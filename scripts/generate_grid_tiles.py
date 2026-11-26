@@ -265,7 +265,7 @@ def gridCells : ℕ := {total}
 set_option maxRecDepth 100000 in
 /-- The modules of tiles, each with the depth at which its cells are counted, in the
 order of a depth-first traversal of the root squares. -/
-def gridModules : List TileModule :=
+noncomputable def gridModules : List TileModule :=
   [{pairs}]
 
 set_option maxRecDepth 100000000 in

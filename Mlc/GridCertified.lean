@@ -1728,11 +1728,272 @@ import Mlc.GridTiles.G40_178
 import Mlc.GridTiles.G40_179
 import Mlc.GridTiles.G40_180
 import Mlc.GridTiles.G40_181
+import Mlc.GridTiles.G40_182
+import Mlc.GridTiles.G40_183
+import Mlc.GridTiles.G40_184
+import Mlc.GridTiles.G40_185
+import Mlc.GridTiles.G40_186
+import Mlc.GridTiles.G40_187
+import Mlc.GridTiles.G40_188
+import Mlc.GridTiles.G40_189
+import Mlc.GridTiles.G40_190
+import Mlc.GridTiles.G40_191
+import Mlc.GridTiles.G40_192
+import Mlc.GridTiles.G40_193
+import Mlc.GridTiles.G40_194
+import Mlc.GridTiles.G40_195
+import Mlc.GridTiles.G40_196
+import Mlc.GridTiles.G40_197
+import Mlc.GridTiles.G40_198
+import Mlc.GridTiles.G40_199
+import Mlc.GridTiles.G40_200
+import Mlc.GridTiles.G40_201
+import Mlc.GridTiles.G40_202
+import Mlc.GridTiles.G40_203
+import Mlc.GridTiles.G40_204
+import Mlc.GridTiles.G40_205
+import Mlc.GridTiles.G40_206
+import Mlc.GridTiles.G40_207
+import Mlc.GridTiles.G40_208
+import Mlc.GridTiles.G40_209
+import Mlc.GridTiles.G40_210
+import Mlc.GridTiles.G40_211
+import Mlc.GridTiles.G40_212
+import Mlc.GridTiles.G40_213
+import Mlc.GridTiles.G40_214
+import Mlc.GridTiles.G40_215
+import Mlc.GridTiles.G40_216
+import Mlc.GridTiles.G40_217
+import Mlc.GridTiles.G40_218
+import Mlc.GridTiles.G40_219
+import Mlc.GridTiles.G40_220
+import Mlc.GridTiles.G40_221
+import Mlc.GridTiles.G40_222
+import Mlc.GridTiles.G40_223
+import Mlc.GridTiles.G40_224
+import Mlc.GridTiles.G40_225
+import Mlc.GridTiles.G40_226
+import Mlc.GridTiles.G40_227
+import Mlc.GridTiles.G40_228
+import Mlc.GridTiles.G40_229
+import Mlc.GridTiles.G40_230
+import Mlc.GridTiles.G40_231
+import Mlc.GridTiles.G40_232
+import Mlc.GridTiles.G40_233
+import Mlc.GridTiles.G40_234
+import Mlc.GridTiles.G40_235
+import Mlc.GridTiles.G40_236
+import Mlc.GridTiles.G40_237
+import Mlc.GridTiles.G40_238
+import Mlc.GridTiles.G40_239
+import Mlc.GridTiles.G40_240
+import Mlc.GridTiles.G40_241
+import Mlc.GridTiles.G40_242
+import Mlc.GridTiles.G40_243
+import Mlc.GridTiles.G40_244
+import Mlc.GridTiles.G40_245
+import Mlc.GridTiles.G40_246
+import Mlc.GridTiles.G40_247
+import Mlc.GridTiles.G40_248
+import Mlc.GridTiles.G40_249
+import Mlc.GridTiles.G40_250
+import Mlc.GridTiles.G40_251
+import Mlc.GridTiles.G40_252
+import Mlc.GridTiles.G40_253
+import Mlc.GridTiles.G40_254
+import Mlc.GridTiles.G40_255
+import Mlc.GridTiles.G40_256
+import Mlc.GridTiles.G40_257
+import Mlc.GridTiles.G40_258
+import Mlc.GridTiles.G40_259
+import Mlc.GridTiles.G40_260
+import Mlc.GridTiles.G40_261
+import Mlc.GridTiles.G40_262
+import Mlc.GridTiles.G40_263
+import Mlc.GridTiles.G40_264
+import Mlc.GridTiles.G40_265
+import Mlc.GridTiles.G40_266
+import Mlc.GridTiles.G40_267
+import Mlc.GridTiles.G40_268
+import Mlc.GridTiles.G40_269
+import Mlc.GridTiles.G40_270
+import Mlc.GridTiles.G40_271
+import Mlc.GridTiles.G40_272
+import Mlc.GridTiles.G40_273
+import Mlc.GridTiles.G40_274
+import Mlc.GridTiles.G40_275
+import Mlc.GridTiles.G40_276
+import Mlc.GridTiles.G40_277
+import Mlc.GridTiles.G40_278
+import Mlc.GridTiles.G40_279
+import Mlc.GridTiles.G40_280
+import Mlc.GridTiles.G40_281
+import Mlc.GridTiles.G40_282
+import Mlc.GridTiles.G40_283
+import Mlc.GridTiles.G40_284
+import Mlc.GridTiles.G40_285
+import Mlc.GridTiles.G40_286
+import Mlc.GridTiles.G40_287
+import Mlc.GridTiles.G40_288
+import Mlc.GridTiles.G40_289
+import Mlc.GridTiles.G40_290
+import Mlc.GridTiles.G40_291
+import Mlc.GridTiles.G40_292
+import Mlc.GridTiles.G40_293
+import Mlc.GridTiles.G40_294
+import Mlc.GridTiles.G40_295
+import Mlc.GridTiles.G40_296
+import Mlc.GridTiles.G40_297
+import Mlc.GridTiles.G40_298
+import Mlc.GridTiles.G40_299
+import Mlc.GridTiles.G40_300
+import Mlc.GridTiles.G40_301
+import Mlc.GridTiles.G40_302
+import Mlc.GridTiles.G40_303
+import Mlc.GridTiles.G40_304
+import Mlc.GridTiles.G40_305
+import Mlc.GridTiles.G40_306
+import Mlc.GridTiles.G40_307
+import Mlc.GridTiles.G40_308
+import Mlc.GridTiles.G40_309
+import Mlc.GridTiles.G40_310
+import Mlc.GridTiles.G40_311
+import Mlc.GridTiles.G40_312
+import Mlc.GridTiles.G40_313
+import Mlc.GridTiles.G40_314
+import Mlc.GridTiles.G40_315
+import Mlc.GridTiles.G40_316
+import Mlc.GridTiles.G40_317
+import Mlc.GridTiles.G40_318
+import Mlc.GridTiles.G40_319
+import Mlc.GridTiles.G40_320
+import Mlc.GridTiles.G40_321
+import Mlc.GridTiles.G40_322
+import Mlc.GridTiles.G40_323
+import Mlc.GridTiles.G40_324
+import Mlc.GridTiles.G40_325
+import Mlc.GridTiles.G40_326
+import Mlc.GridTiles.G40_327
+import Mlc.GridTiles.G40_328
+import Mlc.GridTiles.G40_329
+import Mlc.GridTiles.G40_330
+import Mlc.GridTiles.G40_331
+import Mlc.GridTiles.G40_332
+import Mlc.GridTiles.G40_333
+import Mlc.GridTiles.G40_334
+import Mlc.GridTiles.G40_335
+import Mlc.GridTiles.G40_336
+import Mlc.GridTiles.G40_337
+import Mlc.GridTiles.G40_338
+import Mlc.GridTiles.G40_339
+import Mlc.GridTiles.G40_340
+import Mlc.GridTiles.G40_341
+import Mlc.GridTiles.G40_342
+import Mlc.GridTiles.G40_343
+import Mlc.GridTiles.G40_344
+import Mlc.GridTiles.G40_345
+import Mlc.GridTiles.G40_346
+import Mlc.GridTiles.G40_347
+import Mlc.GridTiles.G40_348
+import Mlc.GridTiles.G40_349
+import Mlc.GridTiles.G40_350
+import Mlc.GridTiles.G40_351
+import Mlc.GridTiles.G40_352
+import Mlc.GridTiles.G40_353
+import Mlc.GridTiles.G40_354
+import Mlc.GridTiles.G40_355
+import Mlc.GridTiles.G40_356
+import Mlc.GridTiles.G40_357
+import Mlc.GridTiles.G40_358
+import Mlc.GridTiles.G40_359
+import Mlc.GridTiles.G40_360
+import Mlc.GridTiles.G40_361
+import Mlc.GridTiles.G40_362
+import Mlc.GridTiles.G40_363
+import Mlc.GridTiles.G40_364
+import Mlc.GridTiles.G40_365
+import Mlc.GridTiles.G40_366
+import Mlc.GridTiles.G40_367
+import Mlc.GridTiles.G40_368
+import Mlc.GridTiles.G40_369
+import Mlc.GridTiles.G40_370
+import Mlc.GridTiles.G40_371
+import Mlc.GridTiles.G40_372
+import Mlc.GridTiles.G40_373
+import Mlc.GridTiles.G40_374
+import Mlc.GridTiles.G40_375
+import Mlc.GridTiles.G40_376
+import Mlc.GridTiles.G40_377
+import Mlc.GridTiles.G40_378
+import Mlc.GridTiles.G40_379
+import Mlc.GridTiles.G40_380
+import Mlc.GridTiles.G40_381
+import Mlc.GridTiles.G40_382
+import Mlc.GridTiles.G40_383
+import Mlc.GridTiles.G40_384
+import Mlc.GridTiles.G40_385
+import Mlc.GridTiles.G40_386
+import Mlc.GridTiles.G40_387
+import Mlc.GridTiles.G40_388
+import Mlc.GridTiles.G40_389
+import Mlc.GridTiles.G40_390
+import Mlc.GridTiles.G40_391
+import Mlc.GridTiles.G40_392
+import Mlc.GridTiles.G40_393
+import Mlc.GridTiles.G40_394
+import Mlc.GridTiles.G40_395
+import Mlc.GridTiles.G40_396
+import Mlc.GridTiles.G40_397
+import Mlc.GridTiles.G40_398
+import Mlc.GridTiles.G40_399
+import Mlc.GridTiles.G40_400
+import Mlc.GridTiles.G40_401
+import Mlc.GridTiles.G40_402
+import Mlc.GridTiles.G40_403
+import Mlc.GridTiles.G40_404
+import Mlc.GridTiles.G40_405
+import Mlc.GridTiles.G40_406
+import Mlc.GridTiles.G40_407
+import Mlc.GridTiles.G40_408
+import Mlc.GridTiles.G40_409
+import Mlc.GridTiles.G40_410
+import Mlc.GridTiles.G40_411
+import Mlc.GridTiles.G40_412
+import Mlc.GridTiles.G40_413
+import Mlc.GridTiles.G40_414
+import Mlc.GridTiles.G40_415
+import Mlc.GridTiles.G40_416
+import Mlc.GridTiles.G40_417
+import Mlc.GridTiles.G40_418
+import Mlc.GridTiles.G40_419
+import Mlc.GridTiles.G40_420
+import Mlc.GridTiles.G40_421
+import Mlc.GridTiles.G40_422
+import Mlc.GridTiles.G40_423
+import Mlc.GridTiles.G40_424
+import Mlc.GridTiles.G40_425
+import Mlc.GridTiles.G40_426
+import Mlc.GridTiles.G40_427
+import Mlc.GridTiles.G40_428
+import Mlc.GridTiles.G40_429
+import Mlc.GridTiles.G40_430
+import Mlc.GridTiles.G40_431
+import Mlc.GridTiles.G40_432
+import Mlc.GridTiles.G40_433
+import Mlc.GridTiles.G40_434
+import Mlc.GridTiles.G40_435
+import Mlc.GridTiles.G40_436
+import Mlc.GridTiles.G40_437
+import Mlc.GridTiles.G40_438
+import Mlc.GridTiles.G40_439
+import Mlc.GridTiles.G40_440
 import Mlc.GridTiles.G41_0
 import Mlc.GridTiles.G41_1
 import Mlc.GridTiles.G41_2
 import Mlc.GridTiles.G41_3
 import Mlc.GridTiles.G41_4
+import Mlc.GridTiles.G41_5
+import Mlc.GridTiles.G41_6
 import Mlc.GridTiles.G42_0
 import Mlc.GridTiles.G43_0
 import Mlc.GridTiles.G44_0
@@ -1801,6 +2062,52 @@ import Mlc.GridTiles.G44_62
 import Mlc.GridTiles.G44_63
 import Mlc.GridTiles.G44_64
 import Mlc.GridTiles.G44_65
+import Mlc.GridTiles.G44_66
+import Mlc.GridTiles.G44_67
+import Mlc.GridTiles.G44_68
+import Mlc.GridTiles.G44_69
+import Mlc.GridTiles.G44_70
+import Mlc.GridTiles.G44_71
+import Mlc.GridTiles.G44_72
+import Mlc.GridTiles.G44_73
+import Mlc.GridTiles.G44_74
+import Mlc.GridTiles.G44_75
+import Mlc.GridTiles.G44_76
+import Mlc.GridTiles.G44_77
+import Mlc.GridTiles.G44_78
+import Mlc.GridTiles.G44_79
+import Mlc.GridTiles.G44_80
+import Mlc.GridTiles.G44_81
+import Mlc.GridTiles.G44_82
+import Mlc.GridTiles.G44_83
+import Mlc.GridTiles.G44_84
+import Mlc.GridTiles.G44_85
+import Mlc.GridTiles.G44_86
+import Mlc.GridTiles.G44_87
+import Mlc.GridTiles.G44_88
+import Mlc.GridTiles.G44_89
+import Mlc.GridTiles.G44_90
+import Mlc.GridTiles.G44_91
+import Mlc.GridTiles.G44_92
+import Mlc.GridTiles.G44_93
+import Mlc.GridTiles.G44_94
+import Mlc.GridTiles.G44_95
+import Mlc.GridTiles.G44_96
+import Mlc.GridTiles.G44_97
+import Mlc.GridTiles.G44_98
+import Mlc.GridTiles.G44_99
+import Mlc.GridTiles.G44_100
+import Mlc.GridTiles.G44_101
+import Mlc.GridTiles.G44_102
+import Mlc.GridTiles.G44_103
+import Mlc.GridTiles.G44_104
+import Mlc.GridTiles.G44_105
+import Mlc.GridTiles.G44_106
+import Mlc.GridTiles.G44_107
+import Mlc.GridTiles.G44_108
+import Mlc.GridTiles.G44_109
+import Mlc.GridTiles.G44_110
+import Mlc.GridTiles.G44_111
 import Mlc.GridTiles.G45_0
 import Mlc.GridTiles.G45_1
 import Mlc.GridTiles.G45_2
@@ -1892,6 +2199,218 @@ import Mlc.GridTiles.G45_87
 import Mlc.GridTiles.G45_88
 import Mlc.GridTiles.G45_89
 import Mlc.GridTiles.G45_90
+import Mlc.GridTiles.G45_91
+import Mlc.GridTiles.G45_92
+import Mlc.GridTiles.G45_93
+import Mlc.GridTiles.G45_94
+import Mlc.GridTiles.G45_95
+import Mlc.GridTiles.G45_96
+import Mlc.GridTiles.G45_97
+import Mlc.GridTiles.G45_98
+import Mlc.GridTiles.G45_99
+import Mlc.GridTiles.G45_100
+import Mlc.GridTiles.G45_101
+import Mlc.GridTiles.G45_102
+import Mlc.GridTiles.G45_103
+import Mlc.GridTiles.G45_104
+import Mlc.GridTiles.G45_105
+import Mlc.GridTiles.G45_106
+import Mlc.GridTiles.G45_107
+import Mlc.GridTiles.G45_108
+import Mlc.GridTiles.G45_109
+import Mlc.GridTiles.G45_110
+import Mlc.GridTiles.G45_111
+import Mlc.GridTiles.G45_112
+import Mlc.GridTiles.G45_113
+import Mlc.GridTiles.G45_114
+import Mlc.GridTiles.G45_115
+import Mlc.GridTiles.G45_116
+import Mlc.GridTiles.G45_117
+import Mlc.GridTiles.G45_118
+import Mlc.GridTiles.G45_119
+import Mlc.GridTiles.G45_120
+import Mlc.GridTiles.G45_121
+import Mlc.GridTiles.G45_122
+import Mlc.GridTiles.G45_123
+import Mlc.GridTiles.G45_124
+import Mlc.GridTiles.G45_125
+import Mlc.GridTiles.G45_126
+import Mlc.GridTiles.G45_127
+import Mlc.GridTiles.G45_128
+import Mlc.GridTiles.G45_129
+import Mlc.GridTiles.G45_130
+import Mlc.GridTiles.G45_131
+import Mlc.GridTiles.G45_132
+import Mlc.GridTiles.G45_133
+import Mlc.GridTiles.G45_134
+import Mlc.GridTiles.G45_135
+import Mlc.GridTiles.G45_136
+import Mlc.GridTiles.G45_137
+import Mlc.GridTiles.G45_138
+import Mlc.GridTiles.G45_139
+import Mlc.GridTiles.G45_140
+import Mlc.GridTiles.G45_141
+import Mlc.GridTiles.G45_142
+import Mlc.GridTiles.G45_143
+import Mlc.GridTiles.G45_144
+import Mlc.GridTiles.G45_145
+import Mlc.GridTiles.G45_146
+import Mlc.GridTiles.G45_147
+import Mlc.GridTiles.G45_148
+import Mlc.GridTiles.G45_149
+import Mlc.GridTiles.G45_150
+import Mlc.GridTiles.G45_151
+import Mlc.GridTiles.G45_152
+import Mlc.GridTiles.G45_153
+import Mlc.GridTiles.G45_154
+import Mlc.GridTiles.G45_155
+import Mlc.GridTiles.G45_156
+import Mlc.GridTiles.G45_157
+import Mlc.GridTiles.G45_158
+import Mlc.GridTiles.G45_159
+import Mlc.GridTiles.G45_160
+import Mlc.GridTiles.G45_161
+import Mlc.GridTiles.G45_162
+import Mlc.GridTiles.G45_163
+import Mlc.GridTiles.G45_164
+import Mlc.GridTiles.G45_165
+import Mlc.GridTiles.G45_166
+import Mlc.GridTiles.G45_167
+import Mlc.GridTiles.G45_168
+import Mlc.GridTiles.G45_169
+import Mlc.GridTiles.G45_170
+import Mlc.GridTiles.G45_171
+import Mlc.GridTiles.G45_172
+import Mlc.GridTiles.G45_173
+import Mlc.GridTiles.G45_174
+import Mlc.GridTiles.G45_175
+import Mlc.GridTiles.G45_176
+import Mlc.GridTiles.G45_177
+import Mlc.GridTiles.G45_178
+import Mlc.GridTiles.G45_179
+import Mlc.GridTiles.G45_180
+import Mlc.GridTiles.G45_181
+import Mlc.GridTiles.G45_182
+import Mlc.GridTiles.G45_183
+import Mlc.GridTiles.G45_184
+import Mlc.GridTiles.G45_185
+import Mlc.GridTiles.G45_186
+import Mlc.GridTiles.G45_187
+import Mlc.GridTiles.G45_188
+import Mlc.GridTiles.G45_189
+import Mlc.GridTiles.G45_190
+import Mlc.GridTiles.G45_191
+import Mlc.GridTiles.G45_192
+import Mlc.GridTiles.G45_193
+import Mlc.GridTiles.G45_194
+import Mlc.GridTiles.G45_195
+import Mlc.GridTiles.G45_196
+import Mlc.GridTiles.G45_197
+import Mlc.GridTiles.G45_198
+import Mlc.GridTiles.G45_199
+import Mlc.GridTiles.G45_200
+import Mlc.GridTiles.G45_201
+import Mlc.GridTiles.G45_202
+import Mlc.GridTiles.G45_203
+import Mlc.GridTiles.G45_204
+import Mlc.GridTiles.G45_205
+import Mlc.GridTiles.G45_206
+import Mlc.GridTiles.G45_207
+import Mlc.GridTiles.G45_208
+import Mlc.GridTiles.G45_209
+import Mlc.GridTiles.G45_210
+import Mlc.GridTiles.G45_211
+import Mlc.GridTiles.G45_212
+import Mlc.GridTiles.G45_213
+import Mlc.GridTiles.G45_214
+import Mlc.GridTiles.G45_215
+import Mlc.GridTiles.G45_216
+import Mlc.GridTiles.G45_217
+import Mlc.GridTiles.G45_218
+import Mlc.GridTiles.G45_219
+import Mlc.GridTiles.G45_220
+import Mlc.GridTiles.G45_221
+import Mlc.GridTiles.G45_222
+import Mlc.GridTiles.G45_223
+import Mlc.GridTiles.G45_224
+import Mlc.GridTiles.G45_225
+import Mlc.GridTiles.G45_226
+import Mlc.GridTiles.G45_227
+import Mlc.GridTiles.G45_228
+import Mlc.GridTiles.G45_229
+import Mlc.GridTiles.G45_230
+import Mlc.GridTiles.G45_231
+import Mlc.GridTiles.G45_232
+import Mlc.GridTiles.G45_233
+import Mlc.GridTiles.G45_234
+import Mlc.GridTiles.G45_235
+import Mlc.GridTiles.G45_236
+import Mlc.GridTiles.G45_237
+import Mlc.GridTiles.G45_238
+import Mlc.GridTiles.G45_239
+import Mlc.GridTiles.G45_240
+import Mlc.GridTiles.G45_241
+import Mlc.GridTiles.G45_242
+import Mlc.GridTiles.G45_243
+import Mlc.GridTiles.G45_244
+import Mlc.GridTiles.G45_245
+import Mlc.GridTiles.G45_246
+import Mlc.GridTiles.G45_247
+import Mlc.GridTiles.G45_248
+import Mlc.GridTiles.G45_249
+import Mlc.GridTiles.G45_250
+import Mlc.GridTiles.G45_251
+import Mlc.GridTiles.G45_252
+import Mlc.GridTiles.G45_253
+import Mlc.GridTiles.G45_254
+import Mlc.GridTiles.G45_255
+import Mlc.GridTiles.G45_256
+import Mlc.GridTiles.G45_257
+import Mlc.GridTiles.G45_258
+import Mlc.GridTiles.G45_259
+import Mlc.GridTiles.G45_260
+import Mlc.GridTiles.G45_261
+import Mlc.GridTiles.G45_262
+import Mlc.GridTiles.G45_263
+import Mlc.GridTiles.G45_264
+import Mlc.GridTiles.G45_265
+import Mlc.GridTiles.G45_266
+import Mlc.GridTiles.G45_267
+import Mlc.GridTiles.G45_268
+import Mlc.GridTiles.G45_269
+import Mlc.GridTiles.G45_270
+import Mlc.GridTiles.G45_271
+import Mlc.GridTiles.G45_272
+import Mlc.GridTiles.G45_273
+import Mlc.GridTiles.G45_274
+import Mlc.GridTiles.G45_275
+import Mlc.GridTiles.G45_276
+import Mlc.GridTiles.G45_277
+import Mlc.GridTiles.G45_278
+import Mlc.GridTiles.G45_279
+import Mlc.GridTiles.G45_280
+import Mlc.GridTiles.G45_281
+import Mlc.GridTiles.G45_282
+import Mlc.GridTiles.G45_283
+import Mlc.GridTiles.G45_284
+import Mlc.GridTiles.G45_285
+import Mlc.GridTiles.G45_286
+import Mlc.GridTiles.G45_287
+import Mlc.GridTiles.G45_288
+import Mlc.GridTiles.G45_289
+import Mlc.GridTiles.G45_290
+import Mlc.GridTiles.G45_291
+import Mlc.GridTiles.G45_292
+import Mlc.GridTiles.G45_293
+import Mlc.GridTiles.G45_294
+import Mlc.GridTiles.G45_295
+import Mlc.GridTiles.G45_296
+import Mlc.GridTiles.G45_297
+import Mlc.GridTiles.G45_298
+import Mlc.GridTiles.G45_299
+import Mlc.GridTiles.G45_300
+import Mlc.GridTiles.G45_301
+import Mlc.GridTiles.G45_302
 import Mlc.GridTiles.G46_0
 import Mlc.GridTiles.G47_0
 import Mlc.GridTiles.G48_0
@@ -1979,6 +2498,120 @@ import Mlc.GridTiles.G49_77
 import Mlc.GridTiles.G49_78
 import Mlc.GridTiles.G49_79
 import Mlc.GridTiles.G49_80
+import Mlc.GridTiles.G49_81
+import Mlc.GridTiles.G49_82
+import Mlc.GridTiles.G49_83
+import Mlc.GridTiles.G49_84
+import Mlc.GridTiles.G49_85
+import Mlc.GridTiles.G49_86
+import Mlc.GridTiles.G49_87
+import Mlc.GridTiles.G49_88
+import Mlc.GridTiles.G49_89
+import Mlc.GridTiles.G49_90
+import Mlc.GridTiles.G49_91
+import Mlc.GridTiles.G49_92
+import Mlc.GridTiles.G49_93
+import Mlc.GridTiles.G49_94
+import Mlc.GridTiles.G49_95
+import Mlc.GridTiles.G49_96
+import Mlc.GridTiles.G49_97
+import Mlc.GridTiles.G49_98
+import Mlc.GridTiles.G49_99
+import Mlc.GridTiles.G49_100
+import Mlc.GridTiles.G49_101
+import Mlc.GridTiles.G49_102
+import Mlc.GridTiles.G49_103
+import Mlc.GridTiles.G49_104
+import Mlc.GridTiles.G49_105
+import Mlc.GridTiles.G49_106
+import Mlc.GridTiles.G49_107
+import Mlc.GridTiles.G49_108
+import Mlc.GridTiles.G49_109
+import Mlc.GridTiles.G49_110
+import Mlc.GridTiles.G49_111
+import Mlc.GridTiles.G49_112
+import Mlc.GridTiles.G49_113
+import Mlc.GridTiles.G49_114
+import Mlc.GridTiles.G49_115
+import Mlc.GridTiles.G49_116
+import Mlc.GridTiles.G49_117
+import Mlc.GridTiles.G49_118
+import Mlc.GridTiles.G49_119
+import Mlc.GridTiles.G49_120
+import Mlc.GridTiles.G49_121
+import Mlc.GridTiles.G49_122
+import Mlc.GridTiles.G49_123
+import Mlc.GridTiles.G49_124
+import Mlc.GridTiles.G49_125
+import Mlc.GridTiles.G49_126
+import Mlc.GridTiles.G49_127
+import Mlc.GridTiles.G49_128
+import Mlc.GridTiles.G49_129
+import Mlc.GridTiles.G49_130
+import Mlc.GridTiles.G49_131
+import Mlc.GridTiles.G49_132
+import Mlc.GridTiles.G49_133
+import Mlc.GridTiles.G49_134
+import Mlc.GridTiles.G49_135
+import Mlc.GridTiles.G49_136
+import Mlc.GridTiles.G49_137
+import Mlc.GridTiles.G49_138
+import Mlc.GridTiles.G49_139
+import Mlc.GridTiles.G49_140
+import Mlc.GridTiles.G49_141
+import Mlc.GridTiles.G49_142
+import Mlc.GridTiles.G49_143
+import Mlc.GridTiles.G49_144
+import Mlc.GridTiles.G49_145
+import Mlc.GridTiles.G49_146
+import Mlc.GridTiles.G49_147
+import Mlc.GridTiles.G49_148
+import Mlc.GridTiles.G49_149
+import Mlc.GridTiles.G49_150
+import Mlc.GridTiles.G49_151
+import Mlc.GridTiles.G49_152
+import Mlc.GridTiles.G49_153
+import Mlc.GridTiles.G49_154
+import Mlc.GridTiles.G49_155
+import Mlc.GridTiles.G49_156
+import Mlc.GridTiles.G49_157
+import Mlc.GridTiles.G49_158
+import Mlc.GridTiles.G49_159
+import Mlc.GridTiles.G49_160
+import Mlc.GridTiles.G49_161
+import Mlc.GridTiles.G49_162
+import Mlc.GridTiles.G49_163
+import Mlc.GridTiles.G49_164
+import Mlc.GridTiles.G49_165
+import Mlc.GridTiles.G49_166
+import Mlc.GridTiles.G49_167
+import Mlc.GridTiles.G49_168
+import Mlc.GridTiles.G49_169
+import Mlc.GridTiles.G49_170
+import Mlc.GridTiles.G49_171
+import Mlc.GridTiles.G49_172
+import Mlc.GridTiles.G49_173
+import Mlc.GridTiles.G49_174
+import Mlc.GridTiles.G49_175
+import Mlc.GridTiles.G49_176
+import Mlc.GridTiles.G49_177
+import Mlc.GridTiles.G49_178
+import Mlc.GridTiles.G49_179
+import Mlc.GridTiles.G49_180
+import Mlc.GridTiles.G49_181
+import Mlc.GridTiles.G49_182
+import Mlc.GridTiles.G49_183
+import Mlc.GridTiles.G49_184
+import Mlc.GridTiles.G49_185
+import Mlc.GridTiles.G49_186
+import Mlc.GridTiles.G49_187
+import Mlc.GridTiles.G49_188
+import Mlc.GridTiles.G49_189
+import Mlc.GridTiles.G49_190
+import Mlc.GridTiles.G49_191
+import Mlc.GridTiles.G49_192
+import Mlc.GridTiles.G49_193
+import Mlc.GridTiles.G49_194
 import Mlc.GridTiles.G50_0
 import Mlc.GridTiles.G51_0
 import Mlc.GridTiles.G52_0
@@ -2067,6 +2700,111 @@ import Mlc.GridTiles.G53_81
 import Mlc.GridTiles.G53_82
 import Mlc.GridTiles.G53_83
 import Mlc.GridTiles.G53_84
+import Mlc.GridTiles.G53_85
+import Mlc.GridTiles.G53_86
+import Mlc.GridTiles.G53_87
+import Mlc.GridTiles.G53_88
+import Mlc.GridTiles.G53_89
+import Mlc.GridTiles.G53_90
+import Mlc.GridTiles.G53_91
+import Mlc.GridTiles.G53_92
+import Mlc.GridTiles.G53_93
+import Mlc.GridTiles.G53_94
+import Mlc.GridTiles.G53_95
+import Mlc.GridTiles.G53_96
+import Mlc.GridTiles.G53_97
+import Mlc.GridTiles.G53_98
+import Mlc.GridTiles.G53_99
+import Mlc.GridTiles.G53_100
+import Mlc.GridTiles.G53_101
+import Mlc.GridTiles.G53_102
+import Mlc.GridTiles.G53_103
+import Mlc.GridTiles.G53_104
+import Mlc.GridTiles.G53_105
+import Mlc.GridTiles.G53_106
+import Mlc.GridTiles.G53_107
+import Mlc.GridTiles.G53_108
+import Mlc.GridTiles.G53_109
+import Mlc.GridTiles.G53_110
+import Mlc.GridTiles.G53_111
+import Mlc.GridTiles.G53_112
+import Mlc.GridTiles.G53_113
+import Mlc.GridTiles.G53_114
+import Mlc.GridTiles.G53_115
+import Mlc.GridTiles.G53_116
+import Mlc.GridTiles.G53_117
+import Mlc.GridTiles.G53_118
+import Mlc.GridTiles.G53_119
+import Mlc.GridTiles.G53_120
+import Mlc.GridTiles.G53_121
+import Mlc.GridTiles.G53_122
+import Mlc.GridTiles.G53_123
+import Mlc.GridTiles.G53_124
+import Mlc.GridTiles.G53_125
+import Mlc.GridTiles.G53_126
+import Mlc.GridTiles.G53_127
+import Mlc.GridTiles.G53_128
+import Mlc.GridTiles.G53_129
+import Mlc.GridTiles.G53_130
+import Mlc.GridTiles.G53_131
+import Mlc.GridTiles.G53_132
+import Mlc.GridTiles.G53_133
+import Mlc.GridTiles.G53_134
+import Mlc.GridTiles.G53_135
+import Mlc.GridTiles.G53_136
+import Mlc.GridTiles.G53_137
+import Mlc.GridTiles.G53_138
+import Mlc.GridTiles.G53_139
+import Mlc.GridTiles.G53_140
+import Mlc.GridTiles.G53_141
+import Mlc.GridTiles.G53_142
+import Mlc.GridTiles.G53_143
+import Mlc.GridTiles.G53_144
+import Mlc.GridTiles.G53_145
+import Mlc.GridTiles.G53_146
+import Mlc.GridTiles.G53_147
+import Mlc.GridTiles.G53_148
+import Mlc.GridTiles.G53_149
+import Mlc.GridTiles.G53_150
+import Mlc.GridTiles.G53_151
+import Mlc.GridTiles.G53_152
+import Mlc.GridTiles.G53_153
+import Mlc.GridTiles.G53_154
+import Mlc.GridTiles.G53_155
+import Mlc.GridTiles.G53_156
+import Mlc.GridTiles.G53_157
+import Mlc.GridTiles.G53_158
+import Mlc.GridTiles.G53_159
+import Mlc.GridTiles.G53_160
+import Mlc.GridTiles.G53_161
+import Mlc.GridTiles.G53_162
+import Mlc.GridTiles.G53_163
+import Mlc.GridTiles.G53_164
+import Mlc.GridTiles.G53_165
+import Mlc.GridTiles.G53_166
+import Mlc.GridTiles.G53_167
+import Mlc.GridTiles.G53_168
+import Mlc.GridTiles.G53_169
+import Mlc.GridTiles.G53_170
+import Mlc.GridTiles.G53_171
+import Mlc.GridTiles.G53_172
+import Mlc.GridTiles.G53_173
+import Mlc.GridTiles.G53_174
+import Mlc.GridTiles.G53_175
+import Mlc.GridTiles.G53_176
+import Mlc.GridTiles.G53_177
+import Mlc.GridTiles.G53_178
+import Mlc.GridTiles.G53_179
+import Mlc.GridTiles.G53_180
+import Mlc.GridTiles.G53_181
+import Mlc.GridTiles.G53_182
+import Mlc.GridTiles.G53_183
+import Mlc.GridTiles.G53_184
+import Mlc.GridTiles.G53_185
+import Mlc.GridTiles.G53_186
+import Mlc.GridTiles.G53_187
+import Mlc.GridTiles.G53_188
+import Mlc.GridTiles.G53_189
 import Mlc.GridTiles.G54_0
 import Mlc.GridTiles.G55_0
 import Mlc.GridTiles.G56_0
@@ -2209,6 +2947,259 @@ import Mlc.GridTiles.G57_135
 import Mlc.GridTiles.G57_136
 import Mlc.GridTiles.G57_137
 import Mlc.GridTiles.G57_138
+import Mlc.GridTiles.G57_139
+import Mlc.GridTiles.G57_140
+import Mlc.GridTiles.G57_141
+import Mlc.GridTiles.G57_142
+import Mlc.GridTiles.G57_143
+import Mlc.GridTiles.G57_144
+import Mlc.GridTiles.G57_145
+import Mlc.GridTiles.G57_146
+import Mlc.GridTiles.G57_147
+import Mlc.GridTiles.G57_148
+import Mlc.GridTiles.G57_149
+import Mlc.GridTiles.G57_150
+import Mlc.GridTiles.G57_151
+import Mlc.GridTiles.G57_152
+import Mlc.GridTiles.G57_153
+import Mlc.GridTiles.G57_154
+import Mlc.GridTiles.G57_155
+import Mlc.GridTiles.G57_156
+import Mlc.GridTiles.G57_157
+import Mlc.GridTiles.G57_158
+import Mlc.GridTiles.G57_159
+import Mlc.GridTiles.G57_160
+import Mlc.GridTiles.G57_161
+import Mlc.GridTiles.G57_162
+import Mlc.GridTiles.G57_163
+import Mlc.GridTiles.G57_164
+import Mlc.GridTiles.G57_165
+import Mlc.GridTiles.G57_166
+import Mlc.GridTiles.G57_167
+import Mlc.GridTiles.G57_168
+import Mlc.GridTiles.G57_169
+import Mlc.GridTiles.G57_170
+import Mlc.GridTiles.G57_171
+import Mlc.GridTiles.G57_172
+import Mlc.GridTiles.G57_173
+import Mlc.GridTiles.G57_174
+import Mlc.GridTiles.G57_175
+import Mlc.GridTiles.G57_176
+import Mlc.GridTiles.G57_177
+import Mlc.GridTiles.G57_178
+import Mlc.GridTiles.G57_179
+import Mlc.GridTiles.G57_180
+import Mlc.GridTiles.G57_181
+import Mlc.GridTiles.G57_182
+import Mlc.GridTiles.G57_183
+import Mlc.GridTiles.G57_184
+import Mlc.GridTiles.G57_185
+import Mlc.GridTiles.G57_186
+import Mlc.GridTiles.G57_187
+import Mlc.GridTiles.G57_188
+import Mlc.GridTiles.G57_189
+import Mlc.GridTiles.G57_190
+import Mlc.GridTiles.G57_191
+import Mlc.GridTiles.G57_192
+import Mlc.GridTiles.G57_193
+import Mlc.GridTiles.G57_194
+import Mlc.GridTiles.G57_195
+import Mlc.GridTiles.G57_196
+import Mlc.GridTiles.G57_197
+import Mlc.GridTiles.G57_198
+import Mlc.GridTiles.G57_199
+import Mlc.GridTiles.G57_200
+import Mlc.GridTiles.G57_201
+import Mlc.GridTiles.G57_202
+import Mlc.GridTiles.G57_203
+import Mlc.GridTiles.G57_204
+import Mlc.GridTiles.G57_205
+import Mlc.GridTiles.G57_206
+import Mlc.GridTiles.G57_207
+import Mlc.GridTiles.G57_208
+import Mlc.GridTiles.G57_209
+import Mlc.GridTiles.G57_210
+import Mlc.GridTiles.G57_211
+import Mlc.GridTiles.G57_212
+import Mlc.GridTiles.G57_213
+import Mlc.GridTiles.G57_214
+import Mlc.GridTiles.G57_215
+import Mlc.GridTiles.G57_216
+import Mlc.GridTiles.G57_217
+import Mlc.GridTiles.G57_218
+import Mlc.GridTiles.G57_219
+import Mlc.GridTiles.G57_220
+import Mlc.GridTiles.G57_221
+import Mlc.GridTiles.G57_222
+import Mlc.GridTiles.G57_223
+import Mlc.GridTiles.G57_224
+import Mlc.GridTiles.G57_225
+import Mlc.GridTiles.G57_226
+import Mlc.GridTiles.G57_227
+import Mlc.GridTiles.G57_228
+import Mlc.GridTiles.G57_229
+import Mlc.GridTiles.G57_230
+import Mlc.GridTiles.G57_231
+import Mlc.GridTiles.G57_232
+import Mlc.GridTiles.G57_233
+import Mlc.GridTiles.G57_234
+import Mlc.GridTiles.G57_235
+import Mlc.GridTiles.G57_236
+import Mlc.GridTiles.G57_237
+import Mlc.GridTiles.G57_238
+import Mlc.GridTiles.G57_239
+import Mlc.GridTiles.G57_240
+import Mlc.GridTiles.G57_241
+import Mlc.GridTiles.G57_242
+import Mlc.GridTiles.G57_243
+import Mlc.GridTiles.G57_244
+import Mlc.GridTiles.G57_245
+import Mlc.GridTiles.G57_246
+import Mlc.GridTiles.G57_247
+import Mlc.GridTiles.G57_248
+import Mlc.GridTiles.G57_249
+import Mlc.GridTiles.G57_250
+import Mlc.GridTiles.G57_251
+import Mlc.GridTiles.G57_252
+import Mlc.GridTiles.G57_253
+import Mlc.GridTiles.G57_254
+import Mlc.GridTiles.G57_255
+import Mlc.GridTiles.G57_256
+import Mlc.GridTiles.G57_257
+import Mlc.GridTiles.G57_258
+import Mlc.GridTiles.G57_259
+import Mlc.GridTiles.G57_260
+import Mlc.GridTiles.G57_261
+import Mlc.GridTiles.G57_262
+import Mlc.GridTiles.G57_263
+import Mlc.GridTiles.G57_264
+import Mlc.GridTiles.G57_265
+import Mlc.GridTiles.G57_266
+import Mlc.GridTiles.G57_267
+import Mlc.GridTiles.G57_268
+import Mlc.GridTiles.G57_269
+import Mlc.GridTiles.G57_270
+import Mlc.GridTiles.G57_271
+import Mlc.GridTiles.G57_272
+import Mlc.GridTiles.G57_273
+import Mlc.GridTiles.G57_274
+import Mlc.GridTiles.G57_275
+import Mlc.GridTiles.G57_276
+import Mlc.GridTiles.G57_277
+import Mlc.GridTiles.G57_278
+import Mlc.GridTiles.G57_279
+import Mlc.GridTiles.G57_280
+import Mlc.GridTiles.G57_281
+import Mlc.GridTiles.G57_282
+import Mlc.GridTiles.G57_283
+import Mlc.GridTiles.G57_284
+import Mlc.GridTiles.G57_285
+import Mlc.GridTiles.G57_286
+import Mlc.GridTiles.G57_287
+import Mlc.GridTiles.G57_288
+import Mlc.GridTiles.G57_289
+import Mlc.GridTiles.G57_290
+import Mlc.GridTiles.G57_291
+import Mlc.GridTiles.G57_292
+import Mlc.GridTiles.G57_293
+import Mlc.GridTiles.G57_294
+import Mlc.GridTiles.G57_295
+import Mlc.GridTiles.G57_296
+import Mlc.GridTiles.G57_297
+import Mlc.GridTiles.G57_298
+import Mlc.GridTiles.G57_299
+import Mlc.GridTiles.G57_300
+import Mlc.GridTiles.G57_301
+import Mlc.GridTiles.G57_302
+import Mlc.GridTiles.G57_303
+import Mlc.GridTiles.G57_304
+import Mlc.GridTiles.G57_305
+import Mlc.GridTiles.G57_306
+import Mlc.GridTiles.G57_307
+import Mlc.GridTiles.G57_308
+import Mlc.GridTiles.G57_309
+import Mlc.GridTiles.G57_310
+import Mlc.GridTiles.G57_311
+import Mlc.GridTiles.G57_312
+import Mlc.GridTiles.G57_313
+import Mlc.GridTiles.G57_314
+import Mlc.GridTiles.G57_315
+import Mlc.GridTiles.G57_316
+import Mlc.GridTiles.G57_317
+import Mlc.GridTiles.G57_318
+import Mlc.GridTiles.G57_319
+import Mlc.GridTiles.G57_320
+import Mlc.GridTiles.G57_321
+import Mlc.GridTiles.G57_322
+import Mlc.GridTiles.G57_323
+import Mlc.GridTiles.G57_324
+import Mlc.GridTiles.G57_325
+import Mlc.GridTiles.G57_326
+import Mlc.GridTiles.G57_327
+import Mlc.GridTiles.G57_328
+import Mlc.GridTiles.G57_329
+import Mlc.GridTiles.G57_330
+import Mlc.GridTiles.G57_331
+import Mlc.GridTiles.G57_332
+import Mlc.GridTiles.G57_333
+import Mlc.GridTiles.G57_334
+import Mlc.GridTiles.G57_335
+import Mlc.GridTiles.G57_336
+import Mlc.GridTiles.G57_337
+import Mlc.GridTiles.G57_338
+import Mlc.GridTiles.G57_339
+import Mlc.GridTiles.G57_340
+import Mlc.GridTiles.G57_341
+import Mlc.GridTiles.G57_342
+import Mlc.GridTiles.G57_343
+import Mlc.GridTiles.G57_344
+import Mlc.GridTiles.G57_345
+import Mlc.GridTiles.G57_346
+import Mlc.GridTiles.G57_347
+import Mlc.GridTiles.G57_348
+import Mlc.GridTiles.G57_349
+import Mlc.GridTiles.G57_350
+import Mlc.GridTiles.G57_351
+import Mlc.GridTiles.G57_352
+import Mlc.GridTiles.G57_353
+import Mlc.GridTiles.G57_354
+import Mlc.GridTiles.G57_355
+import Mlc.GridTiles.G57_356
+import Mlc.GridTiles.G57_357
+import Mlc.GridTiles.G57_358
+import Mlc.GridTiles.G57_359
+import Mlc.GridTiles.G57_360
+import Mlc.GridTiles.G57_361
+import Mlc.GridTiles.G57_362
+import Mlc.GridTiles.G57_363
+import Mlc.GridTiles.G57_364
+import Mlc.GridTiles.G57_365
+import Mlc.GridTiles.G57_366
+import Mlc.GridTiles.G57_367
+import Mlc.GridTiles.G57_368
+import Mlc.GridTiles.G57_369
+import Mlc.GridTiles.G57_370
+import Mlc.GridTiles.G57_371
+import Mlc.GridTiles.G57_372
+import Mlc.GridTiles.G57_373
+import Mlc.GridTiles.G57_374
+import Mlc.GridTiles.G57_375
+import Mlc.GridTiles.G57_376
+import Mlc.GridTiles.G57_377
+import Mlc.GridTiles.G57_378
+import Mlc.GridTiles.G57_379
+import Mlc.GridTiles.G57_380
+import Mlc.GridTiles.G57_381
+import Mlc.GridTiles.G57_382
+import Mlc.GridTiles.G57_383
+import Mlc.GridTiles.G57_384
+import Mlc.GridTiles.G57_385
+import Mlc.GridTiles.G57_386
+import Mlc.GridTiles.G57_387
+import Mlc.GridTiles.G57_388
+import Mlc.GridTiles.G57_389
+import Mlc.GridTiles.G57_390
+import Mlc.GridTiles.G57_391
 import Mlc.GridTiles.G58_0
 import Mlc.GridTiles.G58_1
 import Mlc.GridTiles.G58_2
@@ -2238,6 +3229,62 @@ import Mlc.GridTiles.G58_25
 import Mlc.GridTiles.G58_26
 import Mlc.GridTiles.G58_27
 import Mlc.GridTiles.G58_28
+import Mlc.GridTiles.G58_29
+import Mlc.GridTiles.G58_30
+import Mlc.GridTiles.G58_31
+import Mlc.GridTiles.G58_32
+import Mlc.GridTiles.G58_33
+import Mlc.GridTiles.G58_34
+import Mlc.GridTiles.G58_35
+import Mlc.GridTiles.G58_36
+import Mlc.GridTiles.G58_37
+import Mlc.GridTiles.G58_38
+import Mlc.GridTiles.G58_39
+import Mlc.GridTiles.G58_40
+import Mlc.GridTiles.G58_41
+import Mlc.GridTiles.G58_42
+import Mlc.GridTiles.G58_43
+import Mlc.GridTiles.G58_44
+import Mlc.GridTiles.G58_45
+import Mlc.GridTiles.G58_46
+import Mlc.GridTiles.G58_47
+import Mlc.GridTiles.G58_48
+import Mlc.GridTiles.G58_49
+import Mlc.GridTiles.G58_50
+import Mlc.GridTiles.G58_51
+import Mlc.GridTiles.G58_52
+import Mlc.GridTiles.G58_53
+import Mlc.GridTiles.G58_54
+import Mlc.GridTiles.G58_55
+import Mlc.GridTiles.G58_56
+import Mlc.GridTiles.G58_57
+import Mlc.GridTiles.G58_58
+import Mlc.GridTiles.G58_59
+import Mlc.GridTiles.G58_60
+import Mlc.GridTiles.G58_61
+import Mlc.GridTiles.G58_62
+import Mlc.GridTiles.G58_63
+import Mlc.GridTiles.G58_64
+import Mlc.GridTiles.G58_65
+import Mlc.GridTiles.G58_66
+import Mlc.GridTiles.G58_67
+import Mlc.GridTiles.G58_68
+import Mlc.GridTiles.G58_69
+import Mlc.GridTiles.G58_70
+import Mlc.GridTiles.G58_71
+import Mlc.GridTiles.G58_72
+import Mlc.GridTiles.G58_73
+import Mlc.GridTiles.G58_74
+import Mlc.GridTiles.G58_75
+import Mlc.GridTiles.G58_76
+import Mlc.GridTiles.G58_77
+import Mlc.GridTiles.G58_78
+import Mlc.GridTiles.G58_79
+import Mlc.GridTiles.G58_80
+import Mlc.GridTiles.G58_81
+import Mlc.GridTiles.G58_82
+import Mlc.GridTiles.G58_83
+import Mlc.GridTiles.G58_84
 import Mlc.GridTiles.G59_0
 import Mlc.GridTiles.G60_0
 import Mlc.GridTiles.G61_0
@@ -2404,6 +3451,296 @@ import Mlc.GridTiles.G61_160
 import Mlc.GridTiles.G61_161
 import Mlc.GridTiles.G61_162
 import Mlc.GridTiles.G61_163
+import Mlc.GridTiles.G61_164
+import Mlc.GridTiles.G61_165
+import Mlc.GridTiles.G61_166
+import Mlc.GridTiles.G61_167
+import Mlc.GridTiles.G61_168
+import Mlc.GridTiles.G61_169
+import Mlc.GridTiles.G61_170
+import Mlc.GridTiles.G61_171
+import Mlc.GridTiles.G61_172
+import Mlc.GridTiles.G61_173
+import Mlc.GridTiles.G61_174
+import Mlc.GridTiles.G61_175
+import Mlc.GridTiles.G61_176
+import Mlc.GridTiles.G61_177
+import Mlc.GridTiles.G61_178
+import Mlc.GridTiles.G61_179
+import Mlc.GridTiles.G61_180
+import Mlc.GridTiles.G61_181
+import Mlc.GridTiles.G61_182
+import Mlc.GridTiles.G61_183
+import Mlc.GridTiles.G61_184
+import Mlc.GridTiles.G61_185
+import Mlc.GridTiles.G61_186
+import Mlc.GridTiles.G61_187
+import Mlc.GridTiles.G61_188
+import Mlc.GridTiles.G61_189
+import Mlc.GridTiles.G61_190
+import Mlc.GridTiles.G61_191
+import Mlc.GridTiles.G61_192
+import Mlc.GridTiles.G61_193
+import Mlc.GridTiles.G61_194
+import Mlc.GridTiles.G61_195
+import Mlc.GridTiles.G61_196
+import Mlc.GridTiles.G61_197
+import Mlc.GridTiles.G61_198
+import Mlc.GridTiles.G61_199
+import Mlc.GridTiles.G61_200
+import Mlc.GridTiles.G61_201
+import Mlc.GridTiles.G61_202
+import Mlc.GridTiles.G61_203
+import Mlc.GridTiles.G61_204
+import Mlc.GridTiles.G61_205
+import Mlc.GridTiles.G61_206
+import Mlc.GridTiles.G61_207
+import Mlc.GridTiles.G61_208
+import Mlc.GridTiles.G61_209
+import Mlc.GridTiles.G61_210
+import Mlc.GridTiles.G61_211
+import Mlc.GridTiles.G61_212
+import Mlc.GridTiles.G61_213
+import Mlc.GridTiles.G61_214
+import Mlc.GridTiles.G61_215
+import Mlc.GridTiles.G61_216
+import Mlc.GridTiles.G61_217
+import Mlc.GridTiles.G61_218
+import Mlc.GridTiles.G61_219
+import Mlc.GridTiles.G61_220
+import Mlc.GridTiles.G61_221
+import Mlc.GridTiles.G61_222
+import Mlc.GridTiles.G61_223
+import Mlc.GridTiles.G61_224
+import Mlc.GridTiles.G61_225
+import Mlc.GridTiles.G61_226
+import Mlc.GridTiles.G61_227
+import Mlc.GridTiles.G61_228
+import Mlc.GridTiles.G61_229
+import Mlc.GridTiles.G61_230
+import Mlc.GridTiles.G61_231
+import Mlc.GridTiles.G61_232
+import Mlc.GridTiles.G61_233
+import Mlc.GridTiles.G61_234
+import Mlc.GridTiles.G61_235
+import Mlc.GridTiles.G61_236
+import Mlc.GridTiles.G61_237
+import Mlc.GridTiles.G61_238
+import Mlc.GridTiles.G61_239
+import Mlc.GridTiles.G61_240
+import Mlc.GridTiles.G61_241
+import Mlc.GridTiles.G61_242
+import Mlc.GridTiles.G61_243
+import Mlc.GridTiles.G61_244
+import Mlc.GridTiles.G61_245
+import Mlc.GridTiles.G61_246
+import Mlc.GridTiles.G61_247
+import Mlc.GridTiles.G61_248
+import Mlc.GridTiles.G61_249
+import Mlc.GridTiles.G61_250
+import Mlc.GridTiles.G61_251
+import Mlc.GridTiles.G61_252
+import Mlc.GridTiles.G61_253
+import Mlc.GridTiles.G61_254
+import Mlc.GridTiles.G61_255
+import Mlc.GridTiles.G61_256
+import Mlc.GridTiles.G61_257
+import Mlc.GridTiles.G61_258
+import Mlc.GridTiles.G61_259
+import Mlc.GridTiles.G61_260
+import Mlc.GridTiles.G61_261
+import Mlc.GridTiles.G61_262
+import Mlc.GridTiles.G61_263
+import Mlc.GridTiles.G61_264
+import Mlc.GridTiles.G61_265
+import Mlc.GridTiles.G61_266
+import Mlc.GridTiles.G61_267
+import Mlc.GridTiles.G61_268
+import Mlc.GridTiles.G61_269
+import Mlc.GridTiles.G61_270
+import Mlc.GridTiles.G61_271
+import Mlc.GridTiles.G61_272
+import Mlc.GridTiles.G61_273
+import Mlc.GridTiles.G61_274
+import Mlc.GridTiles.G61_275
+import Mlc.GridTiles.G61_276
+import Mlc.GridTiles.G61_277
+import Mlc.GridTiles.G61_278
+import Mlc.GridTiles.G61_279
+import Mlc.GridTiles.G61_280
+import Mlc.GridTiles.G61_281
+import Mlc.GridTiles.G61_282
+import Mlc.GridTiles.G61_283
+import Mlc.GridTiles.G61_284
+import Mlc.GridTiles.G61_285
+import Mlc.GridTiles.G61_286
+import Mlc.GridTiles.G61_287
+import Mlc.GridTiles.G61_288
+import Mlc.GridTiles.G61_289
+import Mlc.GridTiles.G61_290
+import Mlc.GridTiles.G61_291
+import Mlc.GridTiles.G61_292
+import Mlc.GridTiles.G61_293
+import Mlc.GridTiles.G61_294
+import Mlc.GridTiles.G61_295
+import Mlc.GridTiles.G61_296
+import Mlc.GridTiles.G61_297
+import Mlc.GridTiles.G61_298
+import Mlc.GridTiles.G61_299
+import Mlc.GridTiles.G61_300
+import Mlc.GridTiles.G61_301
+import Mlc.GridTiles.G61_302
+import Mlc.GridTiles.G61_303
+import Mlc.GridTiles.G61_304
+import Mlc.GridTiles.G61_305
+import Mlc.GridTiles.G61_306
+import Mlc.GridTiles.G61_307
+import Mlc.GridTiles.G61_308
+import Mlc.GridTiles.G61_309
+import Mlc.GridTiles.G61_310
+import Mlc.GridTiles.G61_311
+import Mlc.GridTiles.G61_312
+import Mlc.GridTiles.G61_313
+import Mlc.GridTiles.G61_314
+import Mlc.GridTiles.G61_315
+import Mlc.GridTiles.G61_316
+import Mlc.GridTiles.G61_317
+import Mlc.GridTiles.G61_318
+import Mlc.GridTiles.G61_319
+import Mlc.GridTiles.G61_320
+import Mlc.GridTiles.G61_321
+import Mlc.GridTiles.G61_322
+import Mlc.GridTiles.G61_323
+import Mlc.GridTiles.G61_324
+import Mlc.GridTiles.G61_325
+import Mlc.GridTiles.G61_326
+import Mlc.GridTiles.G61_327
+import Mlc.GridTiles.G61_328
+import Mlc.GridTiles.G61_329
+import Mlc.GridTiles.G61_330
+import Mlc.GridTiles.G61_331
+import Mlc.GridTiles.G61_332
+import Mlc.GridTiles.G61_333
+import Mlc.GridTiles.G61_334
+import Mlc.GridTiles.G61_335
+import Mlc.GridTiles.G61_336
+import Mlc.GridTiles.G61_337
+import Mlc.GridTiles.G61_338
+import Mlc.GridTiles.G61_339
+import Mlc.GridTiles.G61_340
+import Mlc.GridTiles.G61_341
+import Mlc.GridTiles.G61_342
+import Mlc.GridTiles.G61_343
+import Mlc.GridTiles.G61_344
+import Mlc.GridTiles.G61_345
+import Mlc.GridTiles.G61_346
+import Mlc.GridTiles.G61_347
+import Mlc.GridTiles.G61_348
+import Mlc.GridTiles.G61_349
+import Mlc.GridTiles.G61_350
+import Mlc.GridTiles.G61_351
+import Mlc.GridTiles.G61_352
+import Mlc.GridTiles.G61_353
+import Mlc.GridTiles.G61_354
+import Mlc.GridTiles.G61_355
+import Mlc.GridTiles.G61_356
+import Mlc.GridTiles.G61_357
+import Mlc.GridTiles.G61_358
+import Mlc.GridTiles.G61_359
+import Mlc.GridTiles.G61_360
+import Mlc.GridTiles.G61_361
+import Mlc.GridTiles.G61_362
+import Mlc.GridTiles.G61_363
+import Mlc.GridTiles.G61_364
+import Mlc.GridTiles.G61_365
+import Mlc.GridTiles.G61_366
+import Mlc.GridTiles.G61_367
+import Mlc.GridTiles.G61_368
+import Mlc.GridTiles.G61_369
+import Mlc.GridTiles.G61_370
+import Mlc.GridTiles.G61_371
+import Mlc.GridTiles.G61_372
+import Mlc.GridTiles.G61_373
+import Mlc.GridTiles.G61_374
+import Mlc.GridTiles.G61_375
+import Mlc.GridTiles.G61_376
+import Mlc.GridTiles.G61_377
+import Mlc.GridTiles.G61_378
+import Mlc.GridTiles.G61_379
+import Mlc.GridTiles.G61_380
+import Mlc.GridTiles.G61_381
+import Mlc.GridTiles.G61_382
+import Mlc.GridTiles.G61_383
+import Mlc.GridTiles.G61_384
+import Mlc.GridTiles.G61_385
+import Mlc.GridTiles.G61_386
+import Mlc.GridTiles.G61_387
+import Mlc.GridTiles.G61_388
+import Mlc.GridTiles.G61_389
+import Mlc.GridTiles.G61_390
+import Mlc.GridTiles.G61_391
+import Mlc.GridTiles.G61_392
+import Mlc.GridTiles.G61_393
+import Mlc.GridTiles.G61_394
+import Mlc.GridTiles.G61_395
+import Mlc.GridTiles.G61_396
+import Mlc.GridTiles.G61_397
+import Mlc.GridTiles.G61_398
+import Mlc.GridTiles.G61_399
+import Mlc.GridTiles.G61_400
+import Mlc.GridTiles.G61_401
+import Mlc.GridTiles.G61_402
+import Mlc.GridTiles.G61_403
+import Mlc.GridTiles.G61_404
+import Mlc.GridTiles.G61_405
+import Mlc.GridTiles.G61_406
+import Mlc.GridTiles.G61_407
+import Mlc.GridTiles.G61_408
+import Mlc.GridTiles.G61_409
+import Mlc.GridTiles.G61_410
+import Mlc.GridTiles.G61_411
+import Mlc.GridTiles.G61_412
+import Mlc.GridTiles.G61_413
+import Mlc.GridTiles.G61_414
+import Mlc.GridTiles.G61_415
+import Mlc.GridTiles.G61_416
+import Mlc.GridTiles.G61_417
+import Mlc.GridTiles.G61_418
+import Mlc.GridTiles.G61_419
+import Mlc.GridTiles.G61_420
+import Mlc.GridTiles.G61_421
+import Mlc.GridTiles.G61_422
+import Mlc.GridTiles.G61_423
+import Mlc.GridTiles.G61_424
+import Mlc.GridTiles.G61_425
+import Mlc.GridTiles.G61_426
+import Mlc.GridTiles.G61_427
+import Mlc.GridTiles.G61_428
+import Mlc.GridTiles.G61_429
+import Mlc.GridTiles.G61_430
+import Mlc.GridTiles.G61_431
+import Mlc.GridTiles.G61_432
+import Mlc.GridTiles.G61_433
+import Mlc.GridTiles.G61_434
+import Mlc.GridTiles.G61_435
+import Mlc.GridTiles.G61_436
+import Mlc.GridTiles.G61_437
+import Mlc.GridTiles.G61_438
+import Mlc.GridTiles.G61_439
+import Mlc.GridTiles.G61_440
+import Mlc.GridTiles.G61_441
+import Mlc.GridTiles.G61_442
+import Mlc.GridTiles.G61_443
+import Mlc.GridTiles.G61_444
+import Mlc.GridTiles.G61_445
+import Mlc.GridTiles.G61_446
+import Mlc.GridTiles.G61_447
+import Mlc.GridTiles.G61_448
+import Mlc.GridTiles.G61_449
+import Mlc.GridTiles.G61_450
+import Mlc.GridTiles.G61_451
+import Mlc.GridTiles.G61_452
+import Mlc.GridTiles.G61_453
 import Mlc.GridTiles.G62_0
 import Mlc.GridTiles.G62_1
 import Mlc.GridTiles.G62_2
@@ -2411,6 +3748,17 @@ import Mlc.GridTiles.G62_3
 import Mlc.GridTiles.G62_4
 import Mlc.GridTiles.G62_5
 import Mlc.GridTiles.G62_6
+import Mlc.GridTiles.G62_7
+import Mlc.GridTiles.G62_8
+import Mlc.GridTiles.G62_9
+import Mlc.GridTiles.G62_10
+import Mlc.GridTiles.G62_11
+import Mlc.GridTiles.G62_12
+import Mlc.GridTiles.G62_13
+import Mlc.GridTiles.G62_14
+import Mlc.GridTiles.G62_15
+import Mlc.GridTiles.G62_16
+import Mlc.GridTiles.G62_17
 import Mlc.GridTiles.G63_0
 import Mlc.GridTiles.G64_0
 import Mlc.GridTiles.G65_0
@@ -2967,12 +4315,12 @@ def gridDepth : ℕ := 16
 
 /-- Number of unresolved cells of the upper half, in units of the cells of side
 `2 ^ (-gridDepth)`: a cell counted at a coarser depth weighs `4 ^ (gridDepth - depth)`. -/
-def gridCells : ℕ := 746636032
+def gridCells : ℕ := 702983936
 
 set_option maxRecDepth 100000 in
 /-- The modules of tiles, each with the depth at which its cells are counted, in the
 order of a depth-first traversal of the root squares. -/
-def gridModules : List TileModule :=
+noncomputable def gridModules : List TileModule :=
   [(12, tiles_0_0), (12, tiles_0_1), (12, tiles_0_2), (12, tiles_0_3), (12, tiles_0_4), (12, tiles_0_5),
      (12, tiles_0_6), (12, tiles_0_7), (12, tiles_0_8), (12, tiles_0_9), (12, tiles_0_10), (12, tiles_0_11),
      (12, tiles_1_0), (12, tiles_2_0), (12, tiles_3_0), (12, tiles_4_0), (12, tiles_4_1), (12, tiles_4_2),
@@ -3230,240 +4578,464 @@ def gridModules : List TileModule :=
      (12, tiles_36_192), (12, tiles_36_193), (12, tiles_36_194), (12, tiles_36_195), (12, tiles_36_196), (12, tiles_36_197),
      (12, tiles_36_198), (12, tiles_36_199), (12, tiles_36_200), (12, tiles_36_201), (12, tiles_36_202), (12, tiles_36_203),
      (12, tiles_36_204), (12, tiles_36_205), (12, tiles_36_206), (12, tiles_36_207), (12, tiles_36_208), (12, tiles_36_209),
-     (12, tiles_36_210), (12, tiles_36_211), (12, tiles_37_0), (12, tiles_38_0), (12, tiles_39_0), (11, tiles_40_0),
-     (11, tiles_40_1), (11, tiles_40_2), (11, tiles_40_3), (11, tiles_40_4), (11, tiles_40_5), (11, tiles_40_6),
-     (11, tiles_40_7), (11, tiles_40_8), (11, tiles_40_9), (11, tiles_40_10), (11, tiles_40_11), (11, tiles_40_12),
-     (11, tiles_40_13), (11, tiles_40_14), (11, tiles_40_15), (11, tiles_40_16), (11, tiles_40_17), (11, tiles_40_18),
-     (11, tiles_40_19), (11, tiles_40_20), (11, tiles_40_21), (11, tiles_40_22), (11, tiles_40_23), (11, tiles_40_24),
-     (11, tiles_40_25), (11, tiles_40_26), (11, tiles_40_27), (11, tiles_40_28), (11, tiles_40_29), (11, tiles_40_30),
-     (11, tiles_40_31), (11, tiles_40_32), (11, tiles_40_33), (11, tiles_40_34), (11, tiles_40_35), (11, tiles_40_36),
-     (11, tiles_40_37), (11, tiles_40_38), (11, tiles_40_39), (11, tiles_40_40), (11, tiles_40_41), (11, tiles_40_42),
-     (11, tiles_40_43), (11, tiles_40_44), (11, tiles_40_45), (11, tiles_40_46), (11, tiles_40_47), (11, tiles_40_48),
-     (11, tiles_40_49), (11, tiles_40_50), (11, tiles_40_51), (11, tiles_40_52), (11, tiles_40_53), (11, tiles_40_54),
-     (11, tiles_40_55), (11, tiles_40_56), (11, tiles_40_57), (11, tiles_40_58), (11, tiles_40_59), (11, tiles_40_60),
-     (11, tiles_40_61), (11, tiles_40_62), (11, tiles_40_63), (11, tiles_40_64), (11, tiles_40_65), (11, tiles_40_66),
-     (11, tiles_40_67), (11, tiles_40_68), (11, tiles_40_69), (11, tiles_40_70), (11, tiles_40_71), (11, tiles_40_72),
-     (11, tiles_40_73), (11, tiles_40_74), (11, tiles_40_75), (11, tiles_40_76), (11, tiles_40_77), (11, tiles_40_78),
-     (11, tiles_40_79), (11, tiles_40_80), (11, tiles_40_81), (11, tiles_40_82), (11, tiles_40_83), (11, tiles_40_84),
-     (11, tiles_40_85), (11, tiles_40_86), (11, tiles_40_87), (11, tiles_40_88), (11, tiles_40_89), (11, tiles_40_90),
-     (11, tiles_40_91), (11, tiles_40_92), (11, tiles_40_93), (11, tiles_40_94), (11, tiles_40_95), (11, tiles_40_96),
-     (11, tiles_40_97), (11, tiles_40_98), (11, tiles_40_99), (11, tiles_40_100), (11, tiles_40_101), (11, tiles_40_102),
-     (11, tiles_40_103), (11, tiles_40_104), (11, tiles_40_105), (11, tiles_40_106), (11, tiles_40_107), (11, tiles_40_108),
-     (11, tiles_40_109), (11, tiles_40_110), (11, tiles_40_111), (11, tiles_40_112), (11, tiles_40_113), (11, tiles_40_114),
-     (11, tiles_40_115), (11, tiles_40_116), (11, tiles_40_117), (11, tiles_40_118), (11, tiles_40_119), (11, tiles_40_120),
-     (11, tiles_40_121), (11, tiles_40_122), (11, tiles_40_123), (11, tiles_40_124), (11, tiles_40_125), (11, tiles_40_126),
-     (11, tiles_40_127), (11, tiles_40_128), (11, tiles_40_129), (11, tiles_40_130), (11, tiles_40_131), (11, tiles_40_132),
-     (11, tiles_40_133), (11, tiles_40_134), (11, tiles_40_135), (11, tiles_40_136), (11, tiles_40_137), (11, tiles_40_138),
-     (11, tiles_40_139), (11, tiles_40_140), (11, tiles_40_141), (11, tiles_40_142), (11, tiles_40_143), (11, tiles_40_144),
-     (11, tiles_40_145), (11, tiles_40_146), (11, tiles_40_147), (11, tiles_40_148), (11, tiles_40_149), (11, tiles_40_150),
-     (11, tiles_40_151), (11, tiles_40_152), (11, tiles_40_153), (11, tiles_40_154), (11, tiles_40_155), (11, tiles_40_156),
-     (11, tiles_40_157), (11, tiles_40_158), (11, tiles_40_159), (11, tiles_40_160), (11, tiles_40_161), (11, tiles_40_162),
-     (11, tiles_40_163), (11, tiles_40_164), (11, tiles_40_165), (11, tiles_40_166), (11, tiles_40_167), (11, tiles_40_168),
-     (11, tiles_40_169), (11, tiles_40_170), (11, tiles_40_171), (11, tiles_40_172), (11, tiles_40_173), (11, tiles_40_174),
-     (11, tiles_40_175), (11, tiles_40_176), (11, tiles_40_177), (11, tiles_40_178), (11, tiles_40_179), (11, tiles_40_180),
-     (11, tiles_40_181), (11, tiles_41_0), (11, tiles_41_1), (11, tiles_41_2), (11, tiles_41_3), (11, tiles_41_4),
-     (11, tiles_42_0), (11, tiles_43_0), (11, tiles_44_0), (11, tiles_44_1), (11, tiles_44_2), (11, tiles_44_3),
-     (11, tiles_44_4), (11, tiles_44_5), (11, tiles_44_6), (11, tiles_44_7), (11, tiles_44_8), (11, tiles_44_9),
-     (11, tiles_44_10), (11, tiles_44_11), (11, tiles_44_12), (11, tiles_44_13), (11, tiles_44_14), (11, tiles_44_15),
-     (11, tiles_44_16), (11, tiles_44_17), (11, tiles_44_18), (11, tiles_44_19), (11, tiles_44_20), (11, tiles_44_21),
-     (11, tiles_44_22), (11, tiles_44_23), (11, tiles_44_24), (11, tiles_44_25), (11, tiles_44_26), (11, tiles_44_27),
-     (11, tiles_44_28), (11, tiles_44_29), (11, tiles_44_30), (11, tiles_44_31), (11, tiles_44_32), (11, tiles_44_33),
-     (11, tiles_44_34), (11, tiles_44_35), (11, tiles_44_36), (11, tiles_44_37), (11, tiles_44_38), (11, tiles_44_39),
-     (11, tiles_44_40), (11, tiles_44_41), (11, tiles_44_42), (11, tiles_44_43), (11, tiles_44_44), (11, tiles_44_45),
-     (11, tiles_44_46), (11, tiles_44_47), (11, tiles_44_48), (11, tiles_44_49), (11, tiles_44_50), (11, tiles_44_51),
-     (11, tiles_44_52), (11, tiles_44_53), (11, tiles_44_54), (11, tiles_44_55), (11, tiles_44_56), (11, tiles_44_57),
-     (11, tiles_44_58), (11, tiles_44_59), (11, tiles_44_60), (11, tiles_44_61), (11, tiles_44_62), (11, tiles_44_63),
-     (11, tiles_44_64), (11, tiles_44_65), (11, tiles_45_0), (11, tiles_45_1), (11, tiles_45_2), (11, tiles_45_3),
-     (11, tiles_45_4), (11, tiles_45_5), (11, tiles_45_6), (11, tiles_45_7), (11, tiles_45_8), (11, tiles_45_9),
-     (11, tiles_45_10), (11, tiles_45_11), (11, tiles_45_12), (11, tiles_45_13), (11, tiles_45_14), (11, tiles_45_15),
-     (11, tiles_45_16), (11, tiles_45_17), (11, tiles_45_18), (11, tiles_45_19), (11, tiles_45_20), (11, tiles_45_21),
-     (11, tiles_45_22), (11, tiles_45_23), (11, tiles_45_24), (11, tiles_45_25), (11, tiles_45_26), (11, tiles_45_27),
-     (11, tiles_45_28), (11, tiles_45_29), (11, tiles_45_30), (11, tiles_45_31), (11, tiles_45_32), (11, tiles_45_33),
-     (11, tiles_45_34), (11, tiles_45_35), (11, tiles_45_36), (11, tiles_45_37), (11, tiles_45_38), (11, tiles_45_39),
-     (11, tiles_45_40), (11, tiles_45_41), (11, tiles_45_42), (11, tiles_45_43), (11, tiles_45_44), (11, tiles_45_45),
-     (11, tiles_45_46), (11, tiles_45_47), (11, tiles_45_48), (11, tiles_45_49), (11, tiles_45_50), (11, tiles_45_51),
-     (11, tiles_45_52), (11, tiles_45_53), (11, tiles_45_54), (11, tiles_45_55), (11, tiles_45_56), (11, tiles_45_57),
-     (11, tiles_45_58), (11, tiles_45_59), (11, tiles_45_60), (11, tiles_45_61), (11, tiles_45_62), (11, tiles_45_63),
-     (11, tiles_45_64), (11, tiles_45_65), (11, tiles_45_66), (11, tiles_45_67), (11, tiles_45_68), (11, tiles_45_69),
-     (11, tiles_45_70), (11, tiles_45_71), (11, tiles_45_72), (11, tiles_45_73), (11, tiles_45_74), (11, tiles_45_75),
-     (11, tiles_45_76), (11, tiles_45_77), (11, tiles_45_78), (11, tiles_45_79), (11, tiles_45_80), (11, tiles_45_81),
-     (11, tiles_45_82), (11, tiles_45_83), (11, tiles_45_84), (11, tiles_45_85), (11, tiles_45_86), (11, tiles_45_87),
-     (11, tiles_45_88), (11, tiles_45_89), (11, tiles_45_90), (11, tiles_46_0), (11, tiles_47_0), (11, tiles_48_0),
-     (11, tiles_48_1), (11, tiles_48_2), (11, tiles_48_3), (11, tiles_49_0), (11, tiles_49_1), (11, tiles_49_2),
-     (11, tiles_49_3), (11, tiles_49_4), (11, tiles_49_5), (11, tiles_49_6), (11, tiles_49_7), (11, tiles_49_8),
-     (11, tiles_49_9), (11, tiles_49_10), (11, tiles_49_11), (11, tiles_49_12), (11, tiles_49_13), (11, tiles_49_14),
-     (11, tiles_49_15), (11, tiles_49_16), (11, tiles_49_17), (11, tiles_49_18), (11, tiles_49_19), (11, tiles_49_20),
-     (11, tiles_49_21), (11, tiles_49_22), (11, tiles_49_23), (11, tiles_49_24), (11, tiles_49_25), (11, tiles_49_26),
-     (11, tiles_49_27), (11, tiles_49_28), (11, tiles_49_29), (11, tiles_49_30), (11, tiles_49_31), (11, tiles_49_32),
-     (11, tiles_49_33), (11, tiles_49_34), (11, tiles_49_35), (11, tiles_49_36), (11, tiles_49_37), (11, tiles_49_38),
-     (11, tiles_49_39), (11, tiles_49_40), (11, tiles_49_41), (11, tiles_49_42), (11, tiles_49_43), (11, tiles_49_44),
-     (11, tiles_49_45), (11, tiles_49_46), (11, tiles_49_47), (11, tiles_49_48), (11, tiles_49_49), (11, tiles_49_50),
-     (11, tiles_49_51), (11, tiles_49_52), (11, tiles_49_53), (11, tiles_49_54), (11, tiles_49_55), (11, tiles_49_56),
-     (11, tiles_49_57), (11, tiles_49_58), (11, tiles_49_59), (11, tiles_49_60), (11, tiles_49_61), (11, tiles_49_62),
-     (11, tiles_49_63), (11, tiles_49_64), (11, tiles_49_65), (11, tiles_49_66), (11, tiles_49_67), (11, tiles_49_68),
-     (11, tiles_49_69), (11, tiles_49_70), (11, tiles_49_71), (11, tiles_49_72), (11, tiles_49_73), (11, tiles_49_74),
-     (11, tiles_49_75), (11, tiles_49_76), (11, tiles_49_77), (11, tiles_49_78), (11, tiles_49_79), (11, tiles_49_80),
-     (11, tiles_50_0), (11, tiles_51_0), (11, tiles_52_0), (11, tiles_53_0), (11, tiles_53_1), (11, tiles_53_2),
-     (11, tiles_53_3), (11, tiles_53_4), (11, tiles_53_5), (11, tiles_53_6), (11, tiles_53_7), (11, tiles_53_8),
-     (11, tiles_53_9), (11, tiles_53_10), (11, tiles_53_11), (11, tiles_53_12), (11, tiles_53_13), (11, tiles_53_14),
-     (11, tiles_53_15), (11, tiles_53_16), (11, tiles_53_17), (11, tiles_53_18), (11, tiles_53_19), (11, tiles_53_20),
-     (11, tiles_53_21), (11, tiles_53_22), (11, tiles_53_23), (11, tiles_53_24), (11, tiles_53_25), (11, tiles_53_26),
-     (11, tiles_53_27), (11, tiles_53_28), (11, tiles_53_29), (11, tiles_53_30), (11, tiles_53_31), (11, tiles_53_32),
-     (11, tiles_53_33), (11, tiles_53_34), (11, tiles_53_35), (11, tiles_53_36), (11, tiles_53_37), (11, tiles_53_38),
-     (11, tiles_53_39), (11, tiles_53_40), (11, tiles_53_41), (11, tiles_53_42), (11, tiles_53_43), (11, tiles_53_44),
-     (11, tiles_53_45), (11, tiles_53_46), (11, tiles_53_47), (11, tiles_53_48), (11, tiles_53_49), (11, tiles_53_50),
-     (11, tiles_53_51), (11, tiles_53_52), (11, tiles_53_53), (11, tiles_53_54), (11, tiles_53_55), (11, tiles_53_56),
-     (11, tiles_53_57), (11, tiles_53_58), (11, tiles_53_59), (11, tiles_53_60), (11, tiles_53_61), (11, tiles_53_62),
-     (11, tiles_53_63), (11, tiles_53_64), (11, tiles_53_65), (11, tiles_53_66), (11, tiles_53_67), (11, tiles_53_68),
-     (11, tiles_53_69), (11, tiles_53_70), (11, tiles_53_71), (11, tiles_53_72), (11, tiles_53_73), (11, tiles_53_74),
-     (11, tiles_53_75), (11, tiles_53_76), (11, tiles_53_77), (11, tiles_53_78), (11, tiles_53_79), (11, tiles_53_80),
-     (11, tiles_53_81), (11, tiles_53_82), (11, tiles_53_83), (11, tiles_53_84), (11, tiles_54_0), (11, tiles_55_0),
-     (11, tiles_56_0), (11, tiles_57_0), (11, tiles_57_1), (11, tiles_57_2), (11, tiles_57_3), (11, tiles_57_4),
-     (11, tiles_57_5), (11, tiles_57_6), (11, tiles_57_7), (11, tiles_57_8), (11, tiles_57_9), (11, tiles_57_10),
-     (11, tiles_57_11), (11, tiles_57_12), (11, tiles_57_13), (11, tiles_57_14), (11, tiles_57_15), (11, tiles_57_16),
-     (11, tiles_57_17), (11, tiles_57_18), (11, tiles_57_19), (11, tiles_57_20), (11, tiles_57_21), (11, tiles_57_22),
-     (11, tiles_57_23), (11, tiles_57_24), (11, tiles_57_25), (11, tiles_57_26), (11, tiles_57_27), (11, tiles_57_28),
-     (11, tiles_57_29), (11, tiles_57_30), (11, tiles_57_31), (11, tiles_57_32), (11, tiles_57_33), (11, tiles_57_34),
-     (11, tiles_57_35), (11, tiles_57_36), (11, tiles_57_37), (11, tiles_57_38), (11, tiles_57_39), (11, tiles_57_40),
-     (11, tiles_57_41), (11, tiles_57_42), (11, tiles_57_43), (11, tiles_57_44), (11, tiles_57_45), (11, tiles_57_46),
-     (11, tiles_57_47), (11, tiles_57_48), (11, tiles_57_49), (11, tiles_57_50), (11, tiles_57_51), (11, tiles_57_52),
-     (11, tiles_57_53), (11, tiles_57_54), (11, tiles_57_55), (11, tiles_57_56), (11, tiles_57_57), (11, tiles_57_58),
-     (11, tiles_57_59), (11, tiles_57_60), (11, tiles_57_61), (11, tiles_57_62), (11, tiles_57_63), (11, tiles_57_64),
-     (11, tiles_57_65), (11, tiles_57_66), (11, tiles_57_67), (11, tiles_57_68), (11, tiles_57_69), (11, tiles_57_70),
-     (11, tiles_57_71), (11, tiles_57_72), (11, tiles_57_73), (11, tiles_57_74), (11, tiles_57_75), (11, tiles_57_76),
-     (11, tiles_57_77), (11, tiles_57_78), (11, tiles_57_79), (11, tiles_57_80), (11, tiles_57_81), (11, tiles_57_82),
-     (11, tiles_57_83), (11, tiles_57_84), (11, tiles_57_85), (11, tiles_57_86), (11, tiles_57_87), (11, tiles_57_88),
-     (11, tiles_57_89), (11, tiles_57_90), (11, tiles_57_91), (11, tiles_57_92), (11, tiles_57_93), (11, tiles_57_94),
-     (11, tiles_57_95), (11, tiles_57_96), (11, tiles_57_97), (11, tiles_57_98), (11, tiles_57_99), (11, tiles_57_100),
-     (11, tiles_57_101), (11, tiles_57_102), (11, tiles_57_103), (11, tiles_57_104), (11, tiles_57_105), (11, tiles_57_106),
-     (11, tiles_57_107), (11, tiles_57_108), (11, tiles_57_109), (11, tiles_57_110), (11, tiles_57_111), (11, tiles_57_112),
-     (11, tiles_57_113), (11, tiles_57_114), (11, tiles_57_115), (11, tiles_57_116), (11, tiles_57_117), (11, tiles_57_118),
-     (11, tiles_57_119), (11, tiles_57_120), (11, tiles_57_121), (11, tiles_57_122), (11, tiles_57_123), (11, tiles_57_124),
-     (11, tiles_57_125), (11, tiles_57_126), (11, tiles_57_127), (11, tiles_57_128), (11, tiles_57_129), (11, tiles_57_130),
-     (11, tiles_57_131), (11, tiles_57_132), (11, tiles_57_133), (11, tiles_57_134), (11, tiles_57_135), (11, tiles_57_136),
-     (11, tiles_57_137), (11, tiles_57_138), (11, tiles_58_0), (11, tiles_58_1), (11, tiles_58_2), (11, tiles_58_3),
-     (11, tiles_58_4), (11, tiles_58_5), (11, tiles_58_6), (11, tiles_58_7), (11, tiles_58_8), (11, tiles_58_9),
-     (11, tiles_58_10), (11, tiles_58_11), (11, tiles_58_12), (11, tiles_58_13), (11, tiles_58_14), (11, tiles_58_15),
-     (11, tiles_58_16), (11, tiles_58_17), (11, tiles_58_18), (11, tiles_58_19), (11, tiles_58_20), (11, tiles_58_21),
-     (11, tiles_58_22), (11, tiles_58_23), (11, tiles_58_24), (11, tiles_58_25), (11, tiles_58_26), (11, tiles_58_27),
-     (11, tiles_58_28), (11, tiles_59_0), (11, tiles_60_0), (11, tiles_61_0), (11, tiles_61_1), (11, tiles_61_2),
-     (11, tiles_61_3), (11, tiles_61_4), (11, tiles_61_5), (11, tiles_61_6), (11, tiles_61_7), (11, tiles_61_8),
-     (11, tiles_61_9), (11, tiles_61_10), (11, tiles_61_11), (11, tiles_61_12), (11, tiles_61_13), (11, tiles_61_14),
-     (11, tiles_61_15), (11, tiles_61_16), (11, tiles_61_17), (11, tiles_61_18), (11, tiles_61_19), (11, tiles_61_20),
-     (11, tiles_61_21), (11, tiles_61_22), (11, tiles_61_23), (11, tiles_61_24), (11, tiles_61_25), (11, tiles_61_26),
-     (11, tiles_61_27), (11, tiles_61_28), (11, tiles_61_29), (11, tiles_61_30), (11, tiles_61_31), (11, tiles_61_32),
-     (11, tiles_61_33), (11, tiles_61_34), (11, tiles_61_35), (11, tiles_61_36), (11, tiles_61_37), (11, tiles_61_38),
-     (11, tiles_61_39), (11, tiles_61_40), (11, tiles_61_41), (11, tiles_61_42), (11, tiles_61_43), (11, tiles_61_44),
-     (11, tiles_61_45), (11, tiles_61_46), (11, tiles_61_47), (11, tiles_61_48), (11, tiles_61_49), (11, tiles_61_50),
-     (11, tiles_61_51), (11, tiles_61_52), (11, tiles_61_53), (11, tiles_61_54), (11, tiles_61_55), (11, tiles_61_56),
-     (11, tiles_61_57), (11, tiles_61_58), (11, tiles_61_59), (11, tiles_61_60), (11, tiles_61_61), (11, tiles_61_62),
-     (11, tiles_61_63), (11, tiles_61_64), (11, tiles_61_65), (11, tiles_61_66), (11, tiles_61_67), (11, tiles_61_68),
-     (11, tiles_61_69), (11, tiles_61_70), (11, tiles_61_71), (11, tiles_61_72), (11, tiles_61_73), (11, tiles_61_74),
-     (11, tiles_61_75), (11, tiles_61_76), (11, tiles_61_77), (11, tiles_61_78), (11, tiles_61_79), (11, tiles_61_80),
-     (11, tiles_61_81), (11, tiles_61_82), (11, tiles_61_83), (11, tiles_61_84), (11, tiles_61_85), (11, tiles_61_86),
-     (11, tiles_61_87), (11, tiles_61_88), (11, tiles_61_89), (11, tiles_61_90), (11, tiles_61_91), (11, tiles_61_92),
-     (11, tiles_61_93), (11, tiles_61_94), (11, tiles_61_95), (11, tiles_61_96), (11, tiles_61_97), (11, tiles_61_98),
-     (11, tiles_61_99), (11, tiles_61_100), (11, tiles_61_101), (11, tiles_61_102), (11, tiles_61_103), (11, tiles_61_104),
-     (11, tiles_61_105), (11, tiles_61_106), (11, tiles_61_107), (11, tiles_61_108), (11, tiles_61_109), (11, tiles_61_110),
-     (11, tiles_61_111), (11, tiles_61_112), (11, tiles_61_113), (11, tiles_61_114), (11, tiles_61_115), (11, tiles_61_116),
-     (11, tiles_61_117), (11, tiles_61_118), (11, tiles_61_119), (11, tiles_61_120), (11, tiles_61_121), (11, tiles_61_122),
-     (11, tiles_61_123), (11, tiles_61_124), (11, tiles_61_125), (11, tiles_61_126), (11, tiles_61_127), (11, tiles_61_128),
-     (11, tiles_61_129), (11, tiles_61_130), (11, tiles_61_131), (11, tiles_61_132), (11, tiles_61_133), (11, tiles_61_134),
-     (11, tiles_61_135), (11, tiles_61_136), (11, tiles_61_137), (11, tiles_61_138), (11, tiles_61_139), (11, tiles_61_140),
-     (11, tiles_61_141), (11, tiles_61_142), (11, tiles_61_143), (11, tiles_61_144), (11, tiles_61_145), (11, tiles_61_146),
-     (11, tiles_61_147), (11, tiles_61_148), (11, tiles_61_149), (11, tiles_61_150), (11, tiles_61_151), (11, tiles_61_152),
-     (11, tiles_61_153), (11, tiles_61_154), (11, tiles_61_155), (11, tiles_61_156), (11, tiles_61_157), (11, tiles_61_158),
-     (11, tiles_61_159), (11, tiles_61_160), (11, tiles_61_161), (11, tiles_61_162), (11, tiles_61_163), (11, tiles_62_0),
-     (11, tiles_62_1), (11, tiles_62_2), (11, tiles_62_3), (11, tiles_62_4), (11, tiles_62_5), (11, tiles_62_6),
-     (11, tiles_63_0), (11, tiles_64_0), (11, tiles_65_0), (11, tiles_65_1), (11, tiles_65_2), (11, tiles_65_3),
-     (11, tiles_65_4), (11, tiles_65_5), (11, tiles_65_6), (11, tiles_65_7), (11, tiles_65_8), (11, tiles_65_9),
-     (11, tiles_65_10), (11, tiles_65_11), (11, tiles_65_12), (11, tiles_65_13), (11, tiles_65_14), (11, tiles_65_15),
-     (11, tiles_65_16), (11, tiles_65_17), (11, tiles_65_18), (11, tiles_65_19), (11, tiles_65_20), (11, tiles_65_21),
-     (11, tiles_65_22), (11, tiles_65_23), (11, tiles_65_24), (11, tiles_65_25), (11, tiles_65_26), (11, tiles_65_27),
-     (11, tiles_65_28), (11, tiles_65_29), (11, tiles_65_30), (11, tiles_65_31), (11, tiles_65_32), (11, tiles_65_33),
-     (11, tiles_65_34), (11, tiles_65_35), (11, tiles_65_36), (11, tiles_65_37), (11, tiles_65_38), (11, tiles_65_39),
-     (11, tiles_65_40), (11, tiles_65_41), (11, tiles_65_42), (11, tiles_65_43), (11, tiles_65_44), (11, tiles_65_45),
-     (11, tiles_65_46), (11, tiles_65_47), (11, tiles_65_48), (11, tiles_65_49), (11, tiles_65_50), (11, tiles_65_51),
-     (11, tiles_65_52), (11, tiles_65_53), (11, tiles_65_54), (11, tiles_65_55), (11, tiles_65_56), (11, tiles_65_57),
-     (11, tiles_65_58), (11, tiles_65_59), (11, tiles_65_60), (11, tiles_65_61), (11, tiles_65_62), (11, tiles_65_63),
-     (11, tiles_65_64), (11, tiles_65_65), (11, tiles_65_66), (11, tiles_65_67), (11, tiles_65_68), (11, tiles_65_69),
-     (11, tiles_65_70), (11, tiles_65_71), (11, tiles_65_72), (11, tiles_65_73), (11, tiles_65_74), (11, tiles_65_75),
-     (11, tiles_65_76), (11, tiles_65_77), (11, tiles_66_0), (11, tiles_67_0), (11, tiles_68_0), (11, tiles_68_1),
-     (11, tiles_68_2), (11, tiles_68_3), (11, tiles_68_4), (11, tiles_68_5), (11, tiles_69_0), (11, tiles_69_1),
-     (11, tiles_69_2), (11, tiles_69_3), (11, tiles_69_4), (11, tiles_69_5), (11, tiles_69_6), (11, tiles_69_7),
-     (11, tiles_69_8), (11, tiles_69_9), (11, tiles_69_10), (11, tiles_69_11), (11, tiles_69_12), (11, tiles_69_13),
-     (11, tiles_69_14), (11, tiles_69_15), (11, tiles_69_16), (11, tiles_69_17), (11, tiles_69_18), (11, tiles_69_19),
-     (11, tiles_69_20), (11, tiles_69_21), (11, tiles_69_22), (11, tiles_69_23), (11, tiles_69_24), (11, tiles_69_25),
-     (11, tiles_69_26), (11, tiles_69_27), (11, tiles_69_28), (11, tiles_69_29), (11, tiles_69_30), (11, tiles_69_31),
-     (11, tiles_69_32), (11, tiles_69_33), (11, tiles_69_34), (11, tiles_69_35), (11, tiles_69_36), (11, tiles_69_37),
-     (11, tiles_69_38), (11, tiles_69_39), (11, tiles_69_40), (11, tiles_69_41), (11, tiles_69_42), (11, tiles_69_43),
-     (11, tiles_69_44), (11, tiles_69_45), (11, tiles_69_46), (11, tiles_69_47), (11, tiles_69_48), (11, tiles_69_49),
-     (11, tiles_69_50), (11, tiles_69_51), (11, tiles_69_52), (11, tiles_69_53), (11, tiles_69_54), (11, tiles_69_55),
-     (11, tiles_69_56), (11, tiles_69_57), (11, tiles_69_58), (11, tiles_69_59), (11, tiles_69_60), (11, tiles_69_61),
-     (11, tiles_69_62), (11, tiles_69_63), (11, tiles_69_64), (11, tiles_69_65), (11, tiles_69_66), (11, tiles_69_67),
-     (11, tiles_69_68), (11, tiles_70_0), (11, tiles_71_0), (11, tiles_72_0), (11, tiles_72_1), (11, tiles_72_2),
-     (11, tiles_72_3), (11, tiles_72_4), (11, tiles_72_5), (11, tiles_72_6), (11, tiles_72_7), (11, tiles_72_8),
-     (11, tiles_72_9), (11, tiles_72_10), (11, tiles_72_11), (11, tiles_72_12), (11, tiles_72_13), (11, tiles_72_14),
-     (11, tiles_72_15), (11, tiles_72_16), (11, tiles_72_17), (11, tiles_72_18), (11, tiles_72_19), (11, tiles_72_20),
-     (11, tiles_72_21), (11, tiles_72_22), (11, tiles_72_23), (11, tiles_72_24), (11, tiles_72_25), (11, tiles_72_26),
-     (11, tiles_72_27), (11, tiles_72_28), (11, tiles_72_29), (11, tiles_72_30), (11, tiles_72_31), (11, tiles_72_32),
-     (11, tiles_72_33), (11, tiles_72_34), (11, tiles_72_35), (11, tiles_72_36), (11, tiles_72_37), (11, tiles_72_38),
-     (11, tiles_72_39), (11, tiles_72_40), (11, tiles_72_41), (11, tiles_72_42), (11, tiles_72_43), (11, tiles_72_44),
-     (11, tiles_72_45), (11, tiles_72_46), (11, tiles_72_47), (11, tiles_72_48), (11, tiles_72_49), (11, tiles_72_50),
-     (11, tiles_72_51), (11, tiles_72_52), (11, tiles_72_53), (11, tiles_72_54), (11, tiles_72_55), (11, tiles_72_56),
-     (11, tiles_72_57), (11, tiles_72_58), (11, tiles_72_59), (11, tiles_72_60), (11, tiles_72_61), (11, tiles_72_62),
-     (11, tiles_72_63), (11, tiles_72_64), (11, tiles_72_65), (11, tiles_72_66), (11, tiles_72_67), (11, tiles_72_68),
-     (11, tiles_72_69), (11, tiles_72_70), (11, tiles_72_71), (11, tiles_72_72), (11, tiles_72_73), (11, tiles_72_74),
-     (11, tiles_72_75), (11, tiles_72_76), (11, tiles_72_77), (11, tiles_72_78), (11, tiles_72_79), (11, tiles_72_80),
-     (11, tiles_72_81), (11, tiles_72_82), (11, tiles_72_83), (11, tiles_72_84), (11, tiles_72_85), (11, tiles_72_86),
-     (11, tiles_72_87), (11, tiles_72_88), (11, tiles_72_89), (11, tiles_72_90), (11, tiles_72_91), (11, tiles_72_92),
-     (11, tiles_72_93), (11, tiles_72_94), (11, tiles_72_95), (11, tiles_72_96), (11, tiles_72_97), (11, tiles_72_98),
-     (11, tiles_72_99), (11, tiles_72_100), (11, tiles_72_101), (11, tiles_72_102), (11, tiles_72_103), (11, tiles_72_104),
-     (11, tiles_72_105), (11, tiles_72_106), (11, tiles_72_107), (11, tiles_72_108), (11, tiles_72_109), (11, tiles_72_110),
-     (11, tiles_72_111), (11, tiles_72_112), (11, tiles_72_113), (11, tiles_72_114), (11, tiles_72_115), (11, tiles_72_116),
-     (11, tiles_72_117), (11, tiles_72_118), (11, tiles_72_119), (11, tiles_72_120), (11, tiles_72_121), (11, tiles_72_122),
-     (11, tiles_72_123), (11, tiles_72_124), (11, tiles_72_125), (11, tiles_72_126), (11, tiles_72_127), (11, tiles_72_128),
-     (11, tiles_72_129), (11, tiles_72_130), (11, tiles_73_0), (11, tiles_73_1), (11, tiles_73_2), (11, tiles_73_3),
-     (11, tiles_73_4), (11, tiles_73_5), (11, tiles_73_6), (11, tiles_73_7), (11, tiles_73_8), (11, tiles_73_9),
-     (11, tiles_73_10), (11, tiles_73_11), (11, tiles_73_12), (11, tiles_73_13), (11, tiles_73_14), (11, tiles_73_15),
-     (11, tiles_73_16), (11, tiles_73_17), (11, tiles_73_18), (11, tiles_73_19), (11, tiles_73_20), (11, tiles_73_21),
-     (11, tiles_73_22), (11, tiles_73_23), (11, tiles_73_24), (11, tiles_73_25), (11, tiles_73_26), (11, tiles_73_27),
-     (11, tiles_73_28), (11, tiles_73_29), (11, tiles_73_30), (11, tiles_73_31), (11, tiles_73_32), (11, tiles_73_33),
-     (11, tiles_73_34), (11, tiles_73_35), (11, tiles_73_36), (11, tiles_73_37), (11, tiles_73_38), (11, tiles_73_39),
-     (11, tiles_73_40), (11, tiles_73_41), (11, tiles_73_42), (11, tiles_73_43), (11, tiles_73_44), (11, tiles_73_45),
-     (11, tiles_73_46), (11, tiles_73_47), (11, tiles_73_48), (11, tiles_73_49), (11, tiles_73_50), (11, tiles_73_51),
-     (11, tiles_73_52), (11, tiles_73_53), (11, tiles_73_54), (11, tiles_73_55), (11, tiles_73_56), (11, tiles_73_57),
-     (11, tiles_73_58), (11, tiles_73_59), (11, tiles_73_60), (11, tiles_73_61), (11, tiles_73_62), (11, tiles_73_63),
-     (11, tiles_73_64), (11, tiles_73_65), (11, tiles_73_66), (11, tiles_73_67), (11, tiles_73_68), (11, tiles_73_69),
-     (11, tiles_73_70), (11, tiles_73_71), (11, tiles_73_72), (11, tiles_73_73), (11, tiles_73_74), (11, tiles_73_75),
-     (11, tiles_73_76), (11, tiles_73_77), (11, tiles_74_0), (11, tiles_75_0), (11, tiles_76_0), (11, tiles_76_1),
-     (11, tiles_76_2), (11, tiles_76_3), (11, tiles_76_4), (11, tiles_76_5), (11, tiles_76_6), (11, tiles_76_7),
-     (11, tiles_76_8), (11, tiles_76_9), (11, tiles_76_10), (11, tiles_76_11), (11, tiles_76_12), (11, tiles_76_13),
-     (11, tiles_76_14), (11, tiles_76_15), (11, tiles_76_16), (11, tiles_76_17), (11, tiles_76_18), (11, tiles_76_19),
-     (11, tiles_76_20), (11, tiles_76_21), (11, tiles_76_22), (11, tiles_76_23), (11, tiles_76_24), (11, tiles_76_25),
-     (11, tiles_76_26), (11, tiles_76_27), (11, tiles_76_28), (11, tiles_76_29), (11, tiles_76_30), (11, tiles_76_31),
-     (11, tiles_76_32), (11, tiles_76_33), (11, tiles_76_34), (11, tiles_76_35), (11, tiles_76_36), (11, tiles_76_37),
-     (11, tiles_76_38), (11, tiles_76_39), (11, tiles_76_40), (11, tiles_76_41), (11, tiles_76_42), (11, tiles_76_43),
-     (11, tiles_76_44), (11, tiles_76_45), (11, tiles_76_46), (11, tiles_76_47), (11, tiles_76_48), (11, tiles_76_49),
-     (11, tiles_76_50), (11, tiles_76_51), (11, tiles_76_52), (11, tiles_76_53), (11, tiles_76_54), (11, tiles_76_55),
-     (11, tiles_76_56), (11, tiles_76_57), (11, tiles_76_58), (11, tiles_76_59), (11, tiles_76_60), (11, tiles_76_61),
-     (11, tiles_76_62), (11, tiles_76_63), (11, tiles_76_64), (11, tiles_76_65), (11, tiles_76_66), (11, tiles_76_67),
-     (11, tiles_76_68), (11, tiles_76_69), (11, tiles_76_70), (11, tiles_76_71), (11, tiles_76_72), (11, tiles_76_73),
-     (11, tiles_76_74), (11, tiles_76_75), (11, tiles_76_76), (11, tiles_76_77), (11, tiles_76_78), (11, tiles_76_79),
-     (11, tiles_76_80), (11, tiles_76_81), (11, tiles_76_82), (11, tiles_76_83), (11, tiles_76_84), (11, tiles_76_85),
-     (11, tiles_76_86), (11, tiles_76_87), (11, tiles_76_88), (11, tiles_76_89), (11, tiles_76_90), (11, tiles_76_91),
-     (11, tiles_76_92), (11, tiles_76_93), (11, tiles_77_0), (11, tiles_77_1), (11, tiles_77_2), (11, tiles_77_3),
-     (11, tiles_77_4), (11, tiles_77_5), (11, tiles_77_6), (11, tiles_77_7), (11, tiles_77_8), (11, tiles_77_9),
-     (11, tiles_77_10), (11, tiles_77_11), (11, tiles_77_12), (11, tiles_77_13), (11, tiles_77_14), (11, tiles_77_15),
-     (11, tiles_78_0), (11, tiles_79_0), (11, tiles_80_0), (11, tiles_81_0), (11, tiles_82_0), (11, tiles_83_0),
-     (11, tiles_84_0), (11, tiles_85_0), (11, tiles_86_0), (11, tiles_87_0), (11, tiles_88_0), (11, tiles_89_0),
-     (11, tiles_90_0), (11, tiles_91_0), (11, tiles_92_0), (11, tiles_93_0), (11, tiles_94_0), (11, tiles_95_0),
-     (11, tiles_96_0), (11, tiles_97_0), (11, tiles_98_0), (11, tiles_99_0), (11, tiles_100_0), (11, tiles_101_0),
-     (11, tiles_102_0), (11, tiles_103_0), (11, tiles_104_0), (11, tiles_105_0), (11, tiles_106_0), (11, tiles_107_0),
-     (11, tiles_108_0), (11, tiles_109_0), (11, tiles_110_0), (11, tiles_111_0), (11, tiles_112_0), (11, tiles_113_0),
-     (11, tiles_114_0), (11, tiles_115_0), (11, tiles_116_0), (11, tiles_117_0), (11, tiles_118_0), (11, tiles_119_0),
-     (11, tiles_120_0), (11, tiles_121_0), (11, tiles_122_0), (11, tiles_123_0), (11, tiles_124_0), (11, tiles_125_0),
-     (11, tiles_126_0), (11, tiles_127_0)]
+     (12, tiles_36_210), (12, tiles_36_211), (12, tiles_37_0), (12, tiles_38_0), (12, tiles_39_0), (12, tiles_40_0),
+     (12, tiles_40_1), (12, tiles_40_2), (12, tiles_40_3), (12, tiles_40_4), (12, tiles_40_5), (12, tiles_40_6),
+     (12, tiles_40_7), (12, tiles_40_8), (12, tiles_40_9), (12, tiles_40_10), (12, tiles_40_11), (12, tiles_40_12),
+     (12, tiles_40_13), (12, tiles_40_14), (12, tiles_40_15), (12, tiles_40_16), (12, tiles_40_17), (12, tiles_40_18),
+     (12, tiles_40_19), (12, tiles_40_20), (12, tiles_40_21), (12, tiles_40_22), (12, tiles_40_23), (12, tiles_40_24),
+     (12, tiles_40_25), (12, tiles_40_26), (12, tiles_40_27), (12, tiles_40_28), (12, tiles_40_29), (12, tiles_40_30),
+     (12, tiles_40_31), (12, tiles_40_32), (12, tiles_40_33), (12, tiles_40_34), (12, tiles_40_35), (12, tiles_40_36),
+     (12, tiles_40_37), (12, tiles_40_38), (12, tiles_40_39), (12, tiles_40_40), (12, tiles_40_41), (12, tiles_40_42),
+     (12, tiles_40_43), (12, tiles_40_44), (12, tiles_40_45), (12, tiles_40_46), (12, tiles_40_47), (12, tiles_40_48),
+     (12, tiles_40_49), (12, tiles_40_50), (12, tiles_40_51), (12, tiles_40_52), (12, tiles_40_53), (12, tiles_40_54),
+     (12, tiles_40_55), (12, tiles_40_56), (12, tiles_40_57), (12, tiles_40_58), (12, tiles_40_59), (12, tiles_40_60),
+     (12, tiles_40_61), (12, tiles_40_62), (12, tiles_40_63), (12, tiles_40_64), (12, tiles_40_65), (12, tiles_40_66),
+     (12, tiles_40_67), (12, tiles_40_68), (12, tiles_40_69), (12, tiles_40_70), (12, tiles_40_71), (12, tiles_40_72),
+     (12, tiles_40_73), (12, tiles_40_74), (12, tiles_40_75), (12, tiles_40_76), (12, tiles_40_77), (12, tiles_40_78),
+     (12, tiles_40_79), (12, tiles_40_80), (12, tiles_40_81), (12, tiles_40_82), (12, tiles_40_83), (12, tiles_40_84),
+     (12, tiles_40_85), (12, tiles_40_86), (12, tiles_40_87), (12, tiles_40_88), (12, tiles_40_89), (12, tiles_40_90),
+     (12, tiles_40_91), (12, tiles_40_92), (12, tiles_40_93), (12, tiles_40_94), (12, tiles_40_95), (12, tiles_40_96),
+     (12, tiles_40_97), (12, tiles_40_98), (12, tiles_40_99), (12, tiles_40_100), (12, tiles_40_101), (12, tiles_40_102),
+     (12, tiles_40_103), (12, tiles_40_104), (12, tiles_40_105), (12, tiles_40_106), (12, tiles_40_107), (12, tiles_40_108),
+     (12, tiles_40_109), (12, tiles_40_110), (12, tiles_40_111), (12, tiles_40_112), (12, tiles_40_113), (12, tiles_40_114),
+     (12, tiles_40_115), (12, tiles_40_116), (12, tiles_40_117), (12, tiles_40_118), (12, tiles_40_119), (12, tiles_40_120),
+     (12, tiles_40_121), (12, tiles_40_122), (12, tiles_40_123), (12, tiles_40_124), (12, tiles_40_125), (12, tiles_40_126),
+     (12, tiles_40_127), (12, tiles_40_128), (12, tiles_40_129), (12, tiles_40_130), (12, tiles_40_131), (12, tiles_40_132),
+     (12, tiles_40_133), (12, tiles_40_134), (12, tiles_40_135), (12, tiles_40_136), (12, tiles_40_137), (12, tiles_40_138),
+     (12, tiles_40_139), (12, tiles_40_140), (12, tiles_40_141), (12, tiles_40_142), (12, tiles_40_143), (12, tiles_40_144),
+     (12, tiles_40_145), (12, tiles_40_146), (12, tiles_40_147), (12, tiles_40_148), (12, tiles_40_149), (12, tiles_40_150),
+     (12, tiles_40_151), (12, tiles_40_152), (12, tiles_40_153), (12, tiles_40_154), (12, tiles_40_155), (12, tiles_40_156),
+     (12, tiles_40_157), (12, tiles_40_158), (12, tiles_40_159), (12, tiles_40_160), (12, tiles_40_161), (12, tiles_40_162),
+     (12, tiles_40_163), (12, tiles_40_164), (12, tiles_40_165), (12, tiles_40_166), (12, tiles_40_167), (12, tiles_40_168),
+     (12, tiles_40_169), (12, tiles_40_170), (12, tiles_40_171), (12, tiles_40_172), (12, tiles_40_173), (12, tiles_40_174),
+     (12, tiles_40_175), (12, tiles_40_176), (12, tiles_40_177), (12, tiles_40_178), (12, tiles_40_179), (12, tiles_40_180),
+     (12, tiles_40_181), (12, tiles_40_182), (12, tiles_40_183), (12, tiles_40_184), (12, tiles_40_185), (12, tiles_40_186),
+     (12, tiles_40_187), (12, tiles_40_188), (12, tiles_40_189), (12, tiles_40_190), (12, tiles_40_191), (12, tiles_40_192),
+     (12, tiles_40_193), (12, tiles_40_194), (12, tiles_40_195), (12, tiles_40_196), (12, tiles_40_197), (12, tiles_40_198),
+     (12, tiles_40_199), (12, tiles_40_200), (12, tiles_40_201), (12, tiles_40_202), (12, tiles_40_203), (12, tiles_40_204),
+     (12, tiles_40_205), (12, tiles_40_206), (12, tiles_40_207), (12, tiles_40_208), (12, tiles_40_209), (12, tiles_40_210),
+     (12, tiles_40_211), (12, tiles_40_212), (12, tiles_40_213), (12, tiles_40_214), (12, tiles_40_215), (12, tiles_40_216),
+     (12, tiles_40_217), (12, tiles_40_218), (12, tiles_40_219), (12, tiles_40_220), (12, tiles_40_221), (12, tiles_40_222),
+     (12, tiles_40_223), (12, tiles_40_224), (12, tiles_40_225), (12, tiles_40_226), (12, tiles_40_227), (12, tiles_40_228),
+     (12, tiles_40_229), (12, tiles_40_230), (12, tiles_40_231), (12, tiles_40_232), (12, tiles_40_233), (12, tiles_40_234),
+     (12, tiles_40_235), (12, tiles_40_236), (12, tiles_40_237), (12, tiles_40_238), (12, tiles_40_239), (12, tiles_40_240),
+     (12, tiles_40_241), (12, tiles_40_242), (12, tiles_40_243), (12, tiles_40_244), (12, tiles_40_245), (12, tiles_40_246),
+     (12, tiles_40_247), (12, tiles_40_248), (12, tiles_40_249), (12, tiles_40_250), (12, tiles_40_251), (12, tiles_40_252),
+     (12, tiles_40_253), (12, tiles_40_254), (12, tiles_40_255), (12, tiles_40_256), (12, tiles_40_257), (12, tiles_40_258),
+     (12, tiles_40_259), (12, tiles_40_260), (12, tiles_40_261), (12, tiles_40_262), (12, tiles_40_263), (12, tiles_40_264),
+     (12, tiles_40_265), (12, tiles_40_266), (12, tiles_40_267), (12, tiles_40_268), (12, tiles_40_269), (12, tiles_40_270),
+     (12, tiles_40_271), (12, tiles_40_272), (12, tiles_40_273), (12, tiles_40_274), (12, tiles_40_275), (12, tiles_40_276),
+     (12, tiles_40_277), (12, tiles_40_278), (12, tiles_40_279), (12, tiles_40_280), (12, tiles_40_281), (12, tiles_40_282),
+     (12, tiles_40_283), (12, tiles_40_284), (12, tiles_40_285), (12, tiles_40_286), (12, tiles_40_287), (12, tiles_40_288),
+     (12, tiles_40_289), (12, tiles_40_290), (12, tiles_40_291), (12, tiles_40_292), (12, tiles_40_293), (12, tiles_40_294),
+     (12, tiles_40_295), (12, tiles_40_296), (12, tiles_40_297), (12, tiles_40_298), (12, tiles_40_299), (12, tiles_40_300),
+     (12, tiles_40_301), (12, tiles_40_302), (12, tiles_40_303), (12, tiles_40_304), (12, tiles_40_305), (12, tiles_40_306),
+     (12, tiles_40_307), (12, tiles_40_308), (12, tiles_40_309), (12, tiles_40_310), (12, tiles_40_311), (12, tiles_40_312),
+     (12, tiles_40_313), (12, tiles_40_314), (12, tiles_40_315), (12, tiles_40_316), (12, tiles_40_317), (12, tiles_40_318),
+     (12, tiles_40_319), (12, tiles_40_320), (12, tiles_40_321), (12, tiles_40_322), (12, tiles_40_323), (12, tiles_40_324),
+     (12, tiles_40_325), (12, tiles_40_326), (12, tiles_40_327), (12, tiles_40_328), (12, tiles_40_329), (12, tiles_40_330),
+     (12, tiles_40_331), (12, tiles_40_332), (12, tiles_40_333), (12, tiles_40_334), (12, tiles_40_335), (12, tiles_40_336),
+     (12, tiles_40_337), (12, tiles_40_338), (12, tiles_40_339), (12, tiles_40_340), (12, tiles_40_341), (12, tiles_40_342),
+     (12, tiles_40_343), (12, tiles_40_344), (12, tiles_40_345), (12, tiles_40_346), (12, tiles_40_347), (12, tiles_40_348),
+     (12, tiles_40_349), (12, tiles_40_350), (12, tiles_40_351), (12, tiles_40_352), (12, tiles_40_353), (12, tiles_40_354),
+     (12, tiles_40_355), (12, tiles_40_356), (12, tiles_40_357), (12, tiles_40_358), (12, tiles_40_359), (12, tiles_40_360),
+     (12, tiles_40_361), (12, tiles_40_362), (12, tiles_40_363), (12, tiles_40_364), (12, tiles_40_365), (12, tiles_40_366),
+     (12, tiles_40_367), (12, tiles_40_368), (12, tiles_40_369), (12, tiles_40_370), (12, tiles_40_371), (12, tiles_40_372),
+     (12, tiles_40_373), (12, tiles_40_374), (12, tiles_40_375), (12, tiles_40_376), (12, tiles_40_377), (12, tiles_40_378),
+     (12, tiles_40_379), (12, tiles_40_380), (12, tiles_40_381), (12, tiles_40_382), (12, tiles_40_383), (12, tiles_40_384),
+     (12, tiles_40_385), (12, tiles_40_386), (12, tiles_40_387), (12, tiles_40_388), (12, tiles_40_389), (12, tiles_40_390),
+     (12, tiles_40_391), (12, tiles_40_392), (12, tiles_40_393), (12, tiles_40_394), (12, tiles_40_395), (12, tiles_40_396),
+     (12, tiles_40_397), (12, tiles_40_398), (12, tiles_40_399), (12, tiles_40_400), (12, tiles_40_401), (12, tiles_40_402),
+     (12, tiles_40_403), (12, tiles_40_404), (12, tiles_40_405), (12, tiles_40_406), (12, tiles_40_407), (12, tiles_40_408),
+     (12, tiles_40_409), (12, tiles_40_410), (12, tiles_40_411), (12, tiles_40_412), (12, tiles_40_413), (12, tiles_40_414),
+     (12, tiles_40_415), (12, tiles_40_416), (12, tiles_40_417), (12, tiles_40_418), (12, tiles_40_419), (12, tiles_40_420),
+     (12, tiles_40_421), (12, tiles_40_422), (12, tiles_40_423), (12, tiles_40_424), (12, tiles_40_425), (12, tiles_40_426),
+     (12, tiles_40_427), (12, tiles_40_428), (12, tiles_40_429), (12, tiles_40_430), (12, tiles_40_431), (12, tiles_40_432),
+     (12, tiles_40_433), (12, tiles_40_434), (12, tiles_40_435), (12, tiles_40_436), (12, tiles_40_437), (12, tiles_40_438),
+     (12, tiles_40_439), (12, tiles_40_440), (12, tiles_41_0), (12, tiles_41_1), (12, tiles_41_2), (12, tiles_41_3),
+     (12, tiles_41_4), (12, tiles_41_5), (12, tiles_41_6), (12, tiles_42_0), (12, tiles_43_0), (12, tiles_44_0),
+     (12, tiles_44_1), (12, tiles_44_2), (12, tiles_44_3), (12, tiles_44_4), (12, tiles_44_5), (12, tiles_44_6),
+     (12, tiles_44_7), (12, tiles_44_8), (12, tiles_44_9), (12, tiles_44_10), (12, tiles_44_11), (12, tiles_44_12),
+     (12, tiles_44_13), (12, tiles_44_14), (12, tiles_44_15), (12, tiles_44_16), (12, tiles_44_17), (12, tiles_44_18),
+     (12, tiles_44_19), (12, tiles_44_20), (12, tiles_44_21), (12, tiles_44_22), (12, tiles_44_23), (12, tiles_44_24),
+     (12, tiles_44_25), (12, tiles_44_26), (12, tiles_44_27), (12, tiles_44_28), (12, tiles_44_29), (12, tiles_44_30),
+     (12, tiles_44_31), (12, tiles_44_32), (12, tiles_44_33), (12, tiles_44_34), (12, tiles_44_35), (12, tiles_44_36),
+     (12, tiles_44_37), (12, tiles_44_38), (12, tiles_44_39), (12, tiles_44_40), (12, tiles_44_41), (12, tiles_44_42),
+     (12, tiles_44_43), (12, tiles_44_44), (12, tiles_44_45), (12, tiles_44_46), (12, tiles_44_47), (12, tiles_44_48),
+     (12, tiles_44_49), (12, tiles_44_50), (12, tiles_44_51), (12, tiles_44_52), (12, tiles_44_53), (12, tiles_44_54),
+     (12, tiles_44_55), (12, tiles_44_56), (12, tiles_44_57), (12, tiles_44_58), (12, tiles_44_59), (12, tiles_44_60),
+     (12, tiles_44_61), (12, tiles_44_62), (12, tiles_44_63), (12, tiles_44_64), (12, tiles_44_65), (12, tiles_44_66),
+     (12, tiles_44_67), (12, tiles_44_68), (12, tiles_44_69), (12, tiles_44_70), (12, tiles_44_71), (12, tiles_44_72),
+     (12, tiles_44_73), (12, tiles_44_74), (12, tiles_44_75), (12, tiles_44_76), (12, tiles_44_77), (12, tiles_44_78),
+     (12, tiles_44_79), (12, tiles_44_80), (12, tiles_44_81), (12, tiles_44_82), (12, tiles_44_83), (12, tiles_44_84),
+     (12, tiles_44_85), (12, tiles_44_86), (12, tiles_44_87), (12, tiles_44_88), (12, tiles_44_89), (12, tiles_44_90),
+     (12, tiles_44_91), (12, tiles_44_92), (12, tiles_44_93), (12, tiles_44_94), (12, tiles_44_95), (12, tiles_44_96),
+     (12, tiles_44_97), (12, tiles_44_98), (12, tiles_44_99), (12, tiles_44_100), (12, tiles_44_101), (12, tiles_44_102),
+     (12, tiles_44_103), (12, tiles_44_104), (12, tiles_44_105), (12, tiles_44_106), (12, tiles_44_107), (12, tiles_44_108),
+     (12, tiles_44_109), (12, tiles_44_110), (12, tiles_44_111), (12, tiles_45_0), (12, tiles_45_1), (12, tiles_45_2),
+     (12, tiles_45_3), (12, tiles_45_4), (12, tiles_45_5), (12, tiles_45_6), (12, tiles_45_7), (12, tiles_45_8),
+     (12, tiles_45_9), (12, tiles_45_10), (12, tiles_45_11), (12, tiles_45_12), (12, tiles_45_13), (12, tiles_45_14),
+     (12, tiles_45_15), (12, tiles_45_16), (12, tiles_45_17), (12, tiles_45_18), (12, tiles_45_19), (12, tiles_45_20),
+     (12, tiles_45_21), (12, tiles_45_22), (12, tiles_45_23), (12, tiles_45_24), (12, tiles_45_25), (12, tiles_45_26),
+     (12, tiles_45_27), (12, tiles_45_28), (12, tiles_45_29), (12, tiles_45_30), (12, tiles_45_31), (12, tiles_45_32),
+     (12, tiles_45_33), (12, tiles_45_34), (12, tiles_45_35), (12, tiles_45_36), (12, tiles_45_37), (12, tiles_45_38),
+     (12, tiles_45_39), (12, tiles_45_40), (12, tiles_45_41), (12, tiles_45_42), (12, tiles_45_43), (12, tiles_45_44),
+     (12, tiles_45_45), (12, tiles_45_46), (12, tiles_45_47), (12, tiles_45_48), (12, tiles_45_49), (12, tiles_45_50),
+     (12, tiles_45_51), (12, tiles_45_52), (12, tiles_45_53), (12, tiles_45_54), (12, tiles_45_55), (12, tiles_45_56),
+     (12, tiles_45_57), (12, tiles_45_58), (12, tiles_45_59), (12, tiles_45_60), (12, tiles_45_61), (12, tiles_45_62),
+     (12, tiles_45_63), (12, tiles_45_64), (12, tiles_45_65), (12, tiles_45_66), (12, tiles_45_67), (12, tiles_45_68),
+     (12, tiles_45_69), (12, tiles_45_70), (12, tiles_45_71), (12, tiles_45_72), (12, tiles_45_73), (12, tiles_45_74),
+     (12, tiles_45_75), (12, tiles_45_76), (12, tiles_45_77), (12, tiles_45_78), (12, tiles_45_79), (12, tiles_45_80),
+     (12, tiles_45_81), (12, tiles_45_82), (12, tiles_45_83), (12, tiles_45_84), (12, tiles_45_85), (12, tiles_45_86),
+     (12, tiles_45_87), (12, tiles_45_88), (12, tiles_45_89), (12, tiles_45_90), (12, tiles_45_91), (12, tiles_45_92),
+     (12, tiles_45_93), (12, tiles_45_94), (12, tiles_45_95), (12, tiles_45_96), (12, tiles_45_97), (12, tiles_45_98),
+     (12, tiles_45_99), (12, tiles_45_100), (12, tiles_45_101), (12, tiles_45_102), (12, tiles_45_103), (12, tiles_45_104),
+     (12, tiles_45_105), (12, tiles_45_106), (12, tiles_45_107), (12, tiles_45_108), (12, tiles_45_109), (12, tiles_45_110),
+     (12, tiles_45_111), (12, tiles_45_112), (12, tiles_45_113), (12, tiles_45_114), (12, tiles_45_115), (12, tiles_45_116),
+     (12, tiles_45_117), (12, tiles_45_118), (12, tiles_45_119), (12, tiles_45_120), (12, tiles_45_121), (12, tiles_45_122),
+     (12, tiles_45_123), (12, tiles_45_124), (12, tiles_45_125), (12, tiles_45_126), (12, tiles_45_127), (12, tiles_45_128),
+     (12, tiles_45_129), (12, tiles_45_130), (12, tiles_45_131), (12, tiles_45_132), (12, tiles_45_133), (12, tiles_45_134),
+     (12, tiles_45_135), (12, tiles_45_136), (12, tiles_45_137), (12, tiles_45_138), (12, tiles_45_139), (12, tiles_45_140),
+     (12, tiles_45_141), (12, tiles_45_142), (12, tiles_45_143), (12, tiles_45_144), (12, tiles_45_145), (12, tiles_45_146),
+     (12, tiles_45_147), (12, tiles_45_148), (12, tiles_45_149), (12, tiles_45_150), (12, tiles_45_151), (12, tiles_45_152),
+     (12, tiles_45_153), (12, tiles_45_154), (12, tiles_45_155), (12, tiles_45_156), (12, tiles_45_157), (12, tiles_45_158),
+     (12, tiles_45_159), (12, tiles_45_160), (12, tiles_45_161), (12, tiles_45_162), (12, tiles_45_163), (12, tiles_45_164),
+     (12, tiles_45_165), (12, tiles_45_166), (12, tiles_45_167), (12, tiles_45_168), (12, tiles_45_169), (12, tiles_45_170),
+     (12, tiles_45_171), (12, tiles_45_172), (12, tiles_45_173), (12, tiles_45_174), (12, tiles_45_175), (12, tiles_45_176),
+     (12, tiles_45_177), (12, tiles_45_178), (12, tiles_45_179), (12, tiles_45_180), (12, tiles_45_181), (12, tiles_45_182),
+     (12, tiles_45_183), (12, tiles_45_184), (12, tiles_45_185), (12, tiles_45_186), (12, tiles_45_187), (12, tiles_45_188),
+     (12, tiles_45_189), (12, tiles_45_190), (12, tiles_45_191), (12, tiles_45_192), (12, tiles_45_193), (12, tiles_45_194),
+     (12, tiles_45_195), (12, tiles_45_196), (12, tiles_45_197), (12, tiles_45_198), (12, tiles_45_199), (12, tiles_45_200),
+     (12, tiles_45_201), (12, tiles_45_202), (12, tiles_45_203), (12, tiles_45_204), (12, tiles_45_205), (12, tiles_45_206),
+     (12, tiles_45_207), (12, tiles_45_208), (12, tiles_45_209), (12, tiles_45_210), (12, tiles_45_211), (12, tiles_45_212),
+     (12, tiles_45_213), (12, tiles_45_214), (12, tiles_45_215), (12, tiles_45_216), (12, tiles_45_217), (12, tiles_45_218),
+     (12, tiles_45_219), (12, tiles_45_220), (12, tiles_45_221), (12, tiles_45_222), (12, tiles_45_223), (12, tiles_45_224),
+     (12, tiles_45_225), (12, tiles_45_226), (12, tiles_45_227), (12, tiles_45_228), (12, tiles_45_229), (12, tiles_45_230),
+     (12, tiles_45_231), (12, tiles_45_232), (12, tiles_45_233), (12, tiles_45_234), (12, tiles_45_235), (12, tiles_45_236),
+     (12, tiles_45_237), (12, tiles_45_238), (12, tiles_45_239), (12, tiles_45_240), (12, tiles_45_241), (12, tiles_45_242),
+     (12, tiles_45_243), (12, tiles_45_244), (12, tiles_45_245), (12, tiles_45_246), (12, tiles_45_247), (12, tiles_45_248),
+     (12, tiles_45_249), (12, tiles_45_250), (12, tiles_45_251), (12, tiles_45_252), (12, tiles_45_253), (12, tiles_45_254),
+     (12, tiles_45_255), (12, tiles_45_256), (12, tiles_45_257), (12, tiles_45_258), (12, tiles_45_259), (12, tiles_45_260),
+     (12, tiles_45_261), (12, tiles_45_262), (12, tiles_45_263), (12, tiles_45_264), (12, tiles_45_265), (12, tiles_45_266),
+     (12, tiles_45_267), (12, tiles_45_268), (12, tiles_45_269), (12, tiles_45_270), (12, tiles_45_271), (12, tiles_45_272),
+     (12, tiles_45_273), (12, tiles_45_274), (12, tiles_45_275), (12, tiles_45_276), (12, tiles_45_277), (12, tiles_45_278),
+     (12, tiles_45_279), (12, tiles_45_280), (12, tiles_45_281), (12, tiles_45_282), (12, tiles_45_283), (12, tiles_45_284),
+     (12, tiles_45_285), (12, tiles_45_286), (12, tiles_45_287), (12, tiles_45_288), (12, tiles_45_289), (12, tiles_45_290),
+     (12, tiles_45_291), (12, tiles_45_292), (12, tiles_45_293), (12, tiles_45_294), (12, tiles_45_295), (12, tiles_45_296),
+     (12, tiles_45_297), (12, tiles_45_298), (12, tiles_45_299), (12, tiles_45_300), (12, tiles_45_301), (12, tiles_45_302),
+     (12, tiles_46_0), (12, tiles_47_0), (12, tiles_48_0), (12, tiles_48_1), (12, tiles_48_2), (12, tiles_48_3),
+     (12, tiles_49_0), (12, tiles_49_1), (12, tiles_49_2), (12, tiles_49_3), (12, tiles_49_4), (12, tiles_49_5),
+     (12, tiles_49_6), (12, tiles_49_7), (12, tiles_49_8), (12, tiles_49_9), (12, tiles_49_10), (12, tiles_49_11),
+     (12, tiles_49_12), (12, tiles_49_13), (12, tiles_49_14), (12, tiles_49_15), (12, tiles_49_16), (12, tiles_49_17),
+     (12, tiles_49_18), (12, tiles_49_19), (12, tiles_49_20), (12, tiles_49_21), (12, tiles_49_22), (12, tiles_49_23),
+     (12, tiles_49_24), (12, tiles_49_25), (12, tiles_49_26), (12, tiles_49_27), (12, tiles_49_28), (12, tiles_49_29),
+     (12, tiles_49_30), (12, tiles_49_31), (12, tiles_49_32), (12, tiles_49_33), (12, tiles_49_34), (12, tiles_49_35),
+     (12, tiles_49_36), (12, tiles_49_37), (12, tiles_49_38), (12, tiles_49_39), (12, tiles_49_40), (12, tiles_49_41),
+     (12, tiles_49_42), (12, tiles_49_43), (12, tiles_49_44), (12, tiles_49_45), (12, tiles_49_46), (12, tiles_49_47),
+     (12, tiles_49_48), (12, tiles_49_49), (12, tiles_49_50), (12, tiles_49_51), (12, tiles_49_52), (12, tiles_49_53),
+     (12, tiles_49_54), (12, tiles_49_55), (12, tiles_49_56), (12, tiles_49_57), (12, tiles_49_58), (12, tiles_49_59),
+     (12, tiles_49_60), (12, tiles_49_61), (12, tiles_49_62), (12, tiles_49_63), (12, tiles_49_64), (12, tiles_49_65),
+     (12, tiles_49_66), (12, tiles_49_67), (12, tiles_49_68), (12, tiles_49_69), (12, tiles_49_70), (12, tiles_49_71),
+     (12, tiles_49_72), (12, tiles_49_73), (12, tiles_49_74), (12, tiles_49_75), (12, tiles_49_76), (12, tiles_49_77),
+     (12, tiles_49_78), (12, tiles_49_79), (12, tiles_49_80), (12, tiles_49_81), (12, tiles_49_82), (12, tiles_49_83),
+     (12, tiles_49_84), (12, tiles_49_85), (12, tiles_49_86), (12, tiles_49_87), (12, tiles_49_88), (12, tiles_49_89),
+     (12, tiles_49_90), (12, tiles_49_91), (12, tiles_49_92), (12, tiles_49_93), (12, tiles_49_94), (12, tiles_49_95),
+     (12, tiles_49_96), (12, tiles_49_97), (12, tiles_49_98), (12, tiles_49_99), (12, tiles_49_100), (12, tiles_49_101),
+     (12, tiles_49_102), (12, tiles_49_103), (12, tiles_49_104), (12, tiles_49_105), (12, tiles_49_106), (12, tiles_49_107),
+     (12, tiles_49_108), (12, tiles_49_109), (12, tiles_49_110), (12, tiles_49_111), (12, tiles_49_112), (12, tiles_49_113),
+     (12, tiles_49_114), (12, tiles_49_115), (12, tiles_49_116), (12, tiles_49_117), (12, tiles_49_118), (12, tiles_49_119),
+     (12, tiles_49_120), (12, tiles_49_121), (12, tiles_49_122), (12, tiles_49_123), (12, tiles_49_124), (12, tiles_49_125),
+     (12, tiles_49_126), (12, tiles_49_127), (12, tiles_49_128), (12, tiles_49_129), (12, tiles_49_130), (12, tiles_49_131),
+     (12, tiles_49_132), (12, tiles_49_133), (12, tiles_49_134), (12, tiles_49_135), (12, tiles_49_136), (12, tiles_49_137),
+     (12, tiles_49_138), (12, tiles_49_139), (12, tiles_49_140), (12, tiles_49_141), (12, tiles_49_142), (12, tiles_49_143),
+     (12, tiles_49_144), (12, tiles_49_145), (12, tiles_49_146), (12, tiles_49_147), (12, tiles_49_148), (12, tiles_49_149),
+     (12, tiles_49_150), (12, tiles_49_151), (12, tiles_49_152), (12, tiles_49_153), (12, tiles_49_154), (12, tiles_49_155),
+     (12, tiles_49_156), (12, tiles_49_157), (12, tiles_49_158), (12, tiles_49_159), (12, tiles_49_160), (12, tiles_49_161),
+     (12, tiles_49_162), (12, tiles_49_163), (12, tiles_49_164), (12, tiles_49_165), (12, tiles_49_166), (12, tiles_49_167),
+     (12, tiles_49_168), (12, tiles_49_169), (12, tiles_49_170), (12, tiles_49_171), (12, tiles_49_172), (12, tiles_49_173),
+     (12, tiles_49_174), (12, tiles_49_175), (12, tiles_49_176), (12, tiles_49_177), (12, tiles_49_178), (12, tiles_49_179),
+     (12, tiles_49_180), (12, tiles_49_181), (12, tiles_49_182), (12, tiles_49_183), (12, tiles_49_184), (12, tiles_49_185),
+     (12, tiles_49_186), (12, tiles_49_187), (12, tiles_49_188), (12, tiles_49_189), (12, tiles_49_190), (12, tiles_49_191),
+     (12, tiles_49_192), (12, tiles_49_193), (12, tiles_49_194), (12, tiles_50_0), (12, tiles_51_0), (12, tiles_52_0),
+     (12, tiles_53_0), (12, tiles_53_1), (12, tiles_53_2), (12, tiles_53_3), (12, tiles_53_4), (12, tiles_53_5),
+     (12, tiles_53_6), (12, tiles_53_7), (12, tiles_53_8), (12, tiles_53_9), (12, tiles_53_10), (12, tiles_53_11),
+     (12, tiles_53_12), (12, tiles_53_13), (12, tiles_53_14), (12, tiles_53_15), (12, tiles_53_16), (12, tiles_53_17),
+     (12, tiles_53_18), (12, tiles_53_19), (12, tiles_53_20), (12, tiles_53_21), (12, tiles_53_22), (12, tiles_53_23),
+     (12, tiles_53_24), (12, tiles_53_25), (12, tiles_53_26), (12, tiles_53_27), (12, tiles_53_28), (12, tiles_53_29),
+     (12, tiles_53_30), (12, tiles_53_31), (12, tiles_53_32), (12, tiles_53_33), (12, tiles_53_34), (12, tiles_53_35),
+     (12, tiles_53_36), (12, tiles_53_37), (12, tiles_53_38), (12, tiles_53_39), (12, tiles_53_40), (12, tiles_53_41),
+     (12, tiles_53_42), (12, tiles_53_43), (12, tiles_53_44), (12, tiles_53_45), (12, tiles_53_46), (12, tiles_53_47),
+     (12, tiles_53_48), (12, tiles_53_49), (12, tiles_53_50), (12, tiles_53_51), (12, tiles_53_52), (12, tiles_53_53),
+     (12, tiles_53_54), (12, tiles_53_55), (12, tiles_53_56), (12, tiles_53_57), (12, tiles_53_58), (12, tiles_53_59),
+     (12, tiles_53_60), (12, tiles_53_61), (12, tiles_53_62), (12, tiles_53_63), (12, tiles_53_64), (12, tiles_53_65),
+     (12, tiles_53_66), (12, tiles_53_67), (12, tiles_53_68), (12, tiles_53_69), (12, tiles_53_70), (12, tiles_53_71),
+     (12, tiles_53_72), (12, tiles_53_73), (12, tiles_53_74), (12, tiles_53_75), (12, tiles_53_76), (12, tiles_53_77),
+     (12, tiles_53_78), (12, tiles_53_79), (12, tiles_53_80), (12, tiles_53_81), (12, tiles_53_82), (12, tiles_53_83),
+     (12, tiles_53_84), (12, tiles_53_85), (12, tiles_53_86), (12, tiles_53_87), (12, tiles_53_88), (12, tiles_53_89),
+     (12, tiles_53_90), (12, tiles_53_91), (12, tiles_53_92), (12, tiles_53_93), (12, tiles_53_94), (12, tiles_53_95),
+     (12, tiles_53_96), (12, tiles_53_97), (12, tiles_53_98), (12, tiles_53_99), (12, tiles_53_100), (12, tiles_53_101),
+     (12, tiles_53_102), (12, tiles_53_103), (12, tiles_53_104), (12, tiles_53_105), (12, tiles_53_106), (12, tiles_53_107),
+     (12, tiles_53_108), (12, tiles_53_109), (12, tiles_53_110), (12, tiles_53_111), (12, tiles_53_112), (12, tiles_53_113),
+     (12, tiles_53_114), (12, tiles_53_115), (12, tiles_53_116), (12, tiles_53_117), (12, tiles_53_118), (12, tiles_53_119),
+     (12, tiles_53_120), (12, tiles_53_121), (12, tiles_53_122), (12, tiles_53_123), (12, tiles_53_124), (12, tiles_53_125),
+     (12, tiles_53_126), (12, tiles_53_127), (12, tiles_53_128), (12, tiles_53_129), (12, tiles_53_130), (12, tiles_53_131),
+     (12, tiles_53_132), (12, tiles_53_133), (12, tiles_53_134), (12, tiles_53_135), (12, tiles_53_136), (12, tiles_53_137),
+     (12, tiles_53_138), (12, tiles_53_139), (12, tiles_53_140), (12, tiles_53_141), (12, tiles_53_142), (12, tiles_53_143),
+     (12, tiles_53_144), (12, tiles_53_145), (12, tiles_53_146), (12, tiles_53_147), (12, tiles_53_148), (12, tiles_53_149),
+     (12, tiles_53_150), (12, tiles_53_151), (12, tiles_53_152), (12, tiles_53_153), (12, tiles_53_154), (12, tiles_53_155),
+     (12, tiles_53_156), (12, tiles_53_157), (12, tiles_53_158), (12, tiles_53_159), (12, tiles_53_160), (12, tiles_53_161),
+     (12, tiles_53_162), (12, tiles_53_163), (12, tiles_53_164), (12, tiles_53_165), (12, tiles_53_166), (12, tiles_53_167),
+     (12, tiles_53_168), (12, tiles_53_169), (12, tiles_53_170), (12, tiles_53_171), (12, tiles_53_172), (12, tiles_53_173),
+     (12, tiles_53_174), (12, tiles_53_175), (12, tiles_53_176), (12, tiles_53_177), (12, tiles_53_178), (12, tiles_53_179),
+     (12, tiles_53_180), (12, tiles_53_181), (12, tiles_53_182), (12, tiles_53_183), (12, tiles_53_184), (12, tiles_53_185),
+     (12, tiles_53_186), (12, tiles_53_187), (12, tiles_53_188), (12, tiles_53_189), (12, tiles_54_0), (12, tiles_55_0),
+     (12, tiles_56_0), (12, tiles_57_0), (12, tiles_57_1), (12, tiles_57_2), (12, tiles_57_3), (12, tiles_57_4),
+     (12, tiles_57_5), (12, tiles_57_6), (12, tiles_57_7), (12, tiles_57_8), (12, tiles_57_9), (12, tiles_57_10),
+     (12, tiles_57_11), (12, tiles_57_12), (12, tiles_57_13), (12, tiles_57_14), (12, tiles_57_15), (12, tiles_57_16),
+     (12, tiles_57_17), (12, tiles_57_18), (12, tiles_57_19), (12, tiles_57_20), (12, tiles_57_21), (12, tiles_57_22),
+     (12, tiles_57_23), (12, tiles_57_24), (12, tiles_57_25), (12, tiles_57_26), (12, tiles_57_27), (12, tiles_57_28),
+     (12, tiles_57_29), (12, tiles_57_30), (12, tiles_57_31), (12, tiles_57_32), (12, tiles_57_33), (12, tiles_57_34),
+     (12, tiles_57_35), (12, tiles_57_36), (12, tiles_57_37), (12, tiles_57_38), (12, tiles_57_39), (12, tiles_57_40),
+     (12, tiles_57_41), (12, tiles_57_42), (12, tiles_57_43), (12, tiles_57_44), (12, tiles_57_45), (12, tiles_57_46),
+     (12, tiles_57_47), (12, tiles_57_48), (12, tiles_57_49), (12, tiles_57_50), (12, tiles_57_51), (12, tiles_57_52),
+     (12, tiles_57_53), (12, tiles_57_54), (12, tiles_57_55), (12, tiles_57_56), (12, tiles_57_57), (12, tiles_57_58),
+     (12, tiles_57_59), (12, tiles_57_60), (12, tiles_57_61), (12, tiles_57_62), (12, tiles_57_63), (12, tiles_57_64),
+     (12, tiles_57_65), (12, tiles_57_66), (12, tiles_57_67), (12, tiles_57_68), (12, tiles_57_69), (12, tiles_57_70),
+     (12, tiles_57_71), (12, tiles_57_72), (12, tiles_57_73), (12, tiles_57_74), (12, tiles_57_75), (12, tiles_57_76),
+     (12, tiles_57_77), (12, tiles_57_78), (12, tiles_57_79), (12, tiles_57_80), (12, tiles_57_81), (12, tiles_57_82),
+     (12, tiles_57_83), (12, tiles_57_84), (12, tiles_57_85), (12, tiles_57_86), (12, tiles_57_87), (12, tiles_57_88),
+     (12, tiles_57_89), (12, tiles_57_90), (12, tiles_57_91), (12, tiles_57_92), (12, tiles_57_93), (12, tiles_57_94),
+     (12, tiles_57_95), (12, tiles_57_96), (12, tiles_57_97), (12, tiles_57_98), (12, tiles_57_99), (12, tiles_57_100),
+     (12, tiles_57_101), (12, tiles_57_102), (12, tiles_57_103), (12, tiles_57_104), (12, tiles_57_105), (12, tiles_57_106),
+     (12, tiles_57_107), (12, tiles_57_108), (12, tiles_57_109), (12, tiles_57_110), (12, tiles_57_111), (12, tiles_57_112),
+     (12, tiles_57_113), (12, tiles_57_114), (12, tiles_57_115), (12, tiles_57_116), (12, tiles_57_117), (12, tiles_57_118),
+     (12, tiles_57_119), (12, tiles_57_120), (12, tiles_57_121), (12, tiles_57_122), (12, tiles_57_123), (12, tiles_57_124),
+     (12, tiles_57_125), (12, tiles_57_126), (12, tiles_57_127), (12, tiles_57_128), (12, tiles_57_129), (12, tiles_57_130),
+     (12, tiles_57_131), (12, tiles_57_132), (12, tiles_57_133), (12, tiles_57_134), (12, tiles_57_135), (12, tiles_57_136),
+     (12, tiles_57_137), (12, tiles_57_138), (12, tiles_57_139), (12, tiles_57_140), (12, tiles_57_141), (12, tiles_57_142),
+     (12, tiles_57_143), (12, tiles_57_144), (12, tiles_57_145), (12, tiles_57_146), (12, tiles_57_147), (12, tiles_57_148),
+     (12, tiles_57_149), (12, tiles_57_150), (12, tiles_57_151), (12, tiles_57_152), (12, tiles_57_153), (12, tiles_57_154),
+     (12, tiles_57_155), (12, tiles_57_156), (12, tiles_57_157), (12, tiles_57_158), (12, tiles_57_159), (12, tiles_57_160),
+     (12, tiles_57_161), (12, tiles_57_162), (12, tiles_57_163), (12, tiles_57_164), (12, tiles_57_165), (12, tiles_57_166),
+     (12, tiles_57_167), (12, tiles_57_168), (12, tiles_57_169), (12, tiles_57_170), (12, tiles_57_171), (12, tiles_57_172),
+     (12, tiles_57_173), (12, tiles_57_174), (12, tiles_57_175), (12, tiles_57_176), (12, tiles_57_177), (12, tiles_57_178),
+     (12, tiles_57_179), (12, tiles_57_180), (12, tiles_57_181), (12, tiles_57_182), (12, tiles_57_183), (12, tiles_57_184),
+     (12, tiles_57_185), (12, tiles_57_186), (12, tiles_57_187), (12, tiles_57_188), (12, tiles_57_189), (12, tiles_57_190),
+     (12, tiles_57_191), (12, tiles_57_192), (12, tiles_57_193), (12, tiles_57_194), (12, tiles_57_195), (12, tiles_57_196),
+     (12, tiles_57_197), (12, tiles_57_198), (12, tiles_57_199), (12, tiles_57_200), (12, tiles_57_201), (12, tiles_57_202),
+     (12, tiles_57_203), (12, tiles_57_204), (12, tiles_57_205), (12, tiles_57_206), (12, tiles_57_207), (12, tiles_57_208),
+     (12, tiles_57_209), (12, tiles_57_210), (12, tiles_57_211), (12, tiles_57_212), (12, tiles_57_213), (12, tiles_57_214),
+     (12, tiles_57_215), (12, tiles_57_216), (12, tiles_57_217), (12, tiles_57_218), (12, tiles_57_219), (12, tiles_57_220),
+     (12, tiles_57_221), (12, tiles_57_222), (12, tiles_57_223), (12, tiles_57_224), (12, tiles_57_225), (12, tiles_57_226),
+     (12, tiles_57_227), (12, tiles_57_228), (12, tiles_57_229), (12, tiles_57_230), (12, tiles_57_231), (12, tiles_57_232),
+     (12, tiles_57_233), (12, tiles_57_234), (12, tiles_57_235), (12, tiles_57_236), (12, tiles_57_237), (12, tiles_57_238),
+     (12, tiles_57_239), (12, tiles_57_240), (12, tiles_57_241), (12, tiles_57_242), (12, tiles_57_243), (12, tiles_57_244),
+     (12, tiles_57_245), (12, tiles_57_246), (12, tiles_57_247), (12, tiles_57_248), (12, tiles_57_249), (12, tiles_57_250),
+     (12, tiles_57_251), (12, tiles_57_252), (12, tiles_57_253), (12, tiles_57_254), (12, tiles_57_255), (12, tiles_57_256),
+     (12, tiles_57_257), (12, tiles_57_258), (12, tiles_57_259), (12, tiles_57_260), (12, tiles_57_261), (12, tiles_57_262),
+     (12, tiles_57_263), (12, tiles_57_264), (12, tiles_57_265), (12, tiles_57_266), (12, tiles_57_267), (12, tiles_57_268),
+     (12, tiles_57_269), (12, tiles_57_270), (12, tiles_57_271), (12, tiles_57_272), (12, tiles_57_273), (12, tiles_57_274),
+     (12, tiles_57_275), (12, tiles_57_276), (12, tiles_57_277), (12, tiles_57_278), (12, tiles_57_279), (12, tiles_57_280),
+     (12, tiles_57_281), (12, tiles_57_282), (12, tiles_57_283), (12, tiles_57_284), (12, tiles_57_285), (12, tiles_57_286),
+     (12, tiles_57_287), (12, tiles_57_288), (12, tiles_57_289), (12, tiles_57_290), (12, tiles_57_291), (12, tiles_57_292),
+     (12, tiles_57_293), (12, tiles_57_294), (12, tiles_57_295), (12, tiles_57_296), (12, tiles_57_297), (12, tiles_57_298),
+     (12, tiles_57_299), (12, tiles_57_300), (12, tiles_57_301), (12, tiles_57_302), (12, tiles_57_303), (12, tiles_57_304),
+     (12, tiles_57_305), (12, tiles_57_306), (12, tiles_57_307), (12, tiles_57_308), (12, tiles_57_309), (12, tiles_57_310),
+     (12, tiles_57_311), (12, tiles_57_312), (12, tiles_57_313), (12, tiles_57_314), (12, tiles_57_315), (12, tiles_57_316),
+     (12, tiles_57_317), (12, tiles_57_318), (12, tiles_57_319), (12, tiles_57_320), (12, tiles_57_321), (12, tiles_57_322),
+     (12, tiles_57_323), (12, tiles_57_324), (12, tiles_57_325), (12, tiles_57_326), (12, tiles_57_327), (12, tiles_57_328),
+     (12, tiles_57_329), (12, tiles_57_330), (12, tiles_57_331), (12, tiles_57_332), (12, tiles_57_333), (12, tiles_57_334),
+     (12, tiles_57_335), (12, tiles_57_336), (12, tiles_57_337), (12, tiles_57_338), (12, tiles_57_339), (12, tiles_57_340),
+     (12, tiles_57_341), (12, tiles_57_342), (12, tiles_57_343), (12, tiles_57_344), (12, tiles_57_345), (12, tiles_57_346),
+     (12, tiles_57_347), (12, tiles_57_348), (12, tiles_57_349), (12, tiles_57_350), (12, tiles_57_351), (12, tiles_57_352),
+     (12, tiles_57_353), (12, tiles_57_354), (12, tiles_57_355), (12, tiles_57_356), (12, tiles_57_357), (12, tiles_57_358),
+     (12, tiles_57_359), (12, tiles_57_360), (12, tiles_57_361), (12, tiles_57_362), (12, tiles_57_363), (12, tiles_57_364),
+     (12, tiles_57_365), (12, tiles_57_366), (12, tiles_57_367), (12, tiles_57_368), (12, tiles_57_369), (12, tiles_57_370),
+     (12, tiles_57_371), (12, tiles_57_372), (12, tiles_57_373), (12, tiles_57_374), (12, tiles_57_375), (12, tiles_57_376),
+     (12, tiles_57_377), (12, tiles_57_378), (12, tiles_57_379), (12, tiles_57_380), (12, tiles_57_381), (12, tiles_57_382),
+     (12, tiles_57_383), (12, tiles_57_384), (12, tiles_57_385), (12, tiles_57_386), (12, tiles_57_387), (12, tiles_57_388),
+     (12, tiles_57_389), (12, tiles_57_390), (12, tiles_57_391), (12, tiles_58_0), (12, tiles_58_1), (12, tiles_58_2),
+     (12, tiles_58_3), (12, tiles_58_4), (12, tiles_58_5), (12, tiles_58_6), (12, tiles_58_7), (12, tiles_58_8),
+     (12, tiles_58_9), (12, tiles_58_10), (12, tiles_58_11), (12, tiles_58_12), (12, tiles_58_13), (12, tiles_58_14),
+     (12, tiles_58_15), (12, tiles_58_16), (12, tiles_58_17), (12, tiles_58_18), (12, tiles_58_19), (12, tiles_58_20),
+     (12, tiles_58_21), (12, tiles_58_22), (12, tiles_58_23), (12, tiles_58_24), (12, tiles_58_25), (12, tiles_58_26),
+     (12, tiles_58_27), (12, tiles_58_28), (12, tiles_58_29), (12, tiles_58_30), (12, tiles_58_31), (12, tiles_58_32),
+     (12, tiles_58_33), (12, tiles_58_34), (12, tiles_58_35), (12, tiles_58_36), (12, tiles_58_37), (12, tiles_58_38),
+     (12, tiles_58_39), (12, tiles_58_40), (12, tiles_58_41), (12, tiles_58_42), (12, tiles_58_43), (12, tiles_58_44),
+     (12, tiles_58_45), (12, tiles_58_46), (12, tiles_58_47), (12, tiles_58_48), (12, tiles_58_49), (12, tiles_58_50),
+     (12, tiles_58_51), (12, tiles_58_52), (12, tiles_58_53), (12, tiles_58_54), (12, tiles_58_55), (12, tiles_58_56),
+     (12, tiles_58_57), (12, tiles_58_58), (12, tiles_58_59), (12, tiles_58_60), (12, tiles_58_61), (12, tiles_58_62),
+     (12, tiles_58_63), (12, tiles_58_64), (12, tiles_58_65), (12, tiles_58_66), (12, tiles_58_67), (12, tiles_58_68),
+     (12, tiles_58_69), (12, tiles_58_70), (12, tiles_58_71), (12, tiles_58_72), (12, tiles_58_73), (12, tiles_58_74),
+     (12, tiles_58_75), (12, tiles_58_76), (12, tiles_58_77), (12, tiles_58_78), (12, tiles_58_79), (12, tiles_58_80),
+     (12, tiles_58_81), (12, tiles_58_82), (12, tiles_58_83), (12, tiles_58_84), (12, tiles_59_0), (12, tiles_60_0),
+     (12, tiles_61_0), (12, tiles_61_1), (12, tiles_61_2), (12, tiles_61_3), (12, tiles_61_4), (12, tiles_61_5),
+     (12, tiles_61_6), (12, tiles_61_7), (12, tiles_61_8), (12, tiles_61_9), (12, tiles_61_10), (12, tiles_61_11),
+     (12, tiles_61_12), (12, tiles_61_13), (12, tiles_61_14), (12, tiles_61_15), (12, tiles_61_16), (12, tiles_61_17),
+     (12, tiles_61_18), (12, tiles_61_19), (12, tiles_61_20), (12, tiles_61_21), (12, tiles_61_22), (12, tiles_61_23),
+     (12, tiles_61_24), (12, tiles_61_25), (12, tiles_61_26), (12, tiles_61_27), (12, tiles_61_28), (12, tiles_61_29),
+     (12, tiles_61_30), (12, tiles_61_31), (12, tiles_61_32), (12, tiles_61_33), (12, tiles_61_34), (12, tiles_61_35),
+     (12, tiles_61_36), (12, tiles_61_37), (12, tiles_61_38), (12, tiles_61_39), (12, tiles_61_40), (12, tiles_61_41),
+     (12, tiles_61_42), (12, tiles_61_43), (12, tiles_61_44), (12, tiles_61_45), (12, tiles_61_46), (12, tiles_61_47),
+     (12, tiles_61_48), (12, tiles_61_49), (12, tiles_61_50), (12, tiles_61_51), (12, tiles_61_52), (12, tiles_61_53),
+     (12, tiles_61_54), (12, tiles_61_55), (12, tiles_61_56), (12, tiles_61_57), (12, tiles_61_58), (12, tiles_61_59),
+     (12, tiles_61_60), (12, tiles_61_61), (12, tiles_61_62), (12, tiles_61_63), (12, tiles_61_64), (12, tiles_61_65),
+     (12, tiles_61_66), (12, tiles_61_67), (12, tiles_61_68), (12, tiles_61_69), (12, tiles_61_70), (12, tiles_61_71),
+     (12, tiles_61_72), (12, tiles_61_73), (12, tiles_61_74), (12, tiles_61_75), (12, tiles_61_76), (12, tiles_61_77),
+     (12, tiles_61_78), (12, tiles_61_79), (12, tiles_61_80), (12, tiles_61_81), (12, tiles_61_82), (12, tiles_61_83),
+     (12, tiles_61_84), (12, tiles_61_85), (12, tiles_61_86), (12, tiles_61_87), (12, tiles_61_88), (12, tiles_61_89),
+     (12, tiles_61_90), (12, tiles_61_91), (12, tiles_61_92), (12, tiles_61_93), (12, tiles_61_94), (12, tiles_61_95),
+     (12, tiles_61_96), (12, tiles_61_97), (12, tiles_61_98), (12, tiles_61_99), (12, tiles_61_100), (12, tiles_61_101),
+     (12, tiles_61_102), (12, tiles_61_103), (12, tiles_61_104), (12, tiles_61_105), (12, tiles_61_106), (12, tiles_61_107),
+     (12, tiles_61_108), (12, tiles_61_109), (12, tiles_61_110), (12, tiles_61_111), (12, tiles_61_112), (12, tiles_61_113),
+     (12, tiles_61_114), (12, tiles_61_115), (12, tiles_61_116), (12, tiles_61_117), (12, tiles_61_118), (12, tiles_61_119),
+     (12, tiles_61_120), (12, tiles_61_121), (12, tiles_61_122), (12, tiles_61_123), (12, tiles_61_124), (12, tiles_61_125),
+     (12, tiles_61_126), (12, tiles_61_127), (12, tiles_61_128), (12, tiles_61_129), (12, tiles_61_130), (12, tiles_61_131),
+     (12, tiles_61_132), (12, tiles_61_133), (12, tiles_61_134), (12, tiles_61_135), (12, tiles_61_136), (12, tiles_61_137),
+     (12, tiles_61_138), (12, tiles_61_139), (12, tiles_61_140), (12, tiles_61_141), (12, tiles_61_142), (12, tiles_61_143),
+     (12, tiles_61_144), (12, tiles_61_145), (12, tiles_61_146), (12, tiles_61_147), (12, tiles_61_148), (12, tiles_61_149),
+     (12, tiles_61_150), (12, tiles_61_151), (12, tiles_61_152), (12, tiles_61_153), (12, tiles_61_154), (12, tiles_61_155),
+     (12, tiles_61_156), (12, tiles_61_157), (12, tiles_61_158), (12, tiles_61_159), (12, tiles_61_160), (12, tiles_61_161),
+     (12, tiles_61_162), (12, tiles_61_163), (12, tiles_61_164), (12, tiles_61_165), (12, tiles_61_166), (12, tiles_61_167),
+     (12, tiles_61_168), (12, tiles_61_169), (12, tiles_61_170), (12, tiles_61_171), (12, tiles_61_172), (12, tiles_61_173),
+     (12, tiles_61_174), (12, tiles_61_175), (12, tiles_61_176), (12, tiles_61_177), (12, tiles_61_178), (12, tiles_61_179),
+     (12, tiles_61_180), (12, tiles_61_181), (12, tiles_61_182), (12, tiles_61_183), (12, tiles_61_184), (12, tiles_61_185),
+     (12, tiles_61_186), (12, tiles_61_187), (12, tiles_61_188), (12, tiles_61_189), (12, tiles_61_190), (12, tiles_61_191),
+     (12, tiles_61_192), (12, tiles_61_193), (12, tiles_61_194), (12, tiles_61_195), (12, tiles_61_196), (12, tiles_61_197),
+     (12, tiles_61_198), (12, tiles_61_199), (12, tiles_61_200), (12, tiles_61_201), (12, tiles_61_202), (12, tiles_61_203),
+     (12, tiles_61_204), (12, tiles_61_205), (12, tiles_61_206), (12, tiles_61_207), (12, tiles_61_208), (12, tiles_61_209),
+     (12, tiles_61_210), (12, tiles_61_211), (12, tiles_61_212), (12, tiles_61_213), (12, tiles_61_214), (12, tiles_61_215),
+     (12, tiles_61_216), (12, tiles_61_217), (12, tiles_61_218), (12, tiles_61_219), (12, tiles_61_220), (12, tiles_61_221),
+     (12, tiles_61_222), (12, tiles_61_223), (12, tiles_61_224), (12, tiles_61_225), (12, tiles_61_226), (12, tiles_61_227),
+     (12, tiles_61_228), (12, tiles_61_229), (12, tiles_61_230), (12, tiles_61_231), (12, tiles_61_232), (12, tiles_61_233),
+     (12, tiles_61_234), (12, tiles_61_235), (12, tiles_61_236), (12, tiles_61_237), (12, tiles_61_238), (12, tiles_61_239),
+     (12, tiles_61_240), (12, tiles_61_241), (12, tiles_61_242), (12, tiles_61_243), (12, tiles_61_244), (12, tiles_61_245),
+     (12, tiles_61_246), (12, tiles_61_247), (12, tiles_61_248), (12, tiles_61_249), (12, tiles_61_250), (12, tiles_61_251),
+     (12, tiles_61_252), (12, tiles_61_253), (12, tiles_61_254), (12, tiles_61_255), (12, tiles_61_256), (12, tiles_61_257),
+     (12, tiles_61_258), (12, tiles_61_259), (12, tiles_61_260), (12, tiles_61_261), (12, tiles_61_262), (12, tiles_61_263),
+     (12, tiles_61_264), (12, tiles_61_265), (12, tiles_61_266), (12, tiles_61_267), (12, tiles_61_268), (12, tiles_61_269),
+     (12, tiles_61_270), (12, tiles_61_271), (12, tiles_61_272), (12, tiles_61_273), (12, tiles_61_274), (12, tiles_61_275),
+     (12, tiles_61_276), (12, tiles_61_277), (12, tiles_61_278), (12, tiles_61_279), (12, tiles_61_280), (12, tiles_61_281),
+     (12, tiles_61_282), (12, tiles_61_283), (12, tiles_61_284), (12, tiles_61_285), (12, tiles_61_286), (12, tiles_61_287),
+     (12, tiles_61_288), (12, tiles_61_289), (12, tiles_61_290), (12, tiles_61_291), (12, tiles_61_292), (12, tiles_61_293),
+     (12, tiles_61_294), (12, tiles_61_295), (12, tiles_61_296), (12, tiles_61_297), (12, tiles_61_298), (12, tiles_61_299),
+     (12, tiles_61_300), (12, tiles_61_301), (12, tiles_61_302), (12, tiles_61_303), (12, tiles_61_304), (12, tiles_61_305),
+     (12, tiles_61_306), (12, tiles_61_307), (12, tiles_61_308), (12, tiles_61_309), (12, tiles_61_310), (12, tiles_61_311),
+     (12, tiles_61_312), (12, tiles_61_313), (12, tiles_61_314), (12, tiles_61_315), (12, tiles_61_316), (12, tiles_61_317),
+     (12, tiles_61_318), (12, tiles_61_319), (12, tiles_61_320), (12, tiles_61_321), (12, tiles_61_322), (12, tiles_61_323),
+     (12, tiles_61_324), (12, tiles_61_325), (12, tiles_61_326), (12, tiles_61_327), (12, tiles_61_328), (12, tiles_61_329),
+     (12, tiles_61_330), (12, tiles_61_331), (12, tiles_61_332), (12, tiles_61_333), (12, tiles_61_334), (12, tiles_61_335),
+     (12, tiles_61_336), (12, tiles_61_337), (12, tiles_61_338), (12, tiles_61_339), (12, tiles_61_340), (12, tiles_61_341),
+     (12, tiles_61_342), (12, tiles_61_343), (12, tiles_61_344), (12, tiles_61_345), (12, tiles_61_346), (12, tiles_61_347),
+     (12, tiles_61_348), (12, tiles_61_349), (12, tiles_61_350), (12, tiles_61_351), (12, tiles_61_352), (12, tiles_61_353),
+     (12, tiles_61_354), (12, tiles_61_355), (12, tiles_61_356), (12, tiles_61_357), (12, tiles_61_358), (12, tiles_61_359),
+     (12, tiles_61_360), (12, tiles_61_361), (12, tiles_61_362), (12, tiles_61_363), (12, tiles_61_364), (12, tiles_61_365),
+     (12, tiles_61_366), (12, tiles_61_367), (12, tiles_61_368), (12, tiles_61_369), (12, tiles_61_370), (12, tiles_61_371),
+     (12, tiles_61_372), (12, tiles_61_373), (12, tiles_61_374), (12, tiles_61_375), (12, tiles_61_376), (12, tiles_61_377),
+     (12, tiles_61_378), (12, tiles_61_379), (12, tiles_61_380), (12, tiles_61_381), (12, tiles_61_382), (12, tiles_61_383),
+     (12, tiles_61_384), (12, tiles_61_385), (12, tiles_61_386), (12, tiles_61_387), (12, tiles_61_388), (12, tiles_61_389),
+     (12, tiles_61_390), (12, tiles_61_391), (12, tiles_61_392), (12, tiles_61_393), (12, tiles_61_394), (12, tiles_61_395),
+     (12, tiles_61_396), (12, tiles_61_397), (12, tiles_61_398), (12, tiles_61_399), (12, tiles_61_400), (12, tiles_61_401),
+     (12, tiles_61_402), (12, tiles_61_403), (12, tiles_61_404), (12, tiles_61_405), (12, tiles_61_406), (12, tiles_61_407),
+     (12, tiles_61_408), (12, tiles_61_409), (12, tiles_61_410), (12, tiles_61_411), (12, tiles_61_412), (12, tiles_61_413),
+     (12, tiles_61_414), (12, tiles_61_415), (12, tiles_61_416), (12, tiles_61_417), (12, tiles_61_418), (12, tiles_61_419),
+     (12, tiles_61_420), (12, tiles_61_421), (12, tiles_61_422), (12, tiles_61_423), (12, tiles_61_424), (12, tiles_61_425),
+     (12, tiles_61_426), (12, tiles_61_427), (12, tiles_61_428), (12, tiles_61_429), (12, tiles_61_430), (12, tiles_61_431),
+     (12, tiles_61_432), (12, tiles_61_433), (12, tiles_61_434), (12, tiles_61_435), (12, tiles_61_436), (12, tiles_61_437),
+     (12, tiles_61_438), (12, tiles_61_439), (12, tiles_61_440), (12, tiles_61_441), (12, tiles_61_442), (12, tiles_61_443),
+     (12, tiles_61_444), (12, tiles_61_445), (12, tiles_61_446), (12, tiles_61_447), (12, tiles_61_448), (12, tiles_61_449),
+     (12, tiles_61_450), (12, tiles_61_451), (12, tiles_61_452), (12, tiles_61_453), (12, tiles_62_0), (12, tiles_62_1),
+     (12, tiles_62_2), (12, tiles_62_3), (12, tiles_62_4), (12, tiles_62_5), (12, tiles_62_6), (12, tiles_62_7),
+     (12, tiles_62_8), (12, tiles_62_9), (12, tiles_62_10), (12, tiles_62_11), (12, tiles_62_12), (12, tiles_62_13),
+     (12, tiles_62_14), (12, tiles_62_15), (12, tiles_62_16), (12, tiles_62_17), (12, tiles_63_0), (11, tiles_64_0),
+     (11, tiles_65_0), (11, tiles_65_1), (11, tiles_65_2), (11, tiles_65_3), (11, tiles_65_4), (11, tiles_65_5),
+     (11, tiles_65_6), (11, tiles_65_7), (11, tiles_65_8), (11, tiles_65_9), (11, tiles_65_10), (11, tiles_65_11),
+     (11, tiles_65_12), (11, tiles_65_13), (11, tiles_65_14), (11, tiles_65_15), (11, tiles_65_16), (11, tiles_65_17),
+     (11, tiles_65_18), (11, tiles_65_19), (11, tiles_65_20), (11, tiles_65_21), (11, tiles_65_22), (11, tiles_65_23),
+     (11, tiles_65_24), (11, tiles_65_25), (11, tiles_65_26), (11, tiles_65_27), (11, tiles_65_28), (11, tiles_65_29),
+     (11, tiles_65_30), (11, tiles_65_31), (11, tiles_65_32), (11, tiles_65_33), (11, tiles_65_34), (11, tiles_65_35),
+     (11, tiles_65_36), (11, tiles_65_37), (11, tiles_65_38), (11, tiles_65_39), (11, tiles_65_40), (11, tiles_65_41),
+     (11, tiles_65_42), (11, tiles_65_43), (11, tiles_65_44), (11, tiles_65_45), (11, tiles_65_46), (11, tiles_65_47),
+     (11, tiles_65_48), (11, tiles_65_49), (11, tiles_65_50), (11, tiles_65_51), (11, tiles_65_52), (11, tiles_65_53),
+     (11, tiles_65_54), (11, tiles_65_55), (11, tiles_65_56), (11, tiles_65_57), (11, tiles_65_58), (11, tiles_65_59),
+     (11, tiles_65_60), (11, tiles_65_61), (11, tiles_65_62), (11, tiles_65_63), (11, tiles_65_64), (11, tiles_65_65),
+     (11, tiles_65_66), (11, tiles_65_67), (11, tiles_65_68), (11, tiles_65_69), (11, tiles_65_70), (11, tiles_65_71),
+     (11, tiles_65_72), (11, tiles_65_73), (11, tiles_65_74), (11, tiles_65_75), (11, tiles_65_76), (11, tiles_65_77),
+     (11, tiles_66_0), (11, tiles_67_0), (11, tiles_68_0), (11, tiles_68_1), (11, tiles_68_2), (11, tiles_68_3),
+     (11, tiles_68_4), (11, tiles_68_5), (11, tiles_69_0), (11, tiles_69_1), (11, tiles_69_2), (11, tiles_69_3),
+     (11, tiles_69_4), (11, tiles_69_5), (11, tiles_69_6), (11, tiles_69_7), (11, tiles_69_8), (11, tiles_69_9),
+     (11, tiles_69_10), (11, tiles_69_11), (11, tiles_69_12), (11, tiles_69_13), (11, tiles_69_14), (11, tiles_69_15),
+     (11, tiles_69_16), (11, tiles_69_17), (11, tiles_69_18), (11, tiles_69_19), (11, tiles_69_20), (11, tiles_69_21),
+     (11, tiles_69_22), (11, tiles_69_23), (11, tiles_69_24), (11, tiles_69_25), (11, tiles_69_26), (11, tiles_69_27),
+     (11, tiles_69_28), (11, tiles_69_29), (11, tiles_69_30), (11, tiles_69_31), (11, tiles_69_32), (11, tiles_69_33),
+     (11, tiles_69_34), (11, tiles_69_35), (11, tiles_69_36), (11, tiles_69_37), (11, tiles_69_38), (11, tiles_69_39),
+     (11, tiles_69_40), (11, tiles_69_41), (11, tiles_69_42), (11, tiles_69_43), (11, tiles_69_44), (11, tiles_69_45),
+     (11, tiles_69_46), (11, tiles_69_47), (11, tiles_69_48), (11, tiles_69_49), (11, tiles_69_50), (11, tiles_69_51),
+     (11, tiles_69_52), (11, tiles_69_53), (11, tiles_69_54), (11, tiles_69_55), (11, tiles_69_56), (11, tiles_69_57),
+     (11, tiles_69_58), (11, tiles_69_59), (11, tiles_69_60), (11, tiles_69_61), (11, tiles_69_62), (11, tiles_69_63),
+     (11, tiles_69_64), (11, tiles_69_65), (11, tiles_69_66), (11, tiles_69_67), (11, tiles_69_68), (11, tiles_70_0),
+     (11, tiles_71_0), (11, tiles_72_0), (11, tiles_72_1), (11, tiles_72_2), (11, tiles_72_3), (11, tiles_72_4),
+     (11, tiles_72_5), (11, tiles_72_6), (11, tiles_72_7), (11, tiles_72_8), (11, tiles_72_9), (11, tiles_72_10),
+     (11, tiles_72_11), (11, tiles_72_12), (11, tiles_72_13), (11, tiles_72_14), (11, tiles_72_15), (11, tiles_72_16),
+     (11, tiles_72_17), (11, tiles_72_18), (11, tiles_72_19), (11, tiles_72_20), (11, tiles_72_21), (11, tiles_72_22),
+     (11, tiles_72_23), (11, tiles_72_24), (11, tiles_72_25), (11, tiles_72_26), (11, tiles_72_27), (11, tiles_72_28),
+     (11, tiles_72_29), (11, tiles_72_30), (11, tiles_72_31), (11, tiles_72_32), (11, tiles_72_33), (11, tiles_72_34),
+     (11, tiles_72_35), (11, tiles_72_36), (11, tiles_72_37), (11, tiles_72_38), (11, tiles_72_39), (11, tiles_72_40),
+     (11, tiles_72_41), (11, tiles_72_42), (11, tiles_72_43), (11, tiles_72_44), (11, tiles_72_45), (11, tiles_72_46),
+     (11, tiles_72_47), (11, tiles_72_48), (11, tiles_72_49), (11, tiles_72_50), (11, tiles_72_51), (11, tiles_72_52),
+     (11, tiles_72_53), (11, tiles_72_54), (11, tiles_72_55), (11, tiles_72_56), (11, tiles_72_57), (11, tiles_72_58),
+     (11, tiles_72_59), (11, tiles_72_60), (11, tiles_72_61), (11, tiles_72_62), (11, tiles_72_63), (11, tiles_72_64),
+     (11, tiles_72_65), (11, tiles_72_66), (11, tiles_72_67), (11, tiles_72_68), (11, tiles_72_69), (11, tiles_72_70),
+     (11, tiles_72_71), (11, tiles_72_72), (11, tiles_72_73), (11, tiles_72_74), (11, tiles_72_75), (11, tiles_72_76),
+     (11, tiles_72_77), (11, tiles_72_78), (11, tiles_72_79), (11, tiles_72_80), (11, tiles_72_81), (11, tiles_72_82),
+     (11, tiles_72_83), (11, tiles_72_84), (11, tiles_72_85), (11, tiles_72_86), (11, tiles_72_87), (11, tiles_72_88),
+     (11, tiles_72_89), (11, tiles_72_90), (11, tiles_72_91), (11, tiles_72_92), (11, tiles_72_93), (11, tiles_72_94),
+     (11, tiles_72_95), (11, tiles_72_96), (11, tiles_72_97), (11, tiles_72_98), (11, tiles_72_99), (11, tiles_72_100),
+     (11, tiles_72_101), (11, tiles_72_102), (11, tiles_72_103), (11, tiles_72_104), (11, tiles_72_105), (11, tiles_72_106),
+     (11, tiles_72_107), (11, tiles_72_108), (11, tiles_72_109), (11, tiles_72_110), (11, tiles_72_111), (11, tiles_72_112),
+     (11, tiles_72_113), (11, tiles_72_114), (11, tiles_72_115), (11, tiles_72_116), (11, tiles_72_117), (11, tiles_72_118),
+     (11, tiles_72_119), (11, tiles_72_120), (11, tiles_72_121), (11, tiles_72_122), (11, tiles_72_123), (11, tiles_72_124),
+     (11, tiles_72_125), (11, tiles_72_126), (11, tiles_72_127), (11, tiles_72_128), (11, tiles_72_129), (11, tiles_72_130),
+     (11, tiles_73_0), (11, tiles_73_1), (11, tiles_73_2), (11, tiles_73_3), (11, tiles_73_4), (11, tiles_73_5),
+     (11, tiles_73_6), (11, tiles_73_7), (11, tiles_73_8), (11, tiles_73_9), (11, tiles_73_10), (11, tiles_73_11),
+     (11, tiles_73_12), (11, tiles_73_13), (11, tiles_73_14), (11, tiles_73_15), (11, tiles_73_16), (11, tiles_73_17),
+     (11, tiles_73_18), (11, tiles_73_19), (11, tiles_73_20), (11, tiles_73_21), (11, tiles_73_22), (11, tiles_73_23),
+     (11, tiles_73_24), (11, tiles_73_25), (11, tiles_73_26), (11, tiles_73_27), (11, tiles_73_28), (11, tiles_73_29),
+     (11, tiles_73_30), (11, tiles_73_31), (11, tiles_73_32), (11, tiles_73_33), (11, tiles_73_34), (11, tiles_73_35),
+     (11, tiles_73_36), (11, tiles_73_37), (11, tiles_73_38), (11, tiles_73_39), (11, tiles_73_40), (11, tiles_73_41),
+     (11, tiles_73_42), (11, tiles_73_43), (11, tiles_73_44), (11, tiles_73_45), (11, tiles_73_46), (11, tiles_73_47),
+     (11, tiles_73_48), (11, tiles_73_49), (11, tiles_73_50), (11, tiles_73_51), (11, tiles_73_52), (11, tiles_73_53),
+     (11, tiles_73_54), (11, tiles_73_55), (11, tiles_73_56), (11, tiles_73_57), (11, tiles_73_58), (11, tiles_73_59),
+     (11, tiles_73_60), (11, tiles_73_61), (11, tiles_73_62), (11, tiles_73_63), (11, tiles_73_64), (11, tiles_73_65),
+     (11, tiles_73_66), (11, tiles_73_67), (11, tiles_73_68), (11, tiles_73_69), (11, tiles_73_70), (11, tiles_73_71),
+     (11, tiles_73_72), (11, tiles_73_73), (11, tiles_73_74), (11, tiles_73_75), (11, tiles_73_76), (11, tiles_73_77),
+     (11, tiles_74_0), (11, tiles_75_0), (11, tiles_76_0), (11, tiles_76_1), (11, tiles_76_2), (11, tiles_76_3),
+     (11, tiles_76_4), (11, tiles_76_5), (11, tiles_76_6), (11, tiles_76_7), (11, tiles_76_8), (11, tiles_76_9),
+     (11, tiles_76_10), (11, tiles_76_11), (11, tiles_76_12), (11, tiles_76_13), (11, tiles_76_14), (11, tiles_76_15),
+     (11, tiles_76_16), (11, tiles_76_17), (11, tiles_76_18), (11, tiles_76_19), (11, tiles_76_20), (11, tiles_76_21),
+     (11, tiles_76_22), (11, tiles_76_23), (11, tiles_76_24), (11, tiles_76_25), (11, tiles_76_26), (11, tiles_76_27),
+     (11, tiles_76_28), (11, tiles_76_29), (11, tiles_76_30), (11, tiles_76_31), (11, tiles_76_32), (11, tiles_76_33),
+     (11, tiles_76_34), (11, tiles_76_35), (11, tiles_76_36), (11, tiles_76_37), (11, tiles_76_38), (11, tiles_76_39),
+     (11, tiles_76_40), (11, tiles_76_41), (11, tiles_76_42), (11, tiles_76_43), (11, tiles_76_44), (11, tiles_76_45),
+     (11, tiles_76_46), (11, tiles_76_47), (11, tiles_76_48), (11, tiles_76_49), (11, tiles_76_50), (11, tiles_76_51),
+     (11, tiles_76_52), (11, tiles_76_53), (11, tiles_76_54), (11, tiles_76_55), (11, tiles_76_56), (11, tiles_76_57),
+     (11, tiles_76_58), (11, tiles_76_59), (11, tiles_76_60), (11, tiles_76_61), (11, tiles_76_62), (11, tiles_76_63),
+     (11, tiles_76_64), (11, tiles_76_65), (11, tiles_76_66), (11, tiles_76_67), (11, tiles_76_68), (11, tiles_76_69),
+     (11, tiles_76_70), (11, tiles_76_71), (11, tiles_76_72), (11, tiles_76_73), (11, tiles_76_74), (11, tiles_76_75),
+     (11, tiles_76_76), (11, tiles_76_77), (11, tiles_76_78), (11, tiles_76_79), (11, tiles_76_80), (11, tiles_76_81),
+     (11, tiles_76_82), (11, tiles_76_83), (11, tiles_76_84), (11, tiles_76_85), (11, tiles_76_86), (11, tiles_76_87),
+     (11, tiles_76_88), (11, tiles_76_89), (11, tiles_76_90), (11, tiles_76_91), (11, tiles_76_92), (11, tiles_76_93),
+     (11, tiles_77_0), (11, tiles_77_1), (11, tiles_77_2), (11, tiles_77_3), (11, tiles_77_4), (11, tiles_77_5),
+     (11, tiles_77_6), (11, tiles_77_7), (11, tiles_77_8), (11, tiles_77_9), (11, tiles_77_10), (11, tiles_77_11),
+     (11, tiles_77_12), (11, tiles_77_13), (11, tiles_77_14), (11, tiles_77_15), (11, tiles_78_0), (11, tiles_79_0),
+     (11, tiles_80_0), (11, tiles_81_0), (11, tiles_82_0), (11, tiles_83_0), (11, tiles_84_0), (11, tiles_85_0),
+     (11, tiles_86_0), (11, tiles_87_0), (11, tiles_88_0), (11, tiles_89_0), (11, tiles_90_0), (11, tiles_91_0),
+     (11, tiles_92_0), (11, tiles_93_0), (11, tiles_94_0), (11, tiles_95_0), (11, tiles_96_0), (11, tiles_97_0),
+     (11, tiles_98_0), (11, tiles_99_0), (11, tiles_100_0), (11, tiles_101_0), (11, tiles_102_0), (11, tiles_103_0),
+     (11, tiles_104_0), (11, tiles_105_0), (11, tiles_106_0), (11, tiles_107_0), (11, tiles_108_0), (11, tiles_109_0),
+     (11, tiles_110_0), (11, tiles_111_0), (11, tiles_112_0), (11, tiles_113_0), (11, tiles_114_0), (11, tiles_115_0),
+     (11, tiles_116_0), (11, tiles_117_0), (11, tiles_118_0), (11, tiles_119_0), (11, tiles_120_0), (11, tiles_121_0),
+     (11, tiles_122_0), (11, tiles_123_0), (11, tiles_124_0), (11, tiles_125_0), (11, tiles_126_0), (11, tiles_127_0)]
 
 set_option maxRecDepth 100000000 in
 theorem gridModules_cover :
@@ -12762,5200 +14334,13288 @@ theorem w_39_0 :
     (congrArg (· * 4 ^ (16 - 12)) part_39_0)
 
 theorem w_40_0 :
-    moduleWeight 16 (11, tiles_40_0) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_0)
+    moduleWeight 16 (12, tiles_40_0) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_0)
 
 theorem w_40_1 :
-    moduleWeight 16 (11, tiles_40_1) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_1).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_1)
+    moduleWeight 16 (12, tiles_40_1) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_1).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_1)
 
 theorem w_40_2 :
-    moduleWeight 16 (11, tiles_40_2) =
-      64 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_2).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_2)
+    moduleWeight 16 (12, tiles_40_2) =
+      256 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_2).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_2)
 
 theorem w_40_3 :
-    moduleWeight 16 (11, tiles_40_3) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_3).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_3)
+    moduleWeight 16 (12, tiles_40_3) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_3).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_3)
 
 theorem w_40_4 :
-    moduleWeight 16 (11, tiles_40_4) =
-      384 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_4).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_4)
+    moduleWeight 16 (12, tiles_40_4) =
+      1536 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_4).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_4)
 
 theorem w_40_5 :
-    moduleWeight 16 (11, tiles_40_5) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_5).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_5)
+    moduleWeight 16 (12, tiles_40_5) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_5).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_5)
 
 theorem w_40_6 :
-    moduleWeight 16 (11, tiles_40_6) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_6).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_6)
+    moduleWeight 16 (12, tiles_40_6) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_6).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_6)
 
 theorem w_40_7 :
-    moduleWeight 16 (11, tiles_40_7) =
-      944 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_7).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_7)
+    moduleWeight 16 (12, tiles_40_7) =
+      3776 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_7).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_7)
 
 theorem w_40_8 :
-    moduleWeight 16 (11, tiles_40_8) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_8).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_8)
+    moduleWeight 16 (12, tiles_40_8) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_8).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_8)
 
 theorem w_40_9 :
-    moduleWeight 16 (11, tiles_40_9) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_9).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_9)
+    moduleWeight 16 (12, tiles_40_9) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_9).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_9)
 
 theorem w_40_10 :
-    moduleWeight 16 (11, tiles_40_10) =
-      1024 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_10).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_10)
+    moduleWeight 16 (12, tiles_40_10) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_10).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_10)
 
 theorem w_40_11 :
-    moduleWeight 16 (11, tiles_40_11) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_11).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_11)
+    moduleWeight 16 (12, tiles_40_11) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_11).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_11)
 
 theorem w_40_12 :
-    moduleWeight 16 (11, tiles_40_12) =
-      64 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_12).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_12)
+    moduleWeight 16 (12, tiles_40_12) =
+      256 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_12).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_12)
 
 theorem w_40_13 :
-    moduleWeight 16 (11, tiles_40_13) =
-      1024 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_13).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_13)
+    moduleWeight 16 (12, tiles_40_13) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_13).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_13)
 
 theorem w_40_14 :
-    moduleWeight 16 (11, tiles_40_14) =
-      80 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_14).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_14)
+    moduleWeight 16 (12, tiles_40_14) =
+      4395 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_14).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_14)
 
 theorem w_40_15 :
-    moduleWeight 16 (11, tiles_40_15) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_15).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_15)
+    moduleWeight 16 (12, tiles_40_15) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_15).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_15)
 
 theorem w_40_16 :
-    moduleWeight 16 (11, tiles_40_16) =
-      128 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_16).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_16)
+    moduleWeight 16 (12, tiles_40_16) =
+      512 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_16).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_16)
 
 theorem w_40_17 :
-    moduleWeight 16 (11, tiles_40_17) =
-      1024 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_17).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_17)
+    moduleWeight 16 (12, tiles_40_17) =
+      2017 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_17).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_17)
 
 theorem w_40_18 :
-    moduleWeight 16 (11, tiles_40_18) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_18).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_18)
+    moduleWeight 16 (12, tiles_40_18) =
+      1976 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_18).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_18)
 
 theorem w_40_19 :
-    moduleWeight 16 (11, tiles_40_19) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_19).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_19)
+    moduleWeight 16 (12, tiles_40_19) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_19).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_19)
 
 theorem w_40_20 :
-    moduleWeight 16 (11, tiles_40_20) =
-      192 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_20).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_20)
+    moduleWeight 16 (12, tiles_40_20) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_20).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_20)
 
 theorem w_40_21 :
-    moduleWeight 16 (11, tiles_40_21) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_21).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_21)
+    moduleWeight 16 (12, tiles_40_21) =
+      768 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_21).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_21)
 
 theorem w_40_22 :
-    moduleWeight 16 (11, tiles_40_22) =
-      1269 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_22).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_22)
+    moduleWeight 16 (12, tiles_40_22) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_22).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_22)
 
 theorem w_40_23 :
-    moduleWeight 16 (11, tiles_40_23) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_23).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_23)
+    moduleWeight 16 (12, tiles_40_23) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_23).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_23)
 
 theorem w_40_24 :
-    moduleWeight 16 (11, tiles_40_24) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_24).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_24)
+    moduleWeight 16 (12, tiles_40_24) =
+      1974 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_24).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_24)
 
 theorem w_40_25 :
-    moduleWeight 16 (11, tiles_40_25) =
-      32 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_25).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_25)
+    moduleWeight 16 (12, tiles_40_25) =
+      2944 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_25).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_25)
 
 theorem w_40_26 :
-    moduleWeight 16 (11, tiles_40_26) =
-      1265 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_26).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_26)
+    moduleWeight 16 (12, tiles_40_26) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_26).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_26)
 
 theorem w_40_27 :
-    moduleWeight 16 (11, tiles_40_27) =
-      304 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_27).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_27)
+    moduleWeight 16 (12, tiles_40_27) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_27).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_27)
 
 theorem w_40_28 :
-    moduleWeight 16 (11, tiles_40_28) =
-      128 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_28).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_28)
+    moduleWeight 16 (12, tiles_40_28) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_28).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_28)
 
 theorem w_40_29 :
-    moduleWeight 16 (11, tiles_40_29) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_29).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_29)
+    moduleWeight 16 (12, tiles_40_29) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_29).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_29)
 
 theorem w_40_30 :
-    moduleWeight 16 (11, tiles_40_30) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_30).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_30)
+    moduleWeight 16 (12, tiles_40_30) =
+      1887 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_30).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_30)
 
 theorem w_40_31 :
-    moduleWeight 16 (11, tiles_40_31) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_31).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_31)
+    moduleWeight 16 (12, tiles_40_31) =
+      345 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_31).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_31)
 
 theorem w_40_32 :
-    moduleWeight 16 (11, tiles_40_32) =
-      935 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_32).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_32)
+    moduleWeight 16 (12, tiles_40_32) =
+      2621 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_32).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_32)
 
 theorem w_40_33 :
-    moduleWeight 16 (11, tiles_40_33) =
-      960 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_33).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_33)
+    moduleWeight 16 (12, tiles_40_33) =
+      1216 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_33).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_33)
 
 theorem w_40_34 :
-    moduleWeight 16 (11, tiles_40_34) =
-      1892 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_34).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_34)
+    moduleWeight 16 (12, tiles_40_34) =
+      512 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_34).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_34)
 
 theorem w_40_35 :
-    moduleWeight 16 (11, tiles_40_35) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_35).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_35)
+    moduleWeight 16 (12, tiles_40_35) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_35).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_35)
 
 theorem w_40_36 :
-    moduleWeight 16 (11, tiles_40_36) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_36).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_36)
+    moduleWeight 16 (12, tiles_40_36) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_36).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_36)
 
 theorem w_40_37 :
-    moduleWeight 16 (11, tiles_40_37) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_37).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_37)
+    moduleWeight 16 (12, tiles_40_37) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_37).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_37)
 
 theorem w_40_38 :
-    moduleWeight 16 (11, tiles_40_38) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_38).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_38)
+    moduleWeight 16 (12, tiles_40_38) =
+      380 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_38).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_38)
 
 theorem w_40_39 :
-    moduleWeight 16 (11, tiles_40_39) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_39).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_39)
+    moduleWeight 16 (12, tiles_40_39) =
+      1318 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_39).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_39)
 
 theorem w_40_40 :
-    moduleWeight 16 (11, tiles_40_40) =
-      112 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_40).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_40)
+    moduleWeight 16 (12, tiles_40_40) =
+      1805 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_40).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_40)
 
 theorem w_40_41 :
-    moduleWeight 16 (11, tiles_40_41) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_41).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_41)
+    moduleWeight 16 (12, tiles_40_41) =
+      3843 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_41).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_41)
 
 theorem w_40_42 :
-    moduleWeight 16 (11, tiles_40_42) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_42).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_42)
+    moduleWeight 16 (12, tiles_40_42) =
+      613 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_42).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_42)
 
 theorem w_40_43 :
-    moduleWeight 16 (11, tiles_40_43) =
-      1849 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_43).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_43)
+    moduleWeight 16 (12, tiles_40_43) =
+      971 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_43).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_43)
 
 theorem w_40_44 :
-    moduleWeight 16 (11, tiles_40_44) =
-      1791 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_44).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_44)
+    moduleWeight 16 (12, tiles_40_44) =
+      364 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_44).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_44)
 
 theorem w_40_45 :
-    moduleWeight 16 (11, tiles_40_45) =
-      176 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_45).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_45)
+    moduleWeight 16 (12, tiles_40_45) =
+      1162 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_45).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_45)
 
 theorem w_40_46 :
-    moduleWeight 16 (11, tiles_40_46) =
-      240 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_46).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_46)
+    moduleWeight 16 (12, tiles_40_46) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_46).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_46)
 
 theorem w_40_47 :
-    moduleWeight 16 (11, tiles_40_47) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_47).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_47)
+    moduleWeight 16 (12, tiles_40_47) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_47).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_47)
 
 theorem w_40_48 :
-    moduleWeight 16 (11, tiles_40_48) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_48).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_48)
+    moduleWeight 16 (12, tiles_40_48) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_48).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_48)
 
 theorem w_40_49 :
-    moduleWeight 16 (11, tiles_40_49) =
-      288 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_49).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_49)
+    moduleWeight 16 (12, tiles_40_49) =
+      192 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_49).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_49)
 
 theorem w_40_50 :
-    moduleWeight 16 (11, tiles_40_50) =
-      288 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_50).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_50)
+    moduleWeight 16 (12, tiles_40_50) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_50).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_50)
 
 theorem w_40_51 :
-    moduleWeight 16 (11, tiles_40_51) =
-      144 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_51).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_51)
+    moduleWeight 16 (12, tiles_40_51) =
+      448 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_51).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_51)
 
 theorem w_40_52 :
-    moduleWeight 16 (11, tiles_40_52) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_52).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_52)
+    moduleWeight 16 (12, tiles_40_52) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_52).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_52)
 
 theorem w_40_53 :
-    moduleWeight 16 (11, tiles_40_53) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_53).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_53)
+    moduleWeight 16 (12, tiles_40_53) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_53).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_53)
 
 theorem w_40_54 :
-    moduleWeight 16 (11, tiles_40_54) =
-      275 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_54).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_54)
+    moduleWeight 16 (12, tiles_40_54) =
+      102 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_54).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_54)
 
 theorem w_40_55 :
-    moduleWeight 16 (11, tiles_40_55) =
-      189 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_55).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_55)
+    moduleWeight 16 (12, tiles_40_55) =
+      382 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_55).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_55)
 
 theorem w_40_56 :
-    moduleWeight 16 (11, tiles_40_56) =
-      977 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_56).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_56)
+    moduleWeight 16 (12, tiles_40_56) =
+      924 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_56).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_56)
 
 theorem w_40_57 :
-    moduleWeight 16 (11, tiles_40_57) =
-      1696 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_57).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_57)
+    moduleWeight 16 (12, tiles_40_57) =
+      353 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_57).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_57)
 
 theorem w_40_58 :
-    moduleWeight 16 (11, tiles_40_58) =
-      992 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_58).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_58)
+    moduleWeight 16 (12, tiles_40_58) =
+      1119 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_58).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_58)
 
 theorem w_40_59 :
-    moduleWeight 16 (11, tiles_40_59) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_59).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_59)
+    moduleWeight 16 (12, tiles_40_59) =
+      4123 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_59).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_59)
 
 theorem w_40_60 :
-    moduleWeight 16 (11, tiles_40_60) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_60).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_60)
+    moduleWeight 16 (12, tiles_40_60) =
+      345 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_60).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_60)
 
 theorem w_40_61 :
-    moduleWeight 16 (11, tiles_40_61) =
-      1024 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_61).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_61)
+    moduleWeight 16 (12, tiles_40_61) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_61).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_61)
 
 theorem w_40_62 :
-    moduleWeight 16 (11, tiles_40_62) =
-      144 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_62).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_62)
+    moduleWeight 16 (12, tiles_40_62) =
+      6 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_62).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_62)
 
 theorem w_40_63 :
-    moduleWeight 16 (11, tiles_40_63) =
-      224 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_63).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_63)
+    moduleWeight 16 (12, tiles_40_63) =
+      149 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_63).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_63)
 
 theorem w_40_64 :
-    moduleWeight 16 (11, tiles_40_64) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_64).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_64)
+    moduleWeight 16 (12, tiles_40_64) =
+      142 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_64).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_64)
 
 theorem w_40_65 :
-    moduleWeight 16 (11, tiles_40_65) =
-      97 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_65).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_65)
+    moduleWeight 16 (12, tiles_40_65) =
+      1707 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_65).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_65)
 
 theorem w_40_66 :
-    moduleWeight 16 (11, tiles_40_66) =
-      293 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_66).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_66)
+    moduleWeight 16 (12, tiles_40_66) =
+      4021 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_66).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_66)
 
 theorem w_40_67 :
-    moduleWeight 16 (11, tiles_40_67) =
-      133 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_67).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_67)
+    moduleWeight 16 (12, tiles_40_67) =
+      704 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_67).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_67)
 
 theorem w_40_68 :
-    moduleWeight 16 (11, tiles_40_68) =
-      358 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_68).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_68)
+    moduleWeight 16 (12, tiles_40_68) =
+      960 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_68).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_68)
 
 theorem w_40_69 :
-    moduleWeight 16 (11, tiles_40_69) =
-      2896 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_69).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_69)
+    moduleWeight 16 (12, tiles_40_69) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_69).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_69)
 
 theorem w_40_70 :
-    moduleWeight 16 (11, tiles_40_70) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_70).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_70)
+    moduleWeight 16 (12, tiles_40_70) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_70).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_70)
 
 theorem w_40_71 :
-    moduleWeight 16 (11, tiles_40_71) =
-      1440 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_71).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_71)
+    moduleWeight 16 (12, tiles_40_71) =
+      1152 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_71).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_71)
 
 theorem w_40_72 :
-    moduleWeight 16 (11, tiles_40_72) =
-      1008 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_72).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_72)
+    moduleWeight 16 (12, tiles_40_72) =
+      1152 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_72).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_72)
 
 theorem w_40_73 :
-    moduleWeight 16 (11, tiles_40_73) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_73).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_73)
+    moduleWeight 16 (12, tiles_40_73) =
+      576 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_73).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_73)
 
 theorem w_40_74 :
-    moduleWeight 16 (11, tiles_40_74) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_74).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_74)
+    moduleWeight 16 (12, tiles_40_74) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_74).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_74)
 
 theorem w_40_75 :
-    moduleWeight 16 (11, tiles_40_75) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_75).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_75)
+    moduleWeight 16 (12, tiles_40_75) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_75).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_75)
 
 theorem w_40_76 :
-    moduleWeight 16 (11, tiles_40_76) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_76).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_76)
+    moduleWeight 16 (12, tiles_40_76) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_76).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_76)
 
 theorem w_40_77 :
-    moduleWeight 16 (11, tiles_40_77) =
-      16 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_77).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_77)
+    moduleWeight 16 (12, tiles_40_77) =
+      11 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_77).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_77)
 
 theorem w_40_78 :
-    moduleWeight 16 (11, tiles_40_78) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_78).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_78)
+    moduleWeight 16 (12, tiles_40_78) =
+      932 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_78).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_78)
 
 theorem w_40_79 :
-    moduleWeight 16 (11, tiles_40_79) =
-      96 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_79).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_79)
+    moduleWeight 16 (12, tiles_40_79) =
+      40 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_79).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_79)
 
 theorem w_40_80 :
-    moduleWeight 16 (11, tiles_40_80) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_80).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_80)
+    moduleWeight 16 (12, tiles_40_80) =
+      295 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_80).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_80)
 
 theorem w_40_81 :
-    moduleWeight 16 (11, tiles_40_81) =
-      254 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_81).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_81)
+    moduleWeight 16 (12, tiles_40_81) =
+      648 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_81).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_81)
 
 theorem w_40_82 :
-    moduleWeight 16 (11, tiles_40_82) =
-      278 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_82).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_82)
+    moduleWeight 16 (12, tiles_40_82) =
+      35 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_82).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_82)
 
 theorem w_40_83 :
-    moduleWeight 16 (11, tiles_40_83) =
-      243 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_83).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_83)
+    moduleWeight 16 (12, tiles_40_83) =
+      15 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_83).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_83)
 
 theorem w_40_84 :
-    moduleWeight 16 (11, tiles_40_84) =
-      560 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_84).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_84)
+    moduleWeight 16 (12, tiles_40_84) =
+      1208 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_84).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_84)
 
 theorem w_40_85 :
-    moduleWeight 16 (11, tiles_40_85) =
-      407 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_85).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_85)
+    moduleWeight 16 (12, tiles_40_85) =
+      78 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_85).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_85)
 
 theorem w_40_86 :
-    moduleWeight 16 (11, tiles_40_86) =
-      1277 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_86).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_86)
+    moduleWeight 16 (12, tiles_40_86) =
+      111 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_86).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_86)
 
 theorem w_40_87 :
-    moduleWeight 16 (11, tiles_40_87) =
-      1957 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_87).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_87)
+    moduleWeight 16 (12, tiles_40_87) =
+      1412 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_87).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_87)
 
 theorem w_40_88 :
-    moduleWeight 16 (11, tiles_40_88) =
-      1340 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_88).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_88)
+    moduleWeight 16 (12, tiles_40_88) =
+      1573 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_88).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_88)
 
 theorem w_40_89 :
-    moduleWeight 16 (11, tiles_40_89) =
-      2659 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_89).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_89)
+    moduleWeight 16 (12, tiles_40_89) =
+      118 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_89).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_89)
 
 theorem w_40_90 :
-    moduleWeight 16 (11, tiles_40_90) =
-      359 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_90).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_90)
+    moduleWeight 16 (12, tiles_40_90) =
+      715 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_90).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_90)
 
 theorem w_40_91 :
-    moduleWeight 16 (11, tiles_40_91) =
-      121 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_91).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_91)
+    moduleWeight 16 (12, tiles_40_91) =
+      4009 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_91).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_91)
 
 theorem w_40_92 :
-    moduleWeight 16 (11, tiles_40_92) =
-      329 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_92).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_92)
+    moduleWeight 16 (12, tiles_40_92) =
+      3968 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_92).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_92)
 
 theorem w_40_93 :
-    moduleWeight 16 (11, tiles_40_93) =
-      446 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_93).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_93)
+    moduleWeight 16 (12, tiles_40_93) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_93).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_93)
 
 theorem w_40_94 :
-    moduleWeight 16 (11, tiles_40_94) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_94).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_94)
+    moduleWeight 16 (12, tiles_40_94) =
+      192 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_94).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_94)
 
 theorem w_40_95 :
-    moduleWeight 16 (11, tiles_40_95) =
-      272 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_95).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_95)
+    moduleWeight 16 (12, tiles_40_95) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_95).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_95)
 
 theorem w_40_96 :
-    moduleWeight 16 (11, tiles_40_96) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_96).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_96)
+    moduleWeight 16 (12, tiles_40_96) =
+      576 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_96).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_96)
 
 theorem w_40_97 :
-    moduleWeight 16 (11, tiles_40_97) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_97).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_97)
+    moduleWeight 16 (12, tiles_40_97) =
+      896 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_97).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_97)
 
 theorem w_40_98 :
-    moduleWeight 16 (11, tiles_40_98) =
-      944 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_98).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_98)
+    moduleWeight 16 (12, tiles_40_98) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_98).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_98)
 
 theorem w_40_99 :
-    moduleWeight 16 (11, tiles_40_99) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_99).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_99)
+    moduleWeight 16 (12, tiles_40_99) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_99).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_99)
 
 theorem w_40_100 :
-    moduleWeight 16 (11, tiles_40_100) =
-      32 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_100).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_100)
+    moduleWeight 16 (12, tiles_40_100) =
+      288 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_100).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_100)
 
 theorem w_40_101 :
-    moduleWeight 16 (11, tiles_40_101) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_101).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_101)
+    moduleWeight 16 (12, tiles_40_101) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_101).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_101)
 
 theorem w_40_102 :
-    moduleWeight 16 (11, tiles_40_102) =
-      1024 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_102).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_102)
+    moduleWeight 16 (12, tiles_40_102) =
+      172 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_102).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_102)
 
 theorem w_40_103 :
-    moduleWeight 16 (11, tiles_40_103) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_103).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_103)
+    moduleWeight 16 (12, tiles_40_103) =
+      258 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_103).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_103)
 
 theorem w_40_104 :
-    moduleWeight 16 (11, tiles_40_104) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_104).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_104)
+    moduleWeight 16 (12, tiles_40_104) =
+      224 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_104).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_104)
 
 theorem w_40_105 :
-    moduleWeight 16 (11, tiles_40_105) =
-      32 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_105).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_105)
+    moduleWeight 16 (12, tiles_40_105) =
+      163 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_105).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_105)
 
 theorem w_40_106 :
-    moduleWeight 16 (11, tiles_40_106) =
-      1984 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_106).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_106)
+    moduleWeight 16 (12, tiles_40_106) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_106).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_106)
 
 theorem w_40_107 :
-    moduleWeight 16 (11, tiles_40_107) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_107).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_107)
+    moduleWeight 16 (12, tiles_40_107) =
+      228 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_107).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_107)
 
 theorem w_40_108 :
-    moduleWeight 16 (11, tiles_40_108) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_108).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_108)
+    moduleWeight 16 (12, tiles_40_108) =
+      121 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_108).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_108)
 
 theorem w_40_109 :
-    moduleWeight 16 (11, tiles_40_109) =
-      64 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_109).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_109)
+    moduleWeight 16 (12, tiles_40_109) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_109).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_109)
 
 theorem w_40_110 :
-    moduleWeight 16 (11, tiles_40_110) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_110).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_110)
+    moduleWeight 16 (12, tiles_40_110) =
+      409 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_110).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_110)
 
 theorem w_40_111 :
-    moduleWeight 16 (11, tiles_40_111) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_111).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_111)
+    moduleWeight 16 (12, tiles_40_111) =
+      270 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_111).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_111)
 
 theorem w_40_112 :
-    moduleWeight 16 (11, tiles_40_112) =
-      188 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_112).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_112)
+    moduleWeight 16 (12, tiles_40_112) =
+      643 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_112).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_112)
 
 theorem w_40_113 :
-    moduleWeight 16 (11, tiles_40_113) =
-      47 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_113).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_113)
+    moduleWeight 16 (12, tiles_40_113) =
+      1220 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_113).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_113)
 
 theorem w_40_114 :
-    moduleWeight 16 (11, tiles_40_114) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_114).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_114)
+    moduleWeight 16 (12, tiles_40_114) =
+      670 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_114).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_114)
 
 theorem w_40_115 :
-    moduleWeight 16 (11, tiles_40_115) =
-      60 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_115).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_115)
+    moduleWeight 16 (12, tiles_40_115) =
+      4014 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_115).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_115)
 
 theorem w_40_116 :
-    moduleWeight 16 (11, tiles_40_116) =
-      326 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_116).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_116)
+    moduleWeight 16 (12, tiles_40_116) =
+      4074 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_116).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_116)
 
 theorem w_40_117 :
-    moduleWeight 16 (11, tiles_40_117) =
-      797 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_117).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_117)
+    moduleWeight 16 (12, tiles_40_117) =
+      1216 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_117).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_117)
 
 theorem w_40_118 :
-    moduleWeight 16 (11, tiles_40_118) =
-      958 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_118).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_118)
+    moduleWeight 16 (12, tiles_40_118) =
+      1664 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_118).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_118)
 
 theorem w_40_119 :
-    moduleWeight 16 (11, tiles_40_119) =
-      693 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_119).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_119)
+    moduleWeight 16 (12, tiles_40_119) =
+      4058 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_119).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_119)
 
 theorem w_40_120 :
-    moduleWeight 16 (11, tiles_40_120) =
-      2348 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_120).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_120)
+    moduleWeight 16 (12, tiles_40_120) =
+      4032 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_120).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_120)
 
 theorem w_40_121 :
-    moduleWeight 16 (11, tiles_40_121) =
-      556 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_121).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_121)
+    moduleWeight 16 (12, tiles_40_121) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_121).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_121)
 
 theorem w_40_122 :
-    moduleWeight 16 (11, tiles_40_122) =
-      915 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_122).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_122)
+    moduleWeight 16 (12, tiles_40_122) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_122).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_122)
 
 theorem w_40_123 :
-    moduleWeight 16 (11, tiles_40_123) =
-      4004 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_123).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_123)
+    moduleWeight 16 (12, tiles_40_123) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_123).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_123)
 
 theorem w_40_124 :
-    moduleWeight 16 (11, tiles_40_124) =
-      192 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_124).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_124)
+    moduleWeight 16 (12, tiles_40_124) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_124).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_124)
 
 theorem w_40_125 :
-    moduleWeight 16 (11, tiles_40_125) =
-      272 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_125).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_125)
+    moduleWeight 16 (12, tiles_40_125) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_125).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_125)
 
 theorem w_40_126 :
-    moduleWeight 16 (11, tiles_40_126) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_126).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_126)
+    moduleWeight 16 (12, tiles_40_126) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_126).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_126)
 
 theorem w_40_127 :
-    moduleWeight 16 (11, tiles_40_127) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_127).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_127)
+    moduleWeight 16 (12, tiles_40_127) =
+      384 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_127).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_127)
 
 theorem w_40_128 :
-    moduleWeight 16 (11, tiles_40_128) =
-      992 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_128).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_128)
+    moduleWeight 16 (12, tiles_40_128) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_128).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_128)
 
 theorem w_40_129 :
-    moduleWeight 16 (11, tiles_40_129) =
-      16 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_129).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_129)
+    moduleWeight 16 (12, tiles_40_129) =
+      13 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_129).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_129)
 
 theorem w_40_130 :
-    moduleWeight 16 (11, tiles_40_130) =
-      144 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_130).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_130)
+    moduleWeight 16 (12, tiles_40_130) =
+      1223 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_130).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_130)
 
 theorem w_40_131 :
-    moduleWeight 16 (11, tiles_40_131) =
-      1014 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_131).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_131)
+    moduleWeight 16 (12, tiles_40_131) =
+      224 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_131).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_131)
 
 theorem w_40_132 :
-    moduleWeight 16 (11, tiles_40_132) =
-      1124 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_132).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_132)
+    moduleWeight 16 (12, tiles_40_132) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_132).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_132)
 
 theorem w_40_133 :
-    moduleWeight 16 (11, tiles_40_133) =
-      261 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_133).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_133)
+    moduleWeight 16 (12, tiles_40_133) =
+      467 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_133).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_133)
 
 theorem w_40_134 :
-    moduleWeight 16 (11, tiles_40_134) =
-      300 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_134).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_134)
+    moduleWeight 16 (12, tiles_40_134) =
+      239 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_134).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_134)
 
 theorem w_40_135 :
-    moduleWeight 16 (11, tiles_40_135) =
-      49 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_135).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_135)
+    moduleWeight 16 (12, tiles_40_135) =
+      32 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_135).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_135)
 
 theorem w_40_136 :
-    moduleWeight 16 (11, tiles_40_136) =
-      1424 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_136).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_136)
+    moduleWeight 16 (12, tiles_40_136) =
+      221 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_136).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_136)
 
 theorem w_40_137 :
-    moduleWeight 16 (11, tiles_40_137) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_137).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_137)
+    moduleWeight 16 (12, tiles_40_137) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_137).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_137)
 
 theorem w_40_138 :
-    moduleWeight 16 (11, tiles_40_138) =
-      2509 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_138).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_138)
+    moduleWeight 16 (12, tiles_40_138) =
+      159 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_138).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_138)
 
 theorem w_40_139 :
-    moduleWeight 16 (11, tiles_40_139) =
-      83 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_139).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_139)
+    moduleWeight 16 (12, tiles_40_139) =
+      1838 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_139).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_139)
 
 theorem w_40_140 :
-    moduleWeight 16 (11, tiles_40_140) =
-      698 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_140).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_140)
+    moduleWeight 16 (12, tiles_40_140) =
+      367 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_140).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_140)
 
 theorem w_40_141 :
-    moduleWeight 16 (11, tiles_40_141) =
-      8 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_141).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_141)
+    moduleWeight 16 (12, tiles_40_141) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_141).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_141)
 
 theorem w_40_142 :
-    moduleWeight 16 (11, tiles_40_142) =
-      152 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_142).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_142)
+    moduleWeight 16 (12, tiles_40_142) =
+      49 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_142).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_142)
 
 theorem w_40_143 :
-    moduleWeight 16 (11, tiles_40_143) =
-      258 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_143).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_143)
+    moduleWeight 16 (12, tiles_40_143) =
+      925 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_143).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_143)
 
 theorem w_40_144 :
-    moduleWeight 16 (11, tiles_40_144) =
-      108 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_144).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_144)
+    moduleWeight 16 (12, tiles_40_144) =
+      34 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_144).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_144)
 
 theorem w_40_145 :
-    moduleWeight 16 (11, tiles_40_145) =
-      1920 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_145).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_145)
+    moduleWeight 16 (12, tiles_40_145) =
+      514 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_145).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_145)
 
 theorem w_40_146 :
-    moduleWeight 16 (11, tiles_40_146) =
-      5 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_146).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_146)
+    moduleWeight 16 (12, tiles_40_146) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_146).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_146)
 
 theorem w_40_147 :
-    moduleWeight 16 (11, tiles_40_147) =
-      9 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_147).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_147)
+    moduleWeight 16 (12, tiles_40_147) =
+      146 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_147).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_147)
 
 theorem w_40_148 :
-    moduleWeight 16 (11, tiles_40_148) =
-      359 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_148).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_148)
+    moduleWeight 16 (12, tiles_40_148) =
+      4220 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_148).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_148)
 
 theorem w_40_149 :
-    moduleWeight 16 (11, tiles_40_149) =
-      109 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_149).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_149)
+    moduleWeight 16 (12, tiles_40_149) =
+      325 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_149).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_149)
 
 theorem w_40_150 :
-    moduleWeight 16 (11, tiles_40_150) =
-      738 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_150).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_150)
+    moduleWeight 16 (12, tiles_40_150) =
+      938 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_150).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_150)
 
 theorem w_40_151 :
-    moduleWeight 16 (11, tiles_40_151) =
-      630 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_151).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_151)
+    moduleWeight 16 (12, tiles_40_151) =
+      1975 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_151).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_151)
 
 theorem w_40_152 :
-    moduleWeight 16 (11, tiles_40_152) =
-      807 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_152).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_152)
+    moduleWeight 16 (12, tiles_40_152) =
+      4306 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_152).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_152)
 
 theorem w_40_153 :
-    moduleWeight 16 (11, tiles_40_153) =
-      38 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_153).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_153)
+    moduleWeight 16 (12, tiles_40_153) =
+      350 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_153).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_153)
 
 theorem w_40_154 :
-    moduleWeight 16 (11, tiles_40_154) =
-      132 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_154).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_154)
+    moduleWeight 16 (12, tiles_40_154) =
+      2573 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_154).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_154)
 
 theorem w_40_155 :
-    moduleWeight 16 (11, tiles_40_155) =
-      75 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_155).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_155)
+    moduleWeight 16 (12, tiles_40_155) =
+      394 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_155).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_155)
 
 theorem w_40_156 :
-    moduleWeight 16 (11, tiles_40_156) =
-      1565 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_156).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_156)
+    moduleWeight 16 (12, tiles_40_156) =
+      1197 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_156).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_156)
 
 theorem w_40_157 :
-    moduleWeight 16 (11, tiles_40_157) =
-      1075 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_157).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_157)
+    moduleWeight 16 (12, tiles_40_157) =
+      241 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_157).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_157)
 
 theorem w_40_158 :
-    moduleWeight 16 (11, tiles_40_158) =
-      80 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_158).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_158)
+    moduleWeight 16 (12, tiles_40_158) =
+      144 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_158).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_158)
 
 theorem w_40_159 :
-    moduleWeight 16 (11, tiles_40_159) =
-      12 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_159).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_159)
+    moduleWeight 16 (12, tiles_40_159) =
+      230 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_159).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_159)
 
 theorem w_40_160 :
-    moduleWeight 16 (11, tiles_40_160) =
-      803 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_160).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_160)
+    moduleWeight 16 (12, tiles_40_160) =
+      2715 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_160).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_160)
 
 theorem w_40_161 :
-    moduleWeight 16 (11, tiles_40_161) =
-      141 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_161).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_161)
+    moduleWeight 16 (12, tiles_40_161) =
+      434 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_161).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_161)
 
 theorem w_40_162 :
-    moduleWeight 16 (11, tiles_40_162) =
-      494 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_162).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_162)
+    moduleWeight 16 (12, tiles_40_162) =
+      151 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_162).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_162)
 
 theorem w_40_163 :
-    moduleWeight 16 (11, tiles_40_163) =
-      315 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_163).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_163)
+    moduleWeight 16 (12, tiles_40_163) =
+      460 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_163).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_163)
 
 theorem w_40_164 :
-    moduleWeight 16 (11, tiles_40_164) =
-      558 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_164).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_164)
+    moduleWeight 16 (12, tiles_40_164) =
+      3913 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_164).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_164)
 
 theorem w_40_165 :
-    moduleWeight 16 (11, tiles_40_165) =
-      336 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_165).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_165)
+    moduleWeight 16 (12, tiles_40_165) =
+      139 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_165).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_165)
 
 theorem w_40_166 :
-    moduleWeight 16 (11, tiles_40_166) =
-      479 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_166).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_166)
+    moduleWeight 16 (12, tiles_40_166) =
+      1178 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_166).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_166)
 
 theorem w_40_167 :
-    moduleWeight 16 (11, tiles_40_167) =
-      369 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_167).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_167)
+    moduleWeight 16 (12, tiles_40_167) =
+      56 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_167).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_167)
 
 theorem w_40_168 :
-    moduleWeight 16 (11, tiles_40_168) =
-      4395 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_168).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_168)
+    moduleWeight 16 (12, tiles_40_168) =
+      168 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_168).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_168)
 
 theorem w_40_169 :
-    moduleWeight 16 (11, tiles_40_169) =
-      406 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_169).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_169)
+    moduleWeight 16 (12, tiles_40_169) =
+      23 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_169).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_169)
 
 theorem w_40_170 :
-    moduleWeight 16 (11, tiles_40_170) =
-      139 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_170).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_170)
+    moduleWeight 16 (12, tiles_40_170) =
+      876 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_170).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_170)
 
 theorem w_40_171 :
-    moduleWeight 16 (11, tiles_40_171) =
-      9 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_171).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_171)
+    moduleWeight 16 (12, tiles_40_171) =
+      55 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_171).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_171)
 
 theorem w_40_172 :
-    moduleWeight 16 (11, tiles_40_172) =
-      417 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_172).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_172)
+    moduleWeight 16 (12, tiles_40_172) =
+      275 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_172).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_172)
 
 theorem w_40_173 :
-    moduleWeight 16 (11, tiles_40_173) =
-      293 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_173).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_173)
+    moduleWeight 16 (12, tiles_40_173) =
+      359 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_173).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_173)
 
 theorem w_40_174 :
-    moduleWeight 16 (11, tiles_40_174) =
-      299 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_174).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_174)
+    moduleWeight 16 (12, tiles_40_174) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_174).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_174)
 
 theorem w_40_175 :
-    moduleWeight 16 (11, tiles_40_175) =
-      755 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_175).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_175)
+    moduleWeight 16 (12, tiles_40_175) =
+      88 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_175).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_175)
 
 theorem w_40_176 :
-    moduleWeight 16 (11, tiles_40_176) =
-      72 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_176).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_176)
+    moduleWeight 16 (12, tiles_40_176) =
+      134 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_176).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_176)
 
 theorem w_40_177 :
-    moduleWeight 16 (11, tiles_40_177) =
-      248 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_177).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_177)
+    moduleWeight 16 (12, tiles_40_177) =
+      360 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_177).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_177)
 
 theorem w_40_178 :
-    moduleWeight 16 (11, tiles_40_178) =
-      867 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_178).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_178)
+    moduleWeight 16 (12, tiles_40_178) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_178).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_178)
 
 theorem w_40_179 :
-    moduleWeight 16 (11, tiles_40_179) =
-      59 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_179).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_179)
+    moduleWeight 16 (12, tiles_40_179) =
+      767 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_179).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_179)
 
 theorem w_40_180 :
-    moduleWeight 16 (11, tiles_40_180) =
-      989 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_180).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_180)
+    moduleWeight 16 (12, tiles_40_180) =
+      896 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_180).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_180)
 
 theorem w_40_181 :
-    moduleWeight 16 (11, tiles_40_181) =
-      273 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_40_181).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_40_181)
+    moduleWeight 16 (12, tiles_40_181) =
+      1088 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_181).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_181)
+
+theorem w_40_182 :
+    moduleWeight 16 (12, tiles_40_182) =
+      192 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_182).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_182)
+
+theorem w_40_183 :
+    moduleWeight 16 (12, tiles_40_183) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_183).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_183)
+
+theorem w_40_184 :
+    moduleWeight 16 (12, tiles_40_184) =
+      3776 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_184).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_184)
+
+theorem w_40_185 :
+    moduleWeight 16 (12, tiles_40_185) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_185).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_185)
+
+theorem w_40_186 :
+    moduleWeight 16 (12, tiles_40_186) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_186).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_186)
+
+theorem w_40_187 :
+    moduleWeight 16 (12, tiles_40_187) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_187).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_187)
+
+theorem w_40_188 :
+    moduleWeight 16 (12, tiles_40_188) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_188).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_188)
+
+theorem w_40_189 :
+    moduleWeight 16 (12, tiles_40_189) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_189).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_189)
+
+theorem w_40_190 :
+    moduleWeight 16 (12, tiles_40_190) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_190).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_190)
+
+theorem w_40_191 :
+    moduleWeight 16 (12, tiles_40_191) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_191).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_191)
+
+theorem w_40_192 :
+    moduleWeight 16 (12, tiles_40_192) =
+      4092 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_192).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_192)
+
+theorem w_40_193 :
+    moduleWeight 16 (12, tiles_40_193) =
+      3840 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_193).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_193)
+
+theorem w_40_194 :
+    moduleWeight 16 (12, tiles_40_194) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_194).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_194)
+
+theorem w_40_195 :
+    moduleWeight 16 (12, tiles_40_195) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_195).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_195)
+
+theorem w_40_196 :
+    moduleWeight 16 (12, tiles_40_196) =
+      256 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_196).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_196)
+
+theorem w_40_197 :
+    moduleWeight 16 (12, tiles_40_197) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_197).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_197)
+
+theorem w_40_198 :
+    moduleWeight 16 (12, tiles_40_198) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_198).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_198)
+
+theorem w_40_199 :
+    moduleWeight 16 (12, tiles_40_199) =
+      136 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_199).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_199)
+
+theorem w_40_200 :
+    moduleWeight 16 (12, tiles_40_200) =
+      319 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_200).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_200)
+
+theorem w_40_201 :
+    moduleWeight 16 (12, tiles_40_201) =
+      52 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_201).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_201)
+
+theorem w_40_202 :
+    moduleWeight 16 (12, tiles_40_202) =
+      33 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_202).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_202)
+
+theorem w_40_203 :
+    moduleWeight 16 (12, tiles_40_203) =
+      92 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_203).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_203)
+
+theorem w_40_204 :
+    moduleWeight 16 (12, tiles_40_204) =
+      13 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_204).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_204)
+
+theorem w_40_205 :
+    moduleWeight 16 (12, tiles_40_205) =
+      182 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_205).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_205)
+
+theorem w_40_206 :
+    moduleWeight 16 (12, tiles_40_206) =
+      1145 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_206).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_206)
+
+theorem w_40_207 :
+    moduleWeight 16 (12, tiles_40_207) =
+      49 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_207).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_207)
+
+theorem w_40_208 :
+    moduleWeight 16 (12, tiles_40_208) =
+      945 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_208).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_208)
+
+theorem w_40_209 :
+    moduleWeight 16 (12, tiles_40_209) =
+      192 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_209).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_209)
+
+theorem w_40_210 :
+    moduleWeight 16 (12, tiles_40_210) =
+      390 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_210).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_210)
+
+theorem w_40_211 :
+    moduleWeight 16 (12, tiles_40_211) =
+      407 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_211).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_211)
+
+theorem w_40_212 :
+    moduleWeight 16 (12, tiles_40_212) =
+      478 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_212).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_212)
+
+theorem w_40_213 :
+    moduleWeight 16 (12, tiles_40_213) =
+      238 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_213).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_213)
+
+theorem w_40_214 :
+    moduleWeight 16 (12, tiles_40_214) =
+      76 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_214).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_214)
+
+theorem w_40_215 :
+    moduleWeight 16 (12, tiles_40_215) =
+      100 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_215).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_215)
+
+theorem w_40_216 :
+    moduleWeight 16 (12, tiles_40_216) =
+      936 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_216).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_216)
+
+theorem w_40_217 :
+    moduleWeight 16 (12, tiles_40_217) =
+      129 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_217).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_217)
+
+theorem w_40_218 :
+    moduleWeight 16 (12, tiles_40_218) =
+      171 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_218).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_218)
+
+theorem w_40_219 :
+    moduleWeight 16 (12, tiles_40_219) =
+      80 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_219).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_219)
+
+theorem w_40_220 :
+    moduleWeight 16 (12, tiles_40_220) =
+      1278 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_220).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_220)
+
+theorem w_40_221 :
+    moduleWeight 16 (12, tiles_40_221) =
+      579 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_221).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_221)
+
+theorem w_40_222 :
+    moduleWeight 16 (12, tiles_40_222) =
+      126 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_222).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_222)
+
+theorem w_40_223 :
+    moduleWeight 16 (12, tiles_40_223) =
+      115 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_223).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_223)
+
+theorem w_40_224 :
+    moduleWeight 16 (12, tiles_40_224) =
+      567 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_224).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_224)
+
+theorem w_40_225 :
+    moduleWeight 16 (12, tiles_40_225) =
+      494 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_225).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_225)
+
+theorem w_40_226 :
+    moduleWeight 16 (12, tiles_40_226) =
+      238 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_226).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_226)
+
+theorem w_40_227 :
+    moduleWeight 16 (12, tiles_40_227) =
+      636 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_227).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_227)
+
+theorem w_40_228 :
+    moduleWeight 16 (12, tiles_40_228) =
+      230 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_228).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_228)
+
+theorem w_40_229 :
+    moduleWeight 16 (12, tiles_40_229) =
+      93 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_229).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_229)
+
+theorem w_40_230 :
+    moduleWeight 16 (12, tiles_40_230) =
+      3981 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_230).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_230)
+
+theorem w_40_231 :
+    moduleWeight 16 (12, tiles_40_231) =
+      2406 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_231).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_231)
+
+theorem w_40_232 :
+    moduleWeight 16 (12, tiles_40_232) =
+      485 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_232).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_232)
+
+theorem w_40_233 :
+    moduleWeight 16 (12, tiles_40_233) =
+      477 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_233).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_233)
+
+theorem w_40_234 :
+    moduleWeight 16 (12, tiles_40_234) =
+      53 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_234).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_234)
+
+theorem w_40_235 :
+    moduleWeight 16 (12, tiles_40_235) =
+      147 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_235).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_235)
+
+theorem w_40_236 :
+    moduleWeight 16 (12, tiles_40_236) =
+      308 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_236).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_236)
+
+theorem w_40_237 :
+    moduleWeight 16 (12, tiles_40_237) =
+      1033 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_237).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_237)
+
+theorem w_40_238 :
+    moduleWeight 16 (12, tiles_40_238) =
+      408 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_238).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_238)
+
+theorem w_40_239 :
+    moduleWeight 16 (12, tiles_40_239) =
+      15 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_239).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_239)
+
+theorem w_40_240 :
+    moduleWeight 16 (12, tiles_40_240) =
+      920 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_240).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_240)
+
+theorem w_40_241 :
+    moduleWeight 16 (12, tiles_40_241) =
+      81 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_241).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_241)
+
+theorem w_40_242 :
+    moduleWeight 16 (12, tiles_40_242) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_242).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_242)
+
+theorem w_40_243 :
+    moduleWeight 16 (12, tiles_40_243) =
+      384 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_243).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_243)
+
+theorem w_40_244 :
+    moduleWeight 16 (12, tiles_40_244) =
+      305 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_244).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_244)
+
+theorem w_40_245 :
+    moduleWeight 16 (12, tiles_40_245) =
+      399 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_245).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_245)
+
+theorem w_40_246 :
+    moduleWeight 16 (12, tiles_40_246) =
+      912 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_246).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_246)
+
+theorem w_40_247 :
+    moduleWeight 16 (12, tiles_40_247) =
+      185 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_247).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_247)
+
+theorem w_40_248 :
+    moduleWeight 16 (12, tiles_40_248) =
+      82 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_248).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_248)
+
+theorem w_40_249 :
+    moduleWeight 16 (12, tiles_40_249) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_249).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_249)
+
+theorem w_40_250 :
+    moduleWeight 16 (12, tiles_40_250) =
+      567 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_250).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_250)
+
+theorem w_40_251 :
+    moduleWeight 16 (12, tiles_40_251) =
+      144 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_251).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_251)
+
+theorem w_40_252 :
+    moduleWeight 16 (12, tiles_40_252) =
+      2215 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_252).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_252)
+
+theorem w_40_253 :
+    moduleWeight 16 (12, tiles_40_253) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_253).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_253)
+
+theorem w_40_254 :
+    moduleWeight 16 (12, tiles_40_254) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_254).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_254)
+
+theorem w_40_255 :
+    moduleWeight 16 (12, tiles_40_255) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_255).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_255)
+
+theorem w_40_256 :
+    moduleWeight 16 (12, tiles_40_256) =
+      768 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_256).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_256)
+
+theorem w_40_257 :
+    moduleWeight 16 (12, tiles_40_257) =
+      1088 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_257).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_257)
+
+theorem w_40_258 :
+    moduleWeight 16 (12, tiles_40_258) =
+      192 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_258).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_258)
+
+theorem w_40_259 :
+    moduleWeight 16 (12, tiles_40_259) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_259).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_259)
+
+theorem w_40_260 :
+    moduleWeight 16 (12, tiles_40_260) =
+      3968 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_260).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_260)
+
+theorem w_40_261 :
+    moduleWeight 16 (12, tiles_40_261) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_261).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_261)
+
+theorem w_40_262 :
+    moduleWeight 16 (12, tiles_40_262) =
+      576 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_262).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_262)
+
+theorem w_40_263 :
+    moduleWeight 16 (12, tiles_40_263) =
+      2551 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_263).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_263)
+
+theorem w_40_264 :
+    moduleWeight 16 (12, tiles_40_264) =
+      122 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_264).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_264)
+
+theorem w_40_265 :
+    moduleWeight 16 (12, tiles_40_265) =
+      3242 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_265).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_265)
+
+theorem w_40_266 :
+    moduleWeight 16 (12, tiles_40_266) =
+      1260 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_266).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_266)
+
+theorem w_40_267 :
+    moduleWeight 16 (12, tiles_40_267) =
+      50 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_267).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_267)
+
+theorem w_40_268 :
+    moduleWeight 16 (12, tiles_40_268) =
+      15 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_268).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_268)
+
+theorem w_40_269 :
+    moduleWeight 16 (12, tiles_40_269) =
+      94 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_269).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_269)
+
+theorem w_40_270 :
+    moduleWeight 16 (12, tiles_40_270) =
+      101 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_270).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_270)
+
+theorem w_40_271 :
+    moduleWeight 16 (12, tiles_40_271) =
+      280 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_271).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_271)
+
+theorem w_40_272 :
+    moduleWeight 16 (12, tiles_40_272) =
+      132 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_272).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_272)
+
+theorem w_40_273 :
+    moduleWeight 16 (12, tiles_40_273) =
+      977 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_273).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_273)
+
+theorem w_40_274 :
+    moduleWeight 16 (12, tiles_40_274) =
+      2 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_274).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_274)
+
+theorem w_40_275 :
+    moduleWeight 16 (12, tiles_40_275) =
+      370 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_275).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_275)
+
+theorem w_40_276 :
+    moduleWeight 16 (12, tiles_40_276) =
+      375 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_276).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_276)
+
+theorem w_40_277 :
+    moduleWeight 16 (12, tiles_40_277) =
+      170 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_277).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_277)
+
+theorem w_40_278 :
+    moduleWeight 16 (12, tiles_40_278) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_278).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_278)
+
+theorem w_40_279 :
+    moduleWeight 16 (12, tiles_40_279) =
+      30 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_279).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_279)
+
+theorem w_40_280 :
+    moduleWeight 16 (12, tiles_40_280) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_280).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_280)
+
+theorem w_40_281 :
+    moduleWeight 16 (12, tiles_40_281) =
+      126 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_281).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_281)
+
+theorem w_40_282 :
+    moduleWeight 16 (12, tiles_40_282) =
+      4401 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_282).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_282)
+
+theorem w_40_283 :
+    moduleWeight 16 (12, tiles_40_283) =
+      1216 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_283).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_283)
+
+theorem w_40_284 :
+    moduleWeight 16 (12, tiles_40_284) =
+      2347 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_284).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_284)
+
+theorem w_40_285 :
+    moduleWeight 16 (12, tiles_40_285) =
+      117 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_285).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_285)
+
+theorem w_40_286 :
+    moduleWeight 16 (12, tiles_40_286) =
+      3268 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_286).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_286)
+
+theorem w_40_287 :
+    moduleWeight 16 (12, tiles_40_287) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_287).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_287)
+
+theorem w_40_288 :
+    moduleWeight 16 (12, tiles_40_288) =
+      1218 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_288).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_288)
+
+theorem w_40_289 :
+    moduleWeight 16 (12, tiles_40_289) =
+      232 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_289).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_289)
+
+theorem w_40_290 :
+    moduleWeight 16 (12, tiles_40_290) =
+      583 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_290).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_290)
+
+theorem w_40_291 :
+    moduleWeight 16 (12, tiles_40_291) =
+      157 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_291).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_291)
+
+theorem w_40_292 :
+    moduleWeight 16 (12, tiles_40_292) =
+      399 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_292).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_292)
+
+theorem w_40_293 :
+    moduleWeight 16 (12, tiles_40_293) =
+      2 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_293).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_293)
+
+theorem w_40_294 :
+    moduleWeight 16 (12, tiles_40_294) =
+      207 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_294).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_294)
+
+theorem w_40_295 :
+    moduleWeight 16 (12, tiles_40_295) =
+      47 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_295).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_295)
+
+theorem w_40_296 :
+    moduleWeight 16 (12, tiles_40_296) =
+      160 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_296).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_296)
+
+theorem w_40_297 :
+    moduleWeight 16 (12, tiles_40_297) =
+      827 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_297).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_297)
+
+theorem w_40_298 :
+    moduleWeight 16 (12, tiles_40_298) =
+      37 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_298).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_298)
+
+theorem w_40_299 :
+    moduleWeight 16 (12, tiles_40_299) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_299).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_299)
+
+theorem w_40_300 :
+    moduleWeight 16 (12, tiles_40_300) =
+      1304 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_300).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_300)
+
+theorem w_40_301 :
+    moduleWeight 16 (12, tiles_40_301) =
+      964 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_301).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_301)
+
+theorem w_40_302 :
+    moduleWeight 16 (12, tiles_40_302) =
+      766 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_302).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_302)
+
+theorem w_40_303 :
+    moduleWeight 16 (12, tiles_40_303) =
+      271 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_303).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_303)
+
+theorem w_40_304 :
+    moduleWeight 16 (12, tiles_40_304) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_304).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_304)
+
+theorem w_40_305 :
+    moduleWeight 16 (12, tiles_40_305) =
+      66 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_305).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_305)
+
+theorem w_40_306 :
+    moduleWeight 16 (12, tiles_40_306) =
+      21 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_306).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_306)
+
+theorem w_40_307 :
+    moduleWeight 16 (12, tiles_40_307) =
+      4044 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_307).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_307)
+
+theorem w_40_308 :
+    moduleWeight 16 (12, tiles_40_308) =
+      6 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_308).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_308)
+
+theorem w_40_309 :
+    moduleWeight 16 (12, tiles_40_309) =
+      265 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_309).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_309)
+
+theorem w_40_310 :
+    moduleWeight 16 (12, tiles_40_310) =
+      195 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_310).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_310)
+
+theorem w_40_311 :
+    moduleWeight 16 (12, tiles_40_311) =
+      669 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_311).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_311)
+
+theorem w_40_312 :
+    moduleWeight 16 (12, tiles_40_312) =
+      252 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_312).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_312)
+
+theorem w_40_313 :
+    moduleWeight 16 (12, tiles_40_313) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_313).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_313)
+
+theorem w_40_314 :
+    moduleWeight 16 (12, tiles_40_314) =
+      2 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_314).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_314)
+
+theorem w_40_315 :
+    moduleWeight 16 (12, tiles_40_315) =
+      463 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_315).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_315)
+
+theorem w_40_316 :
+    moduleWeight 16 (12, tiles_40_316) =
+      8 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_316).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_316)
+
+theorem w_40_317 :
+    moduleWeight 16 (12, tiles_40_317) =
+      157 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_317).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_317)
+
+theorem w_40_318 :
+    moduleWeight 16 (12, tiles_40_318) =
+      951 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_318).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_318)
+
+theorem w_40_319 :
+    moduleWeight 16 (12, tiles_40_319) =
+      954 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_319).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_319)
+
+theorem w_40_320 :
+    moduleWeight 16 (12, tiles_40_320) =
+      1121 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_320).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_320)
+
+theorem w_40_321 :
+    moduleWeight 16 (12, tiles_40_321) =
+      1180 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_321).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_321)
+
+theorem w_40_322 :
+    moduleWeight 16 (12, tiles_40_322) =
+      568 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_322).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_322)
+
+theorem w_40_323 :
+    moduleWeight 16 (12, tiles_40_323) =
+      371 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_323).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_323)
+
+theorem w_40_324 :
+    moduleWeight 16 (12, tiles_40_324) =
+      509 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_324).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_324)
+
+theorem w_40_325 :
+    moduleWeight 16 (12, tiles_40_325) =
+      136 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_325).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_325)
+
+theorem w_40_326 :
+    moduleWeight 16 (12, tiles_40_326) =
+      89 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_326).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_326)
+
+theorem w_40_327 :
+    moduleWeight 16 (12, tiles_40_327) =
+      961 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_327).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_327)
+
+theorem w_40_328 :
+    moduleWeight 16 (12, tiles_40_328) =
+      110 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_328).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_328)
+
+theorem w_40_329 :
+    moduleWeight 16 (12, tiles_40_329) =
+      315 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_329).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_329)
+
+theorem w_40_330 :
+    moduleWeight 16 (12, tiles_40_330) =
+      17 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_330).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_330)
+
+theorem w_40_331 :
+    moduleWeight 16 (12, tiles_40_331) =
+      71 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_331).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_331)
+
+theorem w_40_332 :
+    moduleWeight 16 (12, tiles_40_332) =
+      107 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_332).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_332)
+
+theorem w_40_333 :
+    moduleWeight 16 (12, tiles_40_333) =
+      722 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_333).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_333)
+
+theorem w_40_334 :
+    moduleWeight 16 (12, tiles_40_334) =
+      2752 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_334).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_334)
+
+theorem w_40_335 :
+    moduleWeight 16 (12, tiles_40_335) =
+      145 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_335).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_335)
+
+theorem w_40_336 :
+    moduleWeight 16 (12, tiles_40_336) =
+      2344 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_336).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_336)
+
+theorem w_40_337 :
+    moduleWeight 16 (12, tiles_40_337) =
+      337 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_337).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_337)
+
+theorem w_40_338 :
+    moduleWeight 16 (12, tiles_40_338) =
+      4 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_338).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_338)
+
+theorem w_40_339 :
+    moduleWeight 16 (12, tiles_40_339) =
+      248 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_339).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_339)
+
+theorem w_40_340 :
+    moduleWeight 16 (12, tiles_40_340) =
+      1351 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_340).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_340)
+
+theorem w_40_341 :
+    moduleWeight 16 (12, tiles_40_341) =
+      2024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_341).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_341)
+
+theorem w_40_342 :
+    moduleWeight 16 (12, tiles_40_342) =
+      320 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_342).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_342)
+
+theorem w_40_343 :
+    moduleWeight 16 (12, tiles_40_343) =
+      18 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_343).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_343)
+
+theorem w_40_344 :
+    moduleWeight 16 (12, tiles_40_344) =
+      789 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_344).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_344)
+
+theorem w_40_345 :
+    moduleWeight 16 (12, tiles_40_345) =
+      560 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_345).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_345)
+
+theorem w_40_346 :
+    moduleWeight 16 (12, tiles_40_346) =
+      612 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_346).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_346)
+
+theorem w_40_347 :
+    moduleWeight 16 (12, tiles_40_347) =
+      446 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_347).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_347)
+
+theorem w_40_348 :
+    moduleWeight 16 (12, tiles_40_348) =
+      213 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_348).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_348)
+
+theorem w_40_349 :
+    moduleWeight 16 (12, tiles_40_349) =
+      358 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_349).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_349)
+
+theorem w_40_350 :
+    moduleWeight 16 (12, tiles_40_350) =
+      8 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_350).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_350)
+
+theorem w_40_351 :
+    moduleWeight 16 (12, tiles_40_351) =
+      12 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_351).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_351)
+
+theorem w_40_352 :
+    moduleWeight 16 (12, tiles_40_352) =
+      177 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_352).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_352)
+
+theorem w_40_353 :
+    moduleWeight 16 (12, tiles_40_353) =
+      466 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_353).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_353)
+
+theorem w_40_354 :
+    moduleWeight 16 (12, tiles_40_354) =
+      1080 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_354).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_354)
+
+theorem w_40_355 :
+    moduleWeight 16 (12, tiles_40_355) =
+      556 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_355).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_355)
+
+theorem w_40_356 :
+    moduleWeight 16 (12, tiles_40_356) =
+      132 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_356).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_356)
+
+theorem w_40_357 :
+    moduleWeight 16 (12, tiles_40_357) =
+      1013 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_357).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_357)
+
+theorem w_40_358 :
+    moduleWeight 16 (12, tiles_40_358) =
+      81 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_358).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_358)
+
+theorem w_40_359 :
+    moduleWeight 16 (12, tiles_40_359) =
+      294 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_359).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_359)
+
+theorem w_40_360 :
+    moduleWeight 16 (12, tiles_40_360) =
+      280 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_360).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_360)
+
+theorem w_40_361 :
+    moduleWeight 16 (12, tiles_40_361) =
+      99 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_361).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_361)
+
+theorem w_40_362 :
+    moduleWeight 16 (12, tiles_40_362) =
+      1275 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_362).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_362)
+
+theorem w_40_363 :
+    moduleWeight 16 (12, tiles_40_363) =
+      563 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_363).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_363)
+
+theorem w_40_364 :
+    moduleWeight 16 (12, tiles_40_364) =
+      35 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_364).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_364)
+
+theorem w_40_365 :
+    moduleWeight 16 (12, tiles_40_365) =
+      441 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_365).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_365)
+
+theorem w_40_366 :
+    moduleWeight 16 (12, tiles_40_366) =
+      215 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_366).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_366)
+
+theorem w_40_367 :
+    moduleWeight 16 (12, tiles_40_367) =
+      60 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_367).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_367)
+
+theorem w_40_368 :
+    moduleWeight 16 (12, tiles_40_368) =
+      221 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_368).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_368)
+
+theorem w_40_369 :
+    moduleWeight 16 (12, tiles_40_369) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_369).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_369)
+
+theorem w_40_370 :
+    moduleWeight 16 (12, tiles_40_370) =
+      431 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_370).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_370)
+
+theorem w_40_371 :
+    moduleWeight 16 (12, tiles_40_371) =
+      100 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_371).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_371)
+
+theorem w_40_372 :
+    moduleWeight 16 (12, tiles_40_372) =
+      175 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_372).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_372)
+
+theorem w_40_373 :
+    moduleWeight 16 (12, tiles_40_373) =
+      190 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_373).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_373)
+
+theorem w_40_374 :
+    moduleWeight 16 (12, tiles_40_374) =
+      337 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_374).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_374)
+
+theorem w_40_375 :
+    moduleWeight 16 (12, tiles_40_375) =
+      1198 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_375).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_375)
+
+theorem w_40_376 :
+    moduleWeight 16 (12, tiles_40_376) =
+      150 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_376).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_376)
+
+theorem w_40_377 :
+    moduleWeight 16 (12, tiles_40_377) =
+      158 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_377).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_377)
+
+theorem w_40_378 :
+    moduleWeight 16 (12, tiles_40_378) =
+      79 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_378).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_378)
+
+theorem w_40_379 :
+    moduleWeight 16 (12, tiles_40_379) =
+      1395 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_379).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_379)
+
+theorem w_40_380 :
+    moduleWeight 16 (12, tiles_40_380) =
+      435 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_380).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_380)
+
+theorem w_40_381 :
+    moduleWeight 16 (12, tiles_40_381) =
+      13 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_381).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_381)
+
+theorem w_40_382 :
+    moduleWeight 16 (12, tiles_40_382) =
+      659 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_382).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_382)
+
+theorem w_40_383 :
+    moduleWeight 16 (12, tiles_40_383) =
+      1683 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_383).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_383)
+
+theorem w_40_384 :
+    moduleWeight 16 (12, tiles_40_384) =
+      163 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_384).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_384)
+
+theorem w_40_385 :
+    moduleWeight 16 (12, tiles_40_385) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_385).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_385)
+
+theorem w_40_386 :
+    moduleWeight 16 (12, tiles_40_386) =
+      750 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_386).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_386)
+
+theorem w_40_387 :
+    moduleWeight 16 (12, tiles_40_387) =
+      151 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_387).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_387)
+
+theorem w_40_388 :
+    moduleWeight 16 (12, tiles_40_388) =
+      924 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_388).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_388)
+
+theorem w_40_389 :
+    moduleWeight 16 (12, tiles_40_389) =
+      4058 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_389).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_389)
+
+theorem w_40_390 :
+    moduleWeight 16 (12, tiles_40_390) =
+      1468 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_390).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_390)
+
+theorem w_40_391 :
+    moduleWeight 16 (12, tiles_40_391) =
+      1944 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_391).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_391)
+
+theorem w_40_392 :
+    moduleWeight 16 (12, tiles_40_392) =
+      160 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_392).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_392)
+
+theorem w_40_393 :
+    moduleWeight 16 (12, tiles_40_393) =
+      173 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_393).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_393)
+
+theorem w_40_394 :
+    moduleWeight 16 (12, tiles_40_394) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_394).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_394)
+
+theorem w_40_395 :
+    moduleWeight 16 (12, tiles_40_395) =
+      53 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_395).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_395)
+
+theorem w_40_396 :
+    moduleWeight 16 (12, tiles_40_396) =
+      901 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_396).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_396)
+
+theorem w_40_397 :
+    moduleWeight 16 (12, tiles_40_397) =
+      150 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_397).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_397)
+
+theorem w_40_398 :
+    moduleWeight 16 (12, tiles_40_398) =
+      274 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_398).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_398)
+
+theorem w_40_399 :
+    moduleWeight 16 (12, tiles_40_399) =
+      261 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_399).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_399)
+
+theorem w_40_400 :
+    moduleWeight 16 (12, tiles_40_400) =
+      84 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_400).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_400)
+
+theorem w_40_401 :
+    moduleWeight 16 (12, tiles_40_401) =
+      81 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_401).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_401)
+
+theorem w_40_402 :
+    moduleWeight 16 (12, tiles_40_402) =
+      53 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_402).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_402)
+
+theorem w_40_403 :
+    moduleWeight 16 (12, tiles_40_403) =
+      55 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_403).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_403)
+
+theorem w_40_404 :
+    moduleWeight 16 (12, tiles_40_404) =
+      84 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_404).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_404)
+
+theorem w_40_405 :
+    moduleWeight 16 (12, tiles_40_405) =
+      479 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_405).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_405)
+
+theorem w_40_406 :
+    moduleWeight 16 (12, tiles_40_406) =
+      142 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_406).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_406)
+
+theorem w_40_407 :
+    moduleWeight 16 (12, tiles_40_407) =
+      877 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_407).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_407)
+
+theorem w_40_408 :
+    moduleWeight 16 (12, tiles_40_408) =
+      449 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_408).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_408)
+
+theorem w_40_409 :
+    moduleWeight 16 (12, tiles_40_409) =
+      87 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_409).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_409)
+
+theorem w_40_410 :
+    moduleWeight 16 (12, tiles_40_410) =
+      127 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_410).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_410)
+
+theorem w_40_411 :
+    moduleWeight 16 (12, tiles_40_411) =
+      38 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_411).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_411)
+
+theorem w_40_412 :
+    moduleWeight 16 (12, tiles_40_412) =
+      597 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_412).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_412)
+
+theorem w_40_413 :
+    moduleWeight 16 (12, tiles_40_413) =
+      400 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_413).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_413)
+
+theorem w_40_414 :
+    moduleWeight 16 (12, tiles_40_414) =
+      149 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_414).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_414)
+
+theorem w_40_415 :
+    moduleWeight 16 (12, tiles_40_415) =
+      321 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_415).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_415)
+
+theorem w_40_416 :
+    moduleWeight 16 (12, tiles_40_416) =
+      571 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_416).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_416)
+
+theorem w_40_417 :
+    moduleWeight 16 (12, tiles_40_417) =
+      224 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_417).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_417)
+
+theorem w_40_418 :
+    moduleWeight 16 (12, tiles_40_418) =
+      104 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_418).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_418)
+
+theorem w_40_419 :
+    moduleWeight 16 (12, tiles_40_419) =
+      179 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_419).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_419)
+
+theorem w_40_420 :
+    moduleWeight 16 (12, tiles_40_420) =
+      139 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_420).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_420)
+
+theorem w_40_421 :
+    moduleWeight 16 (12, tiles_40_421) =
+      160 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_421).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_421)
+
+theorem w_40_422 :
+    moduleWeight 16 (12, tiles_40_422) =
+      613 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_422).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_422)
+
+theorem w_40_423 :
+    moduleWeight 16 (12, tiles_40_423) =
+      36 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_423).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_423)
+
+theorem w_40_424 :
+    moduleWeight 16 (12, tiles_40_424) =
+      452 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_424).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_424)
+
+theorem w_40_425 :
+    moduleWeight 16 (12, tiles_40_425) =
+      355 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_425).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_425)
+
+theorem w_40_426 :
+    moduleWeight 16 (12, tiles_40_426) =
+      133 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_426).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_426)
+
+theorem w_40_427 :
+    moduleWeight 16 (12, tiles_40_427) =
+      850 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_427).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_427)
+
+theorem w_40_428 :
+    moduleWeight 16 (12, tiles_40_428) =
+      837 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_428).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_428)
+
+theorem w_40_429 :
+    moduleWeight 16 (12, tiles_40_429) =
+      158 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_429).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_429)
+
+theorem w_40_430 :
+    moduleWeight 16 (12, tiles_40_430) =
+      32 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_430).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_430)
+
+theorem w_40_431 :
+    moduleWeight 16 (12, tiles_40_431) =
+      115 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_431).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_431)
+
+theorem w_40_432 :
+    moduleWeight 16 (12, tiles_40_432) =
+      930 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_432).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_432)
+
+theorem w_40_433 :
+    moduleWeight 16 (12, tiles_40_433) =
+      132 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_433).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_433)
+
+theorem w_40_434 :
+    moduleWeight 16 (12, tiles_40_434) =
+      155 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_434).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_434)
+
+theorem w_40_435 :
+    moduleWeight 16 (12, tiles_40_435) =
+      82 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_435).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_435)
+
+theorem w_40_436 :
+    moduleWeight 16 (12, tiles_40_436) =
+      918 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_436).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_436)
+
+theorem w_40_437 :
+    moduleWeight 16 (12, tiles_40_437) =
+      795 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_437).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_437)
+
+theorem w_40_438 :
+    moduleWeight 16 (12, tiles_40_438) =
+      40 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_438).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_438)
+
+theorem w_40_439 :
+    moduleWeight 16 (12, tiles_40_439) =
+      46 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_439).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_439)
+
+theorem w_40_440 :
+    moduleWeight 16 (12, tiles_40_440) =
+      754 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_40_440).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_40_440)
 
 theorem w_41_0 :
-    moduleWeight 16 (11, tiles_41_0) =
-      60 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_41_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_41_0)
+    moduleWeight 16 (12, tiles_41_0) =
+      174 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_41_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_41_0)
 
 theorem w_41_1 :
-    moduleWeight 16 (11, tiles_41_1) =
-      102 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_41_1).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_41_1)
+    moduleWeight 16 (12, tiles_41_1) =
+      175 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_41_1).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_41_1)
 
 theorem w_41_2 :
-    moduleWeight 16 (11, tiles_41_2) =
-      5 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_41_2).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_41_2)
+    moduleWeight 16 (12, tiles_41_2) =
+      83 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_41_2).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_41_2)
 
 theorem w_41_3 :
-    moduleWeight 16 (11, tiles_41_3) =
-      388 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_41_3).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_41_3)
+    moduleWeight 16 (12, tiles_41_3) =
+      82 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_41_3).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_41_3)
 
 theorem w_41_4 :
-    moduleWeight 16 (11, tiles_41_4) =
-      55 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_41_4).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_41_4)
+    moduleWeight 16 (12, tiles_41_4) =
+      222 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_41_4).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_41_4)
+
+theorem w_41_5 :
+    moduleWeight 16 (12, tiles_41_5) =
+      737 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_41_5).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_41_5)
+
+theorem w_41_6 :
+    moduleWeight 16 (12, tiles_41_6) =
+      119 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_41_6).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_41_6)
 
 theorem w_42_0 :
-    moduleWeight 16 (11, tiles_42_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_42_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_42_0)
+    moduleWeight 16 (12, tiles_42_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_42_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_42_0)
 
 theorem w_43_0 :
-    moduleWeight 16 (11, tiles_43_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_43_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_43_0)
+    moduleWeight 16 (12, tiles_43_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_43_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_43_0)
 
 theorem w_44_0 :
-    moduleWeight 16 (11, tiles_44_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_0)
+    moduleWeight 16 (12, tiles_44_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_0)
 
 theorem w_44_1 :
-    moduleWeight 16 (11, tiles_44_1) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_1).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_1)
+    moduleWeight 16 (12, tiles_44_1) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_1).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_1)
 
 theorem w_44_2 :
-    moduleWeight 16 (11, tiles_44_2) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_2).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_2)
+    moduleWeight 16 (12, tiles_44_2) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_2).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_2)
 
 theorem w_44_3 :
-    moduleWeight 16 (11, tiles_44_3) =
-      128 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_3).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_3)
+    moduleWeight 16 (12, tiles_44_3) =
+      512 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_3).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_3)
 
 theorem w_44_4 :
-    moduleWeight 16 (11, tiles_44_4) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_4).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_4)
+    moduleWeight 16 (12, tiles_44_4) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_4).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_4)
 
 theorem w_44_5 :
-    moduleWeight 16 (11, tiles_44_5) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_5).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_5)
+    moduleWeight 16 (12, tiles_44_5) =
+      192 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_5).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_5)
 
 theorem w_44_6 :
-    moduleWeight 16 (11, tiles_44_6) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_6).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_6)
+    moduleWeight 16 (12, tiles_44_6) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_6).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_6)
 
 theorem w_44_7 :
-    moduleWeight 16 (11, tiles_44_7) =
-      992 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_7).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_7)
+    moduleWeight 16 (12, tiles_44_7) =
+      3968 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_7).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_7)
 
 theorem w_44_8 :
-    moduleWeight 16 (11, tiles_44_8) =
-      16 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_8).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_8)
+    moduleWeight 16 (12, tiles_44_8) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_8).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_8)
 
 theorem w_44_9 :
-    moduleWeight 16 (11, tiles_44_9) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_9).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_9)
+    moduleWeight 16 (12, tiles_44_9) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_9).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_9)
 
 theorem w_44_10 :
-    moduleWeight 16 (11, tiles_44_10) =
-      1024 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_10).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_10)
+    moduleWeight 16 (12, tiles_44_10) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_10).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_10)
 
 theorem w_44_11 :
-    moduleWeight 16 (11, tiles_44_11) =
-      832 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_11).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_11)
+    moduleWeight 16 (12, tiles_44_11) =
+      4044 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_11).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_11)
 
 theorem w_44_12 :
-    moduleWeight 16 (11, tiles_44_12) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_12).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_12)
+    moduleWeight 16 (12, tiles_44_12) =
+      3328 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_12).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_12)
 
 theorem w_44_13 :
-    moduleWeight 16 (11, tiles_44_13) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_13).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_13)
+    moduleWeight 16 (12, tiles_44_13) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_13).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_13)
 
 theorem w_44_14 :
-    moduleWeight 16 (11, tiles_44_14) =
-      32 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_14).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_14)
+    moduleWeight 16 (12, tiles_44_14) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_14).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_14)
 
 theorem w_44_15 :
-    moduleWeight 16 (11, tiles_44_15) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_15).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_15)
+    moduleWeight 16 (12, tiles_44_15) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_15).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_15)
 
 theorem w_44_16 :
-    moduleWeight 16 (11, tiles_44_16) =
-      65 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_16).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_16)
+    moduleWeight 16 (12, tiles_44_16) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_16).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_16)
 
 theorem w_44_17 :
-    moduleWeight 16 (11, tiles_44_17) =
-      116 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_17).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_17)
+    moduleWeight 16 (12, tiles_44_17) =
+      260 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_17).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_17)
 
 theorem w_44_18 :
-    moduleWeight 16 (11, tiles_44_18) =
-      29 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_18).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_18)
+    moduleWeight 16 (12, tiles_44_18) =
+      464 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_18).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_18)
 
 theorem w_44_19 :
-    moduleWeight 16 (11, tiles_44_19) =
-      614 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_19).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_19)
+    moduleWeight 16 (12, tiles_44_19) =
+      116 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_19).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_19)
 
 theorem w_44_20 :
-    moduleWeight 16 (11, tiles_44_20) =
-      327 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_20).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_20)
+    moduleWeight 16 (12, tiles_44_20) =
+      2048 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_20).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_20)
 
 theorem w_44_21 :
-    moduleWeight 16 (11, tiles_44_21) =
-      380 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_21).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_21)
+    moduleWeight 16 (12, tiles_44_21) =
+      408 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_21).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_21)
 
 theorem w_44_22 :
-    moduleWeight 16 (11, tiles_44_22) =
-      657 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_22).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_22)
+    moduleWeight 16 (12, tiles_44_22) =
+      1308 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_22).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_22)
 
 theorem w_44_23 :
-    moduleWeight 16 (11, tiles_44_23) =
-      272 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_23).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_23)
+    moduleWeight 16 (12, tiles_44_23) =
+      1520 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_23).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_23)
 
 theorem w_44_24 :
-    moduleWeight 16 (11, tiles_44_24) =
-      208 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_24).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_24)
+    moduleWeight 16 (12, tiles_44_24) =
+      1014 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_24).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_24)
 
 theorem w_44_25 :
-    moduleWeight 16 (11, tiles_44_25) =
-      16 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_25).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_25)
+    moduleWeight 16 (12, tiles_44_25) =
+      441 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_25).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_25)
 
 theorem w_44_26 :
-    moduleWeight 16 (11, tiles_44_26) =
-      1200 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_26).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_26)
+    moduleWeight 16 (12, tiles_44_26) =
+      79 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_26).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_26)
 
 theorem w_44_27 :
-    moduleWeight 16 (11, tiles_44_27) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_27).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_27)
+    moduleWeight 16 (12, tiles_44_27) =
+      891 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_27).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_27)
 
 theorem w_44_28 :
-    moduleWeight 16 (11, tiles_44_28) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_28).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_28)
+    moduleWeight 16 (12, tiles_44_28) =
+      1088 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_28).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_28)
 
 theorem w_44_29 :
-    moduleWeight 16 (11, tiles_44_29) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_29).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_29)
+    moduleWeight 16 (12, tiles_44_29) =
+      832 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_29).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_29)
 
 theorem w_44_30 :
-    moduleWeight 16 (11, tiles_44_30) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_30).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_30)
+    moduleWeight 16 (12, tiles_44_30) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_30).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_30)
 
 theorem w_44_31 :
-    moduleWeight 16 (11, tiles_44_31) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_31).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_31)
+    moduleWeight 16 (12, tiles_44_31) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_31).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_31)
 
 theorem w_44_32 :
-    moduleWeight 16 (11, tiles_44_32) =
-      1021 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_32).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_32)
+    moduleWeight 16 (12, tiles_44_32) =
+      704 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_32).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_32)
 
 theorem w_44_33 :
-    moduleWeight 16 (11, tiles_44_33) =
-      438 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_33).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_33)
+    moduleWeight 16 (12, tiles_44_33) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_33).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_33)
 
 theorem w_44_34 :
-    moduleWeight 16 (11, tiles_44_34) =
-      78 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_34).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_34)
+    moduleWeight 16 (12, tiles_44_34) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_34).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_34)
 
 theorem w_44_35 :
-    moduleWeight 16 (11, tiles_44_35) =
-      1123 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_35).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_35)
+    moduleWeight 16 (12, tiles_44_35) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_35).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_35)
 
 theorem w_44_36 :
-    moduleWeight 16 (11, tiles_44_36) =
-      138 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_36).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_36)
+    moduleWeight 16 (12, tiles_44_36) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_36).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_36)
 
 theorem w_44_37 :
-    moduleWeight 16 (11, tiles_44_37) =
-      2508 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_37).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_37)
+    moduleWeight 16 (12, tiles_44_37) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_37).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_37)
 
 theorem w_44_38 :
-    moduleWeight 16 (11, tiles_44_38) =
-      19 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_38).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_38)
+    moduleWeight 16 (12, tiles_44_38) =
+      4324 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_38).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_38)
 
 theorem w_44_39 :
-    moduleWeight 16 (11, tiles_44_39) =
-      1137 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_39).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_39)
+    moduleWeight 16 (12, tiles_44_39) =
+      10 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_39).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_39)
 
 theorem w_44_40 :
-    moduleWeight 16 (11, tiles_44_40) =
-      164 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_40).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_40)
+    moduleWeight 16 (12, tiles_44_40) =
+      22 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_40).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_40)
 
 theorem w_44_41 :
-    moduleWeight 16 (11, tiles_44_41) =
-      8 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_41).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_41)
+    moduleWeight 16 (12, tiles_44_41) =
+      101 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_41).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_41)
 
 theorem w_44_42 :
-    moduleWeight 16 (11, tiles_44_42) =
-      13 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_42).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_42)
+    moduleWeight 16 (12, tiles_44_42) =
+      1012 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_42).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_42)
 
 theorem w_44_43 :
-    moduleWeight 16 (11, tiles_44_43) =
-      1855 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_43).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_43)
+    moduleWeight 16 (12, tiles_44_43) =
+      159 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_43).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_43)
 
 theorem w_44_44 :
-    moduleWeight 16 (11, tiles_44_44) =
-      1863 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_44).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_44)
+    moduleWeight 16 (12, tiles_44_44) =
+      1309 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_44).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_44)
 
 theorem w_44_45 :
-    moduleWeight 16 (11, tiles_44_45) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_45).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_45)
+    moduleWeight 16 (12, tiles_44_45) =
+      140 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_45).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_45)
 
 theorem w_44_46 :
-    moduleWeight 16 (11, tiles_44_46) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_46).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_46)
+    moduleWeight 16 (12, tiles_44_46) =
+      1435 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_46).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_46)
 
 theorem w_44_47 :
-    moduleWeight 16 (11, tiles_44_47) =
-      112 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_47).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_47)
+    moduleWeight 16 (12, tiles_44_47) =
+      831 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_47).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_47)
 
 theorem w_44_48 :
-    moduleWeight 16 (11, tiles_44_48) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_48).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_48)
+    moduleWeight 16 (12, tiles_44_48) =
+      111 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_48).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_48)
 
 theorem w_44_49 :
-    moduleWeight 16 (11, tiles_44_49) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_49).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_49)
+    moduleWeight 16 (12, tiles_44_49) =
+      60 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_49).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_49)
 
 theorem w_44_50 :
-    moduleWeight 16 (11, tiles_44_50) =
-      1024 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_50).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_50)
+    moduleWeight 16 (12, tiles_44_50) =
+      88 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_50).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_50)
 
 theorem w_44_51 :
-    moduleWeight 16 (11, tiles_44_51) =
-      96 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_51).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_51)
+    moduleWeight 16 (12, tiles_44_51) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_51).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_51)
 
 theorem w_44_52 :
-    moduleWeight 16 (11, tiles_44_52) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_52).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_52)
+    moduleWeight 16 (12, tiles_44_52) =
+      448 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_52).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_52)
 
 theorem w_44_53 :
-    moduleWeight 16 (11, tiles_44_53) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_53).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_53)
+    moduleWeight 16 (12, tiles_44_53) =
+      2041 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_53).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_53)
 
 theorem w_44_54 :
-    moduleWeight 16 (11, tiles_44_54) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_54).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_54)
+    moduleWeight 16 (12, tiles_44_54) =
+      52 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_54).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_54)
 
 theorem w_44_55 :
-    moduleWeight 16 (11, tiles_44_55) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_55).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_55)
+    moduleWeight 16 (12, tiles_44_55) =
+      1665 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_55).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_55)
 
 theorem w_44_56 :
-    moduleWeight 16 (11, tiles_44_56) =
-      2048 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_56).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_56)
+    moduleWeight 16 (12, tiles_44_56) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_56).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_56)
 
 theorem w_44_57 :
-    moduleWeight 16 (11, tiles_44_57) =
-      397 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_57).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_57)
+    moduleWeight 16 (12, tiles_44_57) =
+      1838 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_57).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_57)
 
 theorem w_44_58 :
-    moduleWeight 16 (11, tiles_44_58) =
-      1314 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_58).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_58)
+    moduleWeight 16 (12, tiles_44_58) =
+      39 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_58).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_58)
 
 theorem w_44_59 :
-    moduleWeight 16 (11, tiles_44_59) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_59).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_59)
+    moduleWeight 16 (12, tiles_44_59) =
+      138 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_59).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_59)
 
 theorem w_44_60 :
-    moduleWeight 16 (11, tiles_44_60) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_60).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_60)
+    moduleWeight 16 (12, tiles_44_60) =
+      49 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_60).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_60)
 
 theorem w_44_61 :
-    moduleWeight 16 (11, tiles_44_61) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_61).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_61)
+    moduleWeight 16 (12, tiles_44_61) =
+      84 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_61).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_61)
 
 theorem w_44_62 :
-    moduleWeight 16 (11, tiles_44_62) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_62).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_62)
+    moduleWeight 16 (12, tiles_44_62) =
+      1989 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_62).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_62)
 
 theorem w_44_63 :
-    moduleWeight 16 (11, tiles_44_63) =
-      1232 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_63).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_63)
+    moduleWeight 16 (12, tiles_44_63) =
+      87 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_63).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_63)
 
 theorem w_44_64 :
-    moduleWeight 16 (11, tiles_44_64) =
-      16 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_64).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_64)
+    moduleWeight 16 (12, tiles_44_64) =
+      2134 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_64).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_64)
 
 theorem w_44_65 :
-    moduleWeight 16 (11, tiles_44_65) =
-      464 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_44_65).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_44_65)
+    moduleWeight 16 (12, tiles_44_65) =
+      82 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_65).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_65)
+
+theorem w_44_66 :
+    moduleWeight 16 (12, tiles_44_66) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_66).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_66)
+
+theorem w_44_67 :
+    moduleWeight 16 (12, tiles_44_67) =
+      13 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_67).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_67)
+
+theorem w_44_68 :
+    moduleWeight 16 (12, tiles_44_68) =
+      21 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_68).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_68)
+
+theorem w_44_69 :
+    moduleWeight 16 (12, tiles_44_69) =
+      435 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_69).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_69)
+
+theorem w_44_70 :
+    moduleWeight 16 (12, tiles_44_70) =
+      181 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_70).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_70)
+
+theorem w_44_71 :
+    moduleWeight 16 (12, tiles_44_71) =
+      386 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_71).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_71)
+
+theorem w_44_72 :
+    moduleWeight 16 (12, tiles_44_72) =
+      175 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_72).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_72)
+
+theorem w_44_73 :
+    moduleWeight 16 (12, tiles_44_73) =
+      181 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_73).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_73)
+
+theorem w_44_74 :
+    moduleWeight 16 (12, tiles_44_74) =
+      1410 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_74).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_74)
+
+theorem w_44_75 :
+    moduleWeight 16 (12, tiles_44_75) =
+      4079 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_75).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_75)
+
+theorem w_44_76 :
+    moduleWeight 16 (12, tiles_44_76) =
+      1784 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_76).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_76)
+
+theorem w_44_77 :
+    moduleWeight 16 (12, tiles_44_77) =
+      664 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_77).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_77)
+
+theorem w_44_78 :
+    moduleWeight 16 (12, tiles_44_78) =
+      1687 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_78).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_78)
+
+theorem w_44_79 :
+    moduleWeight 16 (12, tiles_44_79) =
+      907 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_79).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_79)
+
+theorem w_44_80 :
+    moduleWeight 16 (12, tiles_44_80) =
+      1473 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_80).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_80)
+
+theorem w_44_81 :
+    moduleWeight 16 (12, tiles_44_81) =
+      109 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_81).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_81)
+
+theorem w_44_82 :
+    moduleWeight 16 (12, tiles_44_82) =
+      705 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_82).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_82)
+
+theorem w_44_83 :
+    moduleWeight 16 (12, tiles_44_83) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_83).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_83)
+
+theorem w_44_84 :
+    moduleWeight 16 (12, tiles_44_84) =
+      448 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_84).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_84)
+
+theorem w_44_85 :
+    moduleWeight 16 (12, tiles_44_85) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_85).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_85)
+
+theorem w_44_86 :
+    moduleWeight 16 (12, tiles_44_86) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_86).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_86)
+
+theorem w_44_87 :
+    moduleWeight 16 (12, tiles_44_87) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_87).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_87)
+
+theorem w_44_88 :
+    moduleWeight 16 (12, tiles_44_88) =
+      384 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_88).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_88)
+
+theorem w_44_89 :
+    moduleWeight 16 (12, tiles_44_89) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_89).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_89)
+
+theorem w_44_90 :
+    moduleWeight 16 (12, tiles_44_90) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_90).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_90)
+
+theorem w_44_91 :
+    moduleWeight 16 (12, tiles_44_91) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_91).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_91)
+
+theorem w_44_92 :
+    moduleWeight 16 (12, tiles_44_92) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_92).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_92)
+
+theorem w_44_93 :
+    moduleWeight 16 (12, tiles_44_93) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_93).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_93)
+
+theorem w_44_94 :
+    moduleWeight 16 (12, tiles_44_94) =
+      3999 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_94).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_94)
+
+theorem w_44_95 :
+    moduleWeight 16 (12, tiles_44_95) =
+      4350 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_95).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_95)
+
+theorem w_44_96 :
+    moduleWeight 16 (12, tiles_44_96) =
+      163 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_96).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_96)
+
+theorem w_44_97 :
+    moduleWeight 16 (12, tiles_44_97) =
+      29 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_97).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_97)
+
+theorem w_44_98 :
+    moduleWeight 16 (12, tiles_44_98) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_98).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_98)
+
+theorem w_44_99 :
+    moduleWeight 16 (12, tiles_44_99) =
+      32 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_99).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_99)
+
+theorem w_44_100 :
+    moduleWeight 16 (12, tiles_44_100) =
+      629 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_100).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_100)
+
+theorem w_44_101 :
+    moduleWeight 16 (12, tiles_44_101) =
+      77 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_101).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_101)
+
+theorem w_44_102 :
+    moduleWeight 16 (12, tiles_44_102) =
+      913 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_102).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_102)
+
+theorem w_44_103 :
+    moduleWeight 16 (12, tiles_44_103) =
+      4055 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_103).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_103)
+
+theorem w_44_104 :
+    moduleWeight 16 (12, tiles_44_104) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_104).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_104)
+
+theorem w_44_105 :
+    moduleWeight 16 (12, tiles_44_105) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_105).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_105)
+
+theorem w_44_106 :
+    moduleWeight 16 (12, tiles_44_106) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_106).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_106)
+
+theorem w_44_107 :
+    moduleWeight 16 (12, tiles_44_107) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_107).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_107)
+
+theorem w_44_108 :
+    moduleWeight 16 (12, tiles_44_108) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_108).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_108)
+
+theorem w_44_109 :
+    moduleWeight 16 (12, tiles_44_109) =
+      832 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_109).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_109)
+
+theorem w_44_110 :
+    moduleWeight 16 (12, tiles_44_110) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_110).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_110)
+
+theorem w_44_111 :
+    moduleWeight 16 (12, tiles_44_111) =
+      1856 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_44_111).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_44_111)
 
 theorem w_45_0 :
-    moduleWeight 16 (11, tiles_45_0) =
-      1 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_0)
+    moduleWeight 16 (12, tiles_45_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_0)
 
 theorem w_45_1 :
-    moduleWeight 16 (11, tiles_45_1) =
-      237 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_1).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_1)
+    moduleWeight 16 (12, tiles_45_1) =
+      542 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_1).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_1)
 
 theorem w_45_2 :
-    moduleWeight 16 (11, tiles_45_2) =
-      12 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_2).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_2)
+    moduleWeight 16 (12, tiles_45_2) =
+      210 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_2).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_2)
 
 theorem w_45_3 :
-    moduleWeight 16 (11, tiles_45_3) =
-      255 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_3).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_3)
+    moduleWeight 16 (12, tiles_45_3) =
+      21 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_3).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_3)
 
 theorem w_45_4 :
-    moduleWeight 16 (11, tiles_45_4) =
-      89 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_4).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_4)
+    moduleWeight 16 (12, tiles_45_4) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_4).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_4)
 
 theorem w_45_5 :
-    moduleWeight 16 (11, tiles_45_5) =
-      572 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_5).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_5)
+    moduleWeight 16 (12, tiles_45_5) =
+      895 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_5).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_5)
 
 theorem w_45_6 :
-    moduleWeight 16 (11, tiles_45_6) =
-      962 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_6).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_6)
+    moduleWeight 16 (12, tiles_45_6) =
+      227 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_6).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_6)
 
 theorem w_45_7 :
-    moduleWeight 16 (11, tiles_45_7) =
-      420 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_7).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_7)
+    moduleWeight 16 (12, tiles_45_7) =
+      310 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_7).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_7)
 
 theorem w_45_8 :
-    moduleWeight 16 (11, tiles_45_8) =
-      237 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_8).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_8)
+    moduleWeight 16 (12, tiles_45_8) =
+      226 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_8).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_8)
 
 theorem w_45_9 :
-    moduleWeight 16 (11, tiles_45_9) =
-      32 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_9).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_9)
+    moduleWeight 16 (12, tiles_45_9) =
+      108 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_9).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_9)
 
 theorem w_45_10 :
-    moduleWeight 16 (11, tiles_45_10) =
-      277 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_10).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_10)
+    moduleWeight 16 (12, tiles_45_10) =
+      307 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_10).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_10)
 
 theorem w_45_11 :
-    moduleWeight 16 (11, tiles_45_11) =
-      126 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_11).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_11)
+    moduleWeight 16 (12, tiles_45_11) =
+      783 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_11).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_11)
 
 theorem w_45_12 :
-    moduleWeight 16 (11, tiles_45_12) =
-      446 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_12).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_12)
+    moduleWeight 16 (12, tiles_45_12) =
+      378 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_12).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_12)
 
 theorem w_45_13 :
-    moduleWeight 16 (11, tiles_45_13) =
-      1877 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_13).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_13)
+    moduleWeight 16 (12, tiles_45_13) =
+      584 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_13).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_13)
 
 theorem w_45_14 :
-    moduleWeight 16 (11, tiles_45_14) =
-      135 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_14).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_14)
+    moduleWeight 16 (12, tiles_45_14) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_14).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_14)
 
 theorem w_45_15 :
-    moduleWeight 16 (11, tiles_45_15) =
-      679 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_15).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_15)
+    moduleWeight 16 (12, tiles_45_15) =
+      7 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_15).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_15)
 
 theorem w_45_16 :
-    moduleWeight 16 (11, tiles_45_16) =
-      869 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_16).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_16)
+    moduleWeight 16 (12, tiles_45_16) =
+      183 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_16).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_16)
 
 theorem w_45_17 :
-    moduleWeight 16 (11, tiles_45_17) =
-      392 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_17).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_17)
+    moduleWeight 16 (12, tiles_45_17) =
+      901 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_17).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_17)
 
 theorem w_45_18 :
-    moduleWeight 16 (11, tiles_45_18) =
-      2364 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_18).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_18)
+    moduleWeight 16 (12, tiles_45_18) =
+      910 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_18).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_18)
 
 theorem w_45_19 :
-    moduleWeight 16 (11, tiles_45_19) =
-      592 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_19).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_19)
+    moduleWeight 16 (12, tiles_45_19) =
+      465 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_19).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_19)
 
 theorem w_45_20 :
-    moduleWeight 16 (11, tiles_45_20) =
-      224 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_20).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_20)
+    moduleWeight 16 (12, tiles_45_20) =
+      57 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_20).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_20)
 
 theorem w_45_21 :
-    moduleWeight 16 (11, tiles_45_21) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_21).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_21)
+    moduleWeight 16 (12, tiles_45_21) =
+      936 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_21).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_21)
 
 theorem w_45_22 :
-    moduleWeight 16 (11, tiles_45_22) =
-      297 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_22).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_22)
+    moduleWeight 16 (12, tiles_45_22) =
+      122 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_22).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_22)
 
 theorem w_45_23 :
-    moduleWeight 16 (11, tiles_45_23) =
-      1111 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_23).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_23)
+    moduleWeight 16 (12, tiles_45_23) =
+      482 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_23).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_23)
 
 theorem w_45_24 :
-    moduleWeight 16 (11, tiles_45_24) =
-      161 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_24).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_24)
+    moduleWeight 16 (12, tiles_45_24) =
+      55 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_24).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_24)
 
 theorem w_45_25 :
-    moduleWeight 16 (11, tiles_45_25) =
-      8 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_25).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_25)
+    moduleWeight 16 (12, tiles_45_25) =
+      76 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_25).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_25)
 
 theorem w_45_26 :
-    moduleWeight 16 (11, tiles_45_26) =
-      187 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_26).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_26)
+    moduleWeight 16 (12, tiles_45_26) =
+      208 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_26).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_26)
 
 theorem w_45_27 :
-    moduleWeight 16 (11, tiles_45_27) =
-      143 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_27).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_27)
+    moduleWeight 16 (12, tiles_45_27) =
+      700 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_27).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_27)
 
 theorem w_45_28 :
-    moduleWeight 16 (11, tiles_45_28) =
-      665 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_28).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_28)
+    moduleWeight 16 (12, tiles_45_28) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_28).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_28)
 
 theorem w_45_29 :
-    moduleWeight 16 (11, tiles_45_29) =
-      867 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_29).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_29)
+    moduleWeight 16 (12, tiles_45_29) =
+      381 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_29).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_29)
 
 theorem w_45_30 :
-    moduleWeight 16 (11, tiles_45_30) =
-      35 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_30).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_30)
+    moduleWeight 16 (12, tiles_45_30) =
+      154 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_30).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_30)
 
 theorem w_45_31 :
-    moduleWeight 16 (11, tiles_45_31) =
-      262 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_31).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_31)
+    moduleWeight 16 (12, tiles_45_31) =
+      3435 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_31).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_31)
 
 theorem w_45_32 :
-    moduleWeight 16 (11, tiles_45_32) =
-      476 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_32).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_32)
+    moduleWeight 16 (12, tiles_45_32) =
+      222 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_32).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_32)
 
 theorem w_45_33 :
-    moduleWeight 16 (11, tiles_45_33) =
-      84 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_33).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_33)
+    moduleWeight 16 (12, tiles_45_33) =
+      120 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_33).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_33)
 
 theorem w_45_34 :
-    moduleWeight 16 (11, tiles_45_34) =
-      108 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_34).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_34)
+    moduleWeight 16 (12, tiles_45_34) =
+      512 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_34).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_34)
 
 theorem w_45_35 :
-    moduleWeight 16 (11, tiles_45_35) =
-      431 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_35).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_35)
+    moduleWeight 16 (12, tiles_45_35) =
+      76 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_35).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_35)
 
 theorem w_45_36 :
-    moduleWeight 16 (11, tiles_45_36) =
-      21 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_36).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_36)
+    moduleWeight 16 (12, tiles_45_36) =
+      4212 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_36).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_36)
 
 theorem w_45_37 :
-    moduleWeight 16 (11, tiles_45_37) =
-      302 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_37).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_37)
+    moduleWeight 16 (12, tiles_45_37) =
+      32 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_37).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_37)
 
 theorem w_45_38 :
-    moduleWeight 16 (11, tiles_45_38) =
-      560 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_38).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_38)
+    moduleWeight 16 (12, tiles_45_38) =
+      345 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_38).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_38)
 
 theorem w_45_39 :
-    moduleWeight 16 (11, tiles_45_39) =
-      323 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_39).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_39)
+    moduleWeight 16 (12, tiles_45_39) =
+      18 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_39).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_39)
 
 theorem w_45_40 :
-    moduleWeight 16 (11, tiles_45_40) =
-      139 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_40).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_40)
+    moduleWeight 16 (12, tiles_45_40) =
+      2578 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_40).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_40)
 
 theorem w_45_41 :
-    moduleWeight 16 (11, tiles_45_41) =
-      1115 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_41).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_41)
+    moduleWeight 16 (12, tiles_45_41) =
+      14 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_41).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_41)
 
 theorem w_45_42 :
-    moduleWeight 16 (11, tiles_45_42) =
-      144 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_42).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_42)
+    moduleWeight 16 (12, tiles_45_42) =
+      11 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_42).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_42)
 
 theorem w_45_43 :
-    moduleWeight 16 (11, tiles_45_43) =
-      2045 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_43).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_43)
+    moduleWeight 16 (12, tiles_45_43) =
+      94 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_43).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_43)
 
 theorem w_45_44 :
-    moduleWeight 16 (11, tiles_45_44) =
-      85 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_44).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_44)
+    moduleWeight 16 (12, tiles_45_44) =
+      496 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_44).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_44)
 
 theorem w_45_45 :
-    moduleWeight 16 (11, tiles_45_45) =
-      2701 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_45).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_45)
+    moduleWeight 16 (12, tiles_45_45) =
+      463 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_45).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_45)
 
 theorem w_45_46 :
-    moduleWeight 16 (11, tiles_45_46) =
-      784 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_46).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_46)
+    moduleWeight 16 (12, tiles_45_46) =
+      1228 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_46).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_46)
 
 theorem w_45_47 :
-    moduleWeight 16 (11, tiles_45_47) =
-      1456 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_47).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_47)
+    moduleWeight 16 (12, tiles_45_47) =
+      870 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_47).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_47)
 
 theorem w_45_48 :
-    moduleWeight 16 (11, tiles_45_48) =
-      76 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_48).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_48)
+    moduleWeight 16 (12, tiles_45_48) =
+      1359 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_48).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_48)
 
 theorem w_45_49 :
-    moduleWeight 16 (11, tiles_45_49) =
-      39 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_49).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_49)
+    moduleWeight 16 (12, tiles_45_49) =
+      222 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_49).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_49)
 
 theorem w_45_50 :
-    moduleWeight 16 (11, tiles_45_50) =
-      184 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_50).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_50)
+    moduleWeight 16 (12, tiles_45_50) =
+      276 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_50).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_50)
 
 theorem w_45_51 :
-    moduleWeight 16 (11, tiles_45_51) =
-      147 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_51).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_51)
+    moduleWeight 16 (12, tiles_45_51) =
+      194 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_51).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_51)
 
 theorem w_45_52 :
-    moduleWeight 16 (11, tiles_45_52) =
-      83 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_52).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_52)
+    moduleWeight 16 (12, tiles_45_52) =
+      34 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_52).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_52)
 
 theorem w_45_53 :
-    moduleWeight 16 (11, tiles_45_53) =
-      960 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_53).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_53)
+    moduleWeight 16 (12, tiles_45_53) =
+      24 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_53).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_53)
 
 theorem w_45_54 :
-    moduleWeight 16 (11, tiles_45_54) =
-      30 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_54).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_54)
+    moduleWeight 16 (12, tiles_45_54) =
+      2076 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_54).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_54)
 
 theorem w_45_55 :
-    moduleWeight 16 (11, tiles_45_55) =
-      459 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_55).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_55)
+    moduleWeight 16 (12, tiles_45_55) =
+      928 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_55).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_55)
 
 theorem w_45_56 :
-    moduleWeight 16 (11, tiles_45_56) =
-      488 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_56).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_56)
+    moduleWeight 16 (12, tiles_45_56) =
+      832 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_56).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_56)
 
 theorem w_45_57 :
-    moduleWeight 16 (11, tiles_45_57) =
-      624 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_57).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_57)
+    moduleWeight 16 (12, tiles_45_57) =
+      4007 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_57).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_57)
 
 theorem w_45_58 :
-    moduleWeight 16 (11, tiles_45_58) =
-      430 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_58).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_58)
+    moduleWeight 16 (12, tiles_45_58) =
+      2368 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_58).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_58)
 
 theorem w_45_59 :
-    moduleWeight 16 (11, tiles_45_59) =
-      71 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_59).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_59)
+    moduleWeight 16 (12, tiles_45_59) =
+      896 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_59).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_59)
 
 theorem w_45_60 :
-    moduleWeight 16 (11, tiles_45_60) =
-      849 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_60).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_60)
+    moduleWeight 16 (12, tiles_45_60) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_60).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_60)
 
 theorem w_45_61 :
-    moduleWeight 16 (11, tiles_45_61) =
-      720 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_61).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_61)
+    moduleWeight 16 (12, tiles_45_61) =
+      187 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_61).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_61)
 
 theorem w_45_62 :
-    moduleWeight 16 (11, tiles_45_62) =
-      129 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_62).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_62)
+    moduleWeight 16 (12, tiles_45_62) =
+      156 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_62).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_62)
 
 theorem w_45_63 :
-    moduleWeight 16 (11, tiles_45_63) =
-      200 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_63).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_63)
+    moduleWeight 16 (12, tiles_45_63) =
+      500 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_63).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_63)
 
 theorem w_45_64 :
-    moduleWeight 16 (11, tiles_45_64) =
-      563 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_64).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_64)
+    moduleWeight 16 (12, tiles_45_64) =
+      1152 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_64).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_64)
 
 theorem w_45_65 :
-    moduleWeight 16 (11, tiles_45_65) =
-      213 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_65).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_65)
+    moduleWeight 16 (12, tiles_45_65) =
+      425 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_65).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_65)
 
 theorem w_45_66 :
-    moduleWeight 16 (11, tiles_45_66) =
-      228 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_66).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_66)
+    moduleWeight 16 (12, tiles_45_66) =
+      203 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_66).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_66)
 
 theorem w_45_67 :
-    moduleWeight 16 (11, tiles_45_67) =
-      369 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_67).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_67)
+    moduleWeight 16 (12, tiles_45_67) =
+      1138 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_67).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_67)
 
 theorem w_45_68 :
-    moduleWeight 16 (11, tiles_45_68) =
-      1156 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_68).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_68)
+    moduleWeight 16 (12, tiles_45_68) =
+      422 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_68).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_68)
 
 theorem w_45_69 :
-    moduleWeight 16 (11, tiles_45_69) =
-      102 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_69).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_69)
+    moduleWeight 16 (12, tiles_45_69) =
+      28 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_69).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_69)
 
 theorem w_45_70 :
-    moduleWeight 16 (11, tiles_45_70) =
-      110 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_70).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_70)
+    moduleWeight 16 (12, tiles_45_70) =
+      389 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_70).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_70)
 
 theorem w_45_71 :
-    moduleWeight 16 (11, tiles_45_71) =
-      853 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_71).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_71)
+    moduleWeight 16 (12, tiles_45_71) =
+      243 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_71).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_71)
 
 theorem w_45_72 :
-    moduleWeight 16 (11, tiles_45_72) =
-      313 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_72).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_72)
+    moduleWeight 16 (12, tiles_45_72) =
+      22 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_72).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_72)
 
 theorem w_45_73 :
-    moduleWeight 16 (11, tiles_45_73) =
-      102 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_73).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_73)
+    moduleWeight 16 (12, tiles_45_73) =
+      131 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_73).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_73)
 
 theorem w_45_74 :
-    moduleWeight 16 (11, tiles_45_74) =
-      593 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_74).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_74)
+    moduleWeight 16 (12, tiles_45_74) =
+      1 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_74).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_74)
 
 theorem w_45_75 :
-    moduleWeight 16 (11, tiles_45_75) =
-      91 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_75).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_75)
+    moduleWeight 16 (12, tiles_45_75) =
+      185 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_75).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_75)
 
 theorem w_45_76 :
-    moduleWeight 16 (11, tiles_45_76) =
-      45 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_76).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_76)
+    moduleWeight 16 (12, tiles_45_76) =
+      292 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_76).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_76)
 
 theorem w_45_77 :
-    moduleWeight 16 (11, tiles_45_77) =
-      137 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_77).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_77)
+    moduleWeight 16 (12, tiles_45_77) =
+      1 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_77).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_77)
 
 theorem w_45_78 :
-    moduleWeight 16 (11, tiles_45_78) =
-      207 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_78).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_78)
+    moduleWeight 16 (12, tiles_45_78) =
+      322 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_78).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_78)
 
 theorem w_45_79 :
-    moduleWeight 16 (11, tiles_45_79) =
-      15 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_79).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_79)
+    moduleWeight 16 (12, tiles_45_79) =
+      45 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_79).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_79)
 
 theorem w_45_80 :
-    moduleWeight 16 (11, tiles_45_80) =
-      881 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_80).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_80)
+    moduleWeight 16 (12, tiles_45_80) =
+      536 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_80).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_80)
 
 theorem w_45_81 :
-    moduleWeight 16 (11, tiles_45_81) =
-      152 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_81).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_81)
+    moduleWeight 16 (12, tiles_45_81) =
+      780 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_81).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_81)
 
 theorem w_45_82 :
-    moduleWeight 16 (11, tiles_45_82) =
-      161 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_82).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_82)
+    moduleWeight 16 (12, tiles_45_82) =
+      440 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_82).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_82)
 
 theorem w_45_83 :
-    moduleWeight 16 (11, tiles_45_83) =
-      656 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_83).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_83)
+    moduleWeight 16 (12, tiles_45_83) =
+      234 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_83).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_83)
 
 theorem w_45_84 :
-    moduleWeight 16 (11, tiles_45_84) =
-      24 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_84).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_84)
+    moduleWeight 16 (12, tiles_45_84) =
+      103 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_84).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_84)
 
 theorem w_45_85 :
-    moduleWeight 16 (11, tiles_45_85) =
-      806 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_85).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_85)
+    moduleWeight 16 (12, tiles_45_85) =
+      504 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_85).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_85)
 
 theorem w_45_86 :
-    moduleWeight 16 (11, tiles_45_86) =
-      228 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_86).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_86)
+    moduleWeight 16 (12, tiles_45_86) =
+      1113 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_86).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_86)
 
 theorem w_45_87 :
-    moduleWeight 16 (11, tiles_45_87) =
-      243 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_87).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_87)
+    moduleWeight 16 (12, tiles_45_87) =
+      284 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_87).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_87)
 
 theorem w_45_88 :
-    moduleWeight 16 (11, tiles_45_88) =
-      180 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_88).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_88)
+    moduleWeight 16 (12, tiles_45_88) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_88).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_88)
 
 theorem w_45_89 :
-    moduleWeight 16 (11, tiles_45_89) =
-      758 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_89).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_89)
+    moduleWeight 16 (12, tiles_45_89) =
+      96 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_89).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_89)
 
 theorem w_45_90 :
-    moduleWeight 16 (11, tiles_45_90) =
-      374 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_45_90).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_45_90)
+    moduleWeight 16 (12, tiles_45_90) =
+      543 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_90).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_90)
+
+theorem w_45_91 :
+    moduleWeight 16 (12, tiles_45_91) =
+      137 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_91).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_91)
+
+theorem w_45_92 :
+    moduleWeight 16 (12, tiles_45_92) =
+      368 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_92).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_92)
+
+theorem w_45_93 :
+    moduleWeight 16 (12, tiles_45_93) =
+      115 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_93).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_93)
+
+theorem w_45_94 :
+    moduleWeight 16 (12, tiles_45_94) =
+      332 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_94).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_94)
+
+theorem w_45_95 :
+    moduleWeight 16 (12, tiles_45_95) =
+      418 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_95).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_95)
+
+theorem w_45_96 :
+    moduleWeight 16 (12, tiles_45_96) =
+      88 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_96).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_96)
+
+theorem w_45_97 :
+    moduleWeight 16 (12, tiles_45_97) =
+      850 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_97).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_97)
+
+theorem w_45_98 :
+    moduleWeight 16 (12, tiles_45_98) =
+      21 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_98).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_98)
+
+theorem w_45_99 :
+    moduleWeight 16 (12, tiles_45_99) =
+      19 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_99).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_99)
+
+theorem w_45_100 :
+    moduleWeight 16 (12, tiles_45_100) =
+      118 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_100).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_100)
+
+theorem w_45_101 :
+    moduleWeight 16 (12, tiles_45_101) =
+      148 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_101).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_101)
+
+theorem w_45_102 :
+    moduleWeight 16 (12, tiles_45_102) =
+      141 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_102).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_102)
+
+theorem w_45_103 :
+    moduleWeight 16 (12, tiles_45_103) =
+      9 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_103).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_103)
+
+theorem w_45_104 :
+    moduleWeight 16 (12, tiles_45_104) =
+      15 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_104).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_104)
+
+theorem w_45_105 :
+    moduleWeight 16 (12, tiles_45_105) =
+      223 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_105).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_105)
+
+theorem w_45_106 :
+    moduleWeight 16 (12, tiles_45_106) =
+      1174 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_106).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_106)
+
+theorem w_45_107 :
+    moduleWeight 16 (12, tiles_45_107) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_107).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_107)
+
+theorem w_45_108 :
+    moduleWeight 16 (12, tiles_45_108) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_108).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_108)
+
+theorem w_45_109 :
+    moduleWeight 16 (12, tiles_45_109) =
+      165 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_109).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_109)
+
+theorem w_45_110 :
+    moduleWeight 16 (12, tiles_45_110) =
+      35 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_110).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_110)
+
+theorem w_45_111 :
+    moduleWeight 16 (12, tiles_45_111) =
+      754 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_111).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_111)
+
+theorem w_45_112 :
+    moduleWeight 16 (12, tiles_45_112) =
+      2240 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_112).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_112)
+
+theorem w_45_113 :
+    moduleWeight 16 (12, tiles_45_113) =
+      153 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_113).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_113)
+
+theorem w_45_114 :
+    moduleWeight 16 (12, tiles_45_114) =
+      1 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_114).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_114)
+
+theorem w_45_115 :
+    moduleWeight 16 (12, tiles_45_115) =
+      904 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_115).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_115)
+
+theorem w_45_116 :
+    moduleWeight 16 (12, tiles_45_116) =
+      266 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_116).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_116)
+
+theorem w_45_117 :
+    moduleWeight 16 (12, tiles_45_117) =
+      156 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_117).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_117)
+
+theorem w_45_118 :
+    moduleWeight 16 (12, tiles_45_118) =
+      44 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_118).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_118)
+
+theorem w_45_119 :
+    moduleWeight 16 (12, tiles_45_119) =
+      42 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_119).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_119)
+
+theorem w_45_120 :
+    moduleWeight 16 (12, tiles_45_120) =
+      257 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_120).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_120)
+
+theorem w_45_121 :
+    moduleWeight 16 (12, tiles_45_121) =
+      1851 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_121).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_121)
+
+theorem w_45_122 :
+    moduleWeight 16 (12, tiles_45_122) =
+      1825 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_122).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_122)
+
+theorem w_45_123 :
+    moduleWeight 16 (12, tiles_45_123) =
+      576 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_123).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_123)
+
+theorem w_45_124 :
+    moduleWeight 16 (12, tiles_45_124) =
+      950 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_124).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_124)
+
+theorem w_45_125 :
+    moduleWeight 16 (12, tiles_45_125) =
+      41 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_125).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_125)
+
+theorem w_45_126 :
+    moduleWeight 16 (12, tiles_45_126) =
+      786 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_126).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_126)
+
+theorem w_45_127 :
+    moduleWeight 16 (12, tiles_45_127) =
+      1456 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_127).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_127)
+
+theorem w_45_128 :
+    moduleWeight 16 (12, tiles_45_128) =
+      61 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_128).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_128)
+
+theorem w_45_129 :
+    moduleWeight 16 (12, tiles_45_129) =
+      4355 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_129).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_129)
+
+theorem w_45_130 :
+    moduleWeight 16 (12, tiles_45_130) =
+      137 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_130).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_130)
+
+theorem w_45_131 :
+    moduleWeight 16 (12, tiles_45_131) =
+      31 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_131).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_131)
+
+theorem w_45_132 :
+    moduleWeight 16 (12, tiles_45_132) =
+      16 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_132).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_132)
+
+theorem w_45_133 :
+    moduleWeight 16 (12, tiles_45_133) =
+      413 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_133).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_133)
+
+theorem w_45_134 :
+    moduleWeight 16 (12, tiles_45_134) =
+      329 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_134).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_134)
+
+theorem w_45_135 :
+    moduleWeight 16 (12, tiles_45_135) =
+      285 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_135).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_135)
+
+theorem w_45_136 :
+    moduleWeight 16 (12, tiles_45_136) =
+      401 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_136).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_136)
+
+theorem w_45_137 :
+    moduleWeight 16 (12, tiles_45_137) =
+      325 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_137).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_137)
+
+theorem w_45_138 :
+    moduleWeight 16 (12, tiles_45_138) =
+      3734 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_138).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_138)
+
+theorem w_45_139 :
+    moduleWeight 16 (12, tiles_45_139) =
+      496 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_139).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_139)
+
+theorem w_45_140 :
+    moduleWeight 16 (12, tiles_45_140) =
+      35 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_140).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_140)
+
+theorem w_45_141 :
+    moduleWeight 16 (12, tiles_45_141) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_141).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_141)
+
+theorem w_45_142 :
+    moduleWeight 16 (12, tiles_45_142) =
+      3920 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_142).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_142)
+
+theorem w_45_143 :
+    moduleWeight 16 (12, tiles_45_143) =
+      4151 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_143).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_143)
+
+theorem w_45_144 :
+    moduleWeight 16 (12, tiles_45_144) =
+      886 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_144).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_144)
+
+theorem w_45_145 :
+    moduleWeight 16 (12, tiles_45_145) =
+      991 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_145).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_145)
+
+theorem w_45_146 :
+    moduleWeight 16 (12, tiles_45_146) =
+      68 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_146).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_146)
+
+theorem w_45_147 :
+    moduleWeight 16 (12, tiles_45_147) =
+      15 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_147).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_147)
+
+theorem w_45_148 :
+    moduleWeight 16 (12, tiles_45_148) =
+      503 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_148).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_148)
+
+theorem w_45_149 :
+    moduleWeight 16 (12, tiles_45_149) =
+      20 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_149).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_149)
+
+theorem w_45_150 :
+    moduleWeight 16 (12, tiles_45_150) =
+      201 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_150).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_150)
+
+theorem w_45_151 :
+    moduleWeight 16 (12, tiles_45_151) =
+      271 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_151).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_151)
+
+theorem w_45_152 :
+    moduleWeight 16 (12, tiles_45_152) =
+      984 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_152).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_152)
+
+theorem w_45_153 :
+    moduleWeight 16 (12, tiles_45_153) =
+      163 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_153).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_153)
+
+theorem w_45_154 :
+    moduleWeight 16 (12, tiles_45_154) =
+      56 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_154).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_154)
+
+theorem w_45_155 :
+    moduleWeight 16 (12, tiles_45_155) =
+      20 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_155).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_155)
+
+theorem w_45_156 :
+    moduleWeight 16 (12, tiles_45_156) =
+      519 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_156).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_156)
+
+theorem w_45_157 :
+    moduleWeight 16 (12, tiles_45_157) =
+      18 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_157).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_157)
+
+theorem w_45_158 :
+    moduleWeight 16 (12, tiles_45_158) =
+      86 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_158).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_158)
+
+theorem w_45_159 :
+    moduleWeight 16 (12, tiles_45_159) =
+      196 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_159).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_159)
+
+theorem w_45_160 :
+    moduleWeight 16 (12, tiles_45_160) =
+      55 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_160).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_160)
+
+theorem w_45_161 :
+    moduleWeight 16 (12, tiles_45_161) =
+      116 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_161).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_161)
+
+theorem w_45_162 :
+    moduleWeight 16 (12, tiles_45_162) =
+      939 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_162).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_162)
+
+theorem w_45_163 :
+    moduleWeight 16 (12, tiles_45_163) =
+      881 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_163).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_163)
+
+theorem w_45_164 :
+    moduleWeight 16 (12, tiles_45_164) =
+      273 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_164).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_164)
+
+theorem w_45_165 :
+    moduleWeight 16 (12, tiles_45_165) =
+      16 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_165).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_165)
+
+theorem w_45_166 :
+    moduleWeight 16 (12, tiles_45_166) =
+      471 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_166).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_166)
+
+theorem w_45_167 :
+    moduleWeight 16 (12, tiles_45_167) =
+      396 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_167).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_167)
+
+theorem w_45_168 :
+    moduleWeight 16 (12, tiles_45_168) =
+      142 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_168).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_168)
+
+theorem w_45_169 :
+    moduleWeight 16 (12, tiles_45_169) =
+      57 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_169).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_169)
+
+theorem w_45_170 :
+    moduleWeight 16 (12, tiles_45_170) =
+      626 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_170).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_170)
+
+theorem w_45_171 :
+    moduleWeight 16 (12, tiles_45_171) =
+      373 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_171).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_171)
+
+theorem w_45_172 :
+    moduleWeight 16 (12, tiles_45_172) =
+      292 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_172).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_172)
+
+theorem w_45_173 :
+    moduleWeight 16 (12, tiles_45_173) =
+      217 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_173).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_173)
+
+theorem w_45_174 :
+    moduleWeight 16 (12, tiles_45_174) =
+      180 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_174).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_174)
+
+theorem w_45_175 :
+    moduleWeight 16 (12, tiles_45_175) =
+      312 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_175).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_175)
+
+theorem w_45_176 :
+    moduleWeight 16 (12, tiles_45_176) =
+      1081 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_176).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_176)
+
+theorem w_45_177 :
+    moduleWeight 16 (12, tiles_45_177) =
+      1 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_177).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_177)
+
+theorem w_45_178 :
+    moduleWeight 16 (12, tiles_45_178) =
+      47 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_178).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_178)
+
+theorem w_45_179 :
+    moduleWeight 16 (12, tiles_45_179) =
+      388 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_179).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_179)
+
+theorem w_45_180 :
+    moduleWeight 16 (12, tiles_45_180) =
+      369 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_180).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_180)
+
+theorem w_45_181 :
+    moduleWeight 16 (12, tiles_45_181) =
+      876 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_181).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_181)
+
+theorem w_45_182 :
+    moduleWeight 16 (12, tiles_45_182) =
+      244 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_182).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_182)
+
+theorem w_45_183 :
+    moduleWeight 16 (12, tiles_45_183) =
+      58 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_183).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_183)
+
+theorem w_45_184 :
+    moduleWeight 16 (12, tiles_45_184) =
+      174 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_184).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_184)
+
+theorem w_45_185 :
+    moduleWeight 16 (12, tiles_45_185) =
+      293 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_185).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_185)
+
+theorem w_45_186 :
+    moduleWeight 16 (12, tiles_45_186) =
+      4 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_186).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_186)
+
+theorem w_45_187 :
+    moduleWeight 16 (12, tiles_45_187) =
+      701 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_187).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_187)
+
+theorem w_45_188 :
+    moduleWeight 16 (12, tiles_45_188) =
+      86 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_188).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_188)
+
+theorem w_45_189 :
+    moduleWeight 16 (12, tiles_45_189) =
+      229 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_189).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_189)
+
+theorem w_45_190 :
+    moduleWeight 16 (12, tiles_45_190) =
+      18 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_190).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_190)
+
+theorem w_45_191 :
+    moduleWeight 16 (12, tiles_45_191) =
+      71 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_191).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_191)
+
+theorem w_45_192 :
+    moduleWeight 16 (12, tiles_45_192) =
+      779 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_192).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_192)
+
+theorem w_45_193 :
+    moduleWeight 16 (12, tiles_45_193) =
+      1404 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_193).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_193)
+
+theorem w_45_194 :
+    moduleWeight 16 (12, tiles_45_194) =
+      229 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_194).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_194)
+
+theorem w_45_195 :
+    moduleWeight 16 (12, tiles_45_195) =
+      175 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_195).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_195)
+
+theorem w_45_196 :
+    moduleWeight 16 (12, tiles_45_196) =
+      116 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_196).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_196)
+
+theorem w_45_197 :
+    moduleWeight 16 (12, tiles_45_197) =
+      843 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_197).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_197)
+
+theorem w_45_198 :
+    moduleWeight 16 (12, tiles_45_198) =
+      330 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_198).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_198)
+
+theorem w_45_199 :
+    moduleWeight 16 (12, tiles_45_199) =
+      161 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_199).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_199)
+
+theorem w_45_200 :
+    moduleWeight 16 (12, tiles_45_200) =
+      331 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_200).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_200)
+
+theorem w_45_201 :
+    moduleWeight 16 (12, tiles_45_201) =
+      129 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_201).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_201)
+
+theorem w_45_202 :
+    moduleWeight 16 (12, tiles_45_202) =
+      103 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_202).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_202)
+
+theorem w_45_203 :
+    moduleWeight 16 (12, tiles_45_203) =
+      257 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_203).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_203)
+
+theorem w_45_204 :
+    moduleWeight 16 (12, tiles_45_204) =
+      291 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_204).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_204)
+
+theorem w_45_205 :
+    moduleWeight 16 (12, tiles_45_205) =
+      32 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_205).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_205)
+
+theorem w_45_206 :
+    moduleWeight 16 (12, tiles_45_206) =
+      890 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_206).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_206)
+
+theorem w_45_207 :
+    moduleWeight 16 (12, tiles_45_207) =
+      118 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_207).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_207)
+
+theorem w_45_208 :
+    moduleWeight 16 (12, tiles_45_208) =
+      299 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_208).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_208)
+
+theorem w_45_209 :
+    moduleWeight 16 (12, tiles_45_209) =
+      43 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_209).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_209)
+
+theorem w_45_210 :
+    moduleWeight 16 (12, tiles_45_210) =
+      122 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_210).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_210)
+
+theorem w_45_211 :
+    moduleWeight 16 (12, tiles_45_211) =
+      104 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_211).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_211)
+
+theorem w_45_212 :
+    moduleWeight 16 (12, tiles_45_212) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_212).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_212)
+
+theorem w_45_213 :
+    moduleWeight 16 (12, tiles_45_213) =
+      247 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_213).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_213)
+
+theorem w_45_214 :
+    moduleWeight 16 (12, tiles_45_214) =
+      420 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_214).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_214)
+
+theorem w_45_215 :
+    moduleWeight 16 (12, tiles_45_215) =
+      778 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_215).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_215)
+
+theorem w_45_216 :
+    moduleWeight 16 (12, tiles_45_216) =
+      80 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_216).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_216)
+
+theorem w_45_217 :
+    moduleWeight 16 (12, tiles_45_217) =
+      806 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_217).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_217)
+
+theorem w_45_218 :
+    moduleWeight 16 (12, tiles_45_218) =
+      207 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_218).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_218)
+
+theorem w_45_219 :
+    moduleWeight 16 (12, tiles_45_219) =
+      455 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_219).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_219)
+
+theorem w_45_220 :
+    moduleWeight 16 (12, tiles_45_220) =
+      50 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_220).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_220)
+
+theorem w_45_221 :
+    moduleWeight 16 (12, tiles_45_221) =
+      1232 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_221).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_221)
+
+theorem w_45_222 :
+    moduleWeight 16 (12, tiles_45_222) =
+      886 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_222).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_222)
+
+theorem w_45_223 :
+    moduleWeight 16 (12, tiles_45_223) =
+      387 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_223).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_223)
+
+theorem w_45_224 :
+    moduleWeight 16 (12, tiles_45_224) =
+      56 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_224).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_224)
+
+theorem w_45_225 :
+    moduleWeight 16 (12, tiles_45_225) =
+      12 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_225).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_225)
+
+theorem w_45_226 :
+    moduleWeight 16 (12, tiles_45_226) =
+      204 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_226).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_226)
+
+theorem w_45_227 :
+    moduleWeight 16 (12, tiles_45_227) =
+      345 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_227).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_227)
+
+theorem w_45_228 :
+    moduleWeight 16 (12, tiles_45_228) =
+      140 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_228).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_228)
+
+theorem w_45_229 :
+    moduleWeight 16 (12, tiles_45_229) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_229).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_229)
+
+theorem w_45_230 :
+    moduleWeight 16 (12, tiles_45_230) =
+      82 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_230).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_230)
+
+theorem w_45_231 :
+    moduleWeight 16 (12, tiles_45_231) =
+      144 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_231).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_231)
+
+theorem w_45_232 :
+    moduleWeight 16 (12, tiles_45_232) =
+      201 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_232).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_232)
+
+theorem w_45_233 :
+    moduleWeight 16 (12, tiles_45_233) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_233).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_233)
+
+theorem w_45_234 :
+    moduleWeight 16 (12, tiles_45_234) =
+      346 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_234).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_234)
+
+theorem w_45_235 :
+    moduleWeight 16 (12, tiles_45_235) =
+      150 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_235).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_235)
+
+theorem w_45_236 :
+    moduleWeight 16 (12, tiles_45_236) =
+      442 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_236).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_236)
+
+theorem w_45_237 :
+    moduleWeight 16 (12, tiles_45_237) =
+      68 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_237).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_237)
+
+theorem w_45_238 :
+    moduleWeight 16 (12, tiles_45_238) =
+      468 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_238).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_238)
+
+theorem w_45_239 :
+    moduleWeight 16 (12, tiles_45_239) =
+      179 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_239).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_239)
+
+theorem w_45_240 :
+    moduleWeight 16 (12, tiles_45_240) =
+      85 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_240).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_240)
+
+theorem w_45_241 :
+    moduleWeight 16 (12, tiles_45_241) =
+      215 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_241).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_241)
+
+theorem w_45_242 :
+    moduleWeight 16 (12, tiles_45_242) =
+      828 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_242).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_242)
+
+theorem w_45_243 :
+    moduleWeight 16 (12, tiles_45_243) =
+      11 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_243).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_243)
+
+theorem w_45_244 :
+    moduleWeight 16 (12, tiles_45_244) =
+      90 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_244).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_244)
+
+theorem w_45_245 :
+    moduleWeight 16 (12, tiles_45_245) =
+      897 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_245).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_245)
+
+theorem w_45_246 :
+    moduleWeight 16 (12, tiles_45_246) =
+      263 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_246).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_246)
+
+theorem w_45_247 :
+    moduleWeight 16 (12, tiles_45_247) =
+      1450 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_247).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_247)
+
+theorem w_45_248 :
+    moduleWeight 16 (12, tiles_45_248) =
+      204 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_248).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_248)
+
+theorem w_45_249 :
+    moduleWeight 16 (12, tiles_45_249) =
+      190 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_249).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_249)
+
+theorem w_45_250 :
+    moduleWeight 16 (12, tiles_45_250) =
+      158 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_250).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_250)
+
+theorem w_45_251 :
+    moduleWeight 16 (12, tiles_45_251) =
+      207 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_251).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_251)
+
+theorem w_45_252 :
+    moduleWeight 16 (12, tiles_45_252) =
+      34 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_252).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_252)
+
+theorem w_45_253 :
+    moduleWeight 16 (12, tiles_45_253) =
+      84 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_253).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_253)
+
+theorem w_45_254 :
+    moduleWeight 16 (12, tiles_45_254) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_254).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_254)
+
+theorem w_45_255 :
+    moduleWeight 16 (12, tiles_45_255) =
+      186 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_255).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_255)
+
+theorem w_45_256 :
+    moduleWeight 16 (12, tiles_45_256) =
+      174 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_256).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_256)
+
+theorem w_45_257 :
+    moduleWeight 16 (12, tiles_45_257) =
+      180 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_257).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_257)
+
+theorem w_45_258 :
+    moduleWeight 16 (12, tiles_45_258) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_258).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_258)
+
+theorem w_45_259 :
+    moduleWeight 16 (12, tiles_45_259) =
+      398 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_259).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_259)
+
+theorem w_45_260 :
+    moduleWeight 16 (12, tiles_45_260) =
+      518 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_260).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_260)
+
+theorem w_45_261 :
+    moduleWeight 16 (12, tiles_45_261) =
+      32 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_261).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_261)
+
+theorem w_45_262 :
+    moduleWeight 16 (12, tiles_45_262) =
+      386 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_262).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_262)
+
+theorem w_45_263 :
+    moduleWeight 16 (12, tiles_45_263) =
+      138 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_263).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_263)
+
+theorem w_45_264 :
+    moduleWeight 16 (12, tiles_45_264) =
+      56 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_264).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_264)
+
+theorem w_45_265 :
+    moduleWeight 16 (12, tiles_45_265) =
+      805 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_265).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_265)
+
+theorem w_45_266 :
+    moduleWeight 16 (12, tiles_45_266) =
+      864 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_266).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_266)
+
+theorem w_45_267 :
+    moduleWeight 16 (12, tiles_45_267) =
+      263 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_267).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_267)
+
+theorem w_45_268 :
+    moduleWeight 16 (12, tiles_45_268) =
+      34 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_268).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_268)
+
+theorem w_45_269 :
+    moduleWeight 16 (12, tiles_45_269) =
+      57 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_269).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_269)
+
+theorem w_45_270 :
+    moduleWeight 16 (12, tiles_45_270) =
+      323 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_270).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_270)
+
+theorem w_45_271 :
+    moduleWeight 16 (12, tiles_45_271) =
+      88 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_271).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_271)
+
+theorem w_45_272 :
+    moduleWeight 16 (12, tiles_45_272) =
+      114 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_272).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_272)
+
+theorem w_45_273 :
+    moduleWeight 16 (12, tiles_45_273) =
+      418 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_273).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_273)
+
+theorem w_45_274 :
+    moduleWeight 16 (12, tiles_45_274) =
+      179 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_274).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_274)
+
+theorem w_45_275 :
+    moduleWeight 16 (12, tiles_45_275) =
+      945 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_275).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_275)
+
+theorem w_45_276 :
+    moduleWeight 16 (12, tiles_45_276) =
+      287 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_276).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_276)
+
+theorem w_45_277 :
+    moduleWeight 16 (12, tiles_45_277) =
+      226 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_277).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_277)
+
+theorem w_45_278 :
+    moduleWeight 16 (12, tiles_45_278) =
+      134 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_278).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_278)
+
+theorem w_45_279 :
+    moduleWeight 16 (12, tiles_45_279) =
+      126 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_279).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_279)
+
+theorem w_45_280 :
+    moduleWeight 16 (12, tiles_45_280) =
+      704 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_280).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_280)
+
+theorem w_45_281 :
+    moduleWeight 16 (12, tiles_45_281) =
+      260 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_281).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_281)
+
+theorem w_45_282 :
+    moduleWeight 16 (12, tiles_45_282) =
+      118 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_282).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_282)
+
+theorem w_45_283 :
+    moduleWeight 16 (12, tiles_45_283) =
+      622 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_283).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_283)
+
+theorem w_45_284 :
+    moduleWeight 16 (12, tiles_45_284) =
+      233 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_284).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_284)
+
+theorem w_45_285 :
+    moduleWeight 16 (12, tiles_45_285) =
+      81 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_285).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_285)
+
+theorem w_45_286 :
+    moduleWeight 16 (12, tiles_45_286) =
+      40 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_286).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_286)
+
+theorem w_45_287 :
+    moduleWeight 16 (12, tiles_45_287) =
+      402 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_287).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_287)
+
+theorem w_45_288 :
+    moduleWeight 16 (12, tiles_45_288) =
+      228 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_288).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_288)
+
+theorem w_45_289 :
+    moduleWeight 16 (12, tiles_45_289) =
+      8 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_289).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_289)
+
+theorem w_45_290 :
+    moduleWeight 16 (12, tiles_45_290) =
+      529 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_290).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_290)
+
+theorem w_45_291 :
+    moduleWeight 16 (12, tiles_45_291) =
+      144 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_291).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_291)
+
+theorem w_45_292 :
+    moduleWeight 16 (12, tiles_45_292) =
+      531 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_292).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_292)
+
+theorem w_45_293 :
+    moduleWeight 16 (12, tiles_45_293) =
+      4 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_293).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_293)
+
+theorem w_45_294 :
+    moduleWeight 16 (12, tiles_45_294) =
+      365 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_294).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_294)
+
+theorem w_45_295 :
+    moduleWeight 16 (12, tiles_45_295) =
+      530 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_295).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_295)
+
+theorem w_45_296 :
+    moduleWeight 16 (12, tiles_45_296) =
+      363 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_296).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_296)
+
+theorem w_45_297 :
+    moduleWeight 16 (12, tiles_45_297) =
+      135 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_297).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_297)
+
+theorem w_45_298 :
+    moduleWeight 16 (12, tiles_45_298) =
+      664 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_298).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_298)
+
+theorem w_45_299 :
+    moduleWeight 16 (12, tiles_45_299) =
+      100 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_299).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_299)
+
+theorem w_45_300 :
+    moduleWeight 16 (12, tiles_45_300) =
+      331 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_300).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_300)
+
+theorem w_45_301 :
+    moduleWeight 16 (12, tiles_45_301) =
+      346 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_301).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_301)
+
+theorem w_45_302 :
+    moduleWeight 16 (12, tiles_45_302) =
+      327 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_45_302).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_45_302)
 
 theorem w_46_0 :
-    moduleWeight 16 (11, tiles_46_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_46_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_46_0)
+    moduleWeight 16 (12, tiles_46_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_46_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_46_0)
 
 theorem w_47_0 :
-    moduleWeight 16 (11, tiles_47_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_47_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_47_0)
+    moduleWeight 16 (12, tiles_47_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_47_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_47_0)
 
 theorem w_48_0 :
-    moduleWeight 16 (11, tiles_48_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_48_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_48_0)
+    moduleWeight 16 (12, tiles_48_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_48_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_48_0)
 
 theorem w_48_1 :
-    moduleWeight 16 (11, tiles_48_1) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_48_1).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_48_1)
+    moduleWeight 16 (12, tiles_48_1) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_48_1).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_48_1)
 
 theorem w_48_2 :
-    moduleWeight 16 (11, tiles_48_2) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_48_2).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_48_2)
+    moduleWeight 16 (12, tiles_48_2) =
+      192 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_48_2).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_48_2)
 
 theorem w_48_3 :
-    moduleWeight 16 (11, tiles_48_3) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_48_3).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_48_3)
+    moduleWeight 16 (12, tiles_48_3) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_48_3).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_48_3)
 
 theorem w_49_0 :
-    moduleWeight 16 (11, tiles_49_0) =
-      240 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_0)
+    moduleWeight 16 (12, tiles_49_0) =
+      960 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_0)
 
 theorem w_49_1 :
-    moduleWeight 16 (11, tiles_49_1) =
-      304 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_1).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_1)
+    moduleWeight 16 (12, tiles_49_1) =
+      1216 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_1).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_1)
 
 theorem w_49_2 :
-    moduleWeight 16 (11, tiles_49_2) =
-      240 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_2).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_2)
+    moduleWeight 16 (12, tiles_49_2) =
+      960 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_2).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_2)
 
 theorem w_49_3 :
-    moduleWeight 16 (11, tiles_49_3) =
-      96 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_3).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_3)
+    moduleWeight 16 (12, tiles_49_3) =
+      384 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_3).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_3)
 
 theorem w_49_4 :
-    moduleWeight 16 (11, tiles_49_4) =
-      640 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_4).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_4)
+    moduleWeight 16 (12, tiles_49_4) =
+      2560 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_4).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_4)
 
 theorem w_49_5 :
-    moduleWeight 16 (11, tiles_49_5) =
-      34 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_5).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_5)
+    moduleWeight 16 (12, tiles_49_5) =
+      136 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_5).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_5)
 
 theorem w_49_6 :
-    moduleWeight 16 (11, tiles_49_6) =
-      305 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_6).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_6)
+    moduleWeight 16 (12, tiles_49_6) =
+      1220 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_6).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_6)
 
 theorem w_49_7 :
-    moduleWeight 16 (11, tiles_49_7) =
-      896 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_7).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_7)
+    moduleWeight 16 (12, tiles_49_7) =
+      3584 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_7).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_7)
 
 theorem w_49_8 :
-    moduleWeight 16 (11, tiles_49_8) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_8).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_8)
+    moduleWeight 16 (12, tiles_49_8) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_8).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_8)
 
 theorem w_49_9 :
-    moduleWeight 16 (11, tiles_49_9) =
-      224 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_9).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_9)
+    moduleWeight 16 (12, tiles_49_9) =
+      896 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_9).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_9)
 
 theorem w_49_10 :
-    moduleWeight 16 (11, tiles_49_10) =
-      64 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_10).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_10)
+    moduleWeight 16 (12, tiles_49_10) =
+      256 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_10).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_10)
 
 theorem w_49_11 :
-    moduleWeight 16 (11, tiles_49_11) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_11).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_11)
+    moduleWeight 16 (12, tiles_49_11) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_11).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_11)
 
 theorem w_49_12 :
-    moduleWeight 16 (11, tiles_49_12) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_12).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_12)
+    moduleWeight 16 (12, tiles_49_12) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_12).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_12)
 
 theorem w_49_13 :
-    moduleWeight 16 (11, tiles_49_13) =
-      7 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_13).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_13)
+    moduleWeight 16 (12, tiles_49_13) =
+      28 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_13).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_13)
 
 theorem w_49_14 :
-    moduleWeight 16 (11, tiles_49_14) =
-      41 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_14).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_14)
+    moduleWeight 16 (12, tiles_49_14) =
+      164 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_14).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_14)
 
 theorem w_49_15 :
-    moduleWeight 16 (11, tiles_49_15) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_15).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_15)
+    moduleWeight 16 (12, tiles_49_15) =
+      512 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_15).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_15)
 
 theorem w_49_16 :
-    moduleWeight 16 (11, tiles_49_16) =
-      471 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_16).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_16)
+    moduleWeight 16 (12, tiles_49_16) =
+      348 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_16).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_16)
 
 theorem w_49_17 :
-    moduleWeight 16 (11, tiles_49_17) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_17).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_17)
+    moduleWeight 16 (12, tiles_49_17) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_17).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_17)
 
 theorem w_49_18 :
-    moduleWeight 16 (11, tiles_49_18) =
-      26 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_18).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_18)
+    moduleWeight 16 (12, tiles_49_18) =
+      104 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_18).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_18)
 
 theorem w_49_19 :
-    moduleWeight 16 (11, tiles_49_19) =
-      239 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_19).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_19)
+    moduleWeight 16 (12, tiles_49_19) =
+      956 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_19).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_19)
 
 theorem w_49_20 :
-    moduleWeight 16 (11, tiles_49_20) =
-      136 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_20).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_20)
+    moduleWeight 16 (12, tiles_49_20) =
+      544 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_20).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_20)
 
 theorem w_49_21 :
-    moduleWeight 16 (11, tiles_49_21) =
-      1264 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_21).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_21)
+    moduleWeight 16 (12, tiles_49_21) =
+      4352 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_21).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_21)
 
 theorem w_49_22 :
-    moduleWeight 16 (11, tiles_49_22) =
-      512 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_22).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_22)
+    moduleWeight 16 (12, tiles_49_22) =
+      704 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_22).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_22)
 
 theorem w_49_23 :
-    moduleWeight 16 (11, tiles_49_23) =
-      1982 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_23).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_23)
+    moduleWeight 16 (12, tiles_49_23) =
+      2304 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_23).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_23)
 
 theorem w_49_24 :
-    moduleWeight 16 (11, tiles_49_24) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_24).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_24)
+    moduleWeight 16 (12, tiles_49_24) =
+      529 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_24).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_24)
 
 theorem w_49_25 :
-    moduleWeight 16 (11, tiles_49_25) =
-      112 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_25).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_25)
+    moduleWeight 16 (12, tiles_49_25) =
+      74 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_25).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_25)
 
 theorem w_49_26 :
-    moduleWeight 16 (11, tiles_49_26) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_26).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_26)
+    moduleWeight 16 (12, tiles_49_26) =
+      21 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_26).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_26)
 
 theorem w_49_27 :
-    moduleWeight 16 (11, tiles_49_27) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_27).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_27)
+    moduleWeight 16 (12, tiles_49_27) =
+      1977 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_27).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_27)
 
 theorem w_49_28 :
-    moduleWeight 16 (11, tiles_49_28) =
-      976 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_28).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_28)
+    moduleWeight 16 (12, tiles_49_28) =
+      30 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_28).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_28)
 
 theorem w_49_29 :
-    moduleWeight 16 (11, tiles_49_29) =
-      64 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_29).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_29)
+    moduleWeight 16 (12, tiles_49_29) =
+      15 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_29).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_29)
 
 theorem w_49_30 :
-    moduleWeight 16 (11, tiles_49_30) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_30).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_30)
+    moduleWeight 16 (12, tiles_49_30) =
+      208 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_30).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_30)
 
 theorem w_49_31 :
-    moduleWeight 16 (11, tiles_49_31) =
-      176 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_31).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_31)
+    moduleWeight 16 (12, tiles_49_31) =
+      118 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_31).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_31)
 
 theorem w_49_32 :
-    moduleWeight 16 (11, tiles_49_32) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_32).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_32)
+    moduleWeight 16 (12, tiles_49_32) =
+      4152 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_32).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_32)
 
 theorem w_49_33 :
-    moduleWeight 16 (11, tiles_49_33) =
-      32 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_33).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_33)
+    moduleWeight 16 (12, tiles_49_33) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_33).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_33)
 
 theorem w_49_34 :
-    moduleWeight 16 (11, tiles_49_34) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_34).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_34)
+    moduleWeight 16 (12, tiles_49_34) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_34).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_34)
 
 theorem w_49_35 :
-    moduleWeight 16 (11, tiles_49_35) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_35).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_35)
+    moduleWeight 16 (12, tiles_49_35) =
+      448 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_35).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_35)
 
 theorem w_49_36 :
-    moduleWeight 16 (11, tiles_49_36) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_36).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_36)
+    moduleWeight 16 (12, tiles_49_36) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_36).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_36)
 
 theorem w_49_37 :
-    moduleWeight 16 (11, tiles_49_37) =
-      16 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_37).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_37)
+    moduleWeight 16 (12, tiles_49_37) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_37).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_37)
 
 theorem w_49_38 :
-    moduleWeight 16 (11, tiles_49_38) =
-      928 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_38).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_38)
+    moduleWeight 16 (12, tiles_49_38) =
+      3904 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_38).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_38)
 
 theorem w_49_39 :
-    moduleWeight 16 (11, tiles_49_39) =
-      402 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_39).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_39)
+    moduleWeight 16 (12, tiles_49_39) =
+      256 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_39).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_39)
 
 theorem w_49_40 :
-    moduleWeight 16 (11, tiles_49_40) =
-      610 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_40).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_40)
+    moduleWeight 16 (12, tiles_49_40) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_40).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_40)
 
 theorem w_49_41 :
-    moduleWeight 16 (11, tiles_49_41) =
-      200 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_41).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_41)
+    moduleWeight 16 (12, tiles_49_41) =
+      704 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_41).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_41)
 
 theorem w_49_42 :
-    moduleWeight 16 (11, tiles_49_42) =
-      888 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_42).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_42)
+    moduleWeight 16 (12, tiles_49_42) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_42).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_42)
 
 theorem w_49_43 :
-    moduleWeight 16 (11, tiles_49_43) =
-      120 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_43).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_43)
+    moduleWeight 16 (12, tiles_49_43) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_43).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_43)
 
 theorem w_49_44 :
-    moduleWeight 16 (11, tiles_49_44) =
-      917 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_44).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_44)
+    moduleWeight 16 (12, tiles_49_44) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_44).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_44)
 
 theorem w_49_45 :
-    moduleWeight 16 (11, tiles_49_45) =
-      1405 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_45).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_45)
+    moduleWeight 16 (12, tiles_49_45) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_45).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_45)
 
 theorem w_49_46 :
-    moduleWeight 16 (11, tiles_49_46) =
-      99 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_46).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_46)
+    moduleWeight 16 (12, tiles_49_46) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_46).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_46)
 
 theorem w_49_47 :
-    moduleWeight 16 (11, tiles_49_47) =
-      1115 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_47).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_47)
+    moduleWeight 16 (12, tiles_49_47) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_47).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_47)
 
 theorem w_49_48 :
-    moduleWeight 16 (11, tiles_49_48) =
-      744 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_48).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_48)
+    moduleWeight 16 (12, tiles_49_48) =
+      3712 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_48).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_48)
 
 theorem w_49_49 :
-    moduleWeight 16 (11, tiles_49_49) =
-      27 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_49).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_49)
+    moduleWeight 16 (12, tiles_49_49) =
+      163 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_49).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_49)
 
 theorem w_49_50 :
-    moduleWeight 16 (11, tiles_49_50) =
-      2814 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_50).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_50)
+    moduleWeight 16 (12, tiles_49_50) =
+      257 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_50).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_50)
 
 theorem w_49_51 :
-    moduleWeight 16 (11, tiles_49_51) =
-      6 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_51).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_51)
+    moduleWeight 16 (12, tiles_49_51) =
+      1278 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_51).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_51)
 
 theorem w_49_52 :
-    moduleWeight 16 (11, tiles_49_52) =
-      1163 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_52).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_52)
+    moduleWeight 16 (12, tiles_49_52) =
+      250 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_52).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_52)
 
 theorem w_49_53 :
-    moduleWeight 16 (11, tiles_49_53) =
-      928 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_53).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_53)
+    moduleWeight 16 (12, tiles_49_53) =
+      130 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_53).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_53)
 
 theorem w_49_54 :
-    moduleWeight 16 (11, tiles_49_54) =
-      32 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_54).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_54)
+    moduleWeight 16 (12, tiles_49_54) =
+      36 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_54).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_54)
 
 theorem w_49_55 :
-    moduleWeight 16 (11, tiles_49_55) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_55).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_55)
+    moduleWeight 16 (12, tiles_49_55) =
+      1476 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_55).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_55)
 
 theorem w_49_56 :
-    moduleWeight 16 (11, tiles_49_56) =
-      2208 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_56).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_56)
+    moduleWeight 16 (12, tiles_49_56) =
+      29 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_56).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_56)
 
 theorem w_49_57 :
-    moduleWeight 16 (11, tiles_49_57) =
-      1538 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_57).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_57)
+    moduleWeight 16 (12, tiles_49_57) =
+      67 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_57).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_57)
 
 theorem w_49_58 :
-    moduleWeight 16 (11, tiles_49_58) =
-      78 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_58).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_58)
+    moduleWeight 16 (12, tiles_49_58) =
+      135 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_58).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_58)
 
 theorem w_49_59 :
-    moduleWeight 16 (11, tiles_49_59) =
-      454 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_59).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_59)
+    moduleWeight 16 (12, tiles_49_59) =
+      1319 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_59).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_59)
 
 theorem w_49_60 :
-    moduleWeight 16 (11, tiles_49_60) =
-      428 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_60).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_60)
+    moduleWeight 16 (12, tiles_49_60) =
+      703 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_60).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_60)
 
 theorem w_49_61 :
-    moduleWeight 16 (11, tiles_49_61) =
-      547 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_61).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_61)
+    moduleWeight 16 (12, tiles_49_61) =
+      1012 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_61).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_61)
 
 theorem w_49_62 :
-    moduleWeight 16 (11, tiles_49_62) =
-      98 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_62).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_62)
+    moduleWeight 16 (12, tiles_49_62) =
+      49 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_62).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_62)
 
 theorem w_49_63 :
-    moduleWeight 16 (11, tiles_49_63) =
-      213 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_63).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_63)
+    moduleWeight 16 (12, tiles_49_63) =
+      399 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_63).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_63)
 
 theorem w_49_64 :
-    moduleWeight 16 (11, tiles_49_64) =
-      146 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_64).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_64)
+    moduleWeight 16 (12, tiles_49_64) =
+      238 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_64).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_64)
 
 theorem w_49_65 :
-    moduleWeight 16 (11, tiles_49_65) =
-      1923 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_65).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_65)
+    moduleWeight 16 (12, tiles_49_65) =
+      122 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_65).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_65)
 
 theorem w_49_66 :
-    moduleWeight 16 (11, tiles_49_66) =
-      760 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_66).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_66)
+    moduleWeight 16 (12, tiles_49_66) =
+      3612 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_66).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_66)
 
 theorem w_49_67 :
-    moduleWeight 16 (11, tiles_49_67) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_67).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_67)
+    moduleWeight 16 (12, tiles_49_67) =
+      1372 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_67).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_67)
 
 theorem w_49_68 :
-    moduleWeight 16 (11, tiles_49_68) =
-      204 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_68).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_68)
+    moduleWeight 16 (12, tiles_49_68) =
+      32 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_68).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_68)
 
 theorem w_49_69 :
-    moduleWeight 16 (11, tiles_49_69) =
-      206 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_69).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_69)
+    moduleWeight 16 (12, tiles_49_69) =
+      138 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_69).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_69)
 
 theorem w_49_70 :
-    moduleWeight 16 (11, tiles_49_70) =
-      134 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_70).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_70)
+    moduleWeight 16 (12, tiles_49_70) =
+      1171 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_70).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_70)
 
 theorem w_49_71 :
-    moduleWeight 16 (11, tiles_49_71) =
-      196 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_71).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_71)
+    moduleWeight 16 (12, tiles_49_71) =
+      165 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_71).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_71)
 
 theorem w_49_72 :
-    moduleWeight 16 (11, tiles_49_72) =
-      601 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_72).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_72)
+    moduleWeight 16 (12, tiles_49_72) =
+      126 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_72).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_72)
 
 theorem w_49_73 :
-    moduleWeight 16 (11, tiles_49_73) =
-      232 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_73).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_73)
+    moduleWeight 16 (12, tiles_49_73) =
+      214 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_73).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_73)
 
 theorem w_49_74 :
-    moduleWeight 16 (11, tiles_49_74) =
-      929 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_74).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_74)
+    moduleWeight 16 (12, tiles_49_74) =
+      79 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_74).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_74)
 
 theorem w_49_75 :
-    moduleWeight 16 (11, tiles_49_75) =
-      917 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_75).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_75)
+    moduleWeight 16 (12, tiles_49_75) =
+      294 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_75).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_75)
 
 theorem w_49_76 :
-    moduleWeight 16 (11, tiles_49_76) =
-      128 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_76).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_76)
+    moduleWeight 16 (12, tiles_49_76) =
+      33 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_76).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_76)
 
 theorem w_49_77 :
-    moduleWeight 16 (11, tiles_49_77) =
-      1080 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_77).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_77)
+    moduleWeight 16 (12, tiles_49_77) =
+      584 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_77).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_77)
 
 theorem w_49_78 :
-    moduleWeight 16 (11, tiles_49_78) =
-      442 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_78).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_78)
+    moduleWeight 16 (12, tiles_49_78) =
+      126 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_78).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_78)
 
 theorem w_49_79 :
-    moduleWeight 16 (11, tiles_49_79) =
-      496 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_79).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_79)
+    moduleWeight 16 (12, tiles_49_79) =
+      196 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_79).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_79)
 
 theorem w_49_80 :
-    moduleWeight 16 (11, tiles_49_80) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_49_80).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_49_80)
+    moduleWeight 16 (12, tiles_49_80) =
+      19 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_80).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_80)
+
+theorem w_49_81 :
+    moduleWeight 16 (12, tiles_49_81) =
+      229 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_81).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_81)
+
+theorem w_49_82 :
+    moduleWeight 16 (12, tiles_49_82) =
+      54 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_82).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_82)
+
+theorem w_49_83 :
+    moduleWeight 16 (12, tiles_49_83) =
+      72 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_83).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_83)
+
+theorem w_49_84 :
+    moduleWeight 16 (12, tiles_49_84) =
+      1860 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_84).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_84)
+
+theorem w_49_85 :
+    moduleWeight 16 (12, tiles_49_85) =
+      141 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_85).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_85)
+
+theorem w_49_86 :
+    moduleWeight 16 (12, tiles_49_86) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_86).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_86)
+
+theorem w_49_87 :
+    moduleWeight 16 (12, tiles_49_87) =
+      980 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_87).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_87)
+
+theorem w_49_88 :
+    moduleWeight 16 (12, tiles_49_88) =
+      10 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_88).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_88)
+
+theorem w_49_89 :
+    moduleWeight 16 (12, tiles_49_89) =
+      583 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_89).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_89)
+
+theorem w_49_90 :
+    moduleWeight 16 (12, tiles_49_90) =
+      996 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_90).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_90)
+
+theorem w_49_91 :
+    moduleWeight 16 (12, tiles_49_91) =
+      665 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_91).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_91)
+
+theorem w_49_92 :
+    moduleWeight 16 (12, tiles_49_92) =
+      669 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_92).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_92)
+
+theorem w_49_93 :
+    moduleWeight 16 (12, tiles_49_93) =
+      269 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_93).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_93)
+
+theorem w_49_94 :
+    moduleWeight 16 (12, tiles_49_94) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_94).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_94)
+
+theorem w_49_95 :
+    moduleWeight 16 (12, tiles_49_95) =
+      32 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_95).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_95)
+
+theorem w_49_96 :
+    moduleWeight 16 (12, tiles_49_96) =
+      868 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_96).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_96)
+
+theorem w_49_97 :
+    moduleWeight 16 (12, tiles_49_97) =
+      4266 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_97).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_97)
+
+theorem w_49_98 :
+    moduleWeight 16 (12, tiles_49_98) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_98).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_98)
+
+theorem w_49_99 :
+    moduleWeight 16 (12, tiles_49_99) =
+      1158 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_99).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_99)
+
+theorem w_49_100 :
+    moduleWeight 16 (12, tiles_49_100) =
+      180 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_100).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_100)
+
+theorem w_49_101 :
+    moduleWeight 16 (12, tiles_49_101) =
+      136 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_101).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_101)
+
+theorem w_49_102 :
+    moduleWeight 16 (12, tiles_49_102) =
+      49 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_102).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_102)
+
+theorem w_49_103 :
+    moduleWeight 16 (12, tiles_49_103) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_103).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_103)
+
+theorem w_49_104 :
+    moduleWeight 16 (12, tiles_49_104) =
+      3 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_104).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_104)
+
+theorem w_49_105 :
+    moduleWeight 16 (12, tiles_49_105) =
+      94 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_105).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_105)
+
+theorem w_49_106 :
+    moduleWeight 16 (12, tiles_49_106) =
+      308 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_106).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_106)
+
+theorem w_49_107 :
+    moduleWeight 16 (12, tiles_49_107) =
+      411 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_107).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_107)
+
+theorem w_49_108 :
+    moduleWeight 16 (12, tiles_49_108) =
+      3496 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_108).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_108)
+
+theorem w_49_109 :
+    moduleWeight 16 (12, tiles_49_109) =
+      3712 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_109).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_109)
+
+theorem w_49_110 :
+    moduleWeight 16 (12, tiles_49_110) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_110).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_110)
+
+theorem w_49_111 :
+    moduleWeight 16 (12, tiles_49_111) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_111).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_111)
+
+theorem w_49_112 :
+    moduleWeight 16 (12, tiles_49_112) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_112).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_112)
+
+theorem w_49_113 :
+    moduleWeight 16 (12, tiles_49_113) =
+      4030 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_113).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_113)
+
+theorem w_49_114 :
+    moduleWeight 16 (12, tiles_49_114) =
+      4275 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_114).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_114)
+
+theorem w_49_115 :
+    moduleWeight 16 (12, tiles_49_115) =
+      978 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_115).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_115)
+
+theorem w_49_116 :
+    moduleWeight 16 (12, tiles_49_116) =
+      619 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_116).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_116)
+
+theorem w_49_117 :
+    moduleWeight 16 (12, tiles_49_117) =
+      4021 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_117).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_117)
+
+theorem w_49_118 :
+    moduleWeight 16 (12, tiles_49_118) =
+      233 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_118).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_118)
+
+theorem w_49_119 :
+    moduleWeight 16 (12, tiles_49_119) =
+      153 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_119).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_119)
+
+theorem w_49_120 :
+    moduleWeight 16 (12, tiles_49_120) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_120).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_120)
+
+theorem w_49_121 :
+    moduleWeight 16 (12, tiles_49_121) =
+      680 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_121).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_121)
+
+theorem w_49_122 :
+    moduleWeight 16 (12, tiles_49_122) =
+      459 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_122).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_122)
+
+theorem w_49_123 :
+    moduleWeight 16 (12, tiles_49_123) =
+      84 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_123).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_123)
+
+theorem w_49_124 :
+    moduleWeight 16 (12, tiles_49_124) =
+      60 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_124).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_124)
+
+theorem w_49_125 :
+    moduleWeight 16 (12, tiles_49_125) =
+      573 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_125).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_125)
+
+theorem w_49_126 :
+    moduleWeight 16 (12, tiles_49_126) =
+      725 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_126).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_126)
+
+theorem w_49_127 :
+    moduleWeight 16 (12, tiles_49_127) =
+      83 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_127).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_127)
+
+theorem w_49_128 :
+    moduleWeight 16 (12, tiles_49_128) =
+      2141 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_128).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_128)
+
+theorem w_49_129 :
+    moduleWeight 16 (12, tiles_49_129) =
+      89 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_129).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_129)
+
+theorem w_49_130 :
+    moduleWeight 16 (12, tiles_49_130) =
+      13 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_130).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_130)
+
+theorem w_49_131 :
+    moduleWeight 16 (12, tiles_49_131) =
+      14 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_131).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_131)
+
+theorem w_49_132 :
+    moduleWeight 16 (12, tiles_49_132) =
+      15 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_132).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_132)
+
+theorem w_49_133 :
+    moduleWeight 16 (12, tiles_49_133) =
+      516 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_133).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_133)
+
+theorem w_49_134 :
+    moduleWeight 16 (12, tiles_49_134) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_134).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_134)
+
+theorem w_49_135 :
+    moduleWeight 16 (12, tiles_49_135) =
+      58 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_135).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_135)
+
+theorem w_49_136 :
+    moduleWeight 16 (12, tiles_49_136) =
+      110 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_136).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_136)
+
+theorem w_49_137 :
+    moduleWeight 16 (12, tiles_49_137) =
+      306 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_137).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_137)
+
+theorem w_49_138 :
+    moduleWeight 16 (12, tiles_49_138) =
+      314 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_138).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_138)
+
+theorem w_49_139 :
+    moduleWeight 16 (12, tiles_49_139) =
+      4218 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_139).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_139)
+
+theorem w_49_140 :
+    moduleWeight 16 (12, tiles_49_140) =
+      882 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_140).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_140)
+
+theorem w_49_141 :
+    moduleWeight 16 (12, tiles_49_141) =
+      885 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_141).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_141)
+
+theorem w_49_142 :
+    moduleWeight 16 (12, tiles_49_142) =
+      323 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_142).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_142)
+
+theorem w_49_143 :
+    moduleWeight 16 (12, tiles_49_143) =
+      1125 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_143).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_143)
+
+theorem w_49_144 :
+    moduleWeight 16 (12, tiles_49_144) =
+      590 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_144).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_144)
+
+theorem w_49_145 :
+    moduleWeight 16 (12, tiles_49_145) =
+      206 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_145).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_145)
+
+theorem w_49_146 :
+    moduleWeight 16 (12, tiles_49_146) =
+      305 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_146).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_146)
+
+theorem w_49_147 :
+    moduleWeight 16 (12, tiles_49_147) =
+      328 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_147).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_147)
+
+theorem w_49_148 :
+    moduleWeight 16 (12, tiles_49_148) =
+      100 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_148).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_148)
+
+theorem w_49_149 :
+    moduleWeight 16 (12, tiles_49_149) =
+      666 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_149).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_149)
+
+theorem w_49_150 :
+    moduleWeight 16 (12, tiles_49_150) =
+      615 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_150).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_150)
+
+theorem w_49_151 :
+    moduleWeight 16 (12, tiles_49_151) =
+      24 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_151).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_151)
+
+theorem w_49_152 :
+    moduleWeight 16 (12, tiles_49_152) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_152).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_152)
+
+theorem w_49_153 :
+    moduleWeight 16 (12, tiles_49_153) =
+      241 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_153).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_153)
+
+theorem w_49_154 :
+    moduleWeight 16 (12, tiles_49_154) =
+      129 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_154).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_154)
+
+theorem w_49_155 :
+    moduleWeight 16 (12, tiles_49_155) =
+      124 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_155).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_155)
+
+theorem w_49_156 :
+    moduleWeight 16 (12, tiles_49_156) =
+      225 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_156).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_156)
+
+theorem w_49_157 :
+    moduleWeight 16 (12, tiles_49_157) =
+      184 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_157).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_157)
+
+theorem w_49_158 :
+    moduleWeight 16 (12, tiles_49_158) =
+      13 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_158).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_158)
+
+theorem w_49_159 :
+    moduleWeight 16 (12, tiles_49_159) =
+      1567 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_159).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_159)
+
+theorem w_49_160 :
+    moduleWeight 16 (12, tiles_49_160) =
+      51 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_160).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_160)
+
+theorem w_49_161 :
+    moduleWeight 16 (12, tiles_49_161) =
+      226 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_161).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_161)
+
+theorem w_49_162 :
+    moduleWeight 16 (12, tiles_49_162) =
+      105 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_162).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_162)
+
+theorem w_49_163 :
+    moduleWeight 16 (12, tiles_49_163) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_163).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_163)
+
+theorem w_49_164 :
+    moduleWeight 16 (12, tiles_49_164) =
+      345 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_164).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_164)
+
+theorem w_49_165 :
+    moduleWeight 16 (12, tiles_49_165) =
+      379 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_165).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_165)
+
+theorem w_49_166 :
+    moduleWeight 16 (12, tiles_49_166) =
+      1915 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_166).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_166)
+
+theorem w_49_167 :
+    moduleWeight 16 (12, tiles_49_167) =
+      741 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_167).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_167)
+
+theorem w_49_168 :
+    moduleWeight 16 (12, tiles_49_168) =
+      381 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_168).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_168)
+
+theorem w_49_169 :
+    moduleWeight 16 (12, tiles_49_169) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_169).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_169)
+
+theorem w_49_170 :
+    moduleWeight 16 (12, tiles_49_170) =
+      507 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_170).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_170)
+
+theorem w_49_171 :
+    moduleWeight 16 (12, tiles_49_171) =
+      134 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_171).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_171)
+
+theorem w_49_172 :
+    moduleWeight 16 (12, tiles_49_172) =
+      312 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_172).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_172)
+
+theorem w_49_173 :
+    moduleWeight 16 (12, tiles_49_173) =
+      88 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_173).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_173)
+
+theorem w_49_174 :
+    moduleWeight 16 (12, tiles_49_174) =
+      37 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_174).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_174)
+
+theorem w_49_175 :
+    moduleWeight 16 (12, tiles_49_175) =
+      540 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_175).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_175)
+
+theorem w_49_176 :
+    moduleWeight 16 (12, tiles_49_176) =
+      141 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_176).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_176)
+
+theorem w_49_177 :
+    moduleWeight 16 (12, tiles_49_177) =
+      417 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_177).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_177)
+
+theorem w_49_178 :
+    moduleWeight 16 (12, tiles_49_178) =
+      91 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_178).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_178)
+
+theorem w_49_179 :
+    moduleWeight 16 (12, tiles_49_179) =
+      529 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_179).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_179)
+
+theorem w_49_180 :
+    moduleWeight 16 (12, tiles_49_180) =
+      362 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_180).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_180)
+
+theorem w_49_181 :
+    moduleWeight 16 (12, tiles_49_181) =
+      140 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_181).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_181)
+
+theorem w_49_182 :
+    moduleWeight 16 (12, tiles_49_182) =
+      222 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_182).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_182)
+
+theorem w_49_183 :
+    moduleWeight 16 (12, tiles_49_183) =
+      1647 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_183).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_183)
+
+theorem w_49_184 :
+    moduleWeight 16 (12, tiles_49_184) =
+      29 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_184).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_184)
+
+theorem w_49_185 :
+    moduleWeight 16 (12, tiles_49_185) =
+      673 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_185).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_185)
+
+theorem w_49_186 :
+    moduleWeight 16 (12, tiles_49_186) =
+      876 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_186).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_186)
+
+theorem w_49_187 :
+    moduleWeight 16 (12, tiles_49_187) =
+      16 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_187).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_187)
+
+theorem w_49_188 :
+    moduleWeight 16 (12, tiles_49_188) =
+      961 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_188).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_188)
+
+theorem w_49_189 :
+    moduleWeight 16 (12, tiles_49_189) =
+      442 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_189).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_189)
+
+theorem w_49_190 :
+    moduleWeight 16 (12, tiles_49_190) =
+      705 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_190).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_190)
+
+theorem w_49_191 :
+    moduleWeight 16 (12, tiles_49_191) =
+      300 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_191).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_191)
+
+theorem w_49_192 :
+    moduleWeight 16 (12, tiles_49_192) =
+      174 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_192).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_192)
+
+theorem w_49_193 :
+    moduleWeight 16 (12, tiles_49_193) =
+      322 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_193).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_193)
+
+theorem w_49_194 :
+    moduleWeight 16 (12, tiles_49_194) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_49_194).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_49_194)
 
 theorem w_50_0 :
-    moduleWeight 16 (11, tiles_50_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_50_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_50_0)
+    moduleWeight 16 (12, tiles_50_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_50_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_50_0)
 
 theorem w_51_0 :
-    moduleWeight 16 (11, tiles_51_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_51_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_51_0)
+    moduleWeight 16 (12, tiles_51_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_51_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_51_0)
 
 theorem w_52_0 :
-    moduleWeight 16 (11, tiles_52_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_52_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_52_0)
+    moduleWeight 16 (12, tiles_52_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_52_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_52_0)
 
 theorem w_53_0 :
-    moduleWeight 16 (11, tiles_53_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_0)
+    moduleWeight 16 (12, tiles_53_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_0)
 
 theorem w_53_1 :
-    moduleWeight 16 (11, tiles_53_1) =
-      32 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_1).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_1)
+    moduleWeight 16 (12, tiles_53_1) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_1).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_1)
 
 theorem w_53_2 :
-    moduleWeight 16 (11, tiles_53_2) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_2).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_2)
+    moduleWeight 16 (12, tiles_53_2) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_2).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_2)
 
 theorem w_53_3 :
-    moduleWeight 16 (11, tiles_53_3) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_3).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_3)
+    moduleWeight 16 (12, tiles_53_3) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_3).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_3)
 
 theorem w_53_4 :
-    moduleWeight 16 (11, tiles_53_4) =
-      928 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_4).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_4)
+    moduleWeight 16 (12, tiles_53_4) =
+      3712 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_4).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_4)
 
 theorem w_53_5 :
-    moduleWeight 16 (11, tiles_53_5) =
-      32 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_5).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_5)
+    moduleWeight 16 (12, tiles_53_5) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_5).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_5)
 
 theorem w_53_6 :
-    moduleWeight 16 (11, tiles_53_6) =
-      432 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_6).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_6)
+    moduleWeight 16 (12, tiles_53_6) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_6).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_6)
 
 theorem w_53_7 :
-    moduleWeight 16 (11, tiles_53_7) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_7).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_7)
+    moduleWeight 16 (12, tiles_53_7) =
+      704 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_7).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_7)
 
 theorem w_53_8 :
-    moduleWeight 16 (11, tiles_53_8) =
-      80 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_8).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_8)
+    moduleWeight 16 (12, tiles_53_8) =
+      320 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_8).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_8)
 
 theorem w_53_9 :
-    moduleWeight 16 (11, tiles_53_9) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_9).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_9)
+    moduleWeight 16 (12, tiles_53_9) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_9).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_9)
 
 theorem w_53_10 :
-    moduleWeight 16 (11, tiles_53_10) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_10).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_10)
+    moduleWeight 16 (12, tiles_53_10) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_10).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_10)
 
 theorem w_53_11 :
-    moduleWeight 16 (11, tiles_53_11) =
-      765 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_11).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_11)
+    moduleWeight 16 (12, tiles_53_11) =
+      2026 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_11).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_11)
 
 theorem w_53_12 :
-    moduleWeight 16 (11, tiles_53_12) =
-      658 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_12).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_12)
+    moduleWeight 16 (12, tiles_53_12) =
+      966 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_12).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_12)
 
 theorem w_53_13 :
-    moduleWeight 16 (11, tiles_53_13) =
-      125 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_13).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_13)
+    moduleWeight 16 (12, tiles_53_13) =
+      584 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_13).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_13)
 
 theorem w_53_14 :
-    moduleWeight 16 (11, tiles_53_14) =
-      270 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_14).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_14)
+    moduleWeight 16 (12, tiles_53_14) =
+      2548 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_14).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_14)
 
 theorem w_53_15 :
-    moduleWeight 16 (11, tiles_53_15) =
-      144 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_15).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_15)
+    moduleWeight 16 (12, tiles_53_15) =
+      1080 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_15).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_15)
 
 theorem w_53_16 :
-    moduleWeight 16 (11, tiles_53_16) =
-      133 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_16).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_16)
+    moduleWeight 16 (12, tiles_53_16) =
+      576 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_16).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_16)
 
 theorem w_53_17 :
-    moduleWeight 16 (11, tiles_53_17) =
-      79 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_17).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_17)
+    moduleWeight 16 (12, tiles_53_17) =
+      532 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_17).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_17)
 
 theorem w_53_18 :
-    moduleWeight 16 (11, tiles_53_18) =
-      1197 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_18).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_18)
+    moduleWeight 16 (12, tiles_53_18) =
+      316 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_18).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_18)
 
 theorem w_53_19 :
-    moduleWeight 16 (11, tiles_53_19) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_19).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_19)
+    moduleWeight 16 (12, tiles_53_19) =
+      756 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_19).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_19)
 
 theorem w_53_20 :
-    moduleWeight 16 (11, tiles_53_20) =
-      560 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_20).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_20)
+    moduleWeight 16 (12, tiles_53_20) =
+      4032 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_20).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_20)
 
 theorem w_53_21 :
-    moduleWeight 16 (11, tiles_53_21) =
-      2003 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_21).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_21)
+    moduleWeight 16 (12, tiles_53_21) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_21).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_21)
 
 theorem w_53_22 :
-    moduleWeight 16 (11, tiles_53_22) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_22).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_22)
+    moduleWeight 16 (12, tiles_53_22) =
+      2240 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_22).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_22)
 
 theorem w_53_23 :
-    moduleWeight 16 (11, tiles_53_23) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_23).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_23)
+    moduleWeight 16 (12, tiles_53_23) =
+      2313 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_23).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_23)
 
 theorem w_53_24 :
-    moduleWeight 16 (11, tiles_53_24) =
-      224 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_24).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_24)
+    moduleWeight 16 (12, tiles_53_24) =
+      55 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_24).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_24)
 
 theorem w_53_25 :
-    moduleWeight 16 (11, tiles_53_25) =
-      144 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_25).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_25)
+    moduleWeight 16 (12, tiles_53_25) =
+      460 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_25).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_25)
 
 theorem w_53_26 :
-    moduleWeight 16 (11, tiles_53_26) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_26).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_26)
+    moduleWeight 16 (12, tiles_53_26) =
+      484 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_26).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_26)
 
 theorem w_53_27 :
-    moduleWeight 16 (11, tiles_53_27) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_27).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_27)
+    moduleWeight 16 (12, tiles_53_27) =
+      28 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_27).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_27)
 
 theorem w_53_28 :
-    moduleWeight 16 (11, tiles_53_28) =
-      2032 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_28).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_28)
+    moduleWeight 16 (12, tiles_53_28) =
+      96 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_28).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_28)
 
 theorem w_53_29 :
-    moduleWeight 16 (11, tiles_53_29) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_29).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_29)
+    moduleWeight 16 (12, tiles_53_29) =
+      4094 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_29).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_29)
 
 theorem w_53_30 :
-    moduleWeight 16 (11, tiles_53_30) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_30).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_30)
+    moduleWeight 16 (12, tiles_53_30) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_30).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_30)
 
 theorem w_53_31 :
-    moduleWeight 16 (11, tiles_53_31) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_31).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_31)
+    moduleWeight 16 (12, tiles_53_31) =
+      896 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_31).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_31)
 
 theorem w_53_32 :
-    moduleWeight 16 (11, tiles_53_32) =
-      608 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_32).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_32)
+    moduleWeight 16 (12, tiles_53_32) =
+      576 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_32).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_32)
 
 theorem w_53_33 :
-    moduleWeight 16 (11, tiles_53_33) =
-      32 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_33).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_33)
+    moduleWeight 16 (12, tiles_53_33) =
+      192 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_33).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_33)
 
 theorem w_53_34 :
-    moduleWeight 16 (11, tiles_53_34) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_34).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_34)
+    moduleWeight 16 (12, tiles_53_34) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_34).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_34)
 
 theorem w_53_35 :
-    moduleWeight 16 (11, tiles_53_35) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_35).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_35)
+    moduleWeight 16 (12, tiles_53_35) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_35).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_35)
 
 theorem w_53_36 :
-    moduleWeight 16 (11, tiles_53_36) =
-      1084 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_36).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_36)
+    moduleWeight 16 (12, tiles_53_36) =
+      4032 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_36).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_36)
 
 theorem w_53_37 :
-    moduleWeight 16 (11, tiles_53_37) =
-      1877 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_37).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_37)
+    moduleWeight 16 (12, tiles_53_37) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_37).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_37)
 
 theorem w_53_38 :
-    moduleWeight 16 (11, tiles_53_38) =
-      458 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_38).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_38)
+    moduleWeight 16 (12, tiles_53_38) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_38).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_38)
 
 theorem w_53_39 :
-    moduleWeight 16 (11, tiles_53_39) =
-      147 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_39).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_39)
+    moduleWeight 16 (12, tiles_53_39) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_39).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_39)
 
 theorem w_53_40 :
-    moduleWeight 16 (11, tiles_53_40) =
-      326 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_40).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_40)
+    moduleWeight 16 (12, tiles_53_40) =
+      2432 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_40).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_40)
 
 theorem w_53_41 :
-    moduleWeight 16 (11, tiles_53_41) =
-      63 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_41).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_41)
+    moduleWeight 16 (12, tiles_53_41) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_41).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_41)
 
 theorem w_53_42 :
-    moduleWeight 16 (11, tiles_53_42) =
-      807 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_42).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_42)
+    moduleWeight 16 (12, tiles_53_42) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_42).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_42)
 
 theorem w_53_43 :
-    moduleWeight 16 (11, tiles_53_43) =
-      56 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_43).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_43)
+    moduleWeight 16 (12, tiles_53_43) =
+      1024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_43).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_43)
 
 theorem w_53_44 :
-    moduleWeight 16 (11, tiles_53_44) =
-      55 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_44).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_44)
+    moduleWeight 16 (12, tiles_53_44) =
+      4336 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_44).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_44)
 
 theorem w_53_45 :
-    moduleWeight 16 (11, tiles_53_45) =
-      168 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_45).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_45)
+    moduleWeight 16 (12, tiles_53_45) =
+      1432 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_45).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_45)
 
 theorem w_53_46 :
-    moduleWeight 16 (11, tiles_53_46) =
-      172 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_46).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_46)
+    moduleWeight 16 (12, tiles_53_46) =
+      4004 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_46).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_46)
 
 theorem w_53_47 :
-    moduleWeight 16 (11, tiles_53_47) =
-      1828 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_47).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_47)
+    moduleWeight 16 (12, tiles_53_47) =
+      1169 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_47).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_47)
 
 theorem w_53_48 :
-    moduleWeight 16 (11, tiles_53_48) =
-      117 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_48).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_48)
+    moduleWeight 16 (12, tiles_53_48) =
+      139 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_48).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_48)
 
 theorem w_53_49 :
-    moduleWeight 16 (11, tiles_53_49) =
-      96 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_49).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_49)
+    moduleWeight 16 (12, tiles_53_49) =
+      34 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_49).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_49)
 
 theorem w_53_50 :
-    moduleWeight 16 (11, tiles_53_50) =
-      414 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_50).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_50)
+    moduleWeight 16 (12, tiles_53_50) =
+      92 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_50).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_50)
 
 theorem w_53_51 :
-    moduleWeight 16 (11, tiles_53_51) =
-      390 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_51).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_51)
+    moduleWeight 16 (12, tiles_53_51) =
+      373 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_51).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_51)
 
 theorem w_53_52 :
-    moduleWeight 16 (11, tiles_53_52) =
-      33 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_52).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_52)
+    moduleWeight 16 (12, tiles_53_52) =
+      93 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_52).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_52)
 
 theorem w_53_53 :
-    moduleWeight 16 (11, tiles_53_53) =
-      44 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_53).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_53)
+    moduleWeight 16 (12, tiles_53_53) =
+      231 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_53).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_53)
 
 theorem w_53_54 :
-    moduleWeight 16 (11, tiles_53_54) =
-      4049 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_54).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_54)
+    moduleWeight 16 (12, tiles_53_54) =
+      11 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_54).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_54)
 
 theorem w_53_55 :
-    moduleWeight 16 (11, tiles_53_55) =
-      2123 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_55).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_55)
+    moduleWeight 16 (12, tiles_53_55) =
+      859 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_55).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_55)
 
 theorem w_53_56 :
-    moduleWeight 16 (11, tiles_53_56) =
-      229 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_56).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_56)
+    moduleWeight 16 (12, tiles_53_56) =
+      15 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_56).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_56)
 
 theorem w_53_57 :
-    moduleWeight 16 (11, tiles_53_57) =
-      1324 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_57).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_57)
+    moduleWeight 16 (12, tiles_53_57) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_57).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_57)
 
 theorem w_53_58 :
-    moduleWeight 16 (11, tiles_53_58) =
-      893 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_58).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_58)
+    moduleWeight 16 (12, tiles_53_58) =
+      367 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_58).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_58)
 
 theorem w_53_59 :
-    moduleWeight 16 (11, tiles_53_59) =
-      777 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_59).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_59)
+    moduleWeight 16 (12, tiles_53_59) =
+      3 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_59).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_59)
 
 theorem w_53_60 :
-    moduleWeight 16 (11, tiles_53_60) =
-      33 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_60).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_60)
+    moduleWeight 16 (12, tiles_53_60) =
+      162 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_60).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_60)
 
 theorem w_53_61 :
-    moduleWeight 16 (11, tiles_53_61) =
-      60 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_61).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_61)
+    moduleWeight 16 (12, tiles_53_61) =
+      874 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_61).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_61)
 
 theorem w_53_62 :
-    moduleWeight 16 (11, tiles_53_62) =
-      547 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_62).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_62)
+    moduleWeight 16 (12, tiles_53_62) =
+      162 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_62).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_62)
 
 theorem w_53_63 :
-    moduleWeight 16 (11, tiles_53_63) =
-      99 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_63).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_63)
+    moduleWeight 16 (12, tiles_53_63) =
+      1055 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_63).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_63)
 
 theorem w_53_64 :
-    moduleWeight 16 (11, tiles_53_64) =
-      39 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_64).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_64)
+    moduleWeight 16 (12, tiles_53_64) =
+      78 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_64).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_64)
 
 theorem w_53_65 :
-    moduleWeight 16 (11, tiles_53_65) =
-      67 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_65).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_65)
+    moduleWeight 16 (12, tiles_53_65) =
+      1712 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_65).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_65)
 
 theorem w_53_66 :
-    moduleWeight 16 (11, tiles_53_66) =
-      74 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_66).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_66)
+    moduleWeight 16 (12, tiles_53_66) =
+      82 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_66).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_66)
 
 theorem w_53_67 :
-    moduleWeight 16 (11, tiles_53_67) =
-      643 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_67).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_67)
+    moduleWeight 16 (12, tiles_53_67) =
+      131 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_67).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_67)
 
 theorem w_53_68 :
-    moduleWeight 16 (11, tiles_53_68) =
-      261 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_68).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_68)
+    moduleWeight 16 (12, tiles_53_68) =
+      70 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_68).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_68)
 
 theorem w_53_69 :
-    moduleWeight 16 (11, tiles_53_69) =
-      507 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_69).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_69)
+    moduleWeight 16 (12, tiles_53_69) =
+      2 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_69).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_69)
 
 theorem w_53_70 :
-    moduleWeight 16 (11, tiles_53_70) =
-      913 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_70).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_70)
+    moduleWeight 16 (12, tiles_53_70) =
+      376 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_70).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_70)
 
 theorem w_53_71 :
-    moduleWeight 16 (11, tiles_53_71) =
-      152 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_71).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_71)
+    moduleWeight 16 (12, tiles_53_71) =
+      166 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_71).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_71)
 
 theorem w_53_72 :
-    moduleWeight 16 (11, tiles_53_72) =
-      114 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_72).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_72)
+    moduleWeight 16 (12, tiles_53_72) =
+      54 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_72).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_72)
 
 theorem w_53_73 :
-    moduleWeight 16 (11, tiles_53_73) =
-      129 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_73).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_73)
+    moduleWeight 16 (12, tiles_53_73) =
+      290 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_73).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_73)
 
 theorem w_53_74 :
-    moduleWeight 16 (11, tiles_53_74) =
-      477 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_74).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_74)
+    moduleWeight 16 (12, tiles_53_74) =
+      160 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_74).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_74)
 
 theorem w_53_75 :
-    moduleWeight 16 (11, tiles_53_75) =
-      46 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_75).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_75)
+    moduleWeight 16 (12, tiles_53_75) =
+      2093 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_75).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_75)
 
 theorem w_53_76 :
-    moduleWeight 16 (11, tiles_53_76) =
-      582 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_76).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_76)
+    moduleWeight 16 (12, tiles_53_76) =
+      907 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_76).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_76)
 
 theorem w_53_77 :
-    moduleWeight 16 (11, tiles_53_77) =
-      19 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_77).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_77)
+    moduleWeight 16 (12, tiles_53_77) =
+      918 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_77).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_77)
 
 theorem w_53_78 :
-    moduleWeight 16 (11, tiles_53_78) =
-      206 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_78).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_78)
+    moduleWeight 16 (12, tiles_53_78) =
+      861 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_78).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_78)
 
 theorem w_53_79 :
-    moduleWeight 16 (11, tiles_53_79) =
-      622 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_79).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_79)
+    moduleWeight 16 (12, tiles_53_79) =
+      886 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_79).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_79)
 
 theorem w_53_80 :
-    moduleWeight 16 (11, tiles_53_80) =
-      275 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_80).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_80)
+    moduleWeight 16 (12, tiles_53_80) =
+      960 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_80).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_80)
 
 theorem w_53_81 :
-    moduleWeight 16 (11, tiles_53_81) =
-      145 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_81).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_81)
+    moduleWeight 16 (12, tiles_53_81) =
+      258 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_81).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_81)
 
 theorem w_53_82 :
-    moduleWeight 16 (11, tiles_53_82) =
-      786 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_82).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_82)
+    moduleWeight 16 (12, tiles_53_82) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_82).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_82)
 
 theorem w_53_83 :
-    moduleWeight 16 (11, tiles_53_83) =
-      24 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_83).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_83)
+    moduleWeight 16 (12, tiles_53_83) =
+      259 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_83).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_83)
 
 theorem w_53_84 :
-    moduleWeight 16 (11, tiles_53_84) =
-      87 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_53_84).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_53_84)
+    moduleWeight 16 (12, tiles_53_84) =
+      219 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_84).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_84)
+
+theorem w_53_85 :
+    moduleWeight 16 (12, tiles_53_85) =
+      43 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_85).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_85)
+
+theorem w_53_86 :
+    moduleWeight 16 (12, tiles_53_86) =
+      22 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_86).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_86)
+
+theorem w_53_87 :
+    moduleWeight 16 (12, tiles_53_87) =
+      603 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_87).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_87)
+
+theorem w_53_88 :
+    moduleWeight 16 (12, tiles_53_88) =
+      217 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_88).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_88)
+
+theorem w_53_89 :
+    moduleWeight 16 (12, tiles_53_89) =
+      969 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_89).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_89)
+
+theorem w_53_90 :
+    moduleWeight 16 (12, tiles_53_90) =
+      337 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_90).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_90)
+
+theorem w_53_91 :
+    moduleWeight 16 (12, tiles_53_91) =
+      67 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_91).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_91)
+
+theorem w_53_92 :
+    moduleWeight 16 (12, tiles_53_92) =
+      85 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_92).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_92)
+
+theorem w_53_93 :
+    moduleWeight 16 (12, tiles_53_93) =
+      411 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_93).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_93)
+
+theorem w_53_94 :
+    moduleWeight 16 (12, tiles_53_94) =
+      17 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_94).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_94)
+
+theorem w_53_95 :
+    moduleWeight 16 (12, tiles_53_95) =
+      3360 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_95).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_95)
+
+theorem w_53_96 :
+    moduleWeight 16 (12, tiles_53_96) =
+      4218 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_96).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_96)
+
+theorem w_53_97 :
+    moduleWeight 16 (12, tiles_53_97) =
+      390 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_97).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_97)
+
+theorem w_53_98 :
+    moduleWeight 16 (12, tiles_53_98) =
+      74 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_98).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_98)
+
+theorem w_53_99 :
+    moduleWeight 16 (12, tiles_53_99) =
+      2000 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_99).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_99)
+
+theorem w_53_100 :
+    moduleWeight 16 (12, tiles_53_100) =
+      3984 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_100).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_100)
+
+theorem w_53_101 :
+    moduleWeight 16 (12, tiles_53_101) =
+      199 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_101).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_101)
+
+theorem w_53_102 :
+    moduleWeight 16 (12, tiles_53_102) =
+      1531 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_102).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_102)
+
+theorem w_53_103 :
+    moduleWeight 16 (12, tiles_53_103) =
+      1562 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_103).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_103)
+
+theorem w_53_104 :
+    moduleWeight 16 (12, tiles_53_104) =
+      1290 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_104).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_104)
+
+theorem w_53_105 :
+    moduleWeight 16 (12, tiles_53_105) =
+      4211 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_105).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_105)
+
+theorem w_53_106 :
+    moduleWeight 16 (12, tiles_53_106) =
+      33 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_106).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_106)
+
+theorem w_53_107 :
+    moduleWeight 16 (12, tiles_53_107) =
+      9 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_107).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_107)
+
+theorem w_53_108 :
+    moduleWeight 16 (12, tiles_53_108) =
+      26 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_108).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_108)
+
+theorem w_53_109 :
+    moduleWeight 16 (12, tiles_53_109) =
+      45 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_109).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_109)
+
+theorem w_53_110 :
+    moduleWeight 16 (12, tiles_53_110) =
+      211 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_110).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_110)
+
+theorem w_53_111 :
+    moduleWeight 16 (12, tiles_53_111) =
+      115 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_111).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_111)
+
+theorem w_53_112 :
+    moduleWeight 16 (12, tiles_53_112) =
+      161 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_112).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_112)
+
+theorem w_53_113 :
+    moduleWeight 16 (12, tiles_53_113) =
+      81 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_113).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_113)
+
+theorem w_53_114 :
+    moduleWeight 16 (12, tiles_53_114) =
+      1001 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_114).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_114)
+
+theorem w_53_115 :
+    moduleWeight 16 (12, tiles_53_115) =
+      4253 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_115).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_115)
+
+theorem w_53_116 :
+    moduleWeight 16 (12, tiles_53_116) =
+      1505 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_116).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_116)
+
+theorem w_53_117 :
+    moduleWeight 16 (12, tiles_53_117) =
+      821 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_117).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_117)
+
+theorem w_53_118 :
+    moduleWeight 16 (12, tiles_53_118) =
+      1639 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_118).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_118)
+
+theorem w_53_119 :
+    moduleWeight 16 (12, tiles_53_119) =
+      713 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_119).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_119)
+
+theorem w_53_120 :
+    moduleWeight 16 (12, tiles_53_120) =
+      715 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_120).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_120)
+
+theorem w_53_121 :
+    moduleWeight 16 (12, tiles_53_121) =
+      254 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_121).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_121)
+
+theorem w_53_122 :
+    moduleWeight 16 (12, tiles_53_122) =
+      23 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_122).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_122)
+
+theorem w_53_123 :
+    moduleWeight 16 (12, tiles_53_123) =
+      9 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_123).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_123)
+
+theorem w_53_124 :
+    moduleWeight 16 (12, tiles_53_124) =
+      37 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_124).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_124)
+
+theorem w_53_125 :
+    moduleWeight 16 (12, tiles_53_125) =
+      983 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_125).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_125)
+
+theorem w_53_126 :
+    moduleWeight 16 (12, tiles_53_126) =
+      903 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_126).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_126)
+
+theorem w_53_127 :
+    moduleWeight 16 (12, tiles_53_127) =
+      82 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_127).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_127)
+
+theorem w_53_128 :
+    moduleWeight 16 (12, tiles_53_128) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_128).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_128)
+
+theorem w_53_129 :
+    moduleWeight 16 (12, tiles_53_129) =
+      273 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_129).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_129)
+
+theorem w_53_130 :
+    moduleWeight 16 (12, tiles_53_130) =
+      80 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_130).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_130)
+
+theorem w_53_131 :
+    moduleWeight 16 (12, tiles_53_131) =
+      175 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_131).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_131)
+
+theorem w_53_132 :
+    moduleWeight 16 (12, tiles_53_132) =
+      40 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_132).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_132)
+
+theorem w_53_133 :
+    moduleWeight 16 (12, tiles_53_133) =
+      90 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_133).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_133)
+
+theorem w_53_134 :
+    moduleWeight 16 (12, tiles_53_134) =
+      538 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_134).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_134)
+
+theorem w_53_135 :
+    moduleWeight 16 (12, tiles_53_135) =
+      649 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_135).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_135)
+
+theorem w_53_136 :
+    moduleWeight 16 (12, tiles_53_136) =
+      145 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_136).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_136)
+
+theorem w_53_137 :
+    moduleWeight 16 (12, tiles_53_137) =
+      308 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_137).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_137)
+
+theorem w_53_138 :
+    moduleWeight 16 (12, tiles_53_138) =
+      91 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_138).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_138)
+
+theorem w_53_139 :
+    moduleWeight 16 (12, tiles_53_139) =
+      646 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_139).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_139)
+
+theorem w_53_140 :
+    moduleWeight 16 (12, tiles_53_140) =
+      26 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_140).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_140)
+
+theorem w_53_141 :
+    moduleWeight 16 (12, tiles_53_141) =
+      30 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_141).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_141)
+
+theorem w_53_142 :
+    moduleWeight 16 (12, tiles_53_142) =
+      481 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_142).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_142)
+
+theorem w_53_143 :
+    moduleWeight 16 (12, tiles_53_143) =
+      281 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_143).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_143)
+
+theorem w_53_144 :
+    moduleWeight 16 (12, tiles_53_144) =
+      503 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_144).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_144)
+
+theorem w_53_145 :
+    moduleWeight 16 (12, tiles_53_145) =
+      338 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_145).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_145)
+
+theorem w_53_146 :
+    moduleWeight 16 (12, tiles_53_146) =
+      186 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_146).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_146)
+
+theorem w_53_147 :
+    moduleWeight 16 (12, tiles_53_147) =
+      372 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_147).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_147)
+
+theorem w_53_148 :
+    moduleWeight 16 (12, tiles_53_148) =
+      517 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_148).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_148)
+
+theorem w_53_149 :
+    moduleWeight 16 (12, tiles_53_149) =
+      81 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_149).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_149)
+
+theorem w_53_150 :
+    moduleWeight 16 (12, tiles_53_150) =
+      140 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_150).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_150)
+
+theorem w_53_151 :
+    moduleWeight 16 (12, tiles_53_151) =
+      824 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_151).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_151)
+
+theorem w_53_152 :
+    moduleWeight 16 (12, tiles_53_152) =
+      889 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_152).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_152)
+
+theorem w_53_153 :
+    moduleWeight 16 (12, tiles_53_153) =
+      4 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_153).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_153)
+
+theorem w_53_154 :
+    moduleWeight 16 (12, tiles_53_154) =
+      170 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_154).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_154)
+
+theorem w_53_155 :
+    moduleWeight 16 (12, tiles_53_155) =
+      215 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_155).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_155)
+
+theorem w_53_156 :
+    moduleWeight 16 (12, tiles_53_156) =
+      199 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_156).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_156)
+
+theorem w_53_157 :
+    moduleWeight 16 (12, tiles_53_157) =
+      67 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_157).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_157)
+
+theorem w_53_158 :
+    moduleWeight 16 (12, tiles_53_158) =
+      339 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_158).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_158)
+
+theorem w_53_159 :
+    moduleWeight 16 (12, tiles_53_159) =
+      666 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_159).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_159)
+
+theorem w_53_160 :
+    moduleWeight 16 (12, tiles_53_160) =
+      90 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_160).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_160)
+
+theorem w_53_161 :
+    moduleWeight 16 (12, tiles_53_161) =
+      22 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_161).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_161)
+
+theorem w_53_162 :
+    moduleWeight 16 (12, tiles_53_162) =
+      589 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_162).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_162)
+
+theorem w_53_163 :
+    moduleWeight 16 (12, tiles_53_163) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_163).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_163)
+
+theorem w_53_164 :
+    moduleWeight 16 (12, tiles_53_164) =
+      106 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_164).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_164)
+
+theorem w_53_165 :
+    moduleWeight 16 (12, tiles_53_165) =
+      95 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_165).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_165)
+
+theorem w_53_166 :
+    moduleWeight 16 (12, tiles_53_166) =
+      116 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_166).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_166)
+
+theorem w_53_167 :
+    moduleWeight 16 (12, tiles_53_167) =
+      576 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_167).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_167)
+
+theorem w_53_168 :
+    moduleWeight 16 (12, tiles_53_168) =
+      520 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_168).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_168)
+
+theorem w_53_169 :
+    moduleWeight 16 (12, tiles_53_169) =
+      335 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_169).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_169)
+
+theorem w_53_170 :
+    moduleWeight 16 (12, tiles_53_170) =
+      9 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_170).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_170)
+
+theorem w_53_171 :
+    moduleWeight 16 (12, tiles_53_171) =
+      97 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_171).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_171)
+
+theorem w_53_172 :
+    moduleWeight 16 (12, tiles_53_172) =
+      442 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_172).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_172)
+
+theorem w_53_173 :
+    moduleWeight 16 (12, tiles_53_173) =
+      312 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_173).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_173)
+
+theorem w_53_174 :
+    moduleWeight 16 (12, tiles_53_174) =
+      498 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_174).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_174)
+
+theorem w_53_175 :
+    moduleWeight 16 (12, tiles_53_175) =
+      270 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_175).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_175)
+
+theorem w_53_176 :
+    moduleWeight 16 (12, tiles_53_176) =
+      250 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_176).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_176)
+
+theorem w_53_177 :
+    moduleWeight 16 (12, tiles_53_177) =
+      360 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_177).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_177)
+
+theorem w_53_178 :
+    moduleWeight 16 (12, tiles_53_178) =
+      172 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_178).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_178)
+
+theorem w_53_179 :
+    moduleWeight 16 (12, tiles_53_179) =
+      477 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_179).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_179)
+
+theorem w_53_180 :
+    moduleWeight 16 (12, tiles_53_180) =
+      152 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_180).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_180)
+
+theorem w_53_181 :
+    moduleWeight 16 (12, tiles_53_181) =
+      400 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_181).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_181)
+
+theorem w_53_182 :
+    moduleWeight 16 (12, tiles_53_182) =
+      888 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_182).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_182)
+
+theorem w_53_183 :
+    moduleWeight 16 (12, tiles_53_183) =
+      768 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_183).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_183)
+
+theorem w_53_184 :
+    moduleWeight 16 (12, tiles_53_184) =
+      181 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_184).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_184)
+
+theorem w_53_185 :
+    moduleWeight 16 (12, tiles_53_185) =
+      315 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_185).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_185)
+
+theorem w_53_186 :
+    moduleWeight 16 (12, tiles_53_186) =
+      270 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_186).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_186)
+
+theorem w_53_187 :
+    moduleWeight 16 (12, tiles_53_187) =
+      43 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_187).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_187)
+
+theorem w_53_188 :
+    moduleWeight 16 (12, tiles_53_188) =
+      225 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_188).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_188)
+
+theorem w_53_189 :
+    moduleWeight 16 (12, tiles_53_189) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_53_189).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_53_189)
 
 theorem w_54_0 :
-    moduleWeight 16 (11, tiles_54_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_54_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_54_0)
+    moduleWeight 16 (12, tiles_54_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_54_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_54_0)
 
 theorem w_55_0 :
-    moduleWeight 16 (11, tiles_55_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_55_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_55_0)
+    moduleWeight 16 (12, tiles_55_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_55_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_55_0)
 
 theorem w_56_0 :
-    moduleWeight 16 (11, tiles_56_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_56_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_56_0)
+    moduleWeight 16 (12, tiles_56_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_56_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_56_0)
 
 theorem w_57_0 :
-    moduleWeight 16 (11, tiles_57_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_0)
+    moduleWeight 16 (12, tiles_57_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_0)
 
 theorem w_57_1 :
-    moduleWeight 16 (11, tiles_57_1) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_1).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_1)
+    moduleWeight 16 (12, tiles_57_1) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_1).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_1)
 
 theorem w_57_2 :
-    moduleWeight 16 (11, tiles_57_2) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_2).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_2)
+    moduleWeight 16 (12, tiles_57_2) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_2).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_2)
 
 theorem w_57_3 :
-    moduleWeight 16 (11, tiles_57_3) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_3).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_3)
+    moduleWeight 16 (12, tiles_57_3) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_3).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_3)
 
 theorem w_57_4 :
-    moduleWeight 16 (11, tiles_57_4) =
-      112 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_4).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_4)
+    moduleWeight 16 (12, tiles_57_4) =
+      448 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_4).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_4)
 
 theorem w_57_5 :
-    moduleWeight 16 (11, tiles_57_5) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_5).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_5)
+    moduleWeight 16 (12, tiles_57_5) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_5).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_5)
 
 theorem w_57_6 :
-    moduleWeight 16 (11, tiles_57_6) =
-      64 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_6).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_6)
+    moduleWeight 16 (12, tiles_57_6) =
+      256 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_6).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_6)
 
 theorem w_57_7 :
-    moduleWeight 16 (11, tiles_57_7) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_7).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_7)
+    moduleWeight 16 (12, tiles_57_7) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_7).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_7)
 
 theorem w_57_8 :
-    moduleWeight 16 (11, tiles_57_8) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_8).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_8)
+    moduleWeight 16 (12, tiles_57_8) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_8).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_8)
 
 theorem w_57_9 :
-    moduleWeight 16 (11, tiles_57_9) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_9).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_9)
+    moduleWeight 16 (12, tiles_57_9) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_9).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_9)
 
 theorem w_57_10 :
-    moduleWeight 16 (11, tiles_57_10) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_10).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_10)
+    moduleWeight 16 (12, tiles_57_10) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_10).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_10)
 
 theorem w_57_11 :
-    moduleWeight 16 (11, tiles_57_11) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_11).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_11)
+    moduleWeight 16 (12, tiles_57_11) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_11).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_11)
 
 theorem w_57_12 :
-    moduleWeight 16 (11, tiles_57_12) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_12).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_12)
+    moduleWeight 16 (12, tiles_57_12) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_12).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_12)
 
 theorem w_57_13 :
-    moduleWeight 16 (11, tiles_57_13) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_13).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_13)
+    moduleWeight 16 (12, tiles_57_13) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_13).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_13)
 
 theorem w_57_14 :
-    moduleWeight 16 (11, tiles_57_14) =
-      3994 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_14).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_14)
+    moduleWeight 16 (12, tiles_57_14) =
+      4339 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_14).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_14)
 
 theorem w_57_15 :
-    moduleWeight 16 (11, tiles_57_15) =
-      928 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_15).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_15)
+    moduleWeight 16 (12, tiles_57_15) =
+      376 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_15).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_15)
 
 theorem w_57_16 :
-    moduleWeight 16 (11, tiles_57_16) =
-      128 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_16).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_16)
+    moduleWeight 16 (12, tiles_57_16) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_16).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_16)
 
 theorem w_57_17 :
-    moduleWeight 16 (11, tiles_57_17) =
-      1624 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_17).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_17)
+    moduleWeight 16 (12, tiles_57_17) =
+      32 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_17).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_17)
 
 theorem w_57_18 :
-    moduleWeight 16 (11, tiles_57_18) =
-      940 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_18).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_18)
+    moduleWeight 16 (12, tiles_57_18) =
+      1041 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_18).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_18)
 
 theorem w_57_19 :
-    moduleWeight 16 (11, tiles_57_19) =
-      134 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_19).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_19)
+    moduleWeight 16 (12, tiles_57_19) =
+      270 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_19).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_19)
 
 theorem w_57_20 :
-    moduleWeight 16 (11, tiles_57_20) =
-      130 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_20).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_20)
+    moduleWeight 16 (12, tiles_57_20) =
+      78 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_20).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_20)
 
 theorem w_57_21 :
-    moduleWeight 16 (11, tiles_57_21) =
-      18 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_21).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_21)
+    moduleWeight 16 (12, tiles_57_21) =
+      2060 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_21).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_21)
 
 theorem w_57_22 :
-    moduleWeight 16 (11, tiles_57_22) =
-      11 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_22).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_22)
+    moduleWeight 16 (12, tiles_57_22) =
+      958 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_22).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_22)
 
 theorem w_57_23 :
-    moduleWeight 16 (11, tiles_57_23) =
-      54 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_23).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_23)
+    moduleWeight 16 (12, tiles_57_23) =
+      1453 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_23).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_23)
 
 theorem w_57_24 :
-    moduleWeight 16 (11, tiles_57_24) =
-      18 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_24).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_24)
+    moduleWeight 16 (12, tiles_57_24) =
+      51 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_24).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_24)
 
 theorem w_57_25 :
-    moduleWeight 16 (11, tiles_57_25) =
-      20 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_25).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_25)
+    moduleWeight 16 (12, tiles_57_25) =
+      3897 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_25).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_25)
 
 theorem w_57_26 :
-    moduleWeight 16 (11, tiles_57_26) =
-      306 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_26).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_26)
+    moduleWeight 16 (12, tiles_57_26) =
+      512 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_26).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_26)
 
 theorem w_57_27 :
-    moduleWeight 16 (11, tiles_57_27) =
-      692 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_27).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_27)
+    moduleWeight 16 (12, tiles_57_27) =
+      3520 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_27).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_27)
 
 theorem w_57_28 :
-    moduleWeight 16 (11, tiles_57_28) =
-      944 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_28).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_28)
+    moduleWeight 16 (12, tiles_57_28) =
+      2005 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_28).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_28)
 
 theorem w_57_29 :
-    moduleWeight 16 (11, tiles_57_29) =
-      64 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_29).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_29)
+    moduleWeight 16 (12, tiles_57_29) =
+      806 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_29).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_29)
 
 theorem w_57_30 :
-    moduleWeight 16 (11, tiles_57_30) =
-      560 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_30).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_30)
+    moduleWeight 16 (12, tiles_57_30) =
+      2716 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_30).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_30)
 
 theorem w_57_31 :
-    moduleWeight 16 (11, tiles_57_31) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_31).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_31)
+    moduleWeight 16 (12, tiles_57_31) =
+      612 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_31).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_31)
 
 theorem w_57_32 :
-    moduleWeight 16 (11, tiles_57_32) =
-      256 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_32).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_32)
+    moduleWeight 16 (12, tiles_57_32) =
+      127 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_32).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_32)
 
 theorem w_57_33 :
-    moduleWeight 16 (11, tiles_57_33) =
-      933 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_33).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_33)
+    moduleWeight 16 (12, tiles_57_33) =
+      55 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_33).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_33)
 
 theorem w_57_34 :
-    moduleWeight 16 (11, tiles_57_34) =
-      159 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_34).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_34)
+    moduleWeight 16 (12, tiles_57_34) =
+      80 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_34).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_34)
 
 theorem w_57_35 :
-    moduleWeight 16 (11, tiles_57_35) =
-      990 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_35).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_35)
+    moduleWeight 16 (12, tiles_57_35) =
+      303 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_35).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_35)
 
 theorem w_57_36 :
-    moduleWeight 16 (11, tiles_57_36) =
-      192 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_36).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_36)
+    moduleWeight 16 (12, tiles_57_36) =
+      392 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_36).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_36)
 
 theorem w_57_37 :
-    moduleWeight 16 (11, tiles_57_37) =
-      176 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_37).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_37)
+    moduleWeight 16 (12, tiles_57_37) =
+      44 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_37).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_37)
 
 theorem w_57_38 :
-    moduleWeight 16 (11, tiles_57_38) =
-      128 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_38).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_38)
+    moduleWeight 16 (12, tiles_57_38) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_38).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_38)
 
 theorem w_57_39 :
-    moduleWeight 16 (11, tiles_57_39) =
-      1104 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_39).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_39)
+    moduleWeight 16 (12, tiles_57_39) =
+      16 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_39).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_39)
 
 theorem w_57_40 :
-    moduleWeight 16 (11, tiles_57_40) =
-      1006 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_40).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_40)
+    moduleWeight 16 (12, tiles_57_40) =
+      124 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_40).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_40)
 
 theorem w_57_41 :
-    moduleWeight 16 (11, tiles_57_41) =
-      110 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_41).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_41)
+    moduleWeight 16 (12, tiles_57_41) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_41).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_41)
 
 theorem w_57_42 :
-    moduleWeight 16 (11, tiles_57_42) =
-      1199 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_42).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_42)
+    moduleWeight 16 (12, tiles_57_42) =
+      29 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_42).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_42)
 
 theorem w_57_43 :
-    moduleWeight 16 (11, tiles_57_43) =
-      96 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_43).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_43)
+    moduleWeight 16 (12, tiles_57_43) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_43).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_43)
 
 theorem w_57_44 :
-    moduleWeight 16 (11, tiles_57_44) =
-      192 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_44).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_44)
+    moduleWeight 16 (12, tiles_57_44) =
+      45 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_44).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_44)
 
 theorem w_57_45 :
-    moduleWeight 16 (11, tiles_57_45) =
-      16 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_45).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_45)
+    moduleWeight 16 (12, tiles_57_45) =
+      55 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_45).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_45)
 
 theorem w_57_46 :
-    moduleWeight 16 (11, tiles_57_46) =
-      144 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_46).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_46)
+    moduleWeight 16 (12, tiles_57_46) =
+      168 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_46).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_46)
 
 theorem w_57_47 :
-    moduleWeight 16 (11, tiles_57_47) =
-      74 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_47).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_47)
+    moduleWeight 16 (12, tiles_57_47) =
+      62 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_47).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_47)
 
 theorem w_57_48 :
-    moduleWeight 16 (11, tiles_57_48) =
-      15 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_48).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_48)
+    moduleWeight 16 (12, tiles_57_48) =
+      723 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_48).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_48)
 
 theorem w_57_49 :
-    moduleWeight 16 (11, tiles_57_49) =
-      3 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_49).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_49)
+    moduleWeight 16 (12, tiles_57_49) =
+      77 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_49).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_49)
 
 theorem w_57_50 :
-    moduleWeight 16 (11, tiles_57_50) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_50).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_50)
+    moduleWeight 16 (12, tiles_57_50) =
+      200 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_50).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_50)
 
 theorem w_57_51 :
-    moduleWeight 16 (11, tiles_57_51) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_51).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_51)
+    moduleWeight 16 (12, tiles_57_51) =
+      278 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_51).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_51)
 
 theorem w_57_52 :
-    moduleWeight 16 (11, tiles_57_52) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_52).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_52)
+    moduleWeight 16 (12, tiles_57_52) =
+      885 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_52).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_52)
 
 theorem w_57_53 :
-    moduleWeight 16 (11, tiles_57_53) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_53).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_53)
+    moduleWeight 16 (12, tiles_57_53) =
+      972 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_53).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_53)
 
 theorem w_57_54 :
-    moduleWeight 16 (11, tiles_57_54) =
-      766 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_54).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_54)
+    moduleWeight 16 (12, tiles_57_54) =
+      3727 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_54).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_54)
 
 theorem w_57_55 :
-    moduleWeight 16 (11, tiles_57_55) =
-      294 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_55).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_55)
+    moduleWeight 16 (12, tiles_57_55) =
+      256 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_55).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_55)
 
 theorem w_57_56 :
-    moduleWeight 16 (11, tiles_57_56) =
-      2389 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_56).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_56)
+    moduleWeight 16 (12, tiles_57_56) =
+      2240 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_56).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_56)
 
 theorem w_57_57 :
-    moduleWeight 16 (11, tiles_57_57) =
-      80 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_57).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_57)
+    moduleWeight 16 (12, tiles_57_57) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_57).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_57)
 
 theorem w_57_58 :
-    moduleWeight 16 (11, tiles_57_58) =
-      784 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_58).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_58)
+    moduleWeight 16 (12, tiles_57_58) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_58).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_58)
 
 theorem w_57_59 :
-    moduleWeight 16 (11, tiles_57_59) =
-      915 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_59).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_59)
+    moduleWeight 16 (12, tiles_57_59) =
+      4285 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_59).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_59)
 
 theorem w_57_60 :
-    moduleWeight 16 (11, tiles_57_60) =
-      478 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_60).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_60)
+    moduleWeight 16 (12, tiles_57_60) =
+      312 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_60).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_60)
 
 theorem w_57_61 :
-    moduleWeight 16 (11, tiles_57_61) =
-      384 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_61).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_61)
+    moduleWeight 16 (12, tiles_57_61) =
+      545 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_61).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_61)
 
 theorem w_57_62 :
-    moduleWeight 16 (11, tiles_57_62) =
-      13 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_62).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_62)
+    moduleWeight 16 (12, tiles_57_62) =
+      12 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_62).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_62)
 
 theorem w_57_63 :
-    moduleWeight 16 (11, tiles_57_63) =
-      603 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_63).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_63)
+    moduleWeight 16 (12, tiles_57_63) =
+      2 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_63).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_63)
 
 theorem w_57_64 :
-    moduleWeight 16 (11, tiles_57_64) =
-      1241 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_64).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_64)
+    moduleWeight 16 (12, tiles_57_64) =
+      2496 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_64).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_64)
 
 theorem w_57_65 :
-    moduleWeight 16 (11, tiles_57_65) =
-      208 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_65).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_65)
+    moduleWeight 16 (12, tiles_57_65) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_65).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_65)
 
 theorem w_57_66 :
-    moduleWeight 16 (11, tiles_57_66) =
-      384 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_66).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_66)
+    moduleWeight 16 (12, tiles_57_66) =
+      12 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_66).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_66)
 
 theorem w_57_67 :
-    moduleWeight 16 (11, tiles_57_67) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_67).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_67)
+    moduleWeight 16 (12, tiles_57_67) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_67).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_67)
 
 theorem w_57_68 :
-    moduleWeight 16 (11, tiles_57_68) =
-      1914 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_68).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_68)
+    moduleWeight 16 (12, tiles_57_68) =
+      43 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_68).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_68)
 
 theorem w_57_69 :
-    moduleWeight 16 (11, tiles_57_69) =
-      227 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_69).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_69)
+    moduleWeight 16 (12, tiles_57_69) =
+      256 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_69).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_69)
 
 theorem w_57_70 :
-    moduleWeight 16 (11, tiles_57_70) =
-      141 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_70).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_70)
+    moduleWeight 16 (12, tiles_57_70) =
+      195 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_70).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_70)
 
 theorem w_57_71 :
-    moduleWeight 16 (11, tiles_57_71) =
-      888 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_71).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_71)
+    moduleWeight 16 (12, tiles_57_71) =
+      13 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_71).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_71)
 
 theorem w_57_72 :
-    moduleWeight 16 (11, tiles_57_72) =
-      432 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_72).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_72)
+    moduleWeight 16 (12, tiles_57_72) =
+      400 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_72).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_72)
 
 theorem w_57_73 :
-    moduleWeight 16 (11, tiles_57_73) =
-      704 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_73).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_73)
+    moduleWeight 16 (12, tiles_57_73) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_73).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_73)
 
 theorem w_57_74 :
-    moduleWeight 16 (11, tiles_57_74) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_74).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_74)
+    moduleWeight 16 (12, tiles_57_74) =
+      768 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_74).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_74)
 
 theorem w_57_75 :
-    moduleWeight 16 (11, tiles_57_75) =
-      246 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_75).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_75)
+    moduleWeight 16 (12, tiles_57_75) =
+      704 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_75).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_75)
 
 theorem w_57_76 :
-    moduleWeight 16 (11, tiles_57_76) =
-      339 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_76).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_76)
+    moduleWeight 16 (12, tiles_57_76) =
+      512 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_76).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_76)
 
 theorem w_57_77 :
-    moduleWeight 16 (11, tiles_57_77) =
-      623 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_77).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_77)
+    moduleWeight 16 (12, tiles_57_77) =
+      320 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_77).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_77)
 
 theorem w_57_78 :
-    moduleWeight 16 (11, tiles_57_78) =
-      2247 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_78).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_78)
+    moduleWeight 16 (12, tiles_57_78) =
+      4087 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_78).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_78)
 
 theorem w_57_79 :
-    moduleWeight 16 (11, tiles_57_79) =
-      1152 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_79).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_79)
+    moduleWeight 16 (12, tiles_57_79) =
+      4024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_79).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_79)
 
 theorem w_57_80 :
-    moduleWeight 16 (11, tiles_57_80) =
-      864 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_80).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_80)
+    moduleWeight 16 (12, tiles_57_80) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_80).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_80)
 
 theorem w_57_81 :
-    moduleWeight 16 (11, tiles_57_81) =
-      96 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_81).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_81)
+    moduleWeight 16 (12, tiles_57_81) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_81).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_81)
 
 theorem w_57_82 :
-    moduleWeight 16 (11, tiles_57_82) =
-      428 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_82).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_82)
+    moduleWeight 16 (12, tiles_57_82) =
+      68 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_82).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_82)
 
 theorem w_57_83 :
-    moduleWeight 16 (11, tiles_57_83) =
-      308 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_83).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_83)
+    moduleWeight 16 (12, tiles_57_83) =
+      316 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_83).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_83)
 
 theorem w_57_84 :
-    moduleWeight 16 (11, tiles_57_84) =
-      1371 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_84).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_84)
+    moduleWeight 16 (12, tiles_57_84) =
+      3687 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_84).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_84)
 
 theorem w_57_85 :
-    moduleWeight 16 (11, tiles_57_85) =
-      568 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_85).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_85)
+    moduleWeight 16 (12, tiles_57_85) =
+      1280 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_85).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_85)
 
 theorem w_57_86 :
-    moduleWeight 16 (11, tiles_57_86) =
-      68 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_86).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_86)
+    moduleWeight 16 (12, tiles_57_86) =
+      768 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_86).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_86)
 
 theorem w_57_87 :
-    moduleWeight 16 (11, tiles_57_87) =
-      11 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_87).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_87)
+    moduleWeight 16 (12, tiles_57_87) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_87).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_87)
 
 theorem w_57_88 :
-    moduleWeight 16 (11, tiles_57_88) =
-      1902 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_88).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_88)
+    moduleWeight 16 (12, tiles_57_88) =
+      576 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_88).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_88)
 
 theorem w_57_89 :
-    moduleWeight 16 (11, tiles_57_89) =
-      458 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_89).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_89)
+    moduleWeight 16 (12, tiles_57_89) =
+      296 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_89).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_89)
 
 theorem w_57_90 :
-    moduleWeight 16 (11, tiles_57_90) =
-      62 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_90).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_90)
+    moduleWeight 16 (12, tiles_57_90) =
+      60 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_90).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_90)
 
 theorem w_57_91 :
-    moduleWeight 16 (11, tiles_57_91) =
-      81 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_91).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_91)
+    moduleWeight 16 (12, tiles_57_91) =
+      12 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_91).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_91)
 
 theorem w_57_92 :
-    moduleWeight 16 (11, tiles_57_92) =
-      148 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_92).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_92)
+    moduleWeight 16 (12, tiles_57_92) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_92).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_92)
 
 theorem w_57_93 :
-    moduleWeight 16 (11, tiles_57_93) =
-      569 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_93).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_93)
+    moduleWeight 16 (12, tiles_57_93) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_93).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_93)
 
 theorem w_57_94 :
-    moduleWeight 16 (11, tiles_57_94) =
-      218 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_94).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_94)
+    moduleWeight 16 (12, tiles_57_94) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_94).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_94)
 
 theorem w_57_95 :
-    moduleWeight 16 (11, tiles_57_95) =
-      458 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_95).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_95)
+    moduleWeight 16 (12, tiles_57_95) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_95).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_95)
 
 theorem w_57_96 :
-    moduleWeight 16 (11, tiles_57_96) =
-      418 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_96).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_96)
+    moduleWeight 16 (12, tiles_57_96) =
+      484 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_96).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_96)
 
 theorem w_57_97 :
-    moduleWeight 16 (11, tiles_57_97) =
-      211 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_97).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_97)
+    moduleWeight 16 (12, tiles_57_97) =
+      18 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_97).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_97)
 
 theorem w_57_98 :
-    moduleWeight 16 (11, tiles_57_98) =
-      462 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_98).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_98)
+    moduleWeight 16 (12, tiles_57_98) =
+      362 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_98).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_98)
 
 theorem w_57_99 :
-    moduleWeight 16 (11, tiles_57_99) =
-      96 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_99).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_99)
+    moduleWeight 16 (12, tiles_57_99) =
+      1508 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_99).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_99)
 
 theorem w_57_100 :
-    moduleWeight 16 (11, tiles_57_100) =
-      250 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_100).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_100)
+    moduleWeight 16 (12, tiles_57_100) =
+      59 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_100).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_100)
 
 theorem w_57_101 :
-    moduleWeight 16 (11, tiles_57_101) =
-      896 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_101).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_101)
+    moduleWeight 16 (12, tiles_57_101) =
+      34 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_101).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_101)
 
 theorem w_57_102 :
-    moduleWeight 16 (11, tiles_57_102) =
-      320 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_102).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_102)
+    moduleWeight 16 (12, tiles_57_102) =
+      42 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_102).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_102)
 
 theorem w_57_103 :
-    moduleWeight 16 (11, tiles_57_103) =
-      2024 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_103).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_103)
+    moduleWeight 16 (12, tiles_57_103) =
+      19 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_103).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_103)
 
 theorem w_57_104 :
-    moduleWeight 16 (11, tiles_57_104) =
-      1696 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_104).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_104)
+    moduleWeight 16 (12, tiles_57_104) =
+      921 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_104).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_104)
 
 theorem w_57_105 :
-    moduleWeight 16 (11, tiles_57_105) =
-      588 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_105).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_105)
+    moduleWeight 16 (12, tiles_57_105) =
+      152 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_105).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_105)
 
 theorem w_57_106 :
-    moduleWeight 16 (11, tiles_57_106) =
-      186 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_106).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_106)
+    moduleWeight 16 (12, tiles_57_106) =
+      91 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_106).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_106)
 
 theorem w_57_107 :
-    moduleWeight 16 (11, tiles_57_107) =
-      325 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_107).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_107)
+    moduleWeight 16 (12, tiles_57_107) =
+      536 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_107).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_107)
 
 theorem w_57_108 :
-    moduleWeight 16 (11, tiles_57_108) =
-      20 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_108).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_108)
+    moduleWeight 16 (12, tiles_57_108) =
+      67 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_108).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_108)
 
 theorem w_57_109 :
-    moduleWeight 16 (11, tiles_57_109) =
-      77 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_109).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_109)
+    moduleWeight 16 (12, tiles_57_109) =
+      110 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_109).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_109)
 
 theorem w_57_110 :
-    moduleWeight 16 (11, tiles_57_110) =
-      146 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_110).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_110)
+    moduleWeight 16 (12, tiles_57_110) =
+      176 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_110).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_110)
 
 theorem w_57_111 :
-    moduleWeight 16 (11, tiles_57_111) =
-      129 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_111).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_111)
+    moduleWeight 16 (12, tiles_57_111) =
+      17 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_111).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_111)
 
 theorem w_57_112 :
-    moduleWeight 16 (11, tiles_57_112) =
-      177 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_112).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_112)
+    moduleWeight 16 (12, tiles_57_112) =
+      23 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_112).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_112)
 
 theorem w_57_113 :
-    moduleWeight 16 (11, tiles_57_113) =
-      552 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_113).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_113)
+    moduleWeight 16 (12, tiles_57_113) =
+      110 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_113).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_113)
 
 theorem w_57_114 :
-    moduleWeight 16 (11, tiles_57_114) =
-      427 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_114).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_114)
+    moduleWeight 16 (12, tiles_57_114) =
+      2422 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_114).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_114)
 
 theorem w_57_115 :
-    moduleWeight 16 (11, tiles_57_115) =
-      35 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_115).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_115)
+    moduleWeight 16 (12, tiles_57_115) =
+      697 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_115).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_115)
 
 theorem w_57_116 :
-    moduleWeight 16 (11, tiles_57_116) =
-      863 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_116).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_116)
+    moduleWeight 16 (12, tiles_57_116) =
+      2982 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_116).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_116)
 
 theorem w_57_117 :
-    moduleWeight 16 (11, tiles_57_117) =
-      649 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_117).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_117)
+    moduleWeight 16 (12, tiles_57_117) =
+      960 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_117).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_117)
 
 theorem w_57_118 :
-    moduleWeight 16 (11, tiles_57_118) =
-      554 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_118).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_118)
+    moduleWeight 16 (12, tiles_57_118) =
+      256 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_118).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_118)
 
 theorem w_57_119 :
-    moduleWeight 16 (11, tiles_57_119) =
-      26 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_119).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_119)
+    moduleWeight 16 (12, tiles_57_119) =
+      3125 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_119).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_119)
 
 theorem w_57_120 :
-    moduleWeight 16 (11, tiles_57_120) =
-      47 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_120).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_120)
+    moduleWeight 16 (12, tiles_57_120) =
+      176 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_120).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_120)
 
 theorem w_57_121 :
-    moduleWeight 16 (11, tiles_57_121) =
-      28 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_121).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_121)
+    moduleWeight 16 (12, tiles_57_121) =
+      288 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_121).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_121)
 
 theorem w_57_122 :
-    moduleWeight 16 (11, tiles_57_122) =
-      872 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_122).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_122)
+    moduleWeight 16 (12, tiles_57_122) =
+      934 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_122).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_122)
 
 theorem w_57_123 :
-    moduleWeight 16 (11, tiles_57_123) =
-      196 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_123).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_123)
+    moduleWeight 16 (12, tiles_57_123) =
+      179 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_123).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_123)
 
 theorem w_57_124 :
-    moduleWeight 16 (11, tiles_57_124) =
-      37 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_124).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_124)
+    moduleWeight 16 (12, tiles_57_124) =
+      1026 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_124).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_124)
 
 theorem w_57_125 :
-    moduleWeight 16 (11, tiles_57_125) =
-      1827 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_125).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_125)
+    moduleWeight 16 (12, tiles_57_125) =
+      360 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_125).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_125)
 
 theorem w_57_126 :
-    moduleWeight 16 (11, tiles_57_126) =
-      485 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_126).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_126)
+    moduleWeight 16 (12, tiles_57_126) =
+      528 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_126).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_126)
 
 theorem w_57_127 :
-    moduleWeight 16 (11, tiles_57_127) =
-      115 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_127).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_127)
+    moduleWeight 16 (12, tiles_57_127) =
+      2 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_127).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_127)
 
 theorem w_57_128 :
-    moduleWeight 16 (11, tiles_57_128) =
-      111 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_128).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_128)
+    moduleWeight 16 (12, tiles_57_128) =
+      1220 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_128).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_128)
 
 theorem w_57_129 :
-    moduleWeight 16 (11, tiles_57_129) =
-      226 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_129).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_129)
+    moduleWeight 16 (12, tiles_57_129) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_129).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_129)
 
 theorem w_57_130 :
-    moduleWeight 16 (11, tiles_57_130) =
-      102 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_130).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_130)
+    moduleWeight 16 (12, tiles_57_130) =
+      139 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_130).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_130)
 
 theorem w_57_131 :
-    moduleWeight 16 (11, tiles_57_131) =
-      351 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_131).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_131)
+    moduleWeight 16 (12, tiles_57_131) =
+      22 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_131).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_131)
 
 theorem w_57_132 :
-    moduleWeight 16 (11, tiles_57_132) =
-      11 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_132).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_132)
+    moduleWeight 16 (12, tiles_57_132) =
+      1173 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_132).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_132)
 
 theorem w_57_133 :
-    moduleWeight 16 (11, tiles_57_133) =
-      103 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_133).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_133)
+    moduleWeight 16 (12, tiles_57_133) =
+      23 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_133).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_133)
 
 theorem w_57_134 :
-    moduleWeight 16 (11, tiles_57_134) =
-      70 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_134).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_134)
+    moduleWeight 16 (12, tiles_57_134) =
+      9 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_134).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_134)
 
 theorem w_57_135 :
-    moduleWeight 16 (11, tiles_57_135) =
-      276 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_135).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_135)
+    moduleWeight 16 (12, tiles_57_135) =
+      260 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_135).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_135)
 
 theorem w_57_136 :
-    moduleWeight 16 (11, tiles_57_136) =
-      212 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_136).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_136)
+    moduleWeight 16 (12, tiles_57_136) =
+      1903 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_136).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_136)
 
 theorem w_57_137 :
-    moduleWeight 16 (11, tiles_57_137) =
-      590 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_137).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_137)
+    moduleWeight 16 (12, tiles_57_137) =
+      275 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_137).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_137)
 
 theorem w_57_138 :
-    moduleWeight 16 (11, tiles_57_138) =
-      110 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_57_138).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_57_138)
+    moduleWeight 16 (12, tiles_57_138) =
+      183 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_138).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_138)
+
+theorem w_57_139 :
+    moduleWeight 16 (12, tiles_57_139) =
+      4258 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_139).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_139)
+
+theorem w_57_140 :
+    moduleWeight 16 (12, tiles_57_140) =
+      832 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_140).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_140)
+
+theorem w_57_141 :
+    moduleWeight 16 (12, tiles_57_141) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_141).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_141)
+
+theorem w_57_142 :
+    moduleWeight 16 (12, tiles_57_142) =
+      1536 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_142).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_142)
+
+theorem w_57_143 :
+    moduleWeight 16 (12, tiles_57_143) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_143).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_143)
+
+theorem w_57_144 :
+    moduleWeight 16 (12, tiles_57_144) =
+      885 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_144).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_144)
+
+theorem w_57_145 :
+    moduleWeight 16 (12, tiles_57_145) =
+      1205 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_145).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_145)
+
+theorem w_57_146 :
+    moduleWeight 16 (12, tiles_57_146) =
+      209 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_146).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_146)
+
+theorem w_57_147 :
+    moduleWeight 16 (12, tiles_57_147) =
+      43 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_147).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_147)
+
+theorem w_57_148 :
+    moduleWeight 16 (12, tiles_57_148) =
+      267 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_148).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_148)
+
+theorem w_57_149 :
+    moduleWeight 16 (12, tiles_57_149) =
+      141 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_149).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_149)
+
+theorem w_57_150 :
+    moduleWeight 16 (12, tiles_57_150) =
+      9 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_150).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_150)
+
+theorem w_57_151 :
+    moduleWeight 16 (12, tiles_57_151) =
+      2099 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_151).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_151)
+
+theorem w_57_152 :
+    moduleWeight 16 (12, tiles_57_152) =
+      955 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_152).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_152)
+
+theorem w_57_153 :
+    moduleWeight 16 (12, tiles_57_153) =
+      1208 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_153).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_153)
+
+theorem w_57_154 :
+    moduleWeight 16 (12, tiles_57_154) =
+      295 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_154).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_154)
+
+theorem w_57_155 :
+    moduleWeight 16 (12, tiles_57_155) =
+      88 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_155).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_155)
+
+theorem w_57_156 :
+    moduleWeight 16 (12, tiles_57_156) =
+      109 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_156).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_156)
+
+theorem w_57_157 :
+    moduleWeight 16 (12, tiles_57_157) =
+      398 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_157).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_157)
+
+theorem w_57_158 :
+    moduleWeight 16 (12, tiles_57_158) =
+      220 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_158).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_158)
+
+theorem w_57_159 :
+    moduleWeight 16 (12, tiles_57_159) =
+      209 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_159).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_159)
+
+theorem w_57_160 :
+    moduleWeight 16 (12, tiles_57_160) =
+      15 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_160).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_160)
+
+theorem w_57_161 :
+    moduleWeight 16 (12, tiles_57_161) =
+      25 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_161).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_161)
+
+theorem w_57_162 :
+    moduleWeight 16 (12, tiles_57_162) =
+      392 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_162).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_162)
+
+theorem w_57_163 :
+    moduleWeight 16 (12, tiles_57_163) =
+      514 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_163).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_163)
+
+theorem w_57_164 :
+    moduleWeight 16 (12, tiles_57_164) =
+      90 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_164).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_164)
+
+theorem w_57_165 :
+    moduleWeight 16 (12, tiles_57_165) =
+      1462 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_165).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_165)
+
+theorem w_57_166 :
+    moduleWeight 16 (12, tiles_57_166) =
+      1728 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_166).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_166)
+
+theorem w_57_167 :
+    moduleWeight 16 (12, tiles_57_167) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_167).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_167)
+
+theorem w_57_168 :
+    moduleWeight 16 (12, tiles_57_168) =
+      2816 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_168).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_168)
+
+theorem w_57_169 :
+    moduleWeight 16 (12, tiles_57_169) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_169).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_169)
+
+theorem w_57_170 :
+    moduleWeight 16 (12, tiles_57_170) =
+      399 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_170).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_170)
+
+theorem w_57_171 :
+    moduleWeight 16 (12, tiles_57_171) =
+      268 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_171).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_171)
+
+theorem w_57_172 :
+    moduleWeight 16 (12, tiles_57_172) =
+      67 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_172).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_172)
+
+theorem w_57_173 :
+    moduleWeight 16 (12, tiles_57_173) =
+      163 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_173).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_173)
+
+theorem w_57_174 :
+    moduleWeight 16 (12, tiles_57_174) =
+      44 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_174).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_174)
+
+theorem w_57_175 :
+    moduleWeight 16 (12, tiles_57_175) =
+      63 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_175).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_175)
+
+theorem w_57_176 :
+    moduleWeight 16 (12, tiles_57_176) =
+      13 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_176).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_176)
+
+theorem w_57_177 :
+    moduleWeight 16 (12, tiles_57_177) =
+      79 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_177).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_177)
+
+theorem w_57_178 :
+    moduleWeight 16 (12, tiles_57_178) =
+      71 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_178).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_178)
+
+theorem w_57_179 :
+    moduleWeight 16 (12, tiles_57_179) =
+      313 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_179).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_179)
+
+theorem w_57_180 :
+    moduleWeight 16 (12, tiles_57_180) =
+      130 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_180).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_180)
+
+theorem w_57_181 :
+    moduleWeight 16 (12, tiles_57_181) =
+      709 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_181).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_181)
+
+theorem w_57_182 :
+    moduleWeight 16 (12, tiles_57_182) =
+      323 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_182).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_182)
+
+theorem w_57_183 :
+    moduleWeight 16 (12, tiles_57_183) =
+      360 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_183).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_183)
+
+theorem w_57_184 :
+    moduleWeight 16 (12, tiles_57_184) =
+      449 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_184).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_184)
+
+theorem w_57_185 :
+    moduleWeight 16 (12, tiles_57_185) =
+      101 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_185).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_185)
+
+theorem w_57_186 :
+    moduleWeight 16 (12, tiles_57_186) =
+      1123 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_186).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_186)
+
+theorem w_57_187 :
+    moduleWeight 16 (12, tiles_57_187) =
+      45 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_187).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_187)
+
+theorem w_57_188 :
+    moduleWeight 16 (12, tiles_57_188) =
+      1383 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_188).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_188)
+
+theorem w_57_189 :
+    moduleWeight 16 (12, tiles_57_189) =
+      1707 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_189).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_189)
+
+theorem w_57_190 :
+    moduleWeight 16 (12, tiles_57_190) =
+      3944 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_190).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_190)
+
+theorem w_57_191 :
+    moduleWeight 16 (12, tiles_57_191) =
+      576 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_191).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_191)
+
+theorem w_57_192 :
+    moduleWeight 16 (12, tiles_57_192) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_192).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_192)
+
+theorem w_57_193 :
+    moduleWeight 16 (12, tiles_57_193) =
+      3456 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_193).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_193)
+
+theorem w_57_194 :
+    moduleWeight 16 (12, tiles_57_194) =
+      384 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_194).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_194)
+
+theorem w_57_195 :
+    moduleWeight 16 (12, tiles_57_195) =
+      576 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_195).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_195)
+
+theorem w_57_196 :
+    moduleWeight 16 (12, tiles_57_196) =
+      50 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_196).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_196)
+
+theorem w_57_197 :
+    moduleWeight 16 (12, tiles_57_197) =
+      431 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_197).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_197)
+
+theorem w_57_198 :
+    moduleWeight 16 (12, tiles_57_198) =
+      63 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_198).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_198)
+
+theorem w_57_199 :
+    moduleWeight 16 (12, tiles_57_199) =
+      191 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_199).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_199)
+
+theorem w_57_200 :
+    moduleWeight 16 (12, tiles_57_200) =
+      39 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_200).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_200)
+
+theorem w_57_201 :
+    moduleWeight 16 (12, tiles_57_201) =
+      24 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_201).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_201)
+
+theorem w_57_202 :
+    moduleWeight 16 (12, tiles_57_202) =
+      348 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_202).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_202)
+
+theorem w_57_203 :
+    moduleWeight 16 (12, tiles_57_203) =
+      3239 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_203).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_203)
+
+theorem w_57_204 :
+    moduleWeight 16 (12, tiles_57_204) =
+      130 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_204).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_204)
+
+theorem w_57_205 :
+    moduleWeight 16 (12, tiles_57_205) =
+      43 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_205).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_205)
+
+theorem w_57_206 :
+    moduleWeight 16 (12, tiles_57_206) =
+      238 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_206).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_206)
+
+theorem w_57_207 :
+    moduleWeight 16 (12, tiles_57_207) =
+      40 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_207).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_207)
+
+theorem w_57_208 :
+    moduleWeight 16 (12, tiles_57_208) =
+      6 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_208).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_208)
+
+theorem w_57_209 :
+    moduleWeight 16 (12, tiles_57_209) =
+      404 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_209).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_209)
+
+theorem w_57_210 :
+    moduleWeight 16 (12, tiles_57_210) =
+      121 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_210).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_210)
+
+theorem w_57_211 :
+    moduleWeight 16 (12, tiles_57_211) =
+      942 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_211).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_211)
+
+theorem w_57_212 :
+    moduleWeight 16 (12, tiles_57_212) =
+      341 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_212).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_212)
+
+theorem w_57_213 :
+    moduleWeight 16 (12, tiles_57_213) =
+      599 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_213).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_213)
+
+theorem w_57_214 :
+    moduleWeight 16 (12, tiles_57_214) =
+      13 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_214).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_214)
+
+theorem w_57_215 :
+    moduleWeight 16 (12, tiles_57_215) =
+      477 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_215).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_215)
+
+theorem w_57_216 :
+    moduleWeight 16 (12, tiles_57_216) =
+      51 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_216).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_216)
+
+theorem w_57_217 :
+    moduleWeight 16 (12, tiles_57_217) =
+      385 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_217).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_217)
+
+theorem w_57_218 :
+    moduleWeight 16 (12, tiles_57_218) =
+      4 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_218).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_218)
+
+theorem w_57_219 :
+    moduleWeight 16 (12, tiles_57_219) =
+      13 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_219).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_219)
+
+theorem w_57_220 :
+    moduleWeight 16 (12, tiles_57_220) =
+      3238 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_220).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_220)
+
+theorem w_57_221 :
+    moduleWeight 16 (12, tiles_57_221) =
+      406 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_221).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_221)
+
+theorem w_57_222 :
+    moduleWeight 16 (12, tiles_57_222) =
+      342 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_222).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_222)
+
+theorem w_57_223 :
+    moduleWeight 16 (12, tiles_57_223) =
+      500 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_223).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_223)
+
+theorem w_57_224 :
+    moduleWeight 16 (12, tiles_57_224) =
+      59 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_224).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_224)
+
+theorem w_57_225 :
+    moduleWeight 16 (12, tiles_57_225) =
+      1220 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_225).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_225)
+
+theorem w_57_226 :
+    moduleWeight 16 (12, tiles_57_226) =
+      88 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_226).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_226)
+
+theorem w_57_227 :
+    moduleWeight 16 (12, tiles_57_227) =
+      14 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_227).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_227)
+
+theorem w_57_228 :
+    moduleWeight 16 (12, tiles_57_228) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_228).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_228)
+
+theorem w_57_229 :
+    moduleWeight 16 (12, tiles_57_229) =
+      408 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_229).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_229)
+
+theorem w_57_230 :
+    moduleWeight 16 (12, tiles_57_230) =
+      430 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_230).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_230)
+
+theorem w_57_231 :
+    moduleWeight 16 (12, tiles_57_231) =
+      3 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_231).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_231)
+
+theorem w_57_232 :
+    moduleWeight 16 (12, tiles_57_232) =
+      34 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_232).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_232)
+
+theorem w_57_233 :
+    moduleWeight 16 (12, tiles_57_233) =
+      224 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_233).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_233)
+
+theorem w_57_234 :
+    moduleWeight 16 (12, tiles_57_234) =
+      927 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_234).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_234)
+
+theorem w_57_235 :
+    moduleWeight 16 (12, tiles_57_235) =
+      225 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_235).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_235)
+
+theorem w_57_236 :
+    moduleWeight 16 (12, tiles_57_236) =
+      123 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_236).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_236)
+
+theorem w_57_237 :
+    moduleWeight 16 (12, tiles_57_237) =
+      73 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_237).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_237)
+
+theorem w_57_238 :
+    moduleWeight 16 (12, tiles_57_238) =
+      143 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_238).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_238)
+
+theorem w_57_239 :
+    moduleWeight 16 (12, tiles_57_239) =
+      58 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_239).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_239)
+
+theorem w_57_240 :
+    moduleWeight 16 (12, tiles_57_240) =
+      111 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_240).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_240)
+
+theorem w_57_241 :
+    moduleWeight 16 (12, tiles_57_241) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_241).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_241)
+
+theorem w_57_242 :
+    moduleWeight 16 (12, tiles_57_242) =
+      70 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_242).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_242)
+
+theorem w_57_243 :
+    moduleWeight 16 (12, tiles_57_243) =
+      42 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_243).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_243)
+
+theorem w_57_244 :
+    moduleWeight 16 (12, tiles_57_244) =
+      289 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_244).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_244)
+
+theorem w_57_245 :
+    moduleWeight 16 (12, tiles_57_245) =
+      85 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_245).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_245)
+
+theorem w_57_246 :
+    moduleWeight 16 (12, tiles_57_246) =
+      1103 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_246).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_246)
+
+theorem w_57_247 :
+    moduleWeight 16 (12, tiles_57_247) =
+      139 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_247).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_247)
+
+theorem w_57_248 :
+    moduleWeight 16 (12, tiles_57_248) =
+      166 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_248).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_248)
+
+theorem w_57_249 :
+    moduleWeight 16 (12, tiles_57_249) =
+      166 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_249).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_249)
+
+theorem w_57_250 :
+    moduleWeight 16 (12, tiles_57_250) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_250).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_250)
+
+theorem w_57_251 :
+    moduleWeight 16 (12, tiles_57_251) =
+      156 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_251).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_251)
+
+theorem w_57_252 :
+    moduleWeight 16 (12, tiles_57_252) =
+      337 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_252).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_252)
+
+theorem w_57_253 :
+    moduleWeight 16 (12, tiles_57_253) =
+      366 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_253).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_253)
+
+theorem w_57_254 :
+    moduleWeight 16 (12, tiles_57_254) =
+      824 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_254).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_254)
+
+theorem w_57_255 :
+    moduleWeight 16 (12, tiles_57_255) =
+      120 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_255).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_255)
+
+theorem w_57_256 :
+    moduleWeight 16 (12, tiles_57_256) =
+      71 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_256).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_256)
+
+theorem w_57_257 :
+    moduleWeight 16 (12, tiles_57_257) =
+      203 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_257).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_257)
+
+theorem w_57_258 :
+    moduleWeight 16 (12, tiles_57_258) =
+      466 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_258).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_258)
+
+theorem w_57_259 :
+    moduleWeight 16 (12, tiles_57_259) =
+      767 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_259).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_259)
+
+theorem w_57_260 :
+    moduleWeight 16 (12, tiles_57_260) =
+      350 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_260).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_260)
+
+theorem w_57_261 :
+    moduleWeight 16 (12, tiles_57_261) =
+      260 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_261).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_261)
+
+theorem w_57_262 :
+    moduleWeight 16 (12, tiles_57_262) =
+      222 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_262).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_262)
+
+theorem w_57_263 :
+    moduleWeight 16 (12, tiles_57_263) =
+      21 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_263).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_263)
+
+theorem w_57_264 :
+    moduleWeight 16 (12, tiles_57_264) =
+      29 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_264).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_264)
+
+theorem w_57_265 :
+    moduleWeight 16 (12, tiles_57_265) =
+      722 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_265).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_265)
+
+theorem w_57_266 :
+    moduleWeight 16 (12, tiles_57_266) =
+      90 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_266).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_266)
+
+theorem w_57_267 :
+    moduleWeight 16 (12, tiles_57_267) =
+      73 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_267).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_267)
+
+theorem w_57_268 :
+    moduleWeight 16 (12, tiles_57_268) =
+      215 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_268).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_268)
+
+theorem w_57_269 :
+    moduleWeight 16 (12, tiles_57_269) =
+      726 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_269).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_269)
+
+theorem w_57_270 :
+    moduleWeight 16 (12, tiles_57_270) =
+      1536 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_270).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_270)
+
+theorem w_57_271 :
+    moduleWeight 16 (12, tiles_57_271) =
+      1973 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_271).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_271)
+
+theorem w_57_272 :
+    moduleWeight 16 (12, tiles_57_272) =
+      1280 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_272).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_272)
+
+theorem w_57_273 :
+    moduleWeight 16 (12, tiles_57_273) =
+      1943 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_273).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_273)
+
+theorem w_57_274 :
+    moduleWeight 16 (12, tiles_57_274) =
+      4167 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_274).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_274)
+
+theorem w_57_275 :
+    moduleWeight 16 (12, tiles_57_275) =
+      179 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_275).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_275)
+
+theorem w_57_276 :
+    moduleWeight 16 (12, tiles_57_276) =
+      101 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_276).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_276)
+
+theorem w_57_277 :
+    moduleWeight 16 (12, tiles_57_277) =
+      1130 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_277).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_277)
+
+theorem w_57_278 :
+    moduleWeight 16 (12, tiles_57_278) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_278).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_278)
+
+theorem w_57_279 :
+    moduleWeight 16 (12, tiles_57_279) =
+      3780 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_279).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_279)
+
+theorem w_57_280 :
+    moduleWeight 16 (12, tiles_57_280) =
+      896 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_280).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_280)
+
+theorem w_57_281 :
+    moduleWeight 16 (12, tiles_57_281) =
+      2016 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_281).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_281)
+
+theorem w_57_282 :
+    moduleWeight 16 (12, tiles_57_282) =
+      284 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_282).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_282)
+
+theorem w_57_283 :
+    moduleWeight 16 (12, tiles_57_283) =
+      633 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_283).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_283)
+
+theorem w_57_284 :
+    moduleWeight 16 (12, tiles_57_284) =
+      106 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_284).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_284)
+
+theorem w_57_285 :
+    moduleWeight 16 (12, tiles_57_285) =
+      183 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_285).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_285)
+
+theorem w_57_286 :
+    moduleWeight 16 (12, tiles_57_286) =
+      355 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_286).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_286)
+
+theorem w_57_287 :
+    moduleWeight 16 (12, tiles_57_287) =
+      145 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_287).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_287)
+
+theorem w_57_288 :
+    moduleWeight 16 (12, tiles_57_288) =
+      626 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_288).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_288)
+
+theorem w_57_289 :
+    moduleWeight 16 (12, tiles_57_289) =
+      37 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_289).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_289)
+
+theorem w_57_290 :
+    moduleWeight 16 (12, tiles_57_290) =
+      17 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_290).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_290)
+
+theorem w_57_291 :
+    moduleWeight 16 (12, tiles_57_291) =
+      278 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_291).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_291)
+
+theorem w_57_292 :
+    moduleWeight 16 (12, tiles_57_292) =
+      648 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_292).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_292)
+
+theorem w_57_293 :
+    moduleWeight 16 (12, tiles_57_293) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_293).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_293)
+
+theorem w_57_294 :
+    moduleWeight 16 (12, tiles_57_294) =
+      30 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_294).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_294)
+
+theorem w_57_295 :
+    moduleWeight 16 (12, tiles_57_295) =
+      80 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_295).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_295)
+
+theorem w_57_296 :
+    moduleWeight 16 (12, tiles_57_296) =
+      113 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_296).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_296)
+
+theorem w_57_297 :
+    moduleWeight 16 (12, tiles_57_297) =
+      273 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_297).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_297)
+
+theorem w_57_298 :
+    moduleWeight 16 (12, tiles_57_298) =
+      124 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_298).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_298)
+
+theorem w_57_299 :
+    moduleWeight 16 (12, tiles_57_299) =
+      33 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_299).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_299)
+
+theorem w_57_300 :
+    moduleWeight 16 (12, tiles_57_300) =
+      213 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_300).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_300)
+
+theorem w_57_301 :
+    moduleWeight 16 (12, tiles_57_301) =
+      16 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_301).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_301)
+
+theorem w_57_302 :
+    moduleWeight 16 (12, tiles_57_302) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_302).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_302)
+
+theorem w_57_303 :
+    moduleWeight 16 (12, tiles_57_303) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_303).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_303)
+
+theorem w_57_304 :
+    moduleWeight 16 (12, tiles_57_304) =
+      77 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_304).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_304)
+
+theorem w_57_305 :
+    moduleWeight 16 (12, tiles_57_305) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_305).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_305)
+
+theorem w_57_306 :
+    moduleWeight 16 (12, tiles_57_306) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_306).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_306)
+
+theorem w_57_307 :
+    moduleWeight 16 (12, tiles_57_307) =
+      173 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_307).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_307)
+
+theorem w_57_308 :
+    moduleWeight 16 (12, tiles_57_308) =
+      72 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_308).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_308)
+
+theorem w_57_309 :
+    moduleWeight 16 (12, tiles_57_309) =
+      46 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_309).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_309)
+
+theorem w_57_310 :
+    moduleWeight 16 (12, tiles_57_310) =
+      113 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_310).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_310)
+
+theorem w_57_311 :
+    moduleWeight 16 (12, tiles_57_311) =
+      691 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_311).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_311)
+
+theorem w_57_312 :
+    moduleWeight 16 (12, tiles_57_312) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_312).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_312)
+
+theorem w_57_313 :
+    moduleWeight 16 (12, tiles_57_313) =
+      356 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_313).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_313)
+
+theorem w_57_314 :
+    moduleWeight 16 (12, tiles_57_314) =
+      485 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_314).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_314)
+
+theorem w_57_315 :
+    moduleWeight 16 (12, tiles_57_315) =
+      1708 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_315).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_315)
+
+theorem w_57_316 :
+    moduleWeight 16 (12, tiles_57_316) =
+      140 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_316).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_316)
+
+theorem w_57_317 :
+    moduleWeight 16 (12, tiles_57_317) =
+      209 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_317).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_317)
+
+theorem w_57_318 :
+    moduleWeight 16 (12, tiles_57_318) =
+      93 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_318).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_318)
+
+theorem w_57_319 :
+    moduleWeight 16 (12, tiles_57_319) =
+      48 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_319).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_319)
+
+theorem w_57_320 :
+    moduleWeight 16 (12, tiles_57_320) =
+      1201 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_320).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_320)
+
+theorem w_57_321 :
+    moduleWeight 16 (12, tiles_57_321) =
+      874 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_321).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_321)
+
+theorem w_57_322 :
+    moduleWeight 16 (12, tiles_57_322) =
+      68 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_322).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_322)
+
+theorem w_57_323 :
+    moduleWeight 16 (12, tiles_57_323) =
+      143 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_323).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_323)
+
+theorem w_57_324 :
+    moduleWeight 16 (12, tiles_57_324) =
+      2596 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_324).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_324)
+
+theorem w_57_325 :
+    moduleWeight 16 (12, tiles_57_325) =
+      331 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_325).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_325)
+
+theorem w_57_326 :
+    moduleWeight 16 (12, tiles_57_326) =
+      291 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_326).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_326)
+
+theorem w_57_327 :
+    moduleWeight 16 (12, tiles_57_327) =
+      174 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_327).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_327)
+
+theorem w_57_328 :
+    moduleWeight 16 (12, tiles_57_328) =
+      404 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_328).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_328)
+
+theorem w_57_329 :
+    moduleWeight 16 (12, tiles_57_329) =
+      329 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_329).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_329)
+
+theorem w_57_330 :
+    moduleWeight 16 (12, tiles_57_330) =
+      51 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_330).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_330)
+
+theorem w_57_331 :
+    moduleWeight 16 (12, tiles_57_331) =
+      73 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_331).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_331)
+
+theorem w_57_332 :
+    moduleWeight 16 (12, tiles_57_332) =
+      19 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_332).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_332)
+
+theorem w_57_333 :
+    moduleWeight 16 (12, tiles_57_333) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_333).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_333)
+
+theorem w_57_334 :
+    moduleWeight 16 (12, tiles_57_334) =
+      20 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_334).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_334)
+
+theorem w_57_335 :
+    moduleWeight 16 (12, tiles_57_335) =
+      458 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_335).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_335)
+
+theorem w_57_336 :
+    moduleWeight 16 (12, tiles_57_336) =
+      150 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_336).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_336)
+
+theorem w_57_337 :
+    moduleWeight 16 (12, tiles_57_337) =
+      491 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_337).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_337)
+
+theorem w_57_338 :
+    moduleWeight 16 (12, tiles_57_338) =
+      254 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_338).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_338)
+
+theorem w_57_339 :
+    moduleWeight 16 (12, tiles_57_339) =
+      1352 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_339).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_339)
+
+theorem w_57_340 :
+    moduleWeight 16 (12, tiles_57_340) =
+      326 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_340).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_340)
+
+theorem w_57_341 :
+    moduleWeight 16 (12, tiles_57_341) =
+      60 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_341).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_341)
+
+theorem w_57_342 :
+    moduleWeight 16 (12, tiles_57_342) =
+      37 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_342).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_342)
+
+theorem w_57_343 :
+    moduleWeight 16 (12, tiles_57_343) =
+      25 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_343).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_343)
+
+theorem w_57_344 :
+    moduleWeight 16 (12, tiles_57_344) =
+      23 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_344).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_344)
+
+theorem w_57_345 :
+    moduleWeight 16 (12, tiles_57_345) =
+      316 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_345).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_345)
+
+theorem w_57_346 :
+    moduleWeight 16 (12, tiles_57_346) =
+      32 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_346).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_346)
+
+theorem w_57_347 :
+    moduleWeight 16 (12, tiles_57_347) =
+      369 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_347).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_347)
+
+theorem w_57_348 :
+    moduleWeight 16 (12, tiles_57_348) =
+      141 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_348).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_348)
+
+theorem w_57_349 :
+    moduleWeight 16 (12, tiles_57_349) =
+      3213 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_349).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_349)
+
+theorem w_57_350 :
+    moduleWeight 16 (12, tiles_57_350) =
+      468 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_350).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_350)
+
+theorem w_57_351 :
+    moduleWeight 16 (12, tiles_57_351) =
+      84 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_351).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_351)
+
+theorem w_57_352 :
+    moduleWeight 16 (12, tiles_57_352) =
+      467 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_352).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_352)
+
+theorem w_57_353 :
+    moduleWeight 16 (12, tiles_57_353) =
+      133 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_353).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_353)
+
+theorem w_57_354 :
+    moduleWeight 16 (12, tiles_57_354) =
+      325 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_354).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_354)
+
+theorem w_57_355 :
+    moduleWeight 16 (12, tiles_57_355) =
+      917 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_355).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_355)
+
+theorem w_57_356 :
+    moduleWeight 16 (12, tiles_57_356) =
+      140 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_356).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_356)
+
+theorem w_57_357 :
+    moduleWeight 16 (12, tiles_57_357) =
+      29 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_357).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_357)
+
+theorem w_57_358 :
+    moduleWeight 16 (12, tiles_57_358) =
+      50 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_358).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_358)
+
+theorem w_57_359 :
+    moduleWeight 16 (12, tiles_57_359) =
+      285 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_359).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_359)
+
+theorem w_57_360 :
+    moduleWeight 16 (12, tiles_57_360) =
+      463 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_360).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_360)
+
+theorem w_57_361 :
+    moduleWeight 16 (12, tiles_57_361) =
+      339 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_361).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_361)
+
+theorem w_57_362 :
+    moduleWeight 16 (12, tiles_57_362) =
+      12 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_362).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_362)
+
+theorem w_57_363 :
+    moduleWeight 16 (12, tiles_57_363) =
+      53 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_363).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_363)
+
+theorem w_57_364 :
+    moduleWeight 16 (12, tiles_57_364) =
+      98 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_364).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_364)
+
+theorem w_57_365 :
+    moduleWeight 16 (12, tiles_57_365) =
+      118 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_365).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_365)
+
+theorem w_57_366 :
+    moduleWeight 16 (12, tiles_57_366) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_366).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_366)
+
+theorem w_57_367 :
+    moduleWeight 16 (12, tiles_57_367) =
+      101 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_367).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_367)
+
+theorem w_57_368 :
+    moduleWeight 16 (12, tiles_57_368) =
+      399 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_368).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_368)
+
+theorem w_57_369 :
+    moduleWeight 16 (12, tiles_57_369) =
+      110 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_369).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_369)
+
+theorem w_57_370 :
+    moduleWeight 16 (12, tiles_57_370) =
+      107 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_370).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_370)
+
+theorem w_57_371 :
+    moduleWeight 16 (12, tiles_57_371) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_371).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_371)
+
+theorem w_57_372 :
+    moduleWeight 16 (12, tiles_57_372) =
+      817 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_372).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_372)
+
+theorem w_57_373 :
+    moduleWeight 16 (12, tiles_57_373) =
+      78 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_373).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_373)
+
+theorem w_57_374 :
+    moduleWeight 16 (12, tiles_57_374) =
+      165 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_374).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_374)
+
+theorem w_57_375 :
+    moduleWeight 16 (12, tiles_57_375) =
+      18 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_375).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_375)
+
+theorem w_57_376 :
+    moduleWeight 16 (12, tiles_57_376) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_376).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_376)
+
+theorem w_57_377 :
+    moduleWeight 16 (12, tiles_57_377) =
+      258 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_377).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_377)
+
+theorem w_57_378 :
+    moduleWeight 16 (12, tiles_57_378) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_378).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_378)
+
+theorem w_57_379 :
+    moduleWeight 16 (12, tiles_57_379) =
+      167 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_379).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_379)
+
+theorem w_57_380 :
+    moduleWeight 16 (12, tiles_57_380) =
+      56 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_380).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_380)
+
+theorem w_57_381 :
+    moduleWeight 16 (12, tiles_57_381) =
+      2 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_381).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_381)
+
+theorem w_57_382 :
+    moduleWeight 16 (12, tiles_57_382) =
+      767 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_382).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_382)
+
+theorem w_57_383 :
+    moduleWeight 16 (12, tiles_57_383) =
+      23 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_383).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_383)
+
+theorem w_57_384 :
+    moduleWeight 16 (12, tiles_57_384) =
+      301 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_384).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_384)
+
+theorem w_57_385 :
+    moduleWeight 16 (12, tiles_57_385) =
+      188 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_385).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_385)
+
+theorem w_57_386 :
+    moduleWeight 16 (12, tiles_57_386) =
+      75 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_386).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_386)
+
+theorem w_57_387 :
+    moduleWeight 16 (12, tiles_57_387) =
+      1222 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_387).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_387)
+
+theorem w_57_388 :
+    moduleWeight 16 (12, tiles_57_388) =
+      605 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_388).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_388)
+
+theorem w_57_389 :
+    moduleWeight 16 (12, tiles_57_389) =
+      52 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_389).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_389)
+
+theorem w_57_390 :
+    moduleWeight 16 (12, tiles_57_390) =
+      90 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_390).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_390)
+
+theorem w_57_391 :
+    moduleWeight 16 (12, tiles_57_391) =
+      10 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_57_391).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_57_391)
 
 theorem w_58_0 :
-    moduleWeight 16 (11, tiles_58_0) =
-      60 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_0)
+    moduleWeight 16 (12, tiles_58_0) =
+      49 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_0)
 
 theorem w_58_1 :
-    moduleWeight 16 (11, tiles_58_1) =
-      234 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_1).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_1)
+    moduleWeight 16 (12, tiles_58_1) =
+      70 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_1).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_1)
 
 theorem w_58_2 :
-    moduleWeight 16 (11, tiles_58_2) =
-      229 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_2).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_2)
+    moduleWeight 16 (12, tiles_58_2) =
+      453 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_2).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_2)
 
 theorem w_58_3 :
-    moduleWeight 16 (11, tiles_58_3) =
-      450 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_3).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_3)
+    moduleWeight 16 (12, tiles_58_3) =
+      81 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_3).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_3)
 
 theorem w_58_4 :
-    moduleWeight 16 (11, tiles_58_4) =
-      204 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_4).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_4)
+    moduleWeight 16 (12, tiles_58_4) =
+      25 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_4).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_4)
 
 theorem w_58_5 :
-    moduleWeight 16 (11, tiles_58_5) =
-      35 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_5).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_5)
+    moduleWeight 16 (12, tiles_58_5) =
+      283 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_5).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_5)
 
 theorem w_58_6 :
-    moduleWeight 16 (11, tiles_58_6) =
-      494 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_6).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_6)
+    moduleWeight 16 (12, tiles_58_6) =
+      336 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_6).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_6)
 
 theorem w_58_7 :
-    moduleWeight 16 (11, tiles_58_7) =
-      467 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_7).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_7)
+    moduleWeight 16 (12, tiles_58_7) =
+      132 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_7).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_7)
 
 theorem w_58_8 :
-    moduleWeight 16 (11, tiles_58_8) =
-      124 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_8).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_8)
+    moduleWeight 16 (12, tiles_58_8) =
+      156 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_8).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_8)
 
 theorem w_58_9 :
-    moduleWeight 16 (11, tiles_58_9) =
-      369 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_9).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_9)
+    moduleWeight 16 (12, tiles_58_9) =
+      240 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_9).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_9)
 
 theorem w_58_10 :
-    moduleWeight 16 (11, tiles_58_10) =
-      354 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_10).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_10)
+    moduleWeight 16 (12, tiles_58_10) =
+      413 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_10).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_10)
 
 theorem w_58_11 :
-    moduleWeight 16 (11, tiles_58_11) =
-      125 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_11).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_11)
+    moduleWeight 16 (12, tiles_58_11) =
+      168 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_11).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_11)
 
 theorem w_58_12 :
-    moduleWeight 16 (11, tiles_58_12) =
-      790 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_12).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_12)
+    moduleWeight 16 (12, tiles_58_12) =
+      807 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_12).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_12)
 
 theorem w_58_13 :
-    moduleWeight 16 (11, tiles_58_13) =
-      267 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_13).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_13)
+    moduleWeight 16 (12, tiles_58_13) =
+      27 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_13).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_13)
 
 theorem w_58_14 :
-    moduleWeight 16 (11, tiles_58_14) =
-      228 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_14).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_14)
+    moduleWeight 16 (12, tiles_58_14) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_14).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_14)
 
 theorem w_58_15 :
-    moduleWeight 16 (11, tiles_58_15) =
-      408 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_15).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_15)
+    moduleWeight 16 (12, tiles_58_15) =
+      784 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_15).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_15)
 
 theorem w_58_16 :
-    moduleWeight 16 (11, tiles_58_16) =
-      229 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_16).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_16)
+    moduleWeight 16 (12, tiles_58_16) =
+      58 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_16).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_16)
 
 theorem w_58_17 :
-    moduleWeight 16 (11, tiles_58_17) =
-      24 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_17).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_17)
+    moduleWeight 16 (12, tiles_58_17) =
+      226 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_17).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_17)
 
 theorem w_58_18 :
-    moduleWeight 16 (11, tiles_58_18) =
-      191 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_18).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_18)
+    moduleWeight 16 (12, tiles_58_18) =
+      270 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_18).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_18)
 
 theorem w_58_19 :
-    moduleWeight 16 (11, tiles_58_19) =
-      184 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_19).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_19)
+    moduleWeight 16 (12, tiles_58_19) =
+      3 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_19).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_19)
 
 theorem w_58_20 :
-    moduleWeight 16 (11, tiles_58_20) =
-      427 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_20).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_20)
+    moduleWeight 16 (12, tiles_58_20) =
+      28 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_20).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_20)
 
 theorem w_58_21 :
-    moduleWeight 16 (11, tiles_58_21) =
-      360 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_21).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_21)
+    moduleWeight 16 (12, tiles_58_21) =
+      497 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_21).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_21)
 
 theorem w_58_22 :
-    moduleWeight 16 (11, tiles_58_22) =
-      373 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_22).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_22)
+    moduleWeight 16 (12, tiles_58_22) =
+      301 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_22).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_22)
 
 theorem w_58_23 :
-    moduleWeight 16 (11, tiles_58_23) =
-      127 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_23).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_23)
+    moduleWeight 16 (12, tiles_58_23) =
+      514 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_23).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_23)
 
 theorem w_58_24 :
-    moduleWeight 16 (11, tiles_58_24) =
-      441 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_24).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_24)
+    moduleWeight 16 (12, tiles_58_24) =
+      255 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_24).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_24)
 
 theorem w_58_25 :
-    moduleWeight 16 (11, tiles_58_25) =
-      162 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_25).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_25)
+    moduleWeight 16 (12, tiles_58_25) =
+      33 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_25).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_25)
 
 theorem w_58_26 :
-    moduleWeight 16 (11, tiles_58_26) =
-      85 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_26).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_26)
+    moduleWeight 16 (12, tiles_58_26) =
+      309 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_26).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_26)
 
 theorem w_58_27 :
-    moduleWeight 16 (11, tiles_58_27) =
-      360 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_27).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_27)
+    moduleWeight 16 (12, tiles_58_27) =
+      255 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_27).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_27)
 
 theorem w_58_28 :
-    moduleWeight 16 (11, tiles_58_28) =
-      166 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_58_28).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_58_28)
+    moduleWeight 16 (12, tiles_58_28) =
+      369 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_28).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_28)
+
+theorem w_58_29 :
+    moduleWeight 16 (12, tiles_58_29) =
+      51 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_29).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_29)
+
+theorem w_58_30 :
+    moduleWeight 16 (12, tiles_58_30) =
+      142 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_30).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_30)
+
+theorem w_58_31 :
+    moduleWeight 16 (12, tiles_58_31) =
+      115 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_31).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_31)
+
+theorem w_58_32 :
+    moduleWeight 16 (12, tiles_58_32) =
+      756 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_32).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_32)
+
+theorem w_58_33 :
+    moduleWeight 16 (12, tiles_58_33) =
+      338 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_33).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_33)
+
+theorem w_58_34 :
+    moduleWeight 16 (12, tiles_58_34) =
+      575 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_34).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_34)
+
+theorem w_58_35 :
+    moduleWeight 16 (12, tiles_58_35) =
+      737 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_35).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_35)
+
+theorem w_58_36 :
+    moduleWeight 16 (12, tiles_58_36) =
+      154 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_36).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_36)
+
+theorem w_58_37 :
+    moduleWeight 16 (12, tiles_58_37) =
+      79 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_37).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_37)
+
+theorem w_58_38 :
+    moduleWeight 16 (12, tiles_58_38) =
+      351 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_38).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_38)
+
+theorem w_58_39 :
+    moduleWeight 16 (12, tiles_58_39) =
+      205 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_39).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_39)
+
+theorem w_58_40 :
+    moduleWeight 16 (12, tiles_58_40) =
+      257 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_40).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_40)
+
+theorem w_58_41 :
+    moduleWeight 16 (12, tiles_58_41) =
+      238 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_41).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_41)
+
+theorem w_58_42 :
+    moduleWeight 16 (12, tiles_58_42) =
+      342 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_42).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_42)
+
+theorem w_58_43 :
+    moduleWeight 16 (12, tiles_58_43) =
+      115 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_43).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_43)
+
+theorem w_58_44 :
+    moduleWeight 16 (12, tiles_58_44) =
+      26 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_44).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_44)
+
+theorem w_58_45 :
+    moduleWeight 16 (12, tiles_58_45) =
+      750 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_45).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_45)
+
+theorem w_58_46 :
+    moduleWeight 16 (12, tiles_58_46) =
+      181 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_46).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_46)
+
+theorem w_58_47 :
+    moduleWeight 16 (12, tiles_58_47) =
+      368 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_47).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_47)
+
+theorem w_58_48 :
+    moduleWeight 16 (12, tiles_58_48) =
+      231 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_48).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_48)
+
+theorem w_58_49 :
+    moduleWeight 16 (12, tiles_58_49) =
+      272 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_49).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_49)
+
+theorem w_58_50 :
+    moduleWeight 16 (12, tiles_58_50) =
+      94 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_50).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_50)
+
+theorem w_58_51 :
+    moduleWeight 16 (12, tiles_58_51) =
+      228 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_51).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_51)
+
+theorem w_58_52 :
+    moduleWeight 16 (12, tiles_58_52) =
+      241 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_52).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_52)
+
+theorem w_58_53 :
+    moduleWeight 16 (12, tiles_58_53) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_53).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_53)
+
+theorem w_58_54 :
+    moduleWeight 16 (12, tiles_58_54) =
+      264 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_54).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_54)
+
+theorem w_58_55 :
+    moduleWeight 16 (12, tiles_58_55) =
+      146 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_55).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_55)
+
+theorem w_58_56 :
+    moduleWeight 16 (12, tiles_58_56) =
+      312 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_56).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_56)
+
+theorem w_58_57 :
+    moduleWeight 16 (12, tiles_58_57) =
+      74 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_57).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_57)
+
+theorem w_58_58 :
+    moduleWeight 16 (12, tiles_58_58) =
+      473 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_58).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_58)
+
+theorem w_58_59 :
+    moduleWeight 16 (12, tiles_58_59) =
+      342 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_59).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_59)
+
+theorem w_58_60 :
+    moduleWeight 16 (12, tiles_58_60) =
+      35 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_60).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_60)
+
+theorem w_58_61 :
+    moduleWeight 16 (12, tiles_58_61) =
+      186 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_61).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_61)
+
+theorem w_58_62 :
+    moduleWeight 16 (12, tiles_58_62) =
+      10 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_62).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_62)
+
+theorem w_58_63 :
+    moduleWeight 16 (12, tiles_58_63) =
+      284 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_63).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_63)
+
+theorem w_58_64 :
+    moduleWeight 16 (12, tiles_58_64) =
+      322 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_64).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_64)
+
+theorem w_58_65 :
+    moduleWeight 16 (12, tiles_58_65) =
+      221 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_65).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_65)
+
+theorem w_58_66 :
+    moduleWeight 16 (12, tiles_58_66) =
+      126 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_66).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_66)
+
+theorem w_58_67 :
+    moduleWeight 16 (12, tiles_58_67) =
+      273 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_67).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_67)
+
+theorem w_58_68 :
+    moduleWeight 16 (12, tiles_58_68) =
+      523 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_68).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_68)
+
+theorem w_58_69 :
+    moduleWeight 16 (12, tiles_58_69) =
+      62 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_69).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_69)
+
+theorem w_58_70 :
+    moduleWeight 16 (12, tiles_58_70) =
+      133 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_70).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_70)
+
+theorem w_58_71 :
+    moduleWeight 16 (12, tiles_58_71) =
+      129 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_71).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_71)
+
+theorem w_58_72 :
+    moduleWeight 16 (12, tiles_58_72) =
+      310 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_72).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_72)
+
+theorem w_58_73 :
+    moduleWeight 16 (12, tiles_58_73) =
+      45 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_73).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_73)
+
+theorem w_58_74 :
+    moduleWeight 16 (12, tiles_58_74) =
+      392 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_74).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_74)
+
+theorem w_58_75 :
+    moduleWeight 16 (12, tiles_58_75) =
+      365 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_75).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_75)
+
+theorem w_58_76 :
+    moduleWeight 16 (12, tiles_58_76) =
+      113 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_76).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_76)
+
+theorem w_58_77 :
+    moduleWeight 16 (12, tiles_58_77) =
+      302 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_77).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_77)
+
+theorem w_58_78 :
+    moduleWeight 16 (12, tiles_58_78) =
+      195 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_78).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_78)
+
+theorem w_58_79 :
+    moduleWeight 16 (12, tiles_58_79) =
+      259 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_79).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_79)
+
+theorem w_58_80 :
+    moduleWeight 16 (12, tiles_58_80) =
+      297 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_80).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_80)
+
+theorem w_58_81 :
+    moduleWeight 16 (12, tiles_58_81) =
+      362 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_81).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_81)
+
+theorem w_58_82 :
+    moduleWeight 16 (12, tiles_58_82) =
+      166 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_82).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_82)
+
+theorem w_58_83 :
+    moduleWeight 16 (12, tiles_58_83) =
+      175 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_83).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_83)
+
+theorem w_58_84 :
+    moduleWeight 16 (12, tiles_58_84) =
+      21 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_58_84).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_58_84)
 
 theorem w_59_0 :
-    moduleWeight 16 (11, tiles_59_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_59_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_59_0)
+    moduleWeight 16 (12, tiles_59_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_59_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_59_0)
 
 theorem w_60_0 :
-    moduleWeight 16 (11, tiles_60_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_60_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_60_0)
+    moduleWeight 16 (12, tiles_60_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_60_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_60_0)
 
 theorem w_61_0 :
-    moduleWeight 16 (11, tiles_61_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_0)
+    moduleWeight 16 (12, tiles_61_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_0)
 
 theorem w_61_1 :
-    moduleWeight 16 (11, tiles_61_1) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_1).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_1)
+    moduleWeight 16 (12, tiles_61_1) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_1).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_1)
 
 theorem w_61_2 :
-    moduleWeight 16 (11, tiles_61_2) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_2).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_2)
+    moduleWeight 16 (12, tiles_61_2) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_2).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_2)
 
 theorem w_61_3 :
-    moduleWeight 16 (11, tiles_61_3) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_3).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_3)
+    moduleWeight 16 (12, tiles_61_3) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_3).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_3)
 
 theorem w_61_4 :
-    moduleWeight 16 (11, tiles_61_4) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_4).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_4)
+    moduleWeight 16 (12, tiles_61_4) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_4).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_4)
 
 theorem w_61_5 :
-    moduleWeight 16 (11, tiles_61_5) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_5).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_5)
+    moduleWeight 16 (12, tiles_61_5) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_5).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_5)
 
 theorem w_61_6 :
-    moduleWeight 16 (11, tiles_61_6) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_6).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_6)
+    moduleWeight 16 (12, tiles_61_6) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_6).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_6)
 
 theorem w_61_7 :
-    moduleWeight 16 (11, tiles_61_7) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_7).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_7)
+    moduleWeight 16 (12, tiles_61_7) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_7).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_7)
 
 theorem w_61_8 :
-    moduleWeight 16 (11, tiles_61_8) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_8).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_8)
+    moduleWeight 16 (12, tiles_61_8) =
+      192 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_8).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_8)
 
 theorem w_61_9 :
-    moduleWeight 16 (11, tiles_61_9) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_9).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_9)
+    moduleWeight 16 (12, tiles_61_9) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_9).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_9)
 
 theorem w_61_10 :
-    moduleWeight 16 (11, tiles_61_10) =
-      96 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_10).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_10)
+    moduleWeight 16 (12, tiles_61_10) =
+      384 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_10).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_10)
 
 theorem w_61_11 :
-    moduleWeight 16 (11, tiles_61_11) =
-      160 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_11).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_11)
+    moduleWeight 16 (12, tiles_61_11) =
+      640 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_11).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_11)
 
 theorem w_61_12 :
-    moduleWeight 16 (11, tiles_61_12) =
-      80 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_12).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_12)
+    moduleWeight 16 (12, tiles_61_12) =
+      320 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_12).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_12)
 
 theorem w_61_13 :
-    moduleWeight 16 (11, tiles_61_13) =
-      128 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_13).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_13)
+    moduleWeight 16 (12, tiles_61_13) =
+      512 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_13).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_13)
 
 theorem w_61_14 :
-    moduleWeight 16 (11, tiles_61_14) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_14).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_14)
+    moduleWeight 16 (12, tiles_61_14) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_14).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_14)
 
 theorem w_61_15 :
-    moduleWeight 16 (11, tiles_61_15) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_15).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_15)
+    moduleWeight 16 (12, tiles_61_15) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_15).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_15)
 
 theorem w_61_16 :
-    moduleWeight 16 (11, tiles_61_16) =
-      352 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_16).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_16)
+    moduleWeight 16 (12, tiles_61_16) =
+      1408 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_16).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_16)
 
 theorem w_61_17 :
-    moduleWeight 16 (11, tiles_61_17) =
-      2030 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_17).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_17)
+    moduleWeight 16 (12, tiles_61_17) =
+      4024 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_17).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_17)
 
 theorem w_61_18 :
-    moduleWeight 16 (11, tiles_61_18) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_18).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_18)
+    moduleWeight 16 (12, tiles_61_18) =
+      4089 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_18).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_18)
 
 theorem w_61_19 :
-    moduleWeight 16 (11, tiles_61_19) =
-      496 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_19).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_19)
+    moduleWeight 16 (12, tiles_61_19) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_19).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_19)
 
 theorem w_61_20 :
-    moduleWeight 16 (11, tiles_61_20) =
-      32 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_20).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_20)
+    moduleWeight 16 (12, tiles_61_20) =
+      1984 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_20).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_20)
 
 theorem w_61_21 :
-    moduleWeight 16 (11, tiles_61_21) =
-      576 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_21).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_21)
+    moduleWeight 16 (12, tiles_61_21) =
+      128 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_21).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_21)
 
 theorem w_61_22 :
-    moduleWeight 16 (11, tiles_61_22) =
-      1502 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_22).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_22)
+    moduleWeight 16 (12, tiles_61_22) =
+      4352 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_22).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_22)
 
 theorem w_61_23 :
-    moduleWeight 16 (11, tiles_61_23) =
-      165 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_23).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_23)
+    moduleWeight 16 (12, tiles_61_23) =
+      196 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_23).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_23)
 
 theorem w_61_24 :
-    moduleWeight 16 (11, tiles_61_24) =
-      188 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_24).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_24)
+    moduleWeight 16 (12, tiles_61_24) =
+      443 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_24).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_24)
 
 theorem w_61_25 :
-    moduleWeight 16 (11, tiles_61_25) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_25).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_25)
+    moduleWeight 16 (12, tiles_61_25) =
+      29 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_25).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_25)
 
 theorem w_61_26 :
-    moduleWeight 16 (11, tiles_61_26) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_26).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_26)
+    moduleWeight 16 (12, tiles_61_26) =
+      136 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_26).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_26)
 
 theorem w_61_27 :
-    moduleWeight 16 (11, tiles_61_27) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_27).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_27)
+    moduleWeight 16 (12, tiles_61_27) =
+      454 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_27).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_27)
 
 theorem w_61_28 :
-    moduleWeight 16 (11, tiles_61_28) =
-      1 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_28).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_28)
+    moduleWeight 16 (12, tiles_61_28) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_28).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_28)
 
 theorem w_61_29 :
-    moduleWeight 16 (11, tiles_61_29) =
-      15 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_29).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_29)
+    moduleWeight 16 (12, tiles_61_29) =
+      89 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_29).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_29)
 
 theorem w_61_30 :
-    moduleWeight 16 (11, tiles_61_30) =
-      73 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_30).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_30)
+    moduleWeight 16 (12, tiles_61_30) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_30).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_30)
 
 theorem w_61_31 :
-    moduleWeight 16 (11, tiles_61_31) =
-      127 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_31).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_31)
+    moduleWeight 16 (12, tiles_61_31) =
+      2561 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_31).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_31)
 
 theorem w_61_32 :
-    moduleWeight 16 (11, tiles_61_32) =
-      480 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_32).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_32)
+    moduleWeight 16 (12, tiles_61_32) =
+      8 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_32).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_32)
 
 theorem w_61_33 :
-    moduleWeight 16 (11, tiles_61_33) =
-      312 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_33).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_33)
+    moduleWeight 16 (12, tiles_61_33) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_33).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_33)
 
 theorem w_61_34 :
-    moduleWeight 16 (11, tiles_61_34) =
-      110 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_34).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_34)
+    moduleWeight 16 (12, tiles_61_34) =
+      532 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_34).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_34)
 
 theorem w_61_35 :
-    moduleWeight 16 (11, tiles_61_35) =
-      496 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_35).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_35)
+    moduleWeight 16 (12, tiles_61_35) =
+      59 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_35).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_35)
 
 theorem w_61_36 :
-    moduleWeight 16 (11, tiles_61_36) =
-      176 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_36).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_36)
+    moduleWeight 16 (12, tiles_61_36) =
+      55 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_36).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_36)
 
 theorem w_61_37 :
-    moduleWeight 16 (11, tiles_61_37) =
-      96 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_37).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_37)
+    moduleWeight 16 (12, tiles_61_37) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_37).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_37)
 
 theorem w_61_38 :
-    moduleWeight 16 (11, tiles_61_38) =
-      640 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_38).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_38)
+    moduleWeight 16 (12, tiles_61_38) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_38).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_38)
 
 theorem w_61_39 :
-    moduleWeight 16 (11, tiles_61_39) =
-      896 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_39).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_39)
+    moduleWeight 16 (12, tiles_61_39) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_39).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_39)
 
 theorem w_61_40 :
-    moduleWeight 16 (11, tiles_61_40) =
-      1929 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_40).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_40)
+    moduleWeight 16 (12, tiles_61_40) =
+      4 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_40).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_40)
 
 theorem w_61_41 :
-    moduleWeight 16 (11, tiles_61_41) =
-      3980 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_41).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_41)
+    moduleWeight 16 (12, tiles_61_41) =
+      60 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_41).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_41)
 
 theorem w_61_42 :
-    moduleWeight 16 (11, tiles_61_42) =
-      10 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_42).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_42)
+    moduleWeight 16 (12, tiles_61_42) =
+      292 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_42).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_42)
 
 theorem w_61_43 :
-    moduleWeight 16 (11, tiles_61_43) =
-      232 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_43).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_43)
+    moduleWeight 16 (12, tiles_61_43) =
+      508 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_43).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_43)
 
 theorem w_61_44 :
-    moduleWeight 16 (11, tiles_61_44) =
-      104 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_44).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_44)
+    moduleWeight 16 (12, tiles_61_44) =
+      1909 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_44).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_44)
 
 theorem w_61_45 :
-    moduleWeight 16 (11, tiles_61_45) =
-      64 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_45).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_45)
+    moduleWeight 16 (12, tiles_61_45) =
+      384 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_45).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_45)
 
 theorem w_61_46 :
-    moduleWeight 16 (11, tiles_61_46) =
-      1085 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_46).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_46)
+    moduleWeight 16 (12, tiles_61_46) =
+      168 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_46).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_46)
 
 theorem w_61_47 :
-    moduleWeight 16 (11, tiles_61_47) =
-      481 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_47).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_47)
+    moduleWeight 16 (12, tiles_61_47) =
+      580 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_47).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_47)
 
 theorem w_61_48 :
-    moduleWeight 16 (11, tiles_61_48) =
-      145 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_48).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_48)
+    moduleWeight 16 (12, tiles_61_48) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_48).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_48)
 
 theorem w_61_49 :
-    moduleWeight 16 (11, tiles_61_49) =
-      137 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_49).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_49)
+    moduleWeight 16 (12, tiles_61_49) =
+      320 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_49).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_49)
 
 theorem w_61_50 :
-    moduleWeight 16 (11, tiles_61_50) =
-      19 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_50).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_50)
+    moduleWeight 16 (12, tiles_61_50) =
+      1984 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_50).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_50)
 
 theorem w_61_51 :
-    moduleWeight 16 (11, tiles_61_51) =
-      224 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_51).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_51)
+    moduleWeight 16 (12, tiles_61_51) =
+      704 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_51).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_51)
 
 theorem w_61_52 :
-    moduleWeight 16 (11, tiles_61_52) =
-      1071 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_52).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_52)
+    moduleWeight 16 (12, tiles_61_52) =
+      384 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_52).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_52)
 
 theorem w_61_53 :
-    moduleWeight 16 (11, tiles_61_53) =
-      736 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_53).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_53)
+    moduleWeight 16 (12, tiles_61_53) =
+      2560 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_53).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_53)
 
 theorem w_61_54 :
-    moduleWeight 16 (11, tiles_61_54) =
-      673 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_54).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_54)
+    moduleWeight 16 (12, tiles_61_54) =
+      3584 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_54).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_54)
 
 theorem w_61_55 :
-    moduleWeight 16 (11, tiles_61_55) =
-      969 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_55).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_55)
+    moduleWeight 16 (12, tiles_61_55) =
+      2635 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_55).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_55)
 
 theorem w_61_56 :
-    moduleWeight 16 (11, tiles_61_56) =
-      713 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_56).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_56)
+    moduleWeight 16 (12, tiles_61_56) =
+      634 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_56).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_56)
 
 theorem w_61_57 :
-    moduleWeight 16 (11, tiles_61_57) =
-      240 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_57).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_57)
+    moduleWeight 16 (12, tiles_61_57) =
+      123 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_57).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_57)
 
 theorem w_61_58 :
-    moduleWeight 16 (11, tiles_61_58) =
-      352 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_58).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_58)
+    moduleWeight 16 (12, tiles_61_58) =
+      2139 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_58).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_58)
 
 theorem w_61_59 :
-    moduleWeight 16 (11, tiles_61_59) =
-      400 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_59).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_59)
+    moduleWeight 16 (12, tiles_61_59) =
+      868 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_59).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_59)
 
 theorem w_61_60 :
-    moduleWeight 16 (11, tiles_61_60) =
-      358 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_60).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_60)
+    moduleWeight 16 (12, tiles_61_60) =
+      876 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_60).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_60)
 
 theorem w_61_61 :
-    moduleWeight 16 (11, tiles_61_61) =
-      529 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_61).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_61)
+    moduleWeight 16 (12, tiles_61_61) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_61).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_61)
 
 theorem w_61_62 :
-    moduleWeight 16 (11, tiles_61_62) =
-      1238 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_62).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_62)
+    moduleWeight 16 (12, tiles_61_62) =
+      4096 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_62).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_62)
 
 theorem w_61_63 :
-    moduleWeight 16 (11, tiles_61_63) =
-      973 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_63).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_63)
+    moduleWeight 16 (12, tiles_61_63) =
+      1951 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_63).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_63)
 
 theorem w_61_64 :
-    moduleWeight 16 (11, tiles_61_64) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_64).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_64)
+    moduleWeight 16 (12, tiles_61_64) =
+      861 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_64).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_64)
 
 theorem w_61_65 :
-    moduleWeight 16 (11, tiles_61_65) =
-      400 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_65).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_65)
+    moduleWeight 16 (12, tiles_61_65) =
+      407 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_65).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_65)
 
 theorem w_61_66 :
-    moduleWeight 16 (11, tiles_61_66) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_66).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_66)
+    moduleWeight 16 (12, tiles_61_66) =
+      1593 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_66).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_66)
 
 theorem w_61_67 :
-    moduleWeight 16 (11, tiles_61_67) =
-      640 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_67).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_67)
+    moduleWeight 16 (12, tiles_61_67) =
+      397 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_67).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_67)
 
 theorem w_61_68 :
-    moduleWeight 16 (11, tiles_61_68) =
-      974 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_68).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_68)
+    moduleWeight 16 (12, tiles_61_68) =
+      53 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_68).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_68)
 
 theorem w_61_69 :
-    moduleWeight 16 (11, tiles_61_69) =
-      60 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_69).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_69)
+    moduleWeight 16 (12, tiles_61_69) =
+      1438 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_69).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_69)
 
 theorem w_61_70 :
-    moduleWeight 16 (11, tiles_61_70) =
-      203 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_70).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_70)
+    moduleWeight 16 (12, tiles_61_70) =
+      190 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_70).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_70)
 
 theorem w_61_71 :
-    moduleWeight 16 (11, tiles_61_71) =
-      131 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_71).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_71)
+    moduleWeight 16 (12, tiles_61_71) =
+      13 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_71).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_71)
 
 theorem w_61_72 :
-    moduleWeight 16 (11, tiles_61_72) =
-      915 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_72).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_72)
+    moduleWeight 16 (12, tiles_61_72) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_72).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_72)
 
 theorem w_61_73 :
-    moduleWeight 16 (11, tiles_61_73) =
-      36 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_73).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_73)
+    moduleWeight 16 (12, tiles_61_73) =
+      814 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_73).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_73)
 
 theorem w_61_74 :
-    moduleWeight 16 (11, tiles_61_74) =
-      163 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_74).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_74)
+    moduleWeight 16 (12, tiles_61_74) =
+      9 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_74).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_74)
 
 theorem w_61_75 :
-    moduleWeight 16 (11, tiles_61_75) =
-      128 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_75).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_75)
+    moduleWeight 16 (12, tiles_61_75) =
+      114 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_75).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_75)
 
 theorem w_61_76 :
-    moduleWeight 16 (11, tiles_61_76) =
-      1792 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_76).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_76)
+    moduleWeight 16 (12, tiles_61_76) =
+      91 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_76).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_76)
 
 theorem w_61_77 :
-    moduleWeight 16 (11, tiles_61_77) =
-      1978 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_77).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_77)
+    moduleWeight 16 (12, tiles_61_77) =
+      31 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_77).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_77)
 
 theorem w_61_78 :
-    moduleWeight 16 (11, tiles_61_78) =
-      872 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_78).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_78)
+    moduleWeight 16 (12, tiles_61_78) =
+      181 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_78).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_78)
 
 theorem w_61_79 :
-    moduleWeight 16 (11, tiles_61_79) =
-      1892 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_79).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_79)
+    moduleWeight 16 (12, tiles_61_79) =
+      3709 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_79).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_79)
 
 theorem w_61_80 :
-    moduleWeight 16 (11, tiles_61_80) =
-      64 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_80).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_80)
+    moduleWeight 16 (12, tiles_61_80) =
+      113 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_80).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_80)
 
 theorem w_61_81 :
-    moduleWeight 16 (11, tiles_61_81) =
-      80 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_81).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_81)
+    moduleWeight 16 (12, tiles_61_81) =
+      334 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_81).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_81)
 
 theorem w_61_82 :
-    moduleWeight 16 (11, tiles_61_82) =
-      344 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_82).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_82)
+    moduleWeight 16 (12, tiles_61_82) =
+      599 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_82).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_82)
 
 theorem w_61_83 :
-    moduleWeight 16 (11, tiles_61_83) =
-      16 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_83).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_83)
+    moduleWeight 16 (12, tiles_61_83) =
+      209 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_83).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_83)
 
 theorem w_61_84 :
-    moduleWeight 16 (11, tiles_61_84) =
-      18 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_84).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_84)
+    moduleWeight 16 (12, tiles_61_84) =
+      440 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_84).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_84)
 
 theorem w_61_85 :
-    moduleWeight 16 (11, tiles_61_85) =
-      883 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_85).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_85)
+    moduleWeight 16 (12, tiles_61_85) =
+      306 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_85).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_85)
 
 theorem w_61_86 :
-    moduleWeight 16 (11, tiles_61_86) =
-      304 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_86).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_86)
+    moduleWeight 16 (12, tiles_61_86) =
+      19 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_86).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_86)
 
 theorem w_61_87 :
-    moduleWeight 16 (11, tiles_61_87) =
-      880 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_87).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_87)
+    moduleWeight 16 (12, tiles_61_87) =
+      36 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_87).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_87)
 
 theorem w_61_88 :
-    moduleWeight 16 (11, tiles_61_88) =
-      1401 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_88).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_88)
+    moduleWeight 16 (12, tiles_61_88) =
+      383 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_88).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_88)
 
 theorem w_61_89 :
-    moduleWeight 16 (11, tiles_61_89) =
-      306 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_89).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_89)
+    moduleWeight 16 (12, tiles_61_89) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_89).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_89)
 
 theorem w_61_90 :
-    moduleWeight 16 (11, tiles_61_90) =
-      3 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_90).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_90)
+    moduleWeight 16 (12, tiles_61_90) =
+      430 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_90).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_90)
 
 theorem w_61_91 :
-    moduleWeight 16 (11, tiles_61_91) =
-      9 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_91).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_91)
+    moduleWeight 16 (12, tiles_61_91) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_91).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_91)
 
 theorem w_61_92 :
-    moduleWeight 16 (11, tiles_61_92) =
-      188 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_92).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_92)
+    moduleWeight 16 (12, tiles_61_92) =
+      28 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_92).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_92)
 
 theorem w_61_93 :
-    moduleWeight 16 (11, tiles_61_93) =
-      53 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_93).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_93)
+    moduleWeight 16 (12, tiles_61_93) =
+      896 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_93).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_93)
 
 theorem w_61_94 :
-    moduleWeight 16 (11, tiles_61_94) =
-      48 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_94).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_94)
+    moduleWeight 16 (12, tiles_61_94) =
+      1200 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_94).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_94)
 
 theorem w_61_95 :
-    moduleWeight 16 (11, tiles_61_95) =
-      138 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_95).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_95)
+    moduleWeight 16 (12, tiles_61_95) =
+      2323 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_95).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_95)
 
 theorem w_61_96 :
-    moduleWeight 16 (11, tiles_61_96) =
-      918 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_96).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_96)
+    moduleWeight 16 (12, tiles_61_96) =
+      297 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_96).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_96)
 
 theorem w_61_97 :
-    moduleWeight 16 (11, tiles_61_97) =
-      29 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_97).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_97)
+    moduleWeight 16 (12, tiles_61_97) =
+      150 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_97).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_97)
 
 theorem w_61_98 :
-    moduleWeight 16 (11, tiles_61_98) =
-      1196 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_98).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_98)
+    moduleWeight 16 (12, tiles_61_98) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_98).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_98)
 
 theorem w_61_99 :
-    moduleWeight 16 (11, tiles_61_99) =
-      297 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_99).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_99)
+    moduleWeight 16 (12, tiles_61_99) =
+      2944 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_99).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_99)
 
 theorem w_61_100 :
-    moduleWeight 16 (11, tiles_61_100) =
-      61 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_100).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_100)
+    moduleWeight 16 (12, tiles_61_100) =
+      921 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_100).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_100)
 
 theorem w_61_101 :
-    moduleWeight 16 (11, tiles_61_101) =
-      1024 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_101).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_101)
+    moduleWeight 16 (12, tiles_61_101) =
+      698 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_101).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_101)
 
 theorem w_61_102 :
-    moduleWeight 16 (11, tiles_61_102) =
-      107 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_102).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_102)
+    moduleWeight 16 (12, tiles_61_102) =
+      48 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_102).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_102)
 
 theorem w_61_103 :
-    moduleWeight 16 (11, tiles_61_103) =
-      259 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_103).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_103)
+    moduleWeight 16 (12, tiles_61_103) =
+      51 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_103).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_103)
 
 theorem w_61_104 :
-    moduleWeight 16 (11, tiles_61_104) =
-      82 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_104).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_104)
+    moduleWeight 16 (12, tiles_61_104) =
+      42 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_104).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_104)
 
 theorem w_61_105 :
-    moduleWeight 16 (11, tiles_61_105) =
-      811 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_105).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_105)
+    moduleWeight 16 (12, tiles_61_105) =
+      204 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_105).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_105)
 
 theorem w_61_106 :
-    moduleWeight 16 (11, tiles_61_106) =
-      74 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_106).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_106)
+    moduleWeight 16 (12, tiles_61_106) =
+      13 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_106).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_106)
 
 theorem w_61_107 :
-    moduleWeight 16 (11, tiles_61_107) =
-      421 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_107).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_107)
+    moduleWeight 16 (12, tiles_61_107) =
+      1015 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_107).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_107)
 
 theorem w_61_108 :
-    moduleWeight 16 (11, tiles_61_108) =
-      28 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_108).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_108)
+    moduleWeight 16 (12, tiles_61_108) =
+      1827 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_108).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_108)
 
 theorem w_61_109 :
-    moduleWeight 16 (11, tiles_61_109) =
-      131 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_109).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_109)
+    moduleWeight 16 (12, tiles_61_109) =
+      417 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_109).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_109)
 
 theorem w_61_110 :
-    moduleWeight 16 (11, tiles_61_110) =
-      154 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_110).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_110)
+    moduleWeight 16 (12, tiles_61_110) =
+      34 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_110).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_110)
 
 theorem w_61_111 :
-    moduleWeight 16 (11, tiles_61_111) =
-      206 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_111).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_111)
+    moduleWeight 16 (12, tiles_61_111) =
+      172 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_111).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_111)
 
 theorem w_61_112 :
-    moduleWeight 16 (11, tiles_61_112) =
-      607 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_112).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_112)
+    moduleWeight 16 (12, tiles_61_112) =
+      258 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_112).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_112)
 
 theorem w_61_113 :
-    moduleWeight 16 (11, tiles_61_113) =
-      273 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_113).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_113)
+    moduleWeight 16 (12, tiles_61_113) =
+      416 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_113).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_113)
 
 theorem w_61_114 :
-    moduleWeight 16 (11, tiles_61_114) =
-      41 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_114).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_114)
+    moduleWeight 16 (12, tiles_61_114) =
+      106 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_114).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_114)
 
 theorem w_61_115 :
-    moduleWeight 16 (11, tiles_61_115) =
-      8 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_115).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_115)
+    moduleWeight 16 (12, tiles_61_115) =
+      951 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_115).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_115)
 
 theorem w_61_116 :
-    moduleWeight 16 (11, tiles_61_116) =
-      148 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_116).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_116)
+    moduleWeight 16 (12, tiles_61_116) =
+      585 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_116).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_116)
 
 theorem w_61_117 :
-    moduleWeight 16 (11, tiles_61_117) =
-      799 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_117).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_117)
+    moduleWeight 16 (12, tiles_61_117) =
+      960 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_117).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_117)
 
 theorem w_61_118 :
-    moduleWeight 16 (11, tiles_61_118) =
-      1912 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_118).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_118)
+    moduleWeight 16 (12, tiles_61_118) =
+      1408 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_118).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_118)
 
 theorem w_61_119 :
-    moduleWeight 16 (11, tiles_61_119) =
-      893 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_119).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_119)
+    moduleWeight 16 (12, tiles_61_119) =
+      576 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_119).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_119)
 
 theorem w_61_120 :
-    moduleWeight 16 (11, tiles_61_120) =
-      1119 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_120).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_120)
+    moduleWeight 16 (12, tiles_61_120) =
+      976 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_120).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_120)
 
 theorem w_61_121 :
-    moduleWeight 16 (11, tiles_61_121) =
-      283 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_121).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_121)
+    moduleWeight 16 (12, tiles_61_121) =
+      10 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_121).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_121)
 
 theorem w_61_122 :
-    moduleWeight 16 (11, tiles_61_122) =
-      380 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_122).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_122)
+    moduleWeight 16 (12, tiles_61_122) =
+      95 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_122).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_122)
 
 theorem w_61_123 :
-    moduleWeight 16 (11, tiles_61_123) =
-      162 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_123).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_123)
+    moduleWeight 16 (12, tiles_61_123) =
+      97 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_123).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_123)
 
 theorem w_61_124 :
-    moduleWeight 16 (11, tiles_61_124) =
-      468 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_124).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_124)
+    moduleWeight 16 (12, tiles_61_124) =
+      987 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_124).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_124)
 
 theorem w_61_125 :
-    moduleWeight 16 (11, tiles_61_125) =
-      39 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_125).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_125)
+    moduleWeight 16 (12, tiles_61_125) =
+      171 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_125).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_125)
 
 theorem w_61_126 :
-    moduleWeight 16 (11, tiles_61_126) =
-      202 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_126).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_126)
+    moduleWeight 16 (12, tiles_61_126) =
+      1113 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_126).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_126)
 
 theorem w_61_127 :
-    moduleWeight 16 (11, tiles_61_127) =
-      382 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_127).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_127)
+    moduleWeight 16 (12, tiles_61_127) =
+      41 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_127).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_127)
 
 theorem w_61_128 :
-    moduleWeight 16 (11, tiles_61_128) =
-      336 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_128).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_128)
+    moduleWeight 16 (12, tiles_61_128) =
+      67 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_128).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_128)
 
 theorem w_61_129 :
-    moduleWeight 16 (11, tiles_61_129) =
-      581 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_129).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_129)
+    moduleWeight 16 (12, tiles_61_129) =
+      314 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_129).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_129)
 
 theorem w_61_130 :
-    moduleWeight 16 (11, tiles_61_130) =
-      110 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_130).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_130)
+    moduleWeight 16 (12, tiles_61_130) =
+      28 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_130).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_130)
 
 theorem w_61_131 :
-    moduleWeight 16 (11, tiles_61_131) =
-      130 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_131).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_131)
+    moduleWeight 16 (12, tiles_61_131) =
+      451 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_131).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_131)
 
 theorem w_61_132 :
-    moduleWeight 16 (11, tiles_61_132) =
-      855 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_132).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_132)
+    moduleWeight 16 (12, tiles_61_132) =
+      4237 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_132).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_132)
 
 theorem w_61_133 :
-    moduleWeight 16 (11, tiles_61_133) =
-      153 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_133).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_133)
+    moduleWeight 16 (12, tiles_61_133) =
+      1611 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_133).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_133)
 
 theorem w_61_134 :
-    moduleWeight 16 (11, tiles_61_134) =
-      188 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_134).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_134)
+    moduleWeight 16 (12, tiles_61_134) =
+      603 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_134).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_134)
 
 theorem w_61_135 :
-    moduleWeight 16 (11, tiles_61_135) =
-      569 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_135).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_135)
+    moduleWeight 16 (12, tiles_61_135) =
+      137 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_135).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_135)
 
 theorem w_61_136 :
-    moduleWeight 16 (11, tiles_61_136) =
-      167 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_136).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_136)
+    moduleWeight 16 (12, tiles_61_136) =
+      692 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_136).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_136)
 
 theorem w_61_137 :
-    moduleWeight 16 (11, tiles_61_137) =
-      446 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_137).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_137)
+    moduleWeight 16 (12, tiles_61_137) =
+      69 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_137).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_137)
 
 theorem w_61_138 :
-    moduleWeight 16 (11, tiles_61_138) =
-      65 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_138).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_138)
+    moduleWeight 16 (12, tiles_61_138) =
+      174 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_138).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_138)
 
 theorem w_61_139 :
-    moduleWeight 16 (11, tiles_61_139) =
-      23 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_139).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_139)
+    moduleWeight 16 (12, tiles_61_139) =
+      192 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_139).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_139)
 
 theorem w_61_140 :
-    moduleWeight 16 (11, tiles_61_140) =
-      564 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_140).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_140)
+    moduleWeight 16 (12, tiles_61_140) =
+      1600 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_140).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_140)
 
 theorem w_61_141 :
-    moduleWeight 16 (11, tiles_61_141) =
-      180 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_141).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_141)
+    moduleWeight 16 (12, tiles_61_141) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_141).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_141)
 
 theorem w_61_142 :
-    moduleWeight 16 (11, tiles_61_142) =
-      734 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_142).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_142)
+    moduleWeight 16 (12, tiles_61_142) =
+      2560 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_142).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_142)
 
 theorem w_61_143 :
-    moduleWeight 16 (11, tiles_61_143) =
-      206 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_143).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_143)
+    moduleWeight 16 (12, tiles_61_143) =
+      1436 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_143).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_143)
 
 theorem w_61_144 :
-    moduleWeight 16 (11, tiles_61_144) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_144).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_144)
+    moduleWeight 16 (12, tiles_61_144) =
+      65 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_144).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_144)
 
 theorem w_61_145 :
-    moduleWeight 16 (11, tiles_61_145) =
-      620 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_145).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_145)
+    moduleWeight 16 (12, tiles_61_145) =
+      1468 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_145).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_145)
 
 theorem w_61_146 :
-    moduleWeight 16 (11, tiles_61_146) =
-      354 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_146).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_146)
+    moduleWeight 16 (12, tiles_61_146) =
+      256 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_146).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_146)
 
 theorem w_61_147 :
-    moduleWeight 16 (11, tiles_61_147) =
-      607 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_147).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_147)
+    moduleWeight 16 (12, tiles_61_147) =
+      148 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_147).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_147)
 
 theorem w_61_148 :
-    moduleWeight 16 (11, tiles_61_148) =
-      43 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_148).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_148)
+    moduleWeight 16 (12, tiles_61_148) =
+      88 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_148).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_148)
 
 theorem w_61_149 :
-    moduleWeight 16 (11, tiles_61_149) =
-      54 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_149).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_149)
+    moduleWeight 16 (12, tiles_61_149) =
+      27 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_149).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_149)
 
 theorem w_61_150 :
-    moduleWeight 16 (11, tiles_61_150) =
-      468 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_150).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_150)
+    moduleWeight 16 (12, tiles_61_150) =
+      283 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_150).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_150)
 
 theorem w_61_151 :
-    moduleWeight 16 (11, tiles_61_151) =
-      200 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_151).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_151)
+    moduleWeight 16 (12, tiles_61_151) =
+      353 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_151).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_151)
 
 theorem w_61_152 :
-    moduleWeight 16 (11, tiles_61_152) =
-      67 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_152).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_152)
+    moduleWeight 16 (12, tiles_61_152) =
+      14 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_152).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_152)
 
 theorem w_61_153 :
-    moduleWeight 16 (11, tiles_61_153) =
-      655 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_153).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_153)
+    moduleWeight 16 (12, tiles_61_153) =
+      295 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_153).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_153)
 
 theorem w_61_154 :
-    moduleWeight 16 (11, tiles_61_154) =
-      159 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_154).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_154)
+    moduleWeight 16 (12, tiles_61_154) =
+      802 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_154).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_154)
 
 theorem w_61_155 :
-    moduleWeight 16 (11, tiles_61_155) =
-      61 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_155).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_155)
+    moduleWeight 16 (12, tiles_61_155) =
+      114 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_155).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_155)
 
 theorem w_61_156 :
-    moduleWeight 16 (11, tiles_61_156) =
-      266 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_156).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_156)
+    moduleWeight 16 (12, tiles_61_156) =
+      467 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_156).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_156)
 
 theorem w_61_157 :
-    moduleWeight 16 (11, tiles_61_157) =
-      502 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_157).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_157)
+    moduleWeight 16 (12, tiles_61_157) =
+      99 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_157).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_157)
 
 theorem w_61_158 :
-    moduleWeight 16 (11, tiles_61_158) =
-      503 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_158).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_158)
+    moduleWeight 16 (12, tiles_61_158) =
+      380 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_158).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_158)
 
 theorem w_61_159 :
-    moduleWeight 16 (11, tiles_61_159) =
-      651 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_159).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_159)
+    moduleWeight 16 (12, tiles_61_159) =
+      642 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_159).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_159)
 
 theorem w_61_160 :
-    moduleWeight 16 (11, tiles_61_160) =
-      7 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_160).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_160)
+    moduleWeight 16 (12, tiles_61_160) =
+      75 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_160).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_160)
 
 theorem w_61_161 :
-    moduleWeight 16 (11, tiles_61_161) =
-      156 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_161).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_161)
+    moduleWeight 16 (12, tiles_61_161) =
+      512 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_161).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_161)
 
 theorem w_61_162 :
-    moduleWeight 16 (11, tiles_61_162) =
-      516 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_162).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_162)
+    moduleWeight 16 (12, tiles_61_162) =
+      53 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_162).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_162)
 
 theorem w_61_163 :
-    moduleWeight 16 (11, tiles_61_163) =
-      8 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_61_163).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_61_163)
+    moduleWeight 16 (12, tiles_61_163) =
+      9 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_163).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_163)
+
+theorem w_61_164 :
+    moduleWeight 16 (12, tiles_61_164) =
+      176 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_164).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_164)
+
+theorem w_61_165 :
+    moduleWeight 16 (12, tiles_61_165) =
+      236 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_165).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_165)
+
+theorem w_61_166 :
+    moduleWeight 16 (12, tiles_61_166) =
+      512 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_166).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_166)
+
+theorem w_61_167 :
+    moduleWeight 16 (12, tiles_61_167) =
+      3904 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_167).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_167)
+
+theorem w_61_168 :
+    moduleWeight 16 (12, tiles_61_168) =
+      3264 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_168).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_168)
+
+theorem w_61_169 :
+    moduleWeight 16 (12, tiles_61_169) =
+      1990 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_169).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_169)
+
+theorem w_61_170 :
+    moduleWeight 16 (12, tiles_61_170) =
+      189 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_170).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_170)
+
+theorem w_61_171 :
+    moduleWeight 16 (12, tiles_61_171) =
+      136 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_171).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_171)
+
+theorem w_61_172 :
+    moduleWeight 16 (12, tiles_61_172) =
+      158 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_172).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_172)
+
+theorem w_61_173 :
+    moduleWeight 16 (12, tiles_61_173) =
+      312 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_173).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_173)
+
+theorem w_61_174 :
+    moduleWeight 16 (12, tiles_61_174) =
+      278 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_174).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_174)
+
+theorem w_61_175 :
+    moduleWeight 16 (12, tiles_61_175) =
+      4205 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_175).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_175)
+
+theorem w_61_176 :
+    moduleWeight 16 (12, tiles_61_176) =
+      605 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_176).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_176)
+
+theorem w_61_177 :
+    moduleWeight 16 (12, tiles_61_177) =
+      10 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_177).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_177)
+
+theorem w_61_178 :
+    moduleWeight 16 (12, tiles_61_178) =
+      78 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_178).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_178)
+
+theorem w_61_179 :
+    moduleWeight 16 (12, tiles_61_179) =
+      167 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_179).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_179)
+
+theorem w_61_180 :
+    moduleWeight 16 (12, tiles_61_180) =
+      32 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_180).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_180)
+
+theorem w_61_181 :
+    moduleWeight 16 (12, tiles_61_181) =
+      24 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_181).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_181)
+
+theorem w_61_182 :
+    moduleWeight 16 (12, tiles_61_182) =
+      936 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_182).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_182)
+
+theorem w_61_183 :
+    moduleWeight 16 (12, tiles_61_183) =
+      1914 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_183).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_183)
+
+theorem w_61_184 :
+    moduleWeight 16 (12, tiles_61_184) =
+      1915 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_184).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_184)
+
+theorem w_61_185 :
+    moduleWeight 16 (12, tiles_61_185) =
+      190 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_185).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_185)
+
+theorem w_61_186 :
+    moduleWeight 16 (12, tiles_61_186) =
+      44 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_186).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_186)
+
+theorem w_61_187 :
+    moduleWeight 16 (12, tiles_61_187) =
+      92 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_187).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_187)
+
+theorem w_61_188 :
+    moduleWeight 16 (12, tiles_61_188) =
+      1041 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_188).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_188)
+
+theorem w_61_189 :
+    moduleWeight 16 (12, tiles_61_189) =
+      200 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_189).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_189)
+
+theorem w_61_190 :
+    moduleWeight 16 (12, tiles_61_190) =
+      228 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_190).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_190)
+
+theorem w_61_191 :
+    moduleWeight 16 (12, tiles_61_191) =
+      172 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_191).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_191)
+
+theorem w_61_192 :
+    moduleWeight 16 (12, tiles_61_192) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_192).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_192)
+
+theorem w_61_193 :
+    moduleWeight 16 (12, tiles_61_193) =
+      1716 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_193).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_193)
+
+theorem w_61_194 :
+    moduleWeight 16 (12, tiles_61_194) =
+      256 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_194).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_194)
+
+theorem w_61_195 :
+    moduleWeight 16 (12, tiles_61_195) =
+      320 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_195).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_195)
+
+theorem w_61_196 :
+    moduleWeight 16 (12, tiles_61_196) =
+      1376 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_196).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_196)
+
+theorem w_61_197 :
+    moduleWeight 16 (12, tiles_61_197) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_197).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_197)
+
+theorem w_61_198 :
+    moduleWeight 16 (12, tiles_61_198) =
+      72 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_198).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_198)
+
+theorem w_61_199 :
+    moduleWeight 16 (12, tiles_61_199) =
+      2508 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_199).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_199)
+
+theorem w_61_200 :
+    moduleWeight 16 (12, tiles_61_200) =
+      987 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_200).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_200)
+
+theorem w_61_201 :
+    moduleWeight 16 (12, tiles_61_201) =
+      1216 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_201).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_201)
+
+theorem w_61_202 :
+    moduleWeight 16 (12, tiles_61_202) =
+      3500 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_202).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_202)
+
+theorem w_61_203 :
+    moduleWeight 16 (12, tiles_61_203) =
+      2459 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_203).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_203)
+
+theorem w_61_204 :
+    moduleWeight 16 (12, tiles_61_204) =
+      96 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_204).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_204)
+
+theorem w_61_205 :
+    moduleWeight 16 (12, tiles_61_205) =
+      55 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_205).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_205)
+
+theorem w_61_206 :
+    moduleWeight 16 (12, tiles_61_206) =
+      28 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_206).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_206)
+
+theorem w_61_207 :
+    moduleWeight 16 (12, tiles_61_207) =
+      212 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_207).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_207)
+
+theorem w_61_208 :
+    moduleWeight 16 (12, tiles_61_208) =
+      156 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_208).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_208)
+
+theorem w_61_209 :
+    moduleWeight 16 (12, tiles_61_209) =
+      74 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_209).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_209)
+
+theorem w_61_210 :
+    moduleWeight 16 (12, tiles_61_210) =
+      1267 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_210).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_210)
+
+theorem w_61_211 :
+    moduleWeight 16 (12, tiles_61_211) =
+      108 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_211).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_211)
+
+theorem w_61_212 :
+    moduleWeight 16 (12, tiles_61_212) =
+      137 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_212).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_212)
+
+theorem w_61_213 :
+    moduleWeight 16 (12, tiles_61_213) =
+      44 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_213).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_213)
+
+theorem w_61_214 :
+    moduleWeight 16 (12, tiles_61_214) =
+      344 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_214).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_214)
+
+theorem w_61_215 :
+    moduleWeight 16 (12, tiles_61_215) =
+      496 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_215).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_215)
+
+theorem w_61_216 :
+    moduleWeight 16 (12, tiles_61_216) =
+      64 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_216).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_216)
+
+theorem w_61_217 :
+    moduleWeight 16 (12, tiles_61_217) =
+      12 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_217).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_217)
+
+theorem w_61_218 :
+    moduleWeight 16 (12, tiles_61_218) =
+      36 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_218).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_218)
+
+theorem w_61_219 :
+    moduleWeight 16 (12, tiles_61_219) =
+      752 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_219).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_219)
+
+theorem w_61_220 :
+    moduleWeight 16 (12, tiles_61_220) =
+      212 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_220).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_220)
+
+theorem w_61_221 :
+    moduleWeight 16 (12, tiles_61_221) =
+      192 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_221).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_221)
+
+theorem w_61_222 :
+    moduleWeight 16 (12, tiles_61_222) =
+      1536 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_222).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_222)
+
+theorem w_61_223 :
+    moduleWeight 16 (12, tiles_61_223) =
+      27 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_223).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_223)
+
+theorem w_61_224 :
+    moduleWeight 16 (12, tiles_61_224) =
+      262 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_224).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_224)
+
+theorem w_61_225 :
+    moduleWeight 16 (12, tiles_61_225) =
+      1367 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_225).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_225)
+
+theorem w_61_226 :
+    moduleWeight 16 (12, tiles_61_226) =
+      340 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_226).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_226)
+
+theorem w_61_227 :
+    moduleWeight 16 (12, tiles_61_227) =
+      204 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_227).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_227)
+
+theorem w_61_228 :
+    moduleWeight 16 (12, tiles_61_228) =
+      46 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_228).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_228)
+
+theorem w_61_229 :
+    moduleWeight 16 (12, tiles_61_229) =
+      5 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_229).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_229)
+
+theorem w_61_230 :
+    moduleWeight 16 (12, tiles_61_230) =
+      61 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_230).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_230)
+
+theorem w_61_231 :
+    moduleWeight 16 (12, tiles_61_231) =
+      388 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_231).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_231)
+
+theorem w_61_232 :
+    moduleWeight 16 (12, tiles_61_232) =
+      1584 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_232).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_232)
+
+theorem w_61_233 :
+    moduleWeight 16 (12, tiles_61_233) =
+      213 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_233).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_233)
+
+theorem w_61_234 :
+    moduleWeight 16 (12, tiles_61_234) =
+      1389 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_234).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_234)
+
+theorem w_61_235 :
+    moduleWeight 16 (12, tiles_61_235) =
+      415 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_235).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_235)
+
+theorem w_61_236 :
+    moduleWeight 16 (12, tiles_61_236) =
+      405 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_236).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_236)
+
+theorem w_61_237 :
+    moduleWeight 16 (12, tiles_61_237) =
+      178 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_237).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_237)
+
+theorem w_61_238 :
+    moduleWeight 16 (12, tiles_61_238) =
+      262 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_238).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_238)
+
+theorem w_61_239 :
+    moduleWeight 16 (12, tiles_61_239) =
+      168 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_239).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_239)
+
+theorem w_61_240 :
+    moduleWeight 16 (12, tiles_61_240) =
+      1 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_240).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_240)
+
+theorem w_61_241 :
+    moduleWeight 16 (12, tiles_61_241) =
+      35 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_241).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_241)
+
+theorem w_61_242 :
+    moduleWeight 16 (12, tiles_61_242) =
+      1292 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_242).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_242)
+
+theorem w_61_243 :
+    moduleWeight 16 (12, tiles_61_243) =
+      464 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_243).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_243)
+
+theorem w_61_244 :
+    moduleWeight 16 (12, tiles_61_244) =
+      1100 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_244).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_244)
+
+theorem w_61_245 :
+    moduleWeight 16 (12, tiles_61_245) =
+      1179 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_245).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_245)
+
+theorem w_61_246 :
+    moduleWeight 16 (12, tiles_61_246) =
+      6 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_246).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_246)
+
+theorem w_61_247 :
+    moduleWeight 16 (12, tiles_61_247) =
+      72 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_247).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_247)
+
+theorem w_61_248 :
+    moduleWeight 16 (12, tiles_61_248) =
+      233 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_248).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_248)
+
+theorem w_61_249 :
+    moduleWeight 16 (12, tiles_61_249) =
+      415 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_249).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_249)
+
+theorem w_61_250 :
+    moduleWeight 16 (12, tiles_61_250) =
+      131 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_250).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_250)
+
+theorem w_61_251 :
+    moduleWeight 16 (12, tiles_61_251) =
+      231 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_251).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_251)
+
+theorem w_61_252 :
+    moduleWeight 16 (12, tiles_61_252) =
+      677 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_252).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_252)
+
+theorem w_61_253 :
+    moduleWeight 16 (12, tiles_61_253) =
+      370 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_253).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_253)
+
+theorem w_61_254 :
+    moduleWeight 16 (12, tiles_61_254) =
+      369 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_254).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_254)
+
+theorem w_61_255 :
+    moduleWeight 16 (12, tiles_61_255) =
+      140 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_255).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_255)
+
+theorem w_61_256 :
+    moduleWeight 16 (12, tiles_61_256) =
+      44 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_256).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_256)
+
+theorem w_61_257 :
+    moduleWeight 16 (12, tiles_61_257) =
+      122 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_257).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_257)
+
+theorem w_61_258 :
+    moduleWeight 16 (12, tiles_61_258) =
+      839 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_258).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_258)
+
+theorem w_61_259 :
+    moduleWeight 16 (12, tiles_61_259) =
+      117 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_259).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_259)
+
+theorem w_61_260 :
+    moduleWeight 16 (12, tiles_61_260) =
+      542 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_260).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_260)
+
+theorem w_61_261 :
+    moduleWeight 16 (12, tiles_61_261) =
+      65 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_261).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_261)
+
+theorem w_61_262 :
+    moduleWeight 16 (12, tiles_61_262) =
+      255 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_262).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_262)
+
+theorem w_61_263 :
+    moduleWeight 16 (12, tiles_61_263) =
+      99 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_263).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_263)
+
+theorem w_61_264 :
+    moduleWeight 16 (12, tiles_61_264) =
+      389 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_264).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_264)
+
+theorem w_61_265 :
+    moduleWeight 16 (12, tiles_61_265) =
+      33 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_265).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_265)
+
+theorem w_61_266 :
+    moduleWeight 16 (12, tiles_61_266) =
+      89 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_266).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_266)
+
+theorem w_61_267 :
+    moduleWeight 16 (12, tiles_61_267) =
+      224 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_267).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_267)
+
+theorem w_61_268 :
+    moduleWeight 16 (12, tiles_61_268) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_268).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_268)
+
+theorem w_61_269 :
+    moduleWeight 16 (12, tiles_61_269) =
+      298 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_269).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_269)
+
+theorem w_61_270 :
+    moduleWeight 16 (12, tiles_61_270) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_270).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_270)
+
+theorem w_61_271 :
+    moduleWeight 16 (12, tiles_61_271) =
+      34 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_271).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_271)
+
+theorem w_61_272 :
+    moduleWeight 16 (12, tiles_61_272) =
+      4 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_272).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_272)
+
+theorem w_61_273 :
+    moduleWeight 16 (12, tiles_61_273) =
+      254 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_273).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_273)
+
+theorem w_61_274 :
+    moduleWeight 16 (12, tiles_61_274) =
+      374 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_274).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_274)
+
+theorem w_61_275 :
+    moduleWeight 16 (12, tiles_61_275) =
+      104 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_275).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_275)
+
+theorem w_61_276 :
+    moduleWeight 16 (12, tiles_61_276) =
+      866 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_276).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_276)
+
+theorem w_61_277 :
+    moduleWeight 16 (12, tiles_61_277) =
+      201 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_277).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_277)
+
+theorem w_61_278 :
+    moduleWeight 16 (12, tiles_61_278) =
+      616 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_278).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_278)
+
+theorem w_61_279 :
+    moduleWeight 16 (12, tiles_61_279) =
+      83 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_279).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_279)
+
+theorem w_61_280 :
+    moduleWeight 16 (12, tiles_61_280) =
+      56 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_280).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_280)
+
+theorem w_61_281 :
+    moduleWeight 16 (12, tiles_61_281) =
+      773 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_281).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_281)
+
+theorem w_61_282 :
+    moduleWeight 16 (12, tiles_61_282) =
+      41 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_282).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_282)
+
+theorem w_61_283 :
+    moduleWeight 16 (12, tiles_61_283) =
+      65 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_283).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_283)
+
+theorem w_61_284 :
+    moduleWeight 16 (12, tiles_61_284) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_284).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_284)
+
+theorem w_61_285 :
+    moduleWeight 16 (12, tiles_61_285) =
+      19 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_285).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_285)
+
+theorem w_61_286 :
+    moduleWeight 16 (12, tiles_61_286) =
+      355 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_286).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_286)
+
+theorem w_61_287 :
+    moduleWeight 16 (12, tiles_61_287) =
+      1148 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_287).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_287)
+
+theorem w_61_288 :
+    moduleWeight 16 (12, tiles_61_288) =
+      1975 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_288).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_288)
+
+theorem w_61_289 :
+    moduleWeight 16 (12, tiles_61_289) =
+      3035 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_289).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_289)
+
+theorem w_61_290 :
+    moduleWeight 16 (12, tiles_61_290) =
+      476 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_290).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_290)
+
+theorem w_61_291 :
+    moduleWeight 16 (12, tiles_61_291) =
+      33 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_291).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_291)
+
+theorem w_61_292 :
+    moduleWeight 16 (12, tiles_61_292) =
+      79 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_292).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_292)
+
+theorem w_61_293 :
+    moduleWeight 16 (12, tiles_61_293) =
+      2009 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_293).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_293)
+
+theorem w_61_294 :
+    moduleWeight 16 (12, tiles_61_294) =
+      412 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_294).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_294)
+
+theorem w_61_295 :
+    moduleWeight 16 (12, tiles_61_295) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_295).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_295)
+
+theorem w_61_296 :
+    moduleWeight 16 (12, tiles_61_296) =
+      84 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_296).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_296)
+
+theorem w_61_297 :
+    moduleWeight 16 (12, tiles_61_297) =
+      682 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_297).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_297)
+
+theorem w_61_298 :
+    moduleWeight 16 (12, tiles_61_298) =
+      1008 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_298).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_298)
+
+theorem w_61_299 :
+    moduleWeight 16 (12, tiles_61_299) =
+      884 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_299).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_299)
+
+theorem w_61_300 :
+    moduleWeight 16 (12, tiles_61_300) =
+      899 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_300).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_300)
+
+theorem w_61_301 :
+    moduleWeight 16 (12, tiles_61_301) =
+      38 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_301).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_301)
+
+theorem w_61_302 :
+    moduleWeight 16 (12, tiles_61_302) =
+      126 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_302).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_302)
+
+theorem w_61_303 :
+    moduleWeight 16 (12, tiles_61_303) =
+      555 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_303).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_303)
+
+theorem w_61_304 :
+    moduleWeight 16 (12, tiles_61_304) =
+      197 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_304).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_304)
+
+theorem w_61_305 :
+    moduleWeight 16 (12, tiles_61_305) =
+      135 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_305).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_305)
+
+theorem w_61_306 :
+    moduleWeight 16 (12, tiles_61_306) =
+      1226 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_306).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_306)
+
+theorem w_61_307 :
+    moduleWeight 16 (12, tiles_61_307) =
+      51 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_307).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_307)
+
+theorem w_61_308 :
+    moduleWeight 16 (12, tiles_61_308) =
+      141 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_308).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_308)
+
+theorem w_61_309 :
+    moduleWeight 16 (12, tiles_61_309) =
+      361 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_309).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_309)
+
+theorem w_61_310 :
+    moduleWeight 16 (12, tiles_61_310) =
+      164 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_310).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_310)
+
+theorem w_61_311 :
+    moduleWeight 16 (12, tiles_61_311) =
+      894 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_311).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_311)
+
+theorem w_61_312 :
+    moduleWeight 16 (12, tiles_61_312) =
+      15 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_312).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_312)
+
+theorem w_61_313 :
+    moduleWeight 16 (12, tiles_61_313) =
+      44 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_313).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_313)
+
+theorem w_61_314 :
+    moduleWeight 16 (12, tiles_61_314) =
+      166 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_314).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_314)
+
+theorem w_61_315 :
+    moduleWeight 16 (12, tiles_61_315) =
+      122 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_315).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_315)
+
+theorem w_61_316 :
+    moduleWeight 16 (12, tiles_61_316) =
+      197 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_316).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_316)
+
+theorem w_61_317 :
+    moduleWeight 16 (12, tiles_61_317) =
+      808 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_317).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_317)
+
+theorem w_61_318 :
+    moduleWeight 16 (12, tiles_61_318) =
+      19 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_318).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_318)
+
+theorem w_61_319 :
+    moduleWeight 16 (12, tiles_61_319) =
+      3 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_319).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_319)
+
+theorem w_61_320 :
+    moduleWeight 16 (12, tiles_61_320) =
+      453 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_320).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_320)
+
+theorem w_61_321 :
+    moduleWeight 16 (12, tiles_61_321) =
+      192 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_321).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_321)
+
+theorem w_61_322 :
+    moduleWeight 16 (12, tiles_61_322) =
+      181 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_322).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_322)
+
+theorem w_61_323 :
+    moduleWeight 16 (12, tiles_61_323) =
+      48 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_323).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_323)
+
+theorem w_61_324 :
+    moduleWeight 16 (12, tiles_61_324) =
+      55 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_324).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_324)
+
+theorem w_61_325 :
+    moduleWeight 16 (12, tiles_61_325) =
+      71 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_325).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_325)
+
+theorem w_61_326 :
+    moduleWeight 16 (12, tiles_61_326) =
+      885 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_326).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_326)
+
+theorem w_61_327 :
+    moduleWeight 16 (12, tiles_61_327) =
+      307 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_327).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_327)
+
+theorem w_61_328 :
+    moduleWeight 16 (12, tiles_61_328) =
+      117 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_328).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_328)
+
+theorem w_61_329 :
+    moduleWeight 16 (12, tiles_61_329) =
+      101 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_329).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_329)
+
+theorem w_61_330 :
+    moduleWeight 16 (12, tiles_61_330) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_330).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_330)
+
+theorem w_61_331 :
+    moduleWeight 16 (12, tiles_61_331) =
+      116 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_331).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_331)
+
+theorem w_61_332 :
+    moduleWeight 16 (12, tiles_61_332) =
+      386 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_332).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_332)
+
+theorem w_61_333 :
+    moduleWeight 16 (12, tiles_61_333) =
+      8 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_333).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_333)
+
+theorem w_61_334 :
+    moduleWeight 16 (12, tiles_61_334) =
+      48 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_334).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_334)
+
+theorem w_61_335 :
+    moduleWeight 16 (12, tiles_61_335) =
+      132 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_335).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_335)
+
+theorem w_61_336 :
+    moduleWeight 16 (12, tiles_61_336) =
+      105 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_336).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_336)
+
+theorem w_61_337 :
+    moduleWeight 16 (12, tiles_61_337) =
+      881 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_337).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_337)
+
+theorem w_61_338 :
+    moduleWeight 16 (12, tiles_61_338) =
+      229 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_338).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_338)
+
+theorem w_61_339 :
+    moduleWeight 16 (12, tiles_61_339) =
+      399 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_339).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_339)
+
+theorem w_61_340 :
+    moduleWeight 16 (12, tiles_61_340) =
+      499 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_340).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_340)
+
+theorem w_61_341 :
+    moduleWeight 16 (12, tiles_61_341) =
+      119 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_341).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_341)
+
+theorem w_61_342 :
+    moduleWeight 16 (12, tiles_61_342) =
+      256 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_342).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_342)
+
+theorem w_61_343 :
+    moduleWeight 16 (12, tiles_61_343) =
+      369 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_343).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_343)
+
+theorem w_61_344 :
+    moduleWeight 16 (12, tiles_61_344) =
+      141 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_344).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_344)
+
+theorem w_61_345 :
+    moduleWeight 16 (12, tiles_61_345) =
+      269 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_345).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_345)
+
+theorem w_61_346 :
+    moduleWeight 16 (12, tiles_61_346) =
+      447 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_346).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_346)
+
+theorem w_61_347 :
+    moduleWeight 16 (12, tiles_61_347) =
+      271 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_347).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_347)
+
+theorem w_61_348 :
+    moduleWeight 16 (12, tiles_61_348) =
+      255 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_348).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_348)
+
+theorem w_61_349 :
+    moduleWeight 16 (12, tiles_61_349) =
+      1333 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_349).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_349)
+
+theorem w_61_350 :
+    moduleWeight 16 (12, tiles_61_350) =
+      392 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_350).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_350)
+
+theorem w_61_351 :
+    moduleWeight 16 (12, tiles_61_351) =
+      177 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_351).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_351)
+
+theorem w_61_352 :
+    moduleWeight 16 (12, tiles_61_352) =
+      834 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_352).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_352)
+
+theorem w_61_353 :
+    moduleWeight 16 (12, tiles_61_353) =
+      52 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_353).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_353)
+
+theorem w_61_354 :
+    moduleWeight 16 (12, tiles_61_354) =
+      169 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_354).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_354)
+
+theorem w_61_355 :
+    moduleWeight 16 (12, tiles_61_355) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_355).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_355)
+
+theorem w_61_356 :
+    moduleWeight 16 (12, tiles_61_356) =
+      448 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_356).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_356)
+
+theorem w_61_357 :
+    moduleWeight 16 (12, tiles_61_357) =
+      10 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_357).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_357)
+
+theorem w_61_358 :
+    moduleWeight 16 (12, tiles_61_358) =
+      152 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_358).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_358)
+
+theorem w_61_359 :
+    moduleWeight 16 (12, tiles_61_359) =
+      318 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_359).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_359)
+
+theorem w_61_360 :
+    moduleWeight 16 (12, tiles_61_360) =
+      344 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_360).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_360)
+
+theorem w_61_361 :
+    moduleWeight 16 (12, tiles_61_361) =
+      104 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_361).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_361)
+
+theorem w_61_362 :
+    moduleWeight 16 (12, tiles_61_362) =
+      751 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_362).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_362)
+
+theorem w_61_363 :
+    moduleWeight 16 (12, tiles_61_363) =
+      395 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_363).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_363)
+
+theorem w_61_364 :
+    moduleWeight 16 (12, tiles_61_364) =
+      504 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_364).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_364)
+
+theorem w_61_365 :
+    moduleWeight 16 (12, tiles_61_365) =
+      2 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_365).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_365)
+
+theorem w_61_366 :
+    moduleWeight 16 (12, tiles_61_366) =
+      68 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_366).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_366)
+
+theorem w_61_367 :
+    moduleWeight 16 (12, tiles_61_367) =
+      45 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_367).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_367)
+
+theorem w_61_368 :
+    moduleWeight 16 (12, tiles_61_368) =
+      310 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_368).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_368)
+
+theorem w_61_369 :
+    moduleWeight 16 (12, tiles_61_369) =
+      430 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_369).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_369)
+
+theorem w_61_370 :
+    moduleWeight 16 (12, tiles_61_370) =
+      197 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_370).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_370)
+
+theorem w_61_371 :
+    moduleWeight 16 (12, tiles_61_371) =
+      236 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_371).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_371)
+
+theorem w_61_372 :
+    moduleWeight 16 (12, tiles_61_372) =
+      159 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_372).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_372)
+
+theorem w_61_373 :
+    moduleWeight 16 (12, tiles_61_373) =
+      48 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_373).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_373)
+
+theorem w_61_374 :
+    moduleWeight 16 (12, tiles_61_374) =
+      20 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_374).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_374)
+
+theorem w_61_375 :
+    moduleWeight 16 (12, tiles_61_375) =
+      704 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_375).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_375)
+
+theorem w_61_376 :
+    moduleWeight 16 (12, tiles_61_376) =
+      61 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_376).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_376)
+
+theorem w_61_377 :
+    moduleWeight 16 (12, tiles_61_377) =
+      343 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_377).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_377)
+
+theorem w_61_378 :
+    moduleWeight 16 (12, tiles_61_378) =
+      325 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_378).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_378)
+
+theorem w_61_379 :
+    moduleWeight 16 (12, tiles_61_379) =
+      332 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_379).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_379)
+
+theorem w_61_380 :
+    moduleWeight 16 (12, tiles_61_380) =
+      254 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_380).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_380)
+
+theorem w_61_381 :
+    moduleWeight 16 (12, tiles_61_381) =
+      47 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_381).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_381)
+
+theorem w_61_382 :
+    moduleWeight 16 (12, tiles_61_382) =
+      178 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_382).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_382)
+
+theorem w_61_383 :
+    moduleWeight 16 (12, tiles_61_383) =
+      93 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_383).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_383)
+
+theorem w_61_384 :
+    moduleWeight 16 (12, tiles_61_384) =
+      190 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_384).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_384)
+
+theorem w_61_385 :
+    moduleWeight 16 (12, tiles_61_385) =
+      458 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_385).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_385)
+
+theorem w_61_386 :
+    moduleWeight 16 (12, tiles_61_386) =
+      320 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_386).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_386)
+
+theorem w_61_387 :
+    moduleWeight 16 (12, tiles_61_387) =
+      391 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_387).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_387)
+
+theorem w_61_388 :
+    moduleWeight 16 (12, tiles_61_388) =
+      703 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_388).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_388)
+
+theorem w_61_389 :
+    moduleWeight 16 (12, tiles_61_389) =
+      85 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_389).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_389)
+
+theorem w_61_390 :
+    moduleWeight 16 (12, tiles_61_390) =
+      61 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_390).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_390)
+
+theorem w_61_391 :
+    moduleWeight 16 (12, tiles_61_391) =
+      57 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_391).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_391)
+
+theorem w_61_392 :
+    moduleWeight 16 (12, tiles_61_392) =
+      28 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_392).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_392)
+
+theorem w_61_393 :
+    moduleWeight 16 (12, tiles_61_393) =
+      17 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_393).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_393)
+
+theorem w_61_394 :
+    moduleWeight 16 (12, tiles_61_394) =
+      340 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_394).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_394)
+
+theorem w_61_395 :
+    moduleWeight 16 (12, tiles_61_395) =
+      630 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_395).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_395)
+
+theorem w_61_396 :
+    moduleWeight 16 (12, tiles_61_396) =
+      228 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_396).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_396)
+
+theorem w_61_397 :
+    moduleWeight 16 (12, tiles_61_397) =
+      382 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_397).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_397)
+
+theorem w_61_398 :
+    moduleWeight 16 (12, tiles_61_398) =
+      207 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_398).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_398)
+
+theorem w_61_399 :
+    moduleWeight 16 (12, tiles_61_399) =
+      259 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_399).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_399)
+
+theorem w_61_400 :
+    moduleWeight 16 (12, tiles_61_400) =
+      339 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_400).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_400)
+
+theorem w_61_401 :
+    moduleWeight 16 (12, tiles_61_401) =
+      28 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_401).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_401)
+
+theorem w_61_402 :
+    moduleWeight 16 (12, tiles_61_402) =
+      259 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_402).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_402)
+
+theorem w_61_403 :
+    moduleWeight 16 (12, tiles_61_403) =
+      239 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_403).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_403)
+
+theorem w_61_404 :
+    moduleWeight 16 (12, tiles_61_404) =
+      653 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_404).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_404)
+
+theorem w_61_405 :
+    moduleWeight 16 (12, tiles_61_405) =
+      273 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_405).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_405)
+
+theorem w_61_406 :
+    moduleWeight 16 (12, tiles_61_406) =
+      456 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_406).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_406)
+
+theorem w_61_407 :
+    moduleWeight 16 (12, tiles_61_407) =
+      209 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_407).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_407)
+
+theorem w_61_408 :
+    moduleWeight 16 (12, tiles_61_408) =
+      34 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_408).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_408)
+
+theorem w_61_409 :
+    moduleWeight 16 (12, tiles_61_409) =
+      111 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_409).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_409)
+
+theorem w_61_410 :
+    moduleWeight 16 (12, tiles_61_410) =
+      175 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_410).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_410)
+
+theorem w_61_411 :
+    moduleWeight 16 (12, tiles_61_411) =
+      242 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_411).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_411)
+
+theorem w_61_412 :
+    moduleWeight 16 (12, tiles_61_412) =
+      3 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_412).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_412)
+
+theorem w_61_413 :
+    moduleWeight 16 (12, tiles_61_413) =
+      289 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_413).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_413)
+
+theorem w_61_414 :
+    moduleWeight 16 (12, tiles_61_414) =
+      607 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_414).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_414)
+
+theorem w_61_415 :
+    moduleWeight 16 (12, tiles_61_415) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_415).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_415)
+
+theorem w_61_416 :
+    moduleWeight 16 (12, tiles_61_416) =
+      241 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_416).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_416)
+
+theorem w_61_417 :
+    moduleWeight 16 (12, tiles_61_417) =
+      270 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_417).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_417)
+
+theorem w_61_418 :
+    moduleWeight 16 (12, tiles_61_418) =
+      159 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_418).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_418)
+
+theorem w_61_419 :
+    moduleWeight 16 (12, tiles_61_419) =
+      793 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_419).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_419)
+
+theorem w_61_420 :
+    moduleWeight 16 (12, tiles_61_420) =
+      309 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_420).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_420)
+
+theorem w_61_421 :
+    moduleWeight 16 (12, tiles_61_421) =
+      296 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_421).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_421)
+
+theorem w_61_422 :
+    moduleWeight 16 (12, tiles_61_422) =
+      156 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_422).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_422)
+
+theorem w_61_423 :
+    moduleWeight 16 (12, tiles_61_423) =
+      297 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_423).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_423)
+
+theorem w_61_424 :
+    moduleWeight 16 (12, tiles_61_424) =
+      35 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_424).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_424)
+
+theorem w_61_425 :
+    moduleWeight 16 (12, tiles_61_425) =
+      89 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_425).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_425)
+
+theorem w_61_426 :
+    moduleWeight 16 (12, tiles_61_426) =
+      307 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_426).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_426)
+
+theorem w_61_427 :
+    moduleWeight 16 (12, tiles_61_427) =
+      90 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_427).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_427)
+
+theorem w_61_428 :
+    moduleWeight 16 (12, tiles_61_428) =
+      253 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_428).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_428)
+
+theorem w_61_429 :
+    moduleWeight 16 (12, tiles_61_429) =
+      189 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_429).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_429)
+
+theorem w_61_430 :
+    moduleWeight 16 (12, tiles_61_430) =
+      99 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_430).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_430)
+
+theorem w_61_431 :
+    moduleWeight 16 (12, tiles_61_431) =
+      154 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_431).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_431)
+
+theorem w_61_432 :
+    moduleWeight 16 (12, tiles_61_432) =
+      160 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_432).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_432)
+
+theorem w_61_433 :
+    moduleWeight 16 (12, tiles_61_433) =
+      213 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_433).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_433)
+
+theorem w_61_434 :
+    moduleWeight 16 (12, tiles_61_434) =
+      785 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_434).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_434)
+
+theorem w_61_435 :
+    moduleWeight 16 (12, tiles_61_435) =
+      10 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_435).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_435)
+
+theorem w_61_436 :
+    moduleWeight 16 (12, tiles_61_436) =
+      185 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_436).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_436)
+
+theorem w_61_437 :
+    moduleWeight 16 (12, tiles_61_437) =
+      556 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_437).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_437)
+
+theorem w_61_438 :
+    moduleWeight 16 (12, tiles_61_438) =
+      415 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_438).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_438)
+
+theorem w_61_439 :
+    moduleWeight 16 (12, tiles_61_439) =
+      164 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_439).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_439)
+
+theorem w_61_440 :
+    moduleWeight 16 (12, tiles_61_440) =
+      258 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_440).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_440)
+
+theorem w_61_441 :
+    moduleWeight 16 (12, tiles_61_441) =
+      19 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_441).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_441)
+
+theorem w_61_442 :
+    moduleWeight 16 (12, tiles_61_442) =
+      1086 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_442).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_442)
+
+theorem w_61_443 :
+    moduleWeight 16 (12, tiles_61_443) =
+      265 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_443).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_443)
+
+theorem w_61_444 :
+    moduleWeight 16 (12, tiles_61_444) =
+      203 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_444).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_444)
+
+theorem w_61_445 :
+    moduleWeight 16 (12, tiles_61_445) =
+      346 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_445).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_445)
+
+theorem w_61_446 :
+    moduleWeight 16 (12, tiles_61_446) =
+      2 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_446).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_446)
+
+theorem w_61_447 :
+    moduleWeight 16 (12, tiles_61_447) =
+      122 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_447).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_447)
+
+theorem w_61_448 :
+    moduleWeight 16 (12, tiles_61_448) =
+      275 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_448).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_448)
+
+theorem w_61_449 :
+    moduleWeight 16 (12, tiles_61_449) =
+      514 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_449).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_449)
+
+theorem w_61_450 :
+    moduleWeight 16 (12, tiles_61_450) =
+      46 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_450).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_450)
+
+theorem w_61_451 :
+    moduleWeight 16 (12, tiles_61_451) =
+      377 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_451).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_451)
+
+theorem w_61_452 :
+    moduleWeight 16 (12, tiles_61_452) =
+      459 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_452).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_452)
+
+theorem w_61_453 :
+    moduleWeight 16 (12, tiles_61_453) =
+      7 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_61_453).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_61_453)
 
 theorem w_62_0 :
-    moduleWeight 16 (11, tiles_62_0) =
-      84 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_62_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_62_0)
+    moduleWeight 16 (12, tiles_62_0) =
+      25 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_0)
 
 theorem w_62_1 :
-    moduleWeight 16 (11, tiles_62_1) =
-      73 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_62_1).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_62_1)
+    moduleWeight 16 (12, tiles_62_1) =
+      184 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_1).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_1)
 
 theorem w_62_2 :
-    moduleWeight 16 (11, tiles_62_2) =
-      377 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_62_2).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_62_2)
+    moduleWeight 16 (12, tiles_62_2) =
+      147 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_2).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_2)
 
 theorem w_62_3 :
-    moduleWeight 16 (11, tiles_62_3) =
-      367 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_62_3).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_62_3)
+    moduleWeight 16 (12, tiles_62_3) =
+      34 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_3).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_3)
 
 theorem w_62_4 :
-    moduleWeight 16 (11, tiles_62_4) =
-      171 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_62_4).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_62_4)
+    moduleWeight 16 (12, tiles_62_4) =
+      203 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_4).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_4)
 
 theorem w_62_5 :
-    moduleWeight 16 (11, tiles_62_5) =
-      303 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_62_5).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_62_5)
+    moduleWeight 16 (12, tiles_62_5) =
+      322 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_5).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_5)
 
 theorem w_62_6 :
-    moduleWeight 16 (11, tiles_62_6) =
-      144 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_62_6).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_62_6)
+    moduleWeight 16 (12, tiles_62_6) =
+      212 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_6).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_6)
+
+theorem w_62_7 :
+    moduleWeight 16 (12, tiles_62_7) =
+      196 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_7).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_7)
+
+theorem w_62_8 :
+    moduleWeight 16 (12, tiles_62_8) =
+      600 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_8).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_8)
+
+theorem w_62_9 :
+    moduleWeight 16 (12, tiles_62_9) =
+      288 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_9).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_9)
+
+theorem w_62_10 :
+    moduleWeight 16 (12, tiles_62_10) =
+      24 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_10).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_10)
+
+theorem w_62_11 :
+    moduleWeight 16 (12, tiles_62_11) =
+      4 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_11).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_11)
+
+theorem w_62_12 :
+    moduleWeight 16 (12, tiles_62_12) =
+      418 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_12).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_12)
+
+theorem w_62_13 :
+    moduleWeight 16 (12, tiles_62_13) =
+      6 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_13).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_13)
+
+theorem w_62_14 :
+    moduleWeight 16 (12, tiles_62_14) =
+      405 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_14).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_14)
+
+theorem w_62_15 :
+    moduleWeight 16 (12, tiles_62_15) =
+      347 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_15).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_15)
+
+theorem w_62_16 :
+    moduleWeight 16 (12, tiles_62_16) =
+      87 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_16).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_16)
+
+theorem w_62_17 :
+    moduleWeight 16 (12, tiles_62_17) =
+      252 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_62_17).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_62_17)
 
 theorem w_63_0 :
-    moduleWeight 16 (11, tiles_63_0) =
-      0 * 4 ^ (16 - 11) :=
-  (moduleWeight_eq 16 11 tiles_63_0).trans
-    (congrArg (· * 4 ^ (16 - 11)) part_63_0)
+    moduleWeight 16 (12, tiles_63_0) =
+      0 * 4 ^ (16 - 12) :=
+  (moduleWeight_eq 16 12 tiles_63_0).trans
+    (congrArg (· * 4 ^ (16 - 12)) part_63_0)
 
 theorem w_64_0 :
     moduleWeight 16 (11, tiles_64_0) =
@@ -21134,7 +30794,7 @@ theorem w_127_0 :
 set_option maxRecDepth 100000 in
 theorem gridCells_eq : (gridModules.map (moduleWeight gridDepth)).sum = gridCells := by
   simp only [gridModules, gridDepth, gridCells, List.map_cons, List.map_nil, List.sum_cons,
-    List.sum_nil, w_0_0, w_0_1, w_0_2, w_0_3, w_0_4, w_0_5, w_0_6, w_0_7, w_0_8, w_0_9, w_0_10, w_0_11, w_1_0, w_2_0, w_3_0, w_4_0, w_4_1, w_4_2, w_4_3, w_4_4, w_4_5, w_4_6, w_4_7, w_4_8, w_4_9, w_4_10, w_4_11, w_4_12, w_4_13, w_4_14, w_4_15, w_4_16, w_4_17, w_4_18, w_4_19, w_4_20, w_4_21, w_4_22, w_4_23, w_4_24, w_4_25, w_4_26, w_4_27, w_4_28, w_4_29, w_4_30, w_4_31, w_4_32, w_4_33, w_4_34, w_4_35, w_4_36, w_4_37, w_5_0, w_6_0, w_7_0, w_8_0, w_8_1, w_8_2, w_8_3, w_8_4, w_8_5, w_8_6, w_8_7, w_8_8, w_8_9, w_8_10, w_8_11, w_8_12, w_8_13, w_8_14, w_8_15, w_8_16, w_8_17, w_8_18, w_8_19, w_8_20, w_8_21, w_8_22, w_8_23, w_8_24, w_8_25, w_8_26, w_8_27, w_8_28, w_8_29, w_8_30, w_8_31, w_8_32, w_9_0, w_10_0, w_11_0, w_12_0, w_12_1, w_12_2, w_12_3, w_12_4, w_12_5, w_12_6, w_12_7, w_12_8, w_12_9, w_12_10, w_12_11, w_12_12, w_12_13, w_12_14, w_12_15, w_12_16, w_12_17, w_12_18, w_12_19, w_12_20, w_12_21, w_12_22, w_12_23, w_12_24, w_12_25, w_12_26, w_12_27, w_12_28, w_12_29, w_12_30, w_12_31, w_13_0, w_14_0, w_15_0, w_16_0, w_16_1, w_16_2, w_16_3, w_16_4, w_16_5, w_16_6, w_16_7, w_16_8, w_16_9, w_16_10, w_16_11, w_16_12, w_16_13, w_16_14, w_16_15, w_16_16, w_16_17, w_16_18, w_16_19, w_16_20, w_16_21, w_16_22, w_16_23, w_16_24, w_16_25, w_16_26, w_16_27, w_16_28, w_16_29, w_16_30, w_16_31, w_16_32, w_16_33, w_16_34, w_16_35, w_16_36, w_16_37, w_16_38, w_16_39, w_16_40, w_16_41, w_16_42, w_16_43, w_16_44, w_16_45, w_16_46, w_16_47, w_16_48, w_16_49, w_16_50, w_16_51, w_16_52, w_16_53, w_16_54, w_16_55, w_16_56, w_16_57, w_16_58, w_16_59, w_16_60, w_16_61, w_16_62, w_16_63, w_16_64, w_16_65, w_16_66, w_16_67, w_16_68, w_16_69, w_16_70, w_16_71, w_16_72, w_16_73, w_16_74, w_16_75, w_16_76, w_16_77, w_16_78, w_16_79, w_16_80, w_16_81, w_16_82, w_16_83, w_16_84, w_16_85, w_16_86, w_16_87, w_16_88, w_16_89, w_16_90, w_16_91, w_16_92, w_16_93, w_16_94, w_16_95, w_16_96, w_16_97, w_16_98, w_16_99, w_16_100, w_16_101, w_16_102, w_16_103, w_16_104, w_16_105, w_16_106, w_16_107, w_16_108, w_16_109, w_16_110, w_16_111, w_16_112, w_16_113, w_16_114, w_16_115, w_16_116, w_16_117, w_16_118, w_16_119, w_16_120, w_16_121, w_16_122, w_16_123, w_16_124, w_16_125, w_16_126, w_16_127, w_16_128, w_16_129, w_16_130, w_16_131, w_16_132, w_16_133, w_16_134, w_16_135, w_16_136, w_16_137, w_16_138, w_16_139, w_16_140, w_16_141, w_16_142, w_16_143, w_16_144, w_16_145, w_16_146, w_16_147, w_16_148, w_16_149, w_16_150, w_16_151, w_16_152, w_16_153, w_17_0, w_18_0, w_19_0, w_20_0, w_20_1, w_20_2, w_20_3, w_20_4, w_20_5, w_20_6, w_20_7, w_20_8, w_20_9, w_20_10, w_20_11, w_20_12, w_20_13, w_20_14, w_20_15, w_20_16, w_20_17, w_20_18, w_20_19, w_20_20, w_20_21, w_20_22, w_20_23, w_20_24, w_20_25, w_20_26, w_20_27, w_20_28, w_20_29, w_20_30, w_20_31, w_20_32, w_20_33, w_20_34, w_20_35, w_20_36, w_20_37, w_20_38, w_20_39, w_20_40, w_20_41, w_20_42, w_20_43, w_20_44, w_20_45, w_20_46, w_20_47, w_20_48, w_20_49, w_20_50, w_20_51, w_20_52, w_20_53, w_20_54, w_20_55, w_20_56, w_20_57, w_20_58, w_20_59, w_20_60, w_20_61, w_20_62, w_20_63, w_20_64, w_20_65, w_20_66, w_20_67, w_20_68, w_20_69, w_20_70, w_20_71, w_20_72, w_20_73, w_20_74, w_20_75, w_20_76, w_20_77, w_20_78, w_20_79, w_20_80, w_20_81, w_20_82, w_20_83, w_20_84, w_20_85, w_20_86, w_20_87, w_20_88, w_20_89, w_20_90, w_20_91, w_20_92, w_20_93, w_20_94, w_20_95, w_20_96, w_20_97, w_20_98, w_20_99, w_20_100, w_20_101, w_20_102, w_20_103, w_20_104, w_20_105, w_20_106, w_20_107, w_20_108, w_20_109, w_20_110, w_20_111, w_20_112, w_20_113, w_20_114, w_20_115, w_20_116, w_20_117, w_20_118, w_20_119, w_20_120, w_20_121, w_20_122, w_20_123, w_20_124, w_20_125, w_20_126, w_20_127, w_20_128, w_20_129, w_20_130, w_20_131, w_20_132, w_20_133, w_20_134, w_20_135, w_20_136, w_20_137, w_20_138, w_20_139, w_20_140, w_20_141, w_20_142, w_20_143, w_20_144, w_20_145, w_20_146, w_20_147, w_20_148, w_20_149, w_20_150, w_20_151, w_20_152, w_20_153, w_20_154, w_20_155, w_20_156, w_20_157, w_20_158, w_20_159, w_20_160, w_20_161, w_20_162, w_20_163, w_20_164, w_20_165, w_20_166, w_20_167, w_20_168, w_20_169, w_20_170, w_20_171, w_20_172, w_20_173, w_20_174, w_20_175, w_20_176, w_20_177, w_20_178, w_20_179, w_20_180, w_20_181, w_20_182, w_20_183, w_20_184, w_20_185, w_20_186, w_20_187, w_20_188, w_20_189, w_20_190, w_20_191, w_20_192, w_20_193, w_20_194, w_20_195, w_20_196, w_20_197, w_20_198, w_20_199, w_20_200, w_20_201, w_20_202, w_20_203, w_20_204, w_20_205, w_20_206, w_20_207, w_20_208, w_20_209, w_20_210, w_20_211, w_20_212, w_20_213, w_20_214, w_20_215, w_20_216, w_20_217, w_20_218, w_20_219, w_20_220, w_20_221, w_20_222, w_20_223, w_20_224, w_20_225, w_20_226, w_20_227, w_20_228, w_20_229, w_20_230, w_20_231, w_20_232, w_20_233, w_20_234, w_20_235, w_20_236, w_20_237, w_20_238, w_20_239, w_20_240, w_20_241, w_20_242, w_20_243, w_20_244, w_20_245, w_20_246, w_20_247, w_20_248, w_20_249, w_20_250, w_20_251, w_20_252, w_20_253, w_20_254, w_20_255, w_20_256, w_20_257, w_20_258, w_20_259, w_20_260, w_20_261, w_20_262, w_20_263, w_20_264, w_20_265, w_20_266, w_20_267, w_20_268, w_20_269, w_20_270, w_20_271, w_20_272, w_21_0, w_22_0, w_23_0, w_24_0, w_24_1, w_24_2, w_24_3, w_24_4, w_24_5, w_24_6, w_24_7, w_24_8, w_24_9, w_24_10, w_24_11, w_24_12, w_24_13, w_24_14, w_24_15, w_24_16, w_24_17, w_24_18, w_24_19, w_24_20, w_24_21, w_24_22, w_24_23, w_24_24, w_24_25, w_24_26, w_24_27, w_24_28, w_24_29, w_24_30, w_24_31, w_24_32, w_24_33, w_24_34, w_24_35, w_24_36, w_24_37, w_24_38, w_24_39, w_24_40, w_24_41, w_24_42, w_24_43, w_24_44, w_24_45, w_24_46, w_24_47, w_24_48, w_24_49, w_24_50, w_24_51, w_24_52, w_24_53, w_24_54, w_24_55, w_24_56, w_24_57, w_24_58, w_24_59, w_24_60, w_24_61, w_24_62, w_24_63, w_24_64, w_24_65, w_24_66, w_24_67, w_24_68, w_24_69, w_24_70, w_24_71, w_24_72, w_24_73, w_24_74, w_24_75, w_24_76, w_24_77, w_24_78, w_24_79, w_24_80, w_24_81, w_24_82, w_24_83, w_24_84, w_24_85, w_24_86, w_24_87, w_24_88, w_24_89, w_24_90, w_24_91, w_24_92, w_24_93, w_24_94, w_24_95, w_24_96, w_24_97, w_24_98, w_24_99, w_24_100, w_24_101, w_24_102, w_24_103, w_24_104, w_24_105, w_24_106, w_24_107, w_24_108, w_24_109, w_24_110, w_24_111, w_24_112, w_24_113, w_24_114, w_24_115, w_24_116, w_24_117, w_24_118, w_24_119, w_24_120, w_24_121, w_24_122, w_24_123, w_24_124, w_24_125, w_24_126, w_24_127, w_24_128, w_24_129, w_24_130, w_24_131, w_24_132, w_24_133, w_24_134, w_24_135, w_24_136, w_24_137, w_24_138, w_24_139, w_24_140, w_24_141, w_24_142, w_24_143, w_24_144, w_24_145, w_24_146, w_24_147, w_24_148, w_24_149, w_24_150, w_24_151, w_24_152, w_24_153, w_24_154, w_24_155, w_24_156, w_24_157, w_24_158, w_24_159, w_24_160, w_24_161, w_24_162, w_24_163, w_24_164, w_24_165, w_24_166, w_24_167, w_24_168, w_24_169, w_24_170, w_24_171, w_24_172, w_24_173, w_24_174, w_24_175, w_24_176, w_24_177, w_24_178, w_24_179, w_24_180, w_24_181, w_24_182, w_24_183, w_24_184, w_24_185, w_24_186, w_24_187, w_24_188, w_24_189, w_24_190, w_24_191, w_24_192, w_24_193, w_24_194, w_24_195, w_24_196, w_24_197, w_24_198, w_24_199, w_24_200, w_24_201, w_24_202, w_24_203, w_24_204, w_24_205, w_24_206, w_24_207, w_24_208, w_24_209, w_24_210, w_24_211, w_24_212, w_24_213, w_24_214, w_24_215, w_24_216, w_24_217, w_24_218, w_24_219, w_24_220, w_24_221, w_24_222, w_24_223, w_24_224, w_24_225, w_24_226, w_24_227, w_24_228, w_24_229, w_24_230, w_24_231, w_24_232, w_24_233, w_24_234, w_24_235, w_24_236, w_24_237, w_24_238, w_24_239, w_24_240, w_24_241, w_24_242, w_24_243, w_24_244, w_24_245, w_24_246, w_24_247, w_24_248, w_24_249, w_24_250, w_24_251, w_24_252, w_24_253, w_24_254, w_24_255, w_24_256, w_24_257, w_24_258, w_24_259, w_24_260, w_24_261, w_24_262, w_24_263, w_24_264, w_24_265, w_24_266, w_24_267, w_24_268, w_24_269, w_24_270, w_24_271, w_24_272, w_24_273, w_24_274, w_24_275, w_24_276, w_24_277, w_24_278, w_24_279, w_24_280, w_24_281, w_24_282, w_24_283, w_24_284, w_24_285, w_24_286, w_24_287, w_24_288, w_24_289, w_24_290, w_24_291, w_24_292, w_24_293, w_24_294, w_24_295, w_24_296, w_24_297, w_24_298, w_24_299, w_24_300, w_24_301, w_24_302, w_24_303, w_24_304, w_24_305, w_24_306, w_24_307, w_24_308, w_24_309, w_24_310, w_24_311, w_24_312, w_24_313, w_24_314, w_24_315, w_24_316, w_24_317, w_24_318, w_24_319, w_24_320, w_24_321, w_24_322, w_24_323, w_24_324, w_24_325, w_24_326, w_24_327, w_24_328, w_24_329, w_24_330, w_24_331, w_24_332, w_24_333, w_24_334, w_24_335, w_24_336, w_24_337, w_24_338, w_24_339, w_24_340, w_24_341, w_24_342, w_24_343, w_24_344, w_24_345, w_24_346, w_24_347, w_24_348, w_24_349, w_24_350, w_24_351, w_24_352, w_24_353, w_24_354, w_24_355, w_24_356, w_24_357, w_24_358, w_24_359, w_24_360, w_24_361, w_24_362, w_25_0, w_26_0, w_27_0, w_28_0, w_28_1, w_28_2, w_28_3, w_28_4, w_28_5, w_28_6, w_28_7, w_28_8, w_28_9, w_28_10, w_28_11, w_28_12, w_28_13, w_28_14, w_28_15, w_28_16, w_28_17, w_28_18, w_28_19, w_28_20, w_28_21, w_28_22, w_28_23, w_28_24, w_28_25, w_28_26, w_28_27, w_28_28, w_28_29, w_28_30, w_28_31, w_28_32, w_28_33, w_28_34, w_28_35, w_28_36, w_28_37, w_28_38, w_28_39, w_28_40, w_28_41, w_28_42, w_28_43, w_28_44, w_28_45, w_28_46, w_28_47, w_28_48, w_28_49, w_28_50, w_28_51, w_28_52, w_28_53, w_28_54, w_28_55, w_28_56, w_28_57, w_28_58, w_28_59, w_28_60, w_28_61, w_28_62, w_28_63, w_28_64, w_28_65, w_28_66, w_28_67, w_28_68, w_28_69, w_28_70, w_28_71, w_28_72, w_28_73, w_28_74, w_28_75, w_28_76, w_28_77, w_28_78, w_28_79, w_28_80, w_28_81, w_28_82, w_28_83, w_28_84, w_28_85, w_28_86, w_28_87, w_28_88, w_28_89, w_28_90, w_28_91, w_28_92, w_28_93, w_28_94, w_28_95, w_28_96, w_28_97, w_28_98, w_28_99, w_28_100, w_28_101, w_28_102, w_28_103, w_28_104, w_28_105, w_28_106, w_28_107, w_28_108, w_28_109, w_28_110, w_28_111, w_28_112, w_28_113, w_28_114, w_28_115, w_28_116, w_28_117, w_28_118, w_28_119, w_28_120, w_28_121, w_28_122, w_28_123, w_28_124, w_28_125, w_28_126, w_28_127, w_28_128, w_28_129, w_28_130, w_28_131, w_28_132, w_28_133, w_28_134, w_28_135, w_28_136, w_28_137, w_28_138, w_28_139, w_28_140, w_28_141, w_28_142, w_28_143, w_28_144, w_28_145, w_28_146, w_28_147, w_28_148, w_28_149, w_28_150, w_28_151, w_28_152, w_28_153, w_28_154, w_28_155, w_28_156, w_28_157, w_28_158, w_28_159, w_28_160, w_28_161, w_28_162, w_28_163, w_28_164, w_28_165, w_28_166, w_28_167, w_28_168, w_28_169, w_28_170, w_28_171, w_28_172, w_28_173, w_28_174, w_28_175, w_28_176, w_28_177, w_28_178, w_28_179, w_28_180, w_28_181, w_28_182, w_28_183, w_28_184, w_28_185, w_28_186, w_28_187, w_28_188, w_28_189, w_28_190, w_28_191, w_28_192, w_28_193, w_28_194, w_28_195, w_28_196, w_28_197, w_28_198, w_28_199, w_28_200, w_28_201, w_28_202, w_28_203, w_28_204, w_28_205, w_28_206, w_28_207, w_28_208, w_28_209, w_28_210, w_28_211, w_28_212, w_28_213, w_28_214, w_28_215, w_28_216, w_28_217, w_28_218, w_28_219, w_29_0, w_30_0, w_31_0, w_32_0, w_32_1, w_32_2, w_32_3, w_32_4, w_32_5, w_32_6, w_32_7, w_32_8, w_32_9, w_32_10, w_32_11, w_32_12, w_32_13, w_32_14, w_32_15, w_32_16, w_32_17, w_32_18, w_32_19, w_32_20, w_32_21, w_32_22, w_32_23, w_32_24, w_32_25, w_32_26, w_32_27, w_32_28, w_32_29, w_32_30, w_32_31, w_32_32, w_32_33, w_32_34, w_32_35, w_32_36, w_32_37, w_32_38, w_32_39, w_32_40, w_32_41, w_32_42, w_32_43, w_32_44, w_32_45, w_32_46, w_32_47, w_32_48, w_32_49, w_32_50, w_32_51, w_32_52, w_32_53, w_32_54, w_32_55, w_32_56, w_32_57, w_32_58, w_32_59, w_32_60, w_32_61, w_32_62, w_32_63, w_32_64, w_32_65, w_32_66, w_32_67, w_32_68, w_32_69, w_32_70, w_32_71, w_32_72, w_32_73, w_32_74, w_32_75, w_32_76, w_32_77, w_32_78, w_32_79, w_32_80, w_32_81, w_32_82, w_32_83, w_32_84, w_32_85, w_32_86, w_32_87, w_32_88, w_32_89, w_32_90, w_32_91, w_32_92, w_32_93, w_32_94, w_32_95, w_32_96, w_32_97, w_32_98, w_32_99, w_32_100, w_32_101, w_32_102, w_32_103, w_32_104, w_32_105, w_32_106, w_32_107, w_32_108, w_32_109, w_32_110, w_32_111, w_32_112, w_32_113, w_32_114, w_32_115, w_32_116, w_32_117, w_32_118, w_32_119, w_32_120, w_32_121, w_32_122, w_32_123, w_32_124, w_32_125, w_32_126, w_32_127, w_32_128, w_32_129, w_32_130, w_32_131, w_32_132, w_32_133, w_32_134, w_32_135, w_32_136, w_32_137, w_32_138, w_32_139, w_32_140, w_32_141, w_32_142, w_32_143, w_32_144, w_32_145, w_32_146, w_32_147, w_32_148, w_32_149, w_32_150, w_32_151, w_32_152, w_32_153, w_32_154, w_32_155, w_32_156, w_32_157, w_32_158, w_32_159, w_32_160, w_32_161, w_32_162, w_32_163, w_32_164, w_32_165, w_32_166, w_32_167, w_32_168, w_32_169, w_32_170, w_32_171, w_32_172, w_32_173, w_32_174, w_32_175, w_32_176, w_32_177, w_32_178, w_32_179, w_33_0, w_34_0, w_35_0, w_36_0, w_36_1, w_36_2, w_36_3, w_36_4, w_36_5, w_36_6, w_36_7, w_36_8, w_36_9, w_36_10, w_36_11, w_36_12, w_36_13, w_36_14, w_36_15, w_36_16, w_36_17, w_36_18, w_36_19, w_36_20, w_36_21, w_36_22, w_36_23, w_36_24, w_36_25, w_36_26, w_36_27, w_36_28, w_36_29, w_36_30, w_36_31, w_36_32, w_36_33, w_36_34, w_36_35, w_36_36, w_36_37, w_36_38, w_36_39, w_36_40, w_36_41, w_36_42, w_36_43, w_36_44, w_36_45, w_36_46, w_36_47, w_36_48, w_36_49, w_36_50, w_36_51, w_36_52, w_36_53, w_36_54, w_36_55, w_36_56, w_36_57, w_36_58, w_36_59, w_36_60, w_36_61, w_36_62, w_36_63, w_36_64, w_36_65, w_36_66, w_36_67, w_36_68, w_36_69, w_36_70, w_36_71, w_36_72, w_36_73, w_36_74, w_36_75, w_36_76, w_36_77, w_36_78, w_36_79, w_36_80, w_36_81, w_36_82, w_36_83, w_36_84, w_36_85, w_36_86, w_36_87, w_36_88, w_36_89, w_36_90, w_36_91, w_36_92, w_36_93, w_36_94, w_36_95, w_36_96, w_36_97, w_36_98, w_36_99, w_36_100, w_36_101, w_36_102, w_36_103, w_36_104, w_36_105, w_36_106, w_36_107, w_36_108, w_36_109, w_36_110, w_36_111, w_36_112, w_36_113, w_36_114, w_36_115, w_36_116, w_36_117, w_36_118, w_36_119, w_36_120, w_36_121, w_36_122, w_36_123, w_36_124, w_36_125, w_36_126, w_36_127, w_36_128, w_36_129, w_36_130, w_36_131, w_36_132, w_36_133, w_36_134, w_36_135, w_36_136, w_36_137, w_36_138, w_36_139, w_36_140, w_36_141, w_36_142, w_36_143, w_36_144, w_36_145, w_36_146, w_36_147, w_36_148, w_36_149, w_36_150, w_36_151, w_36_152, w_36_153, w_36_154, w_36_155, w_36_156, w_36_157, w_36_158, w_36_159, w_36_160, w_36_161, w_36_162, w_36_163, w_36_164, w_36_165, w_36_166, w_36_167, w_36_168, w_36_169, w_36_170, w_36_171, w_36_172, w_36_173, w_36_174, w_36_175, w_36_176, w_36_177, w_36_178, w_36_179, w_36_180, w_36_181, w_36_182, w_36_183, w_36_184, w_36_185, w_36_186, w_36_187, w_36_188, w_36_189, w_36_190, w_36_191, w_36_192, w_36_193, w_36_194, w_36_195, w_36_196, w_36_197, w_36_198, w_36_199, w_36_200, w_36_201, w_36_202, w_36_203, w_36_204, w_36_205, w_36_206, w_36_207, w_36_208, w_36_209, w_36_210, w_36_211, w_37_0, w_38_0, w_39_0, w_40_0, w_40_1, w_40_2, w_40_3, w_40_4, w_40_5, w_40_6, w_40_7, w_40_8, w_40_9, w_40_10, w_40_11, w_40_12, w_40_13, w_40_14, w_40_15, w_40_16, w_40_17, w_40_18, w_40_19, w_40_20, w_40_21, w_40_22, w_40_23, w_40_24, w_40_25, w_40_26, w_40_27, w_40_28, w_40_29, w_40_30, w_40_31, w_40_32, w_40_33, w_40_34, w_40_35, w_40_36, w_40_37, w_40_38, w_40_39, w_40_40, w_40_41, w_40_42, w_40_43, w_40_44, w_40_45, w_40_46, w_40_47, w_40_48, w_40_49, w_40_50, w_40_51, w_40_52, w_40_53, w_40_54, w_40_55, w_40_56, w_40_57, w_40_58, w_40_59, w_40_60, w_40_61, w_40_62, w_40_63, w_40_64, w_40_65, w_40_66, w_40_67, w_40_68, w_40_69, w_40_70, w_40_71, w_40_72, w_40_73, w_40_74, w_40_75, w_40_76, w_40_77, w_40_78, w_40_79, w_40_80, w_40_81, w_40_82, w_40_83, w_40_84, w_40_85, w_40_86, w_40_87, w_40_88, w_40_89, w_40_90, w_40_91, w_40_92, w_40_93, w_40_94, w_40_95, w_40_96, w_40_97, w_40_98, w_40_99, w_40_100, w_40_101, w_40_102, w_40_103, w_40_104, w_40_105, w_40_106, w_40_107, w_40_108, w_40_109, w_40_110, w_40_111, w_40_112, w_40_113, w_40_114, w_40_115, w_40_116, w_40_117, w_40_118, w_40_119, w_40_120, w_40_121, w_40_122, w_40_123, w_40_124, w_40_125, w_40_126, w_40_127, w_40_128, w_40_129, w_40_130, w_40_131, w_40_132, w_40_133, w_40_134, w_40_135, w_40_136, w_40_137, w_40_138, w_40_139, w_40_140, w_40_141, w_40_142, w_40_143, w_40_144, w_40_145, w_40_146, w_40_147, w_40_148, w_40_149, w_40_150, w_40_151, w_40_152, w_40_153, w_40_154, w_40_155, w_40_156, w_40_157, w_40_158, w_40_159, w_40_160, w_40_161, w_40_162, w_40_163, w_40_164, w_40_165, w_40_166, w_40_167, w_40_168, w_40_169, w_40_170, w_40_171, w_40_172, w_40_173, w_40_174, w_40_175, w_40_176, w_40_177, w_40_178, w_40_179, w_40_180, w_40_181, w_41_0, w_41_1, w_41_2, w_41_3, w_41_4, w_42_0, w_43_0, w_44_0, w_44_1, w_44_2, w_44_3, w_44_4, w_44_5, w_44_6, w_44_7, w_44_8, w_44_9, w_44_10, w_44_11, w_44_12, w_44_13, w_44_14, w_44_15, w_44_16, w_44_17, w_44_18, w_44_19, w_44_20, w_44_21, w_44_22, w_44_23, w_44_24, w_44_25, w_44_26, w_44_27, w_44_28, w_44_29, w_44_30, w_44_31, w_44_32, w_44_33, w_44_34, w_44_35, w_44_36, w_44_37, w_44_38, w_44_39, w_44_40, w_44_41, w_44_42, w_44_43, w_44_44, w_44_45, w_44_46, w_44_47, w_44_48, w_44_49, w_44_50, w_44_51, w_44_52, w_44_53, w_44_54, w_44_55, w_44_56, w_44_57, w_44_58, w_44_59, w_44_60, w_44_61, w_44_62, w_44_63, w_44_64, w_44_65, w_45_0, w_45_1, w_45_2, w_45_3, w_45_4, w_45_5, w_45_6, w_45_7, w_45_8, w_45_9, w_45_10, w_45_11, w_45_12, w_45_13, w_45_14, w_45_15, w_45_16, w_45_17, w_45_18, w_45_19, w_45_20, w_45_21, w_45_22, w_45_23, w_45_24, w_45_25, w_45_26, w_45_27, w_45_28, w_45_29, w_45_30, w_45_31, w_45_32, w_45_33, w_45_34, w_45_35, w_45_36, w_45_37, w_45_38, w_45_39, w_45_40, w_45_41, w_45_42, w_45_43, w_45_44, w_45_45, w_45_46, w_45_47, w_45_48, w_45_49, w_45_50, w_45_51, w_45_52, w_45_53, w_45_54, w_45_55, w_45_56, w_45_57, w_45_58, w_45_59, w_45_60, w_45_61, w_45_62, w_45_63, w_45_64, w_45_65, w_45_66, w_45_67, w_45_68, w_45_69, w_45_70, w_45_71, w_45_72, w_45_73, w_45_74, w_45_75, w_45_76, w_45_77, w_45_78, w_45_79, w_45_80, w_45_81, w_45_82, w_45_83, w_45_84, w_45_85, w_45_86, w_45_87, w_45_88, w_45_89, w_45_90, w_46_0, w_47_0, w_48_0, w_48_1, w_48_2, w_48_3, w_49_0, w_49_1, w_49_2, w_49_3, w_49_4, w_49_5, w_49_6, w_49_7, w_49_8, w_49_9, w_49_10, w_49_11, w_49_12, w_49_13, w_49_14, w_49_15, w_49_16, w_49_17, w_49_18, w_49_19, w_49_20, w_49_21, w_49_22, w_49_23, w_49_24, w_49_25, w_49_26, w_49_27, w_49_28, w_49_29, w_49_30, w_49_31, w_49_32, w_49_33, w_49_34, w_49_35, w_49_36, w_49_37, w_49_38, w_49_39, w_49_40, w_49_41, w_49_42, w_49_43, w_49_44, w_49_45, w_49_46, w_49_47, w_49_48, w_49_49, w_49_50, w_49_51, w_49_52, w_49_53, w_49_54, w_49_55, w_49_56, w_49_57, w_49_58, w_49_59, w_49_60, w_49_61, w_49_62, w_49_63, w_49_64, w_49_65, w_49_66, w_49_67, w_49_68, w_49_69, w_49_70, w_49_71, w_49_72, w_49_73, w_49_74, w_49_75, w_49_76, w_49_77, w_49_78, w_49_79, w_49_80, w_50_0, w_51_0, w_52_0, w_53_0, w_53_1, w_53_2, w_53_3, w_53_4, w_53_5, w_53_6, w_53_7, w_53_8, w_53_9, w_53_10, w_53_11, w_53_12, w_53_13, w_53_14, w_53_15, w_53_16, w_53_17, w_53_18, w_53_19, w_53_20, w_53_21, w_53_22, w_53_23, w_53_24, w_53_25, w_53_26, w_53_27, w_53_28, w_53_29, w_53_30, w_53_31, w_53_32, w_53_33, w_53_34, w_53_35, w_53_36, w_53_37, w_53_38, w_53_39, w_53_40, w_53_41, w_53_42, w_53_43, w_53_44, w_53_45, w_53_46, w_53_47, w_53_48, w_53_49, w_53_50, w_53_51, w_53_52, w_53_53, w_53_54, w_53_55, w_53_56, w_53_57, w_53_58, w_53_59, w_53_60, w_53_61, w_53_62, w_53_63, w_53_64, w_53_65, w_53_66, w_53_67, w_53_68, w_53_69, w_53_70, w_53_71, w_53_72, w_53_73, w_53_74, w_53_75, w_53_76, w_53_77, w_53_78, w_53_79, w_53_80, w_53_81, w_53_82, w_53_83, w_53_84, w_54_0, w_55_0, w_56_0, w_57_0, w_57_1, w_57_2, w_57_3, w_57_4, w_57_5, w_57_6, w_57_7, w_57_8, w_57_9, w_57_10, w_57_11, w_57_12, w_57_13, w_57_14, w_57_15, w_57_16, w_57_17, w_57_18, w_57_19, w_57_20, w_57_21, w_57_22, w_57_23, w_57_24, w_57_25, w_57_26, w_57_27, w_57_28, w_57_29, w_57_30, w_57_31, w_57_32, w_57_33, w_57_34, w_57_35, w_57_36, w_57_37, w_57_38, w_57_39, w_57_40, w_57_41, w_57_42, w_57_43, w_57_44, w_57_45, w_57_46, w_57_47, w_57_48, w_57_49, w_57_50, w_57_51, w_57_52, w_57_53, w_57_54, w_57_55, w_57_56, w_57_57, w_57_58, w_57_59, w_57_60, w_57_61, w_57_62, w_57_63, w_57_64, w_57_65, w_57_66, w_57_67, w_57_68, w_57_69, w_57_70, w_57_71, w_57_72, w_57_73, w_57_74, w_57_75, w_57_76, w_57_77, w_57_78, w_57_79, w_57_80, w_57_81, w_57_82, w_57_83, w_57_84, w_57_85, w_57_86, w_57_87, w_57_88, w_57_89, w_57_90, w_57_91, w_57_92, w_57_93, w_57_94, w_57_95, w_57_96, w_57_97, w_57_98, w_57_99, w_57_100, w_57_101, w_57_102, w_57_103, w_57_104, w_57_105, w_57_106, w_57_107, w_57_108, w_57_109, w_57_110, w_57_111, w_57_112, w_57_113, w_57_114, w_57_115, w_57_116, w_57_117, w_57_118, w_57_119, w_57_120, w_57_121, w_57_122, w_57_123, w_57_124, w_57_125, w_57_126, w_57_127, w_57_128, w_57_129, w_57_130, w_57_131, w_57_132, w_57_133, w_57_134, w_57_135, w_57_136, w_57_137, w_57_138, w_58_0, w_58_1, w_58_2, w_58_3, w_58_4, w_58_5, w_58_6, w_58_7, w_58_8, w_58_9, w_58_10, w_58_11, w_58_12, w_58_13, w_58_14, w_58_15, w_58_16, w_58_17, w_58_18, w_58_19, w_58_20, w_58_21, w_58_22, w_58_23, w_58_24, w_58_25, w_58_26, w_58_27, w_58_28, w_59_0, w_60_0, w_61_0, w_61_1, w_61_2, w_61_3, w_61_4, w_61_5, w_61_6, w_61_7, w_61_8, w_61_9, w_61_10, w_61_11, w_61_12, w_61_13, w_61_14, w_61_15, w_61_16, w_61_17, w_61_18, w_61_19, w_61_20, w_61_21, w_61_22, w_61_23, w_61_24, w_61_25, w_61_26, w_61_27, w_61_28, w_61_29, w_61_30, w_61_31, w_61_32, w_61_33, w_61_34, w_61_35, w_61_36, w_61_37, w_61_38, w_61_39, w_61_40, w_61_41, w_61_42, w_61_43, w_61_44, w_61_45, w_61_46, w_61_47, w_61_48, w_61_49, w_61_50, w_61_51, w_61_52, w_61_53, w_61_54, w_61_55, w_61_56, w_61_57, w_61_58, w_61_59, w_61_60, w_61_61, w_61_62, w_61_63, w_61_64, w_61_65, w_61_66, w_61_67, w_61_68, w_61_69, w_61_70, w_61_71, w_61_72, w_61_73, w_61_74, w_61_75, w_61_76, w_61_77, w_61_78, w_61_79, w_61_80, w_61_81, w_61_82, w_61_83, w_61_84, w_61_85, w_61_86, w_61_87, w_61_88, w_61_89, w_61_90, w_61_91, w_61_92, w_61_93, w_61_94, w_61_95, w_61_96, w_61_97, w_61_98, w_61_99, w_61_100, w_61_101, w_61_102, w_61_103, w_61_104, w_61_105, w_61_106, w_61_107, w_61_108, w_61_109, w_61_110, w_61_111, w_61_112, w_61_113, w_61_114, w_61_115, w_61_116, w_61_117, w_61_118, w_61_119, w_61_120, w_61_121, w_61_122, w_61_123, w_61_124, w_61_125, w_61_126, w_61_127, w_61_128, w_61_129, w_61_130, w_61_131, w_61_132, w_61_133, w_61_134, w_61_135, w_61_136, w_61_137, w_61_138, w_61_139, w_61_140, w_61_141, w_61_142, w_61_143, w_61_144, w_61_145, w_61_146, w_61_147, w_61_148, w_61_149, w_61_150, w_61_151, w_61_152, w_61_153, w_61_154, w_61_155, w_61_156, w_61_157, w_61_158, w_61_159, w_61_160, w_61_161, w_61_162, w_61_163, w_62_0, w_62_1, w_62_2, w_62_3, w_62_4, w_62_5, w_62_6, w_63_0, w_64_0, w_65_0, w_65_1, w_65_2, w_65_3, w_65_4, w_65_5, w_65_6, w_65_7, w_65_8, w_65_9, w_65_10, w_65_11, w_65_12, w_65_13, w_65_14, w_65_15, w_65_16, w_65_17, w_65_18, w_65_19, w_65_20, w_65_21, w_65_22, w_65_23, w_65_24, w_65_25, w_65_26, w_65_27, w_65_28, w_65_29, w_65_30, w_65_31, w_65_32, w_65_33, w_65_34, w_65_35, w_65_36, w_65_37, w_65_38, w_65_39, w_65_40, w_65_41, w_65_42, w_65_43, w_65_44, w_65_45, w_65_46, w_65_47, w_65_48, w_65_49, w_65_50, w_65_51, w_65_52, w_65_53, w_65_54, w_65_55, w_65_56, w_65_57, w_65_58, w_65_59, w_65_60, w_65_61, w_65_62, w_65_63, w_65_64, w_65_65, w_65_66, w_65_67, w_65_68, w_65_69, w_65_70, w_65_71, w_65_72, w_65_73, w_65_74, w_65_75, w_65_76, w_65_77, w_66_0, w_67_0, w_68_0, w_68_1, w_68_2, w_68_3, w_68_4, w_68_5, w_69_0, w_69_1, w_69_2, w_69_3, w_69_4, w_69_5, w_69_6, w_69_7, w_69_8, w_69_9, w_69_10, w_69_11, w_69_12, w_69_13, w_69_14, w_69_15, w_69_16, w_69_17, w_69_18, w_69_19, w_69_20, w_69_21, w_69_22, w_69_23, w_69_24, w_69_25, w_69_26, w_69_27, w_69_28, w_69_29, w_69_30, w_69_31, w_69_32, w_69_33, w_69_34, w_69_35, w_69_36, w_69_37, w_69_38, w_69_39, w_69_40, w_69_41, w_69_42, w_69_43, w_69_44, w_69_45, w_69_46, w_69_47, w_69_48, w_69_49, w_69_50, w_69_51, w_69_52, w_69_53, w_69_54, w_69_55, w_69_56, w_69_57, w_69_58, w_69_59, w_69_60, w_69_61, w_69_62, w_69_63, w_69_64, w_69_65, w_69_66, w_69_67, w_69_68, w_70_0, w_71_0, w_72_0, w_72_1, w_72_2, w_72_3, w_72_4, w_72_5, w_72_6, w_72_7, w_72_8, w_72_9, w_72_10, w_72_11, w_72_12, w_72_13, w_72_14, w_72_15, w_72_16, w_72_17, w_72_18, w_72_19, w_72_20, w_72_21, w_72_22, w_72_23, w_72_24, w_72_25, w_72_26, w_72_27, w_72_28, w_72_29, w_72_30, w_72_31, w_72_32, w_72_33, w_72_34, w_72_35, w_72_36, w_72_37, w_72_38, w_72_39, w_72_40, w_72_41, w_72_42, w_72_43, w_72_44, w_72_45, w_72_46, w_72_47, w_72_48, w_72_49, w_72_50, w_72_51, w_72_52, w_72_53, w_72_54, w_72_55, w_72_56, w_72_57, w_72_58, w_72_59, w_72_60, w_72_61, w_72_62, w_72_63, w_72_64, w_72_65, w_72_66, w_72_67, w_72_68, w_72_69, w_72_70, w_72_71, w_72_72, w_72_73, w_72_74, w_72_75, w_72_76, w_72_77, w_72_78, w_72_79, w_72_80, w_72_81, w_72_82, w_72_83, w_72_84, w_72_85, w_72_86, w_72_87, w_72_88, w_72_89, w_72_90, w_72_91, w_72_92, w_72_93, w_72_94, w_72_95, w_72_96, w_72_97, w_72_98, w_72_99, w_72_100, w_72_101, w_72_102, w_72_103, w_72_104, w_72_105, w_72_106, w_72_107, w_72_108, w_72_109, w_72_110, w_72_111, w_72_112, w_72_113, w_72_114, w_72_115, w_72_116, w_72_117, w_72_118, w_72_119, w_72_120, w_72_121, w_72_122, w_72_123, w_72_124, w_72_125, w_72_126, w_72_127, w_72_128, w_72_129, w_72_130, w_73_0, w_73_1, w_73_2, w_73_3, w_73_4, w_73_5, w_73_6, w_73_7, w_73_8, w_73_9, w_73_10, w_73_11, w_73_12, w_73_13, w_73_14, w_73_15, w_73_16, w_73_17, w_73_18, w_73_19, w_73_20, w_73_21, w_73_22, w_73_23, w_73_24, w_73_25, w_73_26, w_73_27, w_73_28, w_73_29, w_73_30, w_73_31, w_73_32, w_73_33, w_73_34, w_73_35, w_73_36, w_73_37, w_73_38, w_73_39, w_73_40, w_73_41, w_73_42, w_73_43, w_73_44, w_73_45, w_73_46, w_73_47, w_73_48, w_73_49, w_73_50, w_73_51, w_73_52, w_73_53, w_73_54, w_73_55, w_73_56, w_73_57, w_73_58, w_73_59, w_73_60, w_73_61, w_73_62, w_73_63, w_73_64, w_73_65, w_73_66, w_73_67, w_73_68, w_73_69, w_73_70, w_73_71, w_73_72, w_73_73, w_73_74, w_73_75, w_73_76, w_73_77, w_74_0, w_75_0, w_76_0, w_76_1, w_76_2, w_76_3, w_76_4, w_76_5, w_76_6, w_76_7, w_76_8, w_76_9, w_76_10, w_76_11, w_76_12, w_76_13, w_76_14, w_76_15, w_76_16, w_76_17, w_76_18, w_76_19, w_76_20, w_76_21, w_76_22, w_76_23, w_76_24, w_76_25, w_76_26, w_76_27, w_76_28, w_76_29, w_76_30, w_76_31, w_76_32, w_76_33, w_76_34, w_76_35, w_76_36, w_76_37, w_76_38, w_76_39, w_76_40, w_76_41, w_76_42, w_76_43, w_76_44, w_76_45, w_76_46, w_76_47, w_76_48, w_76_49, w_76_50, w_76_51, w_76_52, w_76_53, w_76_54, w_76_55, w_76_56, w_76_57, w_76_58, w_76_59, w_76_60, w_76_61, w_76_62, w_76_63, w_76_64, w_76_65, w_76_66, w_76_67, w_76_68, w_76_69, w_76_70, w_76_71, w_76_72, w_76_73, w_76_74, w_76_75, w_76_76, w_76_77, w_76_78, w_76_79, w_76_80, w_76_81, w_76_82, w_76_83, w_76_84, w_76_85, w_76_86, w_76_87, w_76_88, w_76_89, w_76_90, w_76_91, w_76_92, w_76_93, w_77_0, w_77_1, w_77_2, w_77_3, w_77_4, w_77_5, w_77_6, w_77_7, w_77_8, w_77_9, w_77_10, w_77_11, w_77_12, w_77_13, w_77_14, w_77_15, w_78_0, w_79_0, w_80_0, w_81_0, w_82_0, w_83_0, w_84_0, w_85_0, w_86_0, w_87_0, w_88_0, w_89_0, w_90_0, w_91_0, w_92_0, w_93_0, w_94_0, w_95_0, w_96_0, w_97_0, w_98_0, w_99_0, w_100_0, w_101_0, w_102_0, w_103_0, w_104_0, w_105_0, w_106_0, w_107_0, w_108_0, w_109_0, w_110_0, w_111_0, w_112_0, w_113_0, w_114_0, w_115_0, w_116_0, w_117_0, w_118_0, w_119_0, w_120_0, w_121_0, w_122_0, w_123_0, w_124_0, w_125_0, w_126_0, w_127_0]
+    List.sum_nil, w_0_0, w_0_1, w_0_2, w_0_3, w_0_4, w_0_5, w_0_6, w_0_7, w_0_8, w_0_9, w_0_10, w_0_11, w_1_0, w_2_0, w_3_0, w_4_0, w_4_1, w_4_2, w_4_3, w_4_4, w_4_5, w_4_6, w_4_7, w_4_8, w_4_9, w_4_10, w_4_11, w_4_12, w_4_13, w_4_14, w_4_15, w_4_16, w_4_17, w_4_18, w_4_19, w_4_20, w_4_21, w_4_22, w_4_23, w_4_24, w_4_25, w_4_26, w_4_27, w_4_28, w_4_29, w_4_30, w_4_31, w_4_32, w_4_33, w_4_34, w_4_35, w_4_36, w_4_37, w_5_0, w_6_0, w_7_0, w_8_0, w_8_1, w_8_2, w_8_3, w_8_4, w_8_5, w_8_6, w_8_7, w_8_8, w_8_9, w_8_10, w_8_11, w_8_12, w_8_13, w_8_14, w_8_15, w_8_16, w_8_17, w_8_18, w_8_19, w_8_20, w_8_21, w_8_22, w_8_23, w_8_24, w_8_25, w_8_26, w_8_27, w_8_28, w_8_29, w_8_30, w_8_31, w_8_32, w_9_0, w_10_0, w_11_0, w_12_0, w_12_1, w_12_2, w_12_3, w_12_4, w_12_5, w_12_6, w_12_7, w_12_8, w_12_9, w_12_10, w_12_11, w_12_12, w_12_13, w_12_14, w_12_15, w_12_16, w_12_17, w_12_18, w_12_19, w_12_20, w_12_21, w_12_22, w_12_23, w_12_24, w_12_25, w_12_26, w_12_27, w_12_28, w_12_29, w_12_30, w_12_31, w_13_0, w_14_0, w_15_0, w_16_0, w_16_1, w_16_2, w_16_3, w_16_4, w_16_5, w_16_6, w_16_7, w_16_8, w_16_9, w_16_10, w_16_11, w_16_12, w_16_13, w_16_14, w_16_15, w_16_16, w_16_17, w_16_18, w_16_19, w_16_20, w_16_21, w_16_22, w_16_23, w_16_24, w_16_25, w_16_26, w_16_27, w_16_28, w_16_29, w_16_30, w_16_31, w_16_32, w_16_33, w_16_34, w_16_35, w_16_36, w_16_37, w_16_38, w_16_39, w_16_40, w_16_41, w_16_42, w_16_43, w_16_44, w_16_45, w_16_46, w_16_47, w_16_48, w_16_49, w_16_50, w_16_51, w_16_52, w_16_53, w_16_54, w_16_55, w_16_56, w_16_57, w_16_58, w_16_59, w_16_60, w_16_61, w_16_62, w_16_63, w_16_64, w_16_65, w_16_66, w_16_67, w_16_68, w_16_69, w_16_70, w_16_71, w_16_72, w_16_73, w_16_74, w_16_75, w_16_76, w_16_77, w_16_78, w_16_79, w_16_80, w_16_81, w_16_82, w_16_83, w_16_84, w_16_85, w_16_86, w_16_87, w_16_88, w_16_89, w_16_90, w_16_91, w_16_92, w_16_93, w_16_94, w_16_95, w_16_96, w_16_97, w_16_98, w_16_99, w_16_100, w_16_101, w_16_102, w_16_103, w_16_104, w_16_105, w_16_106, w_16_107, w_16_108, w_16_109, w_16_110, w_16_111, w_16_112, w_16_113, w_16_114, w_16_115, w_16_116, w_16_117, w_16_118, w_16_119, w_16_120, w_16_121, w_16_122, w_16_123, w_16_124, w_16_125, w_16_126, w_16_127, w_16_128, w_16_129, w_16_130, w_16_131, w_16_132, w_16_133, w_16_134, w_16_135, w_16_136, w_16_137, w_16_138, w_16_139, w_16_140, w_16_141, w_16_142, w_16_143, w_16_144, w_16_145, w_16_146, w_16_147, w_16_148, w_16_149, w_16_150, w_16_151, w_16_152, w_16_153, w_17_0, w_18_0, w_19_0, w_20_0, w_20_1, w_20_2, w_20_3, w_20_4, w_20_5, w_20_6, w_20_7, w_20_8, w_20_9, w_20_10, w_20_11, w_20_12, w_20_13, w_20_14, w_20_15, w_20_16, w_20_17, w_20_18, w_20_19, w_20_20, w_20_21, w_20_22, w_20_23, w_20_24, w_20_25, w_20_26, w_20_27, w_20_28, w_20_29, w_20_30, w_20_31, w_20_32, w_20_33, w_20_34, w_20_35, w_20_36, w_20_37, w_20_38, w_20_39, w_20_40, w_20_41, w_20_42, w_20_43, w_20_44, w_20_45, w_20_46, w_20_47, w_20_48, w_20_49, w_20_50, w_20_51, w_20_52, w_20_53, w_20_54, w_20_55, w_20_56, w_20_57, w_20_58, w_20_59, w_20_60, w_20_61, w_20_62, w_20_63, w_20_64, w_20_65, w_20_66, w_20_67, w_20_68, w_20_69, w_20_70, w_20_71, w_20_72, w_20_73, w_20_74, w_20_75, w_20_76, w_20_77, w_20_78, w_20_79, w_20_80, w_20_81, w_20_82, w_20_83, w_20_84, w_20_85, w_20_86, w_20_87, w_20_88, w_20_89, w_20_90, w_20_91, w_20_92, w_20_93, w_20_94, w_20_95, w_20_96, w_20_97, w_20_98, w_20_99, w_20_100, w_20_101, w_20_102, w_20_103, w_20_104, w_20_105, w_20_106, w_20_107, w_20_108, w_20_109, w_20_110, w_20_111, w_20_112, w_20_113, w_20_114, w_20_115, w_20_116, w_20_117, w_20_118, w_20_119, w_20_120, w_20_121, w_20_122, w_20_123, w_20_124, w_20_125, w_20_126, w_20_127, w_20_128, w_20_129, w_20_130, w_20_131, w_20_132, w_20_133, w_20_134, w_20_135, w_20_136, w_20_137, w_20_138, w_20_139, w_20_140, w_20_141, w_20_142, w_20_143, w_20_144, w_20_145, w_20_146, w_20_147, w_20_148, w_20_149, w_20_150, w_20_151, w_20_152, w_20_153, w_20_154, w_20_155, w_20_156, w_20_157, w_20_158, w_20_159, w_20_160, w_20_161, w_20_162, w_20_163, w_20_164, w_20_165, w_20_166, w_20_167, w_20_168, w_20_169, w_20_170, w_20_171, w_20_172, w_20_173, w_20_174, w_20_175, w_20_176, w_20_177, w_20_178, w_20_179, w_20_180, w_20_181, w_20_182, w_20_183, w_20_184, w_20_185, w_20_186, w_20_187, w_20_188, w_20_189, w_20_190, w_20_191, w_20_192, w_20_193, w_20_194, w_20_195, w_20_196, w_20_197, w_20_198, w_20_199, w_20_200, w_20_201, w_20_202, w_20_203, w_20_204, w_20_205, w_20_206, w_20_207, w_20_208, w_20_209, w_20_210, w_20_211, w_20_212, w_20_213, w_20_214, w_20_215, w_20_216, w_20_217, w_20_218, w_20_219, w_20_220, w_20_221, w_20_222, w_20_223, w_20_224, w_20_225, w_20_226, w_20_227, w_20_228, w_20_229, w_20_230, w_20_231, w_20_232, w_20_233, w_20_234, w_20_235, w_20_236, w_20_237, w_20_238, w_20_239, w_20_240, w_20_241, w_20_242, w_20_243, w_20_244, w_20_245, w_20_246, w_20_247, w_20_248, w_20_249, w_20_250, w_20_251, w_20_252, w_20_253, w_20_254, w_20_255, w_20_256, w_20_257, w_20_258, w_20_259, w_20_260, w_20_261, w_20_262, w_20_263, w_20_264, w_20_265, w_20_266, w_20_267, w_20_268, w_20_269, w_20_270, w_20_271, w_20_272, w_21_0, w_22_0, w_23_0, w_24_0, w_24_1, w_24_2, w_24_3, w_24_4, w_24_5, w_24_6, w_24_7, w_24_8, w_24_9, w_24_10, w_24_11, w_24_12, w_24_13, w_24_14, w_24_15, w_24_16, w_24_17, w_24_18, w_24_19, w_24_20, w_24_21, w_24_22, w_24_23, w_24_24, w_24_25, w_24_26, w_24_27, w_24_28, w_24_29, w_24_30, w_24_31, w_24_32, w_24_33, w_24_34, w_24_35, w_24_36, w_24_37, w_24_38, w_24_39, w_24_40, w_24_41, w_24_42, w_24_43, w_24_44, w_24_45, w_24_46, w_24_47, w_24_48, w_24_49, w_24_50, w_24_51, w_24_52, w_24_53, w_24_54, w_24_55, w_24_56, w_24_57, w_24_58, w_24_59, w_24_60, w_24_61, w_24_62, w_24_63, w_24_64, w_24_65, w_24_66, w_24_67, w_24_68, w_24_69, w_24_70, w_24_71, w_24_72, w_24_73, w_24_74, w_24_75, w_24_76, w_24_77, w_24_78, w_24_79, w_24_80, w_24_81, w_24_82, w_24_83, w_24_84, w_24_85, w_24_86, w_24_87, w_24_88, w_24_89, w_24_90, w_24_91, w_24_92, w_24_93, w_24_94, w_24_95, w_24_96, w_24_97, w_24_98, w_24_99, w_24_100, w_24_101, w_24_102, w_24_103, w_24_104, w_24_105, w_24_106, w_24_107, w_24_108, w_24_109, w_24_110, w_24_111, w_24_112, w_24_113, w_24_114, w_24_115, w_24_116, w_24_117, w_24_118, w_24_119, w_24_120, w_24_121, w_24_122, w_24_123, w_24_124, w_24_125, w_24_126, w_24_127, w_24_128, w_24_129, w_24_130, w_24_131, w_24_132, w_24_133, w_24_134, w_24_135, w_24_136, w_24_137, w_24_138, w_24_139, w_24_140, w_24_141, w_24_142, w_24_143, w_24_144, w_24_145, w_24_146, w_24_147, w_24_148, w_24_149, w_24_150, w_24_151, w_24_152, w_24_153, w_24_154, w_24_155, w_24_156, w_24_157, w_24_158, w_24_159, w_24_160, w_24_161, w_24_162, w_24_163, w_24_164, w_24_165, w_24_166, w_24_167, w_24_168, w_24_169, w_24_170, w_24_171, w_24_172, w_24_173, w_24_174, w_24_175, w_24_176, w_24_177, w_24_178, w_24_179, w_24_180, w_24_181, w_24_182, w_24_183, w_24_184, w_24_185, w_24_186, w_24_187, w_24_188, w_24_189, w_24_190, w_24_191, w_24_192, w_24_193, w_24_194, w_24_195, w_24_196, w_24_197, w_24_198, w_24_199, w_24_200, w_24_201, w_24_202, w_24_203, w_24_204, w_24_205, w_24_206, w_24_207, w_24_208, w_24_209, w_24_210, w_24_211, w_24_212, w_24_213, w_24_214, w_24_215, w_24_216, w_24_217, w_24_218, w_24_219, w_24_220, w_24_221, w_24_222, w_24_223, w_24_224, w_24_225, w_24_226, w_24_227, w_24_228, w_24_229, w_24_230, w_24_231, w_24_232, w_24_233, w_24_234, w_24_235, w_24_236, w_24_237, w_24_238, w_24_239, w_24_240, w_24_241, w_24_242, w_24_243, w_24_244, w_24_245, w_24_246, w_24_247, w_24_248, w_24_249, w_24_250, w_24_251, w_24_252, w_24_253, w_24_254, w_24_255, w_24_256, w_24_257, w_24_258, w_24_259, w_24_260, w_24_261, w_24_262, w_24_263, w_24_264, w_24_265, w_24_266, w_24_267, w_24_268, w_24_269, w_24_270, w_24_271, w_24_272, w_24_273, w_24_274, w_24_275, w_24_276, w_24_277, w_24_278, w_24_279, w_24_280, w_24_281, w_24_282, w_24_283, w_24_284, w_24_285, w_24_286, w_24_287, w_24_288, w_24_289, w_24_290, w_24_291, w_24_292, w_24_293, w_24_294, w_24_295, w_24_296, w_24_297, w_24_298, w_24_299, w_24_300, w_24_301, w_24_302, w_24_303, w_24_304, w_24_305, w_24_306, w_24_307, w_24_308, w_24_309, w_24_310, w_24_311, w_24_312, w_24_313, w_24_314, w_24_315, w_24_316, w_24_317, w_24_318, w_24_319, w_24_320, w_24_321, w_24_322, w_24_323, w_24_324, w_24_325, w_24_326, w_24_327, w_24_328, w_24_329, w_24_330, w_24_331, w_24_332, w_24_333, w_24_334, w_24_335, w_24_336, w_24_337, w_24_338, w_24_339, w_24_340, w_24_341, w_24_342, w_24_343, w_24_344, w_24_345, w_24_346, w_24_347, w_24_348, w_24_349, w_24_350, w_24_351, w_24_352, w_24_353, w_24_354, w_24_355, w_24_356, w_24_357, w_24_358, w_24_359, w_24_360, w_24_361, w_24_362, w_25_0, w_26_0, w_27_0, w_28_0, w_28_1, w_28_2, w_28_3, w_28_4, w_28_5, w_28_6, w_28_7, w_28_8, w_28_9, w_28_10, w_28_11, w_28_12, w_28_13, w_28_14, w_28_15, w_28_16, w_28_17, w_28_18, w_28_19, w_28_20, w_28_21, w_28_22, w_28_23, w_28_24, w_28_25, w_28_26, w_28_27, w_28_28, w_28_29, w_28_30, w_28_31, w_28_32, w_28_33, w_28_34, w_28_35, w_28_36, w_28_37, w_28_38, w_28_39, w_28_40, w_28_41, w_28_42, w_28_43, w_28_44, w_28_45, w_28_46, w_28_47, w_28_48, w_28_49, w_28_50, w_28_51, w_28_52, w_28_53, w_28_54, w_28_55, w_28_56, w_28_57, w_28_58, w_28_59, w_28_60, w_28_61, w_28_62, w_28_63, w_28_64, w_28_65, w_28_66, w_28_67, w_28_68, w_28_69, w_28_70, w_28_71, w_28_72, w_28_73, w_28_74, w_28_75, w_28_76, w_28_77, w_28_78, w_28_79, w_28_80, w_28_81, w_28_82, w_28_83, w_28_84, w_28_85, w_28_86, w_28_87, w_28_88, w_28_89, w_28_90, w_28_91, w_28_92, w_28_93, w_28_94, w_28_95, w_28_96, w_28_97, w_28_98, w_28_99, w_28_100, w_28_101, w_28_102, w_28_103, w_28_104, w_28_105, w_28_106, w_28_107, w_28_108, w_28_109, w_28_110, w_28_111, w_28_112, w_28_113, w_28_114, w_28_115, w_28_116, w_28_117, w_28_118, w_28_119, w_28_120, w_28_121, w_28_122, w_28_123, w_28_124, w_28_125, w_28_126, w_28_127, w_28_128, w_28_129, w_28_130, w_28_131, w_28_132, w_28_133, w_28_134, w_28_135, w_28_136, w_28_137, w_28_138, w_28_139, w_28_140, w_28_141, w_28_142, w_28_143, w_28_144, w_28_145, w_28_146, w_28_147, w_28_148, w_28_149, w_28_150, w_28_151, w_28_152, w_28_153, w_28_154, w_28_155, w_28_156, w_28_157, w_28_158, w_28_159, w_28_160, w_28_161, w_28_162, w_28_163, w_28_164, w_28_165, w_28_166, w_28_167, w_28_168, w_28_169, w_28_170, w_28_171, w_28_172, w_28_173, w_28_174, w_28_175, w_28_176, w_28_177, w_28_178, w_28_179, w_28_180, w_28_181, w_28_182, w_28_183, w_28_184, w_28_185, w_28_186, w_28_187, w_28_188, w_28_189, w_28_190, w_28_191, w_28_192, w_28_193, w_28_194, w_28_195, w_28_196, w_28_197, w_28_198, w_28_199, w_28_200, w_28_201, w_28_202, w_28_203, w_28_204, w_28_205, w_28_206, w_28_207, w_28_208, w_28_209, w_28_210, w_28_211, w_28_212, w_28_213, w_28_214, w_28_215, w_28_216, w_28_217, w_28_218, w_28_219, w_29_0, w_30_0, w_31_0, w_32_0, w_32_1, w_32_2, w_32_3, w_32_4, w_32_5, w_32_6, w_32_7, w_32_8, w_32_9, w_32_10, w_32_11, w_32_12, w_32_13, w_32_14, w_32_15, w_32_16, w_32_17, w_32_18, w_32_19, w_32_20, w_32_21, w_32_22, w_32_23, w_32_24, w_32_25, w_32_26, w_32_27, w_32_28, w_32_29, w_32_30, w_32_31, w_32_32, w_32_33, w_32_34, w_32_35, w_32_36, w_32_37, w_32_38, w_32_39, w_32_40, w_32_41, w_32_42, w_32_43, w_32_44, w_32_45, w_32_46, w_32_47, w_32_48, w_32_49, w_32_50, w_32_51, w_32_52, w_32_53, w_32_54, w_32_55, w_32_56, w_32_57, w_32_58, w_32_59, w_32_60, w_32_61, w_32_62, w_32_63, w_32_64, w_32_65, w_32_66, w_32_67, w_32_68, w_32_69, w_32_70, w_32_71, w_32_72, w_32_73, w_32_74, w_32_75, w_32_76, w_32_77, w_32_78, w_32_79, w_32_80, w_32_81, w_32_82, w_32_83, w_32_84, w_32_85, w_32_86, w_32_87, w_32_88, w_32_89, w_32_90, w_32_91, w_32_92, w_32_93, w_32_94, w_32_95, w_32_96, w_32_97, w_32_98, w_32_99, w_32_100, w_32_101, w_32_102, w_32_103, w_32_104, w_32_105, w_32_106, w_32_107, w_32_108, w_32_109, w_32_110, w_32_111, w_32_112, w_32_113, w_32_114, w_32_115, w_32_116, w_32_117, w_32_118, w_32_119, w_32_120, w_32_121, w_32_122, w_32_123, w_32_124, w_32_125, w_32_126, w_32_127, w_32_128, w_32_129, w_32_130, w_32_131, w_32_132, w_32_133, w_32_134, w_32_135, w_32_136, w_32_137, w_32_138, w_32_139, w_32_140, w_32_141, w_32_142, w_32_143, w_32_144, w_32_145, w_32_146, w_32_147, w_32_148, w_32_149, w_32_150, w_32_151, w_32_152, w_32_153, w_32_154, w_32_155, w_32_156, w_32_157, w_32_158, w_32_159, w_32_160, w_32_161, w_32_162, w_32_163, w_32_164, w_32_165, w_32_166, w_32_167, w_32_168, w_32_169, w_32_170, w_32_171, w_32_172, w_32_173, w_32_174, w_32_175, w_32_176, w_32_177, w_32_178, w_32_179, w_33_0, w_34_0, w_35_0, w_36_0, w_36_1, w_36_2, w_36_3, w_36_4, w_36_5, w_36_6, w_36_7, w_36_8, w_36_9, w_36_10, w_36_11, w_36_12, w_36_13, w_36_14, w_36_15, w_36_16, w_36_17, w_36_18, w_36_19, w_36_20, w_36_21, w_36_22, w_36_23, w_36_24, w_36_25, w_36_26, w_36_27, w_36_28, w_36_29, w_36_30, w_36_31, w_36_32, w_36_33, w_36_34, w_36_35, w_36_36, w_36_37, w_36_38, w_36_39, w_36_40, w_36_41, w_36_42, w_36_43, w_36_44, w_36_45, w_36_46, w_36_47, w_36_48, w_36_49, w_36_50, w_36_51, w_36_52, w_36_53, w_36_54, w_36_55, w_36_56, w_36_57, w_36_58, w_36_59, w_36_60, w_36_61, w_36_62, w_36_63, w_36_64, w_36_65, w_36_66, w_36_67, w_36_68, w_36_69, w_36_70, w_36_71, w_36_72, w_36_73, w_36_74, w_36_75, w_36_76, w_36_77, w_36_78, w_36_79, w_36_80, w_36_81, w_36_82, w_36_83, w_36_84, w_36_85, w_36_86, w_36_87, w_36_88, w_36_89, w_36_90, w_36_91, w_36_92, w_36_93, w_36_94, w_36_95, w_36_96, w_36_97, w_36_98, w_36_99, w_36_100, w_36_101, w_36_102, w_36_103, w_36_104, w_36_105, w_36_106, w_36_107, w_36_108, w_36_109, w_36_110, w_36_111, w_36_112, w_36_113, w_36_114, w_36_115, w_36_116, w_36_117, w_36_118, w_36_119, w_36_120, w_36_121, w_36_122, w_36_123, w_36_124, w_36_125, w_36_126, w_36_127, w_36_128, w_36_129, w_36_130, w_36_131, w_36_132, w_36_133, w_36_134, w_36_135, w_36_136, w_36_137, w_36_138, w_36_139, w_36_140, w_36_141, w_36_142, w_36_143, w_36_144, w_36_145, w_36_146, w_36_147, w_36_148, w_36_149, w_36_150, w_36_151, w_36_152, w_36_153, w_36_154, w_36_155, w_36_156, w_36_157, w_36_158, w_36_159, w_36_160, w_36_161, w_36_162, w_36_163, w_36_164, w_36_165, w_36_166, w_36_167, w_36_168, w_36_169, w_36_170, w_36_171, w_36_172, w_36_173, w_36_174, w_36_175, w_36_176, w_36_177, w_36_178, w_36_179, w_36_180, w_36_181, w_36_182, w_36_183, w_36_184, w_36_185, w_36_186, w_36_187, w_36_188, w_36_189, w_36_190, w_36_191, w_36_192, w_36_193, w_36_194, w_36_195, w_36_196, w_36_197, w_36_198, w_36_199, w_36_200, w_36_201, w_36_202, w_36_203, w_36_204, w_36_205, w_36_206, w_36_207, w_36_208, w_36_209, w_36_210, w_36_211, w_37_0, w_38_0, w_39_0, w_40_0, w_40_1, w_40_2, w_40_3, w_40_4, w_40_5, w_40_6, w_40_7, w_40_8, w_40_9, w_40_10, w_40_11, w_40_12, w_40_13, w_40_14, w_40_15, w_40_16, w_40_17, w_40_18, w_40_19, w_40_20, w_40_21, w_40_22, w_40_23, w_40_24, w_40_25, w_40_26, w_40_27, w_40_28, w_40_29, w_40_30, w_40_31, w_40_32, w_40_33, w_40_34, w_40_35, w_40_36, w_40_37, w_40_38, w_40_39, w_40_40, w_40_41, w_40_42, w_40_43, w_40_44, w_40_45, w_40_46, w_40_47, w_40_48, w_40_49, w_40_50, w_40_51, w_40_52, w_40_53, w_40_54, w_40_55, w_40_56, w_40_57, w_40_58, w_40_59, w_40_60, w_40_61, w_40_62, w_40_63, w_40_64, w_40_65, w_40_66, w_40_67, w_40_68, w_40_69, w_40_70, w_40_71, w_40_72, w_40_73, w_40_74, w_40_75, w_40_76, w_40_77, w_40_78, w_40_79, w_40_80, w_40_81, w_40_82, w_40_83, w_40_84, w_40_85, w_40_86, w_40_87, w_40_88, w_40_89, w_40_90, w_40_91, w_40_92, w_40_93, w_40_94, w_40_95, w_40_96, w_40_97, w_40_98, w_40_99, w_40_100, w_40_101, w_40_102, w_40_103, w_40_104, w_40_105, w_40_106, w_40_107, w_40_108, w_40_109, w_40_110, w_40_111, w_40_112, w_40_113, w_40_114, w_40_115, w_40_116, w_40_117, w_40_118, w_40_119, w_40_120, w_40_121, w_40_122, w_40_123, w_40_124, w_40_125, w_40_126, w_40_127, w_40_128, w_40_129, w_40_130, w_40_131, w_40_132, w_40_133, w_40_134, w_40_135, w_40_136, w_40_137, w_40_138, w_40_139, w_40_140, w_40_141, w_40_142, w_40_143, w_40_144, w_40_145, w_40_146, w_40_147, w_40_148, w_40_149, w_40_150, w_40_151, w_40_152, w_40_153, w_40_154, w_40_155, w_40_156, w_40_157, w_40_158, w_40_159, w_40_160, w_40_161, w_40_162, w_40_163, w_40_164, w_40_165, w_40_166, w_40_167, w_40_168, w_40_169, w_40_170, w_40_171, w_40_172, w_40_173, w_40_174, w_40_175, w_40_176, w_40_177, w_40_178, w_40_179, w_40_180, w_40_181, w_40_182, w_40_183, w_40_184, w_40_185, w_40_186, w_40_187, w_40_188, w_40_189, w_40_190, w_40_191, w_40_192, w_40_193, w_40_194, w_40_195, w_40_196, w_40_197, w_40_198, w_40_199, w_40_200, w_40_201, w_40_202, w_40_203, w_40_204, w_40_205, w_40_206, w_40_207, w_40_208, w_40_209, w_40_210, w_40_211, w_40_212, w_40_213, w_40_214, w_40_215, w_40_216, w_40_217, w_40_218, w_40_219, w_40_220, w_40_221, w_40_222, w_40_223, w_40_224, w_40_225, w_40_226, w_40_227, w_40_228, w_40_229, w_40_230, w_40_231, w_40_232, w_40_233, w_40_234, w_40_235, w_40_236, w_40_237, w_40_238, w_40_239, w_40_240, w_40_241, w_40_242, w_40_243, w_40_244, w_40_245, w_40_246, w_40_247, w_40_248, w_40_249, w_40_250, w_40_251, w_40_252, w_40_253, w_40_254, w_40_255, w_40_256, w_40_257, w_40_258, w_40_259, w_40_260, w_40_261, w_40_262, w_40_263, w_40_264, w_40_265, w_40_266, w_40_267, w_40_268, w_40_269, w_40_270, w_40_271, w_40_272, w_40_273, w_40_274, w_40_275, w_40_276, w_40_277, w_40_278, w_40_279, w_40_280, w_40_281, w_40_282, w_40_283, w_40_284, w_40_285, w_40_286, w_40_287, w_40_288, w_40_289, w_40_290, w_40_291, w_40_292, w_40_293, w_40_294, w_40_295, w_40_296, w_40_297, w_40_298, w_40_299, w_40_300, w_40_301, w_40_302, w_40_303, w_40_304, w_40_305, w_40_306, w_40_307, w_40_308, w_40_309, w_40_310, w_40_311, w_40_312, w_40_313, w_40_314, w_40_315, w_40_316, w_40_317, w_40_318, w_40_319, w_40_320, w_40_321, w_40_322, w_40_323, w_40_324, w_40_325, w_40_326, w_40_327, w_40_328, w_40_329, w_40_330, w_40_331, w_40_332, w_40_333, w_40_334, w_40_335, w_40_336, w_40_337, w_40_338, w_40_339, w_40_340, w_40_341, w_40_342, w_40_343, w_40_344, w_40_345, w_40_346, w_40_347, w_40_348, w_40_349, w_40_350, w_40_351, w_40_352, w_40_353, w_40_354, w_40_355, w_40_356, w_40_357, w_40_358, w_40_359, w_40_360, w_40_361, w_40_362, w_40_363, w_40_364, w_40_365, w_40_366, w_40_367, w_40_368, w_40_369, w_40_370, w_40_371, w_40_372, w_40_373, w_40_374, w_40_375, w_40_376, w_40_377, w_40_378, w_40_379, w_40_380, w_40_381, w_40_382, w_40_383, w_40_384, w_40_385, w_40_386, w_40_387, w_40_388, w_40_389, w_40_390, w_40_391, w_40_392, w_40_393, w_40_394, w_40_395, w_40_396, w_40_397, w_40_398, w_40_399, w_40_400, w_40_401, w_40_402, w_40_403, w_40_404, w_40_405, w_40_406, w_40_407, w_40_408, w_40_409, w_40_410, w_40_411, w_40_412, w_40_413, w_40_414, w_40_415, w_40_416, w_40_417, w_40_418, w_40_419, w_40_420, w_40_421, w_40_422, w_40_423, w_40_424, w_40_425, w_40_426, w_40_427, w_40_428, w_40_429, w_40_430, w_40_431, w_40_432, w_40_433, w_40_434, w_40_435, w_40_436, w_40_437, w_40_438, w_40_439, w_40_440, w_41_0, w_41_1, w_41_2, w_41_3, w_41_4, w_41_5, w_41_6, w_42_0, w_43_0, w_44_0, w_44_1, w_44_2, w_44_3, w_44_4, w_44_5, w_44_6, w_44_7, w_44_8, w_44_9, w_44_10, w_44_11, w_44_12, w_44_13, w_44_14, w_44_15, w_44_16, w_44_17, w_44_18, w_44_19, w_44_20, w_44_21, w_44_22, w_44_23, w_44_24, w_44_25, w_44_26, w_44_27, w_44_28, w_44_29, w_44_30, w_44_31, w_44_32, w_44_33, w_44_34, w_44_35, w_44_36, w_44_37, w_44_38, w_44_39, w_44_40, w_44_41, w_44_42, w_44_43, w_44_44, w_44_45, w_44_46, w_44_47, w_44_48, w_44_49, w_44_50, w_44_51, w_44_52, w_44_53, w_44_54, w_44_55, w_44_56, w_44_57, w_44_58, w_44_59, w_44_60, w_44_61, w_44_62, w_44_63, w_44_64, w_44_65, w_44_66, w_44_67, w_44_68, w_44_69, w_44_70, w_44_71, w_44_72, w_44_73, w_44_74, w_44_75, w_44_76, w_44_77, w_44_78, w_44_79, w_44_80, w_44_81, w_44_82, w_44_83, w_44_84, w_44_85, w_44_86, w_44_87, w_44_88, w_44_89, w_44_90, w_44_91, w_44_92, w_44_93, w_44_94, w_44_95, w_44_96, w_44_97, w_44_98, w_44_99, w_44_100, w_44_101, w_44_102, w_44_103, w_44_104, w_44_105, w_44_106, w_44_107, w_44_108, w_44_109, w_44_110, w_44_111, w_45_0, w_45_1, w_45_2, w_45_3, w_45_4, w_45_5, w_45_6, w_45_7, w_45_8, w_45_9, w_45_10, w_45_11, w_45_12, w_45_13, w_45_14, w_45_15, w_45_16, w_45_17, w_45_18, w_45_19, w_45_20, w_45_21, w_45_22, w_45_23, w_45_24, w_45_25, w_45_26, w_45_27, w_45_28, w_45_29, w_45_30, w_45_31, w_45_32, w_45_33, w_45_34, w_45_35, w_45_36, w_45_37, w_45_38, w_45_39, w_45_40, w_45_41, w_45_42, w_45_43, w_45_44, w_45_45, w_45_46, w_45_47, w_45_48, w_45_49, w_45_50, w_45_51, w_45_52, w_45_53, w_45_54, w_45_55, w_45_56, w_45_57, w_45_58, w_45_59, w_45_60, w_45_61, w_45_62, w_45_63, w_45_64, w_45_65, w_45_66, w_45_67, w_45_68, w_45_69, w_45_70, w_45_71, w_45_72, w_45_73, w_45_74, w_45_75, w_45_76, w_45_77, w_45_78, w_45_79, w_45_80, w_45_81, w_45_82, w_45_83, w_45_84, w_45_85, w_45_86, w_45_87, w_45_88, w_45_89, w_45_90, w_45_91, w_45_92, w_45_93, w_45_94, w_45_95, w_45_96, w_45_97, w_45_98, w_45_99, w_45_100, w_45_101, w_45_102, w_45_103, w_45_104, w_45_105, w_45_106, w_45_107, w_45_108, w_45_109, w_45_110, w_45_111, w_45_112, w_45_113, w_45_114, w_45_115, w_45_116, w_45_117, w_45_118, w_45_119, w_45_120, w_45_121, w_45_122, w_45_123, w_45_124, w_45_125, w_45_126, w_45_127, w_45_128, w_45_129, w_45_130, w_45_131, w_45_132, w_45_133, w_45_134, w_45_135, w_45_136, w_45_137, w_45_138, w_45_139, w_45_140, w_45_141, w_45_142, w_45_143, w_45_144, w_45_145, w_45_146, w_45_147, w_45_148, w_45_149, w_45_150, w_45_151, w_45_152, w_45_153, w_45_154, w_45_155, w_45_156, w_45_157, w_45_158, w_45_159, w_45_160, w_45_161, w_45_162, w_45_163, w_45_164, w_45_165, w_45_166, w_45_167, w_45_168, w_45_169, w_45_170, w_45_171, w_45_172, w_45_173, w_45_174, w_45_175, w_45_176, w_45_177, w_45_178, w_45_179, w_45_180, w_45_181, w_45_182, w_45_183, w_45_184, w_45_185, w_45_186, w_45_187, w_45_188, w_45_189, w_45_190, w_45_191, w_45_192, w_45_193, w_45_194, w_45_195, w_45_196, w_45_197, w_45_198, w_45_199, w_45_200, w_45_201, w_45_202, w_45_203, w_45_204, w_45_205, w_45_206, w_45_207, w_45_208, w_45_209, w_45_210, w_45_211, w_45_212, w_45_213, w_45_214, w_45_215, w_45_216, w_45_217, w_45_218, w_45_219, w_45_220, w_45_221, w_45_222, w_45_223, w_45_224, w_45_225, w_45_226, w_45_227, w_45_228, w_45_229, w_45_230, w_45_231, w_45_232, w_45_233, w_45_234, w_45_235, w_45_236, w_45_237, w_45_238, w_45_239, w_45_240, w_45_241, w_45_242, w_45_243, w_45_244, w_45_245, w_45_246, w_45_247, w_45_248, w_45_249, w_45_250, w_45_251, w_45_252, w_45_253, w_45_254, w_45_255, w_45_256, w_45_257, w_45_258, w_45_259, w_45_260, w_45_261, w_45_262, w_45_263, w_45_264, w_45_265, w_45_266, w_45_267, w_45_268, w_45_269, w_45_270, w_45_271, w_45_272, w_45_273, w_45_274, w_45_275, w_45_276, w_45_277, w_45_278, w_45_279, w_45_280, w_45_281, w_45_282, w_45_283, w_45_284, w_45_285, w_45_286, w_45_287, w_45_288, w_45_289, w_45_290, w_45_291, w_45_292, w_45_293, w_45_294, w_45_295, w_45_296, w_45_297, w_45_298, w_45_299, w_45_300, w_45_301, w_45_302, w_46_0, w_47_0, w_48_0, w_48_1, w_48_2, w_48_3, w_49_0, w_49_1, w_49_2, w_49_3, w_49_4, w_49_5, w_49_6, w_49_7, w_49_8, w_49_9, w_49_10, w_49_11, w_49_12, w_49_13, w_49_14, w_49_15, w_49_16, w_49_17, w_49_18, w_49_19, w_49_20, w_49_21, w_49_22, w_49_23, w_49_24, w_49_25, w_49_26, w_49_27, w_49_28, w_49_29, w_49_30, w_49_31, w_49_32, w_49_33, w_49_34, w_49_35, w_49_36, w_49_37, w_49_38, w_49_39, w_49_40, w_49_41, w_49_42, w_49_43, w_49_44, w_49_45, w_49_46, w_49_47, w_49_48, w_49_49, w_49_50, w_49_51, w_49_52, w_49_53, w_49_54, w_49_55, w_49_56, w_49_57, w_49_58, w_49_59, w_49_60, w_49_61, w_49_62, w_49_63, w_49_64, w_49_65, w_49_66, w_49_67, w_49_68, w_49_69, w_49_70, w_49_71, w_49_72, w_49_73, w_49_74, w_49_75, w_49_76, w_49_77, w_49_78, w_49_79, w_49_80, w_49_81, w_49_82, w_49_83, w_49_84, w_49_85, w_49_86, w_49_87, w_49_88, w_49_89, w_49_90, w_49_91, w_49_92, w_49_93, w_49_94, w_49_95, w_49_96, w_49_97, w_49_98, w_49_99, w_49_100, w_49_101, w_49_102, w_49_103, w_49_104, w_49_105, w_49_106, w_49_107, w_49_108, w_49_109, w_49_110, w_49_111, w_49_112, w_49_113, w_49_114, w_49_115, w_49_116, w_49_117, w_49_118, w_49_119, w_49_120, w_49_121, w_49_122, w_49_123, w_49_124, w_49_125, w_49_126, w_49_127, w_49_128, w_49_129, w_49_130, w_49_131, w_49_132, w_49_133, w_49_134, w_49_135, w_49_136, w_49_137, w_49_138, w_49_139, w_49_140, w_49_141, w_49_142, w_49_143, w_49_144, w_49_145, w_49_146, w_49_147, w_49_148, w_49_149, w_49_150, w_49_151, w_49_152, w_49_153, w_49_154, w_49_155, w_49_156, w_49_157, w_49_158, w_49_159, w_49_160, w_49_161, w_49_162, w_49_163, w_49_164, w_49_165, w_49_166, w_49_167, w_49_168, w_49_169, w_49_170, w_49_171, w_49_172, w_49_173, w_49_174, w_49_175, w_49_176, w_49_177, w_49_178, w_49_179, w_49_180, w_49_181, w_49_182, w_49_183, w_49_184, w_49_185, w_49_186, w_49_187, w_49_188, w_49_189, w_49_190, w_49_191, w_49_192, w_49_193, w_49_194, w_50_0, w_51_0, w_52_0, w_53_0, w_53_1, w_53_2, w_53_3, w_53_4, w_53_5, w_53_6, w_53_7, w_53_8, w_53_9, w_53_10, w_53_11, w_53_12, w_53_13, w_53_14, w_53_15, w_53_16, w_53_17, w_53_18, w_53_19, w_53_20, w_53_21, w_53_22, w_53_23, w_53_24, w_53_25, w_53_26, w_53_27, w_53_28, w_53_29, w_53_30, w_53_31, w_53_32, w_53_33, w_53_34, w_53_35, w_53_36, w_53_37, w_53_38, w_53_39, w_53_40, w_53_41, w_53_42, w_53_43, w_53_44, w_53_45, w_53_46, w_53_47, w_53_48, w_53_49, w_53_50, w_53_51, w_53_52, w_53_53, w_53_54, w_53_55, w_53_56, w_53_57, w_53_58, w_53_59, w_53_60, w_53_61, w_53_62, w_53_63, w_53_64, w_53_65, w_53_66, w_53_67, w_53_68, w_53_69, w_53_70, w_53_71, w_53_72, w_53_73, w_53_74, w_53_75, w_53_76, w_53_77, w_53_78, w_53_79, w_53_80, w_53_81, w_53_82, w_53_83, w_53_84, w_53_85, w_53_86, w_53_87, w_53_88, w_53_89, w_53_90, w_53_91, w_53_92, w_53_93, w_53_94, w_53_95, w_53_96, w_53_97, w_53_98, w_53_99, w_53_100, w_53_101, w_53_102, w_53_103, w_53_104, w_53_105, w_53_106, w_53_107, w_53_108, w_53_109, w_53_110, w_53_111, w_53_112, w_53_113, w_53_114, w_53_115, w_53_116, w_53_117, w_53_118, w_53_119, w_53_120, w_53_121, w_53_122, w_53_123, w_53_124, w_53_125, w_53_126, w_53_127, w_53_128, w_53_129, w_53_130, w_53_131, w_53_132, w_53_133, w_53_134, w_53_135, w_53_136, w_53_137, w_53_138, w_53_139, w_53_140, w_53_141, w_53_142, w_53_143, w_53_144, w_53_145, w_53_146, w_53_147, w_53_148, w_53_149, w_53_150, w_53_151, w_53_152, w_53_153, w_53_154, w_53_155, w_53_156, w_53_157, w_53_158, w_53_159, w_53_160, w_53_161, w_53_162, w_53_163, w_53_164, w_53_165, w_53_166, w_53_167, w_53_168, w_53_169, w_53_170, w_53_171, w_53_172, w_53_173, w_53_174, w_53_175, w_53_176, w_53_177, w_53_178, w_53_179, w_53_180, w_53_181, w_53_182, w_53_183, w_53_184, w_53_185, w_53_186, w_53_187, w_53_188, w_53_189, w_54_0, w_55_0, w_56_0, w_57_0, w_57_1, w_57_2, w_57_3, w_57_4, w_57_5, w_57_6, w_57_7, w_57_8, w_57_9, w_57_10, w_57_11, w_57_12, w_57_13, w_57_14, w_57_15, w_57_16, w_57_17, w_57_18, w_57_19, w_57_20, w_57_21, w_57_22, w_57_23, w_57_24, w_57_25, w_57_26, w_57_27, w_57_28, w_57_29, w_57_30, w_57_31, w_57_32, w_57_33, w_57_34, w_57_35, w_57_36, w_57_37, w_57_38, w_57_39, w_57_40, w_57_41, w_57_42, w_57_43, w_57_44, w_57_45, w_57_46, w_57_47, w_57_48, w_57_49, w_57_50, w_57_51, w_57_52, w_57_53, w_57_54, w_57_55, w_57_56, w_57_57, w_57_58, w_57_59, w_57_60, w_57_61, w_57_62, w_57_63, w_57_64, w_57_65, w_57_66, w_57_67, w_57_68, w_57_69, w_57_70, w_57_71, w_57_72, w_57_73, w_57_74, w_57_75, w_57_76, w_57_77, w_57_78, w_57_79, w_57_80, w_57_81, w_57_82, w_57_83, w_57_84, w_57_85, w_57_86, w_57_87, w_57_88, w_57_89, w_57_90, w_57_91, w_57_92, w_57_93, w_57_94, w_57_95, w_57_96, w_57_97, w_57_98, w_57_99, w_57_100, w_57_101, w_57_102, w_57_103, w_57_104, w_57_105, w_57_106, w_57_107, w_57_108, w_57_109, w_57_110, w_57_111, w_57_112, w_57_113, w_57_114, w_57_115, w_57_116, w_57_117, w_57_118, w_57_119, w_57_120, w_57_121, w_57_122, w_57_123, w_57_124, w_57_125, w_57_126, w_57_127, w_57_128, w_57_129, w_57_130, w_57_131, w_57_132, w_57_133, w_57_134, w_57_135, w_57_136, w_57_137, w_57_138, w_57_139, w_57_140, w_57_141, w_57_142, w_57_143, w_57_144, w_57_145, w_57_146, w_57_147, w_57_148, w_57_149, w_57_150, w_57_151, w_57_152, w_57_153, w_57_154, w_57_155, w_57_156, w_57_157, w_57_158, w_57_159, w_57_160, w_57_161, w_57_162, w_57_163, w_57_164, w_57_165, w_57_166, w_57_167, w_57_168, w_57_169, w_57_170, w_57_171, w_57_172, w_57_173, w_57_174, w_57_175, w_57_176, w_57_177, w_57_178, w_57_179, w_57_180, w_57_181, w_57_182, w_57_183, w_57_184, w_57_185, w_57_186, w_57_187, w_57_188, w_57_189, w_57_190, w_57_191, w_57_192, w_57_193, w_57_194, w_57_195, w_57_196, w_57_197, w_57_198, w_57_199, w_57_200, w_57_201, w_57_202, w_57_203, w_57_204, w_57_205, w_57_206, w_57_207, w_57_208, w_57_209, w_57_210, w_57_211, w_57_212, w_57_213, w_57_214, w_57_215, w_57_216, w_57_217, w_57_218, w_57_219, w_57_220, w_57_221, w_57_222, w_57_223, w_57_224, w_57_225, w_57_226, w_57_227, w_57_228, w_57_229, w_57_230, w_57_231, w_57_232, w_57_233, w_57_234, w_57_235, w_57_236, w_57_237, w_57_238, w_57_239, w_57_240, w_57_241, w_57_242, w_57_243, w_57_244, w_57_245, w_57_246, w_57_247, w_57_248, w_57_249, w_57_250, w_57_251, w_57_252, w_57_253, w_57_254, w_57_255, w_57_256, w_57_257, w_57_258, w_57_259, w_57_260, w_57_261, w_57_262, w_57_263, w_57_264, w_57_265, w_57_266, w_57_267, w_57_268, w_57_269, w_57_270, w_57_271, w_57_272, w_57_273, w_57_274, w_57_275, w_57_276, w_57_277, w_57_278, w_57_279, w_57_280, w_57_281, w_57_282, w_57_283, w_57_284, w_57_285, w_57_286, w_57_287, w_57_288, w_57_289, w_57_290, w_57_291, w_57_292, w_57_293, w_57_294, w_57_295, w_57_296, w_57_297, w_57_298, w_57_299, w_57_300, w_57_301, w_57_302, w_57_303, w_57_304, w_57_305, w_57_306, w_57_307, w_57_308, w_57_309, w_57_310, w_57_311, w_57_312, w_57_313, w_57_314, w_57_315, w_57_316, w_57_317, w_57_318, w_57_319, w_57_320, w_57_321, w_57_322, w_57_323, w_57_324, w_57_325, w_57_326, w_57_327, w_57_328, w_57_329, w_57_330, w_57_331, w_57_332, w_57_333, w_57_334, w_57_335, w_57_336, w_57_337, w_57_338, w_57_339, w_57_340, w_57_341, w_57_342, w_57_343, w_57_344, w_57_345, w_57_346, w_57_347, w_57_348, w_57_349, w_57_350, w_57_351, w_57_352, w_57_353, w_57_354, w_57_355, w_57_356, w_57_357, w_57_358, w_57_359, w_57_360, w_57_361, w_57_362, w_57_363, w_57_364, w_57_365, w_57_366, w_57_367, w_57_368, w_57_369, w_57_370, w_57_371, w_57_372, w_57_373, w_57_374, w_57_375, w_57_376, w_57_377, w_57_378, w_57_379, w_57_380, w_57_381, w_57_382, w_57_383, w_57_384, w_57_385, w_57_386, w_57_387, w_57_388, w_57_389, w_57_390, w_57_391, w_58_0, w_58_1, w_58_2, w_58_3, w_58_4, w_58_5, w_58_6, w_58_7, w_58_8, w_58_9, w_58_10, w_58_11, w_58_12, w_58_13, w_58_14, w_58_15, w_58_16, w_58_17, w_58_18, w_58_19, w_58_20, w_58_21, w_58_22, w_58_23, w_58_24, w_58_25, w_58_26, w_58_27, w_58_28, w_58_29, w_58_30, w_58_31, w_58_32, w_58_33, w_58_34, w_58_35, w_58_36, w_58_37, w_58_38, w_58_39, w_58_40, w_58_41, w_58_42, w_58_43, w_58_44, w_58_45, w_58_46, w_58_47, w_58_48, w_58_49, w_58_50, w_58_51, w_58_52, w_58_53, w_58_54, w_58_55, w_58_56, w_58_57, w_58_58, w_58_59, w_58_60, w_58_61, w_58_62, w_58_63, w_58_64, w_58_65, w_58_66, w_58_67, w_58_68, w_58_69, w_58_70, w_58_71, w_58_72, w_58_73, w_58_74, w_58_75, w_58_76, w_58_77, w_58_78, w_58_79, w_58_80, w_58_81, w_58_82, w_58_83, w_58_84, w_59_0, w_60_0, w_61_0, w_61_1, w_61_2, w_61_3, w_61_4, w_61_5, w_61_6, w_61_7, w_61_8, w_61_9, w_61_10, w_61_11, w_61_12, w_61_13, w_61_14, w_61_15, w_61_16, w_61_17, w_61_18, w_61_19, w_61_20, w_61_21, w_61_22, w_61_23, w_61_24, w_61_25, w_61_26, w_61_27, w_61_28, w_61_29, w_61_30, w_61_31, w_61_32, w_61_33, w_61_34, w_61_35, w_61_36, w_61_37, w_61_38, w_61_39, w_61_40, w_61_41, w_61_42, w_61_43, w_61_44, w_61_45, w_61_46, w_61_47, w_61_48, w_61_49, w_61_50, w_61_51, w_61_52, w_61_53, w_61_54, w_61_55, w_61_56, w_61_57, w_61_58, w_61_59, w_61_60, w_61_61, w_61_62, w_61_63, w_61_64, w_61_65, w_61_66, w_61_67, w_61_68, w_61_69, w_61_70, w_61_71, w_61_72, w_61_73, w_61_74, w_61_75, w_61_76, w_61_77, w_61_78, w_61_79, w_61_80, w_61_81, w_61_82, w_61_83, w_61_84, w_61_85, w_61_86, w_61_87, w_61_88, w_61_89, w_61_90, w_61_91, w_61_92, w_61_93, w_61_94, w_61_95, w_61_96, w_61_97, w_61_98, w_61_99, w_61_100, w_61_101, w_61_102, w_61_103, w_61_104, w_61_105, w_61_106, w_61_107, w_61_108, w_61_109, w_61_110, w_61_111, w_61_112, w_61_113, w_61_114, w_61_115, w_61_116, w_61_117, w_61_118, w_61_119, w_61_120, w_61_121, w_61_122, w_61_123, w_61_124, w_61_125, w_61_126, w_61_127, w_61_128, w_61_129, w_61_130, w_61_131, w_61_132, w_61_133, w_61_134, w_61_135, w_61_136, w_61_137, w_61_138, w_61_139, w_61_140, w_61_141, w_61_142, w_61_143, w_61_144, w_61_145, w_61_146, w_61_147, w_61_148, w_61_149, w_61_150, w_61_151, w_61_152, w_61_153, w_61_154, w_61_155, w_61_156, w_61_157, w_61_158, w_61_159, w_61_160, w_61_161, w_61_162, w_61_163, w_61_164, w_61_165, w_61_166, w_61_167, w_61_168, w_61_169, w_61_170, w_61_171, w_61_172, w_61_173, w_61_174, w_61_175, w_61_176, w_61_177, w_61_178, w_61_179, w_61_180, w_61_181, w_61_182, w_61_183, w_61_184, w_61_185, w_61_186, w_61_187, w_61_188, w_61_189, w_61_190, w_61_191, w_61_192, w_61_193, w_61_194, w_61_195, w_61_196, w_61_197, w_61_198, w_61_199, w_61_200, w_61_201, w_61_202, w_61_203, w_61_204, w_61_205, w_61_206, w_61_207, w_61_208, w_61_209, w_61_210, w_61_211, w_61_212, w_61_213, w_61_214, w_61_215, w_61_216, w_61_217, w_61_218, w_61_219, w_61_220, w_61_221, w_61_222, w_61_223, w_61_224, w_61_225, w_61_226, w_61_227, w_61_228, w_61_229, w_61_230, w_61_231, w_61_232, w_61_233, w_61_234, w_61_235, w_61_236, w_61_237, w_61_238, w_61_239, w_61_240, w_61_241, w_61_242, w_61_243, w_61_244, w_61_245, w_61_246, w_61_247, w_61_248, w_61_249, w_61_250, w_61_251, w_61_252, w_61_253, w_61_254, w_61_255, w_61_256, w_61_257, w_61_258, w_61_259, w_61_260, w_61_261, w_61_262, w_61_263, w_61_264, w_61_265, w_61_266, w_61_267, w_61_268, w_61_269, w_61_270, w_61_271, w_61_272, w_61_273, w_61_274, w_61_275, w_61_276, w_61_277, w_61_278, w_61_279, w_61_280, w_61_281, w_61_282, w_61_283, w_61_284, w_61_285, w_61_286, w_61_287, w_61_288, w_61_289, w_61_290, w_61_291, w_61_292, w_61_293, w_61_294, w_61_295, w_61_296, w_61_297, w_61_298, w_61_299, w_61_300, w_61_301, w_61_302, w_61_303, w_61_304, w_61_305, w_61_306, w_61_307, w_61_308, w_61_309, w_61_310, w_61_311, w_61_312, w_61_313, w_61_314, w_61_315, w_61_316, w_61_317, w_61_318, w_61_319, w_61_320, w_61_321, w_61_322, w_61_323, w_61_324, w_61_325, w_61_326, w_61_327, w_61_328, w_61_329, w_61_330, w_61_331, w_61_332, w_61_333, w_61_334, w_61_335, w_61_336, w_61_337, w_61_338, w_61_339, w_61_340, w_61_341, w_61_342, w_61_343, w_61_344, w_61_345, w_61_346, w_61_347, w_61_348, w_61_349, w_61_350, w_61_351, w_61_352, w_61_353, w_61_354, w_61_355, w_61_356, w_61_357, w_61_358, w_61_359, w_61_360, w_61_361, w_61_362, w_61_363, w_61_364, w_61_365, w_61_366, w_61_367, w_61_368, w_61_369, w_61_370, w_61_371, w_61_372, w_61_373, w_61_374, w_61_375, w_61_376, w_61_377, w_61_378, w_61_379, w_61_380, w_61_381, w_61_382, w_61_383, w_61_384, w_61_385, w_61_386, w_61_387, w_61_388, w_61_389, w_61_390, w_61_391, w_61_392, w_61_393, w_61_394, w_61_395, w_61_396, w_61_397, w_61_398, w_61_399, w_61_400, w_61_401, w_61_402, w_61_403, w_61_404, w_61_405, w_61_406, w_61_407, w_61_408, w_61_409, w_61_410, w_61_411, w_61_412, w_61_413, w_61_414, w_61_415, w_61_416, w_61_417, w_61_418, w_61_419, w_61_420, w_61_421, w_61_422, w_61_423, w_61_424, w_61_425, w_61_426, w_61_427, w_61_428, w_61_429, w_61_430, w_61_431, w_61_432, w_61_433, w_61_434, w_61_435, w_61_436, w_61_437, w_61_438, w_61_439, w_61_440, w_61_441, w_61_442, w_61_443, w_61_444, w_61_445, w_61_446, w_61_447, w_61_448, w_61_449, w_61_450, w_61_451, w_61_452, w_61_453, w_62_0, w_62_1, w_62_2, w_62_3, w_62_4, w_62_5, w_62_6, w_62_7, w_62_8, w_62_9, w_62_10, w_62_11, w_62_12, w_62_13, w_62_14, w_62_15, w_62_16, w_62_17, w_63_0, w_64_0, w_65_0, w_65_1, w_65_2, w_65_3, w_65_4, w_65_5, w_65_6, w_65_7, w_65_8, w_65_9, w_65_10, w_65_11, w_65_12, w_65_13, w_65_14, w_65_15, w_65_16, w_65_17, w_65_18, w_65_19, w_65_20, w_65_21, w_65_22, w_65_23, w_65_24, w_65_25, w_65_26, w_65_27, w_65_28, w_65_29, w_65_30, w_65_31, w_65_32, w_65_33, w_65_34, w_65_35, w_65_36, w_65_37, w_65_38, w_65_39, w_65_40, w_65_41, w_65_42, w_65_43, w_65_44, w_65_45, w_65_46, w_65_47, w_65_48, w_65_49, w_65_50, w_65_51, w_65_52, w_65_53, w_65_54, w_65_55, w_65_56, w_65_57, w_65_58, w_65_59, w_65_60, w_65_61, w_65_62, w_65_63, w_65_64, w_65_65, w_65_66, w_65_67, w_65_68, w_65_69, w_65_70, w_65_71, w_65_72, w_65_73, w_65_74, w_65_75, w_65_76, w_65_77, w_66_0, w_67_0, w_68_0, w_68_1, w_68_2, w_68_3, w_68_4, w_68_5, w_69_0, w_69_1, w_69_2, w_69_3, w_69_4, w_69_5, w_69_6, w_69_7, w_69_8, w_69_9, w_69_10, w_69_11, w_69_12, w_69_13, w_69_14, w_69_15, w_69_16, w_69_17, w_69_18, w_69_19, w_69_20, w_69_21, w_69_22, w_69_23, w_69_24, w_69_25, w_69_26, w_69_27, w_69_28, w_69_29, w_69_30, w_69_31, w_69_32, w_69_33, w_69_34, w_69_35, w_69_36, w_69_37, w_69_38, w_69_39, w_69_40, w_69_41, w_69_42, w_69_43, w_69_44, w_69_45, w_69_46, w_69_47, w_69_48, w_69_49, w_69_50, w_69_51, w_69_52, w_69_53, w_69_54, w_69_55, w_69_56, w_69_57, w_69_58, w_69_59, w_69_60, w_69_61, w_69_62, w_69_63, w_69_64, w_69_65, w_69_66, w_69_67, w_69_68, w_70_0, w_71_0, w_72_0, w_72_1, w_72_2, w_72_3, w_72_4, w_72_5, w_72_6, w_72_7, w_72_8, w_72_9, w_72_10, w_72_11, w_72_12, w_72_13, w_72_14, w_72_15, w_72_16, w_72_17, w_72_18, w_72_19, w_72_20, w_72_21, w_72_22, w_72_23, w_72_24, w_72_25, w_72_26, w_72_27, w_72_28, w_72_29, w_72_30, w_72_31, w_72_32, w_72_33, w_72_34, w_72_35, w_72_36, w_72_37, w_72_38, w_72_39, w_72_40, w_72_41, w_72_42, w_72_43, w_72_44, w_72_45, w_72_46, w_72_47, w_72_48, w_72_49, w_72_50, w_72_51, w_72_52, w_72_53, w_72_54, w_72_55, w_72_56, w_72_57, w_72_58, w_72_59, w_72_60, w_72_61, w_72_62, w_72_63, w_72_64, w_72_65, w_72_66, w_72_67, w_72_68, w_72_69, w_72_70, w_72_71, w_72_72, w_72_73, w_72_74, w_72_75, w_72_76, w_72_77, w_72_78, w_72_79, w_72_80, w_72_81, w_72_82, w_72_83, w_72_84, w_72_85, w_72_86, w_72_87, w_72_88, w_72_89, w_72_90, w_72_91, w_72_92, w_72_93, w_72_94, w_72_95, w_72_96, w_72_97, w_72_98, w_72_99, w_72_100, w_72_101, w_72_102, w_72_103, w_72_104, w_72_105, w_72_106, w_72_107, w_72_108, w_72_109, w_72_110, w_72_111, w_72_112, w_72_113, w_72_114, w_72_115, w_72_116, w_72_117, w_72_118, w_72_119, w_72_120, w_72_121, w_72_122, w_72_123, w_72_124, w_72_125, w_72_126, w_72_127, w_72_128, w_72_129, w_72_130, w_73_0, w_73_1, w_73_2, w_73_3, w_73_4, w_73_5, w_73_6, w_73_7, w_73_8, w_73_9, w_73_10, w_73_11, w_73_12, w_73_13, w_73_14, w_73_15, w_73_16, w_73_17, w_73_18, w_73_19, w_73_20, w_73_21, w_73_22, w_73_23, w_73_24, w_73_25, w_73_26, w_73_27, w_73_28, w_73_29, w_73_30, w_73_31, w_73_32, w_73_33, w_73_34, w_73_35, w_73_36, w_73_37, w_73_38, w_73_39, w_73_40, w_73_41, w_73_42, w_73_43, w_73_44, w_73_45, w_73_46, w_73_47, w_73_48, w_73_49, w_73_50, w_73_51, w_73_52, w_73_53, w_73_54, w_73_55, w_73_56, w_73_57, w_73_58, w_73_59, w_73_60, w_73_61, w_73_62, w_73_63, w_73_64, w_73_65, w_73_66, w_73_67, w_73_68, w_73_69, w_73_70, w_73_71, w_73_72, w_73_73, w_73_74, w_73_75, w_73_76, w_73_77, w_74_0, w_75_0, w_76_0, w_76_1, w_76_2, w_76_3, w_76_4, w_76_5, w_76_6, w_76_7, w_76_8, w_76_9, w_76_10, w_76_11, w_76_12, w_76_13, w_76_14, w_76_15, w_76_16, w_76_17, w_76_18, w_76_19, w_76_20, w_76_21, w_76_22, w_76_23, w_76_24, w_76_25, w_76_26, w_76_27, w_76_28, w_76_29, w_76_30, w_76_31, w_76_32, w_76_33, w_76_34, w_76_35, w_76_36, w_76_37, w_76_38, w_76_39, w_76_40, w_76_41, w_76_42, w_76_43, w_76_44, w_76_45, w_76_46, w_76_47, w_76_48, w_76_49, w_76_50, w_76_51, w_76_52, w_76_53, w_76_54, w_76_55, w_76_56, w_76_57, w_76_58, w_76_59, w_76_60, w_76_61, w_76_62, w_76_63, w_76_64, w_76_65, w_76_66, w_76_67, w_76_68, w_76_69, w_76_70, w_76_71, w_76_72, w_76_73, w_76_74, w_76_75, w_76_76, w_76_77, w_76_78, w_76_79, w_76_80, w_76_81, w_76_82, w_76_83, w_76_84, w_76_85, w_76_86, w_76_87, w_76_88, w_76_89, w_76_90, w_76_91, w_76_92, w_76_93, w_77_0, w_77_1, w_77_2, w_77_3, w_77_4, w_77_5, w_77_6, w_77_7, w_77_8, w_77_9, w_77_10, w_77_11, w_77_12, w_77_13, w_77_14, w_77_15, w_78_0, w_79_0, w_80_0, w_81_0, w_82_0, w_83_0, w_84_0, w_85_0, w_86_0, w_87_0, w_88_0, w_89_0, w_90_0, w_91_0, w_92_0, w_93_0, w_94_0, w_95_0, w_96_0, w_97_0, w_98_0, w_99_0, w_100_0, w_101_0, w_102_0, w_103_0, w_104_0, w_105_0, w_106_0, w_107_0, w_108_0, w_109_0, w_110_0, w_111_0, w_112_0, w_113_0, w_114_0, w_115_0, w_116_0, w_117_0, w_118_0, w_119_0, w_120_0, w_121_0, w_122_0, w_123_0, w_124_0, w_125_0, w_126_0, w_127_0]
   decide +kernel
 
 /-- The certified area bound for the non-interior part of the Mandelbrot set. -/

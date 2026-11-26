@@ -205,16 +205,16 @@ moving disk centered at the model returns into itself, which gives a bounded
 critical orbit for every parameter of the square. These squares are removed, and
 the remaining cells in the upper half-plane (the lower half is the mirror
 image) cover `M ∖ int M`. The grid is refined block by block: its cells have side
-`2^-12` for `Re c < -3/4` and `2^-11` elsewhere, which is 746636032 cells of
+`2^-12` for `Re c < 0` and `2^-11` elsewhere, which is 702983936 cells of
 side `2^-16`:
 
 ```text
 R ⊆ M ∖ int M
-μ*(R) ≤ 2 · 746636032 / 4^16 ≈ 0.3477
-q(R) ≤ 0.0277.
+μ*(R) ≤ 2 · 702983936 / 4^16 ≈ 0.3274
+q(R) ≤ 0.0260.
 ```
 
-The resolved share is therefore at least `97.23%`, a 36-fold reduction of the
+The resolved share is therefore at least `97.40%`, a 38-fold reduction of the
 unresolved area. The earlier classifier with disk enclosures stopped at `11.2%`
 (`q(R) ≤ 0.1117`): the disks lose the phases of the derivative, so squares at a
 few cell widths from `M` stay unresolved, and a fixed trapping disk needs a
