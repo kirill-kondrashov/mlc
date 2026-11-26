@@ -181,6 +181,29 @@ def grid_bound(lean_text: str) -> dict[str, object] | None:
     """Area bound proved by the kernel-checked grid, read from the Lean source."""
     if GRID_SYMBOL not in lean_text:
         return None
+    if "def gridModules" in lean_text:
+        # Modules of tiles with their own depths; the cells are weighed to the
+        # common side 2^-scale.
+        weight, scale = (_lean_nat(name, lean_text) for name in ("gridCells", "gridDepth"))
+        depths = [int(v) for v in re.findall(r"\((\d+), tiles_\d+_\d+\)", lean_text)]
+        if weight is None or scale is None or not depths:
+            return None
+        n, d = weight, scale
+        while n % 4 == 0 and d > max(depths):
+            n, d = n // 4, d - 1
+        area = 2.0 * weight / 4**scale
+        return {
+            "format": "blocks",
+            "cells": n,
+            "depth": d,
+            "weight": weight,
+            "scale": scale,
+            "finest": max(depths),
+            "coarsest": min(depths),
+            "area": area,
+            "percent": 100.0 * area / (4.0 * math.pi),
+            "exact": rf"2\cdot {n}/4^{{{d}}}",
+        }
     cells, fuel, pmax, steps = (
         _lean_nat(name, lean_text)
         for name in ("gridCells", "gridFuel", "gridPmax", "gridJ")
@@ -196,6 +219,8 @@ def grid_bound(lean_text: str) -> dict[str, object] | None:
         "format": "hints" if hints else "classifier",
         "cells": n,
         "depth": d,
+        "weight": n,
+        "scale": d,
         "fuel": fuel,
         "pmax": pmax,
         "J": steps,
@@ -435,8 +460,9 @@ def annotate_rows(rows: list[dict[str, object]]) -> None:
                 }
                 grid_commits += 1
                 before = previous.get("grid")
-                if grid.get("format") == "hints" and (
-                    before is None or before.get("format") != "hints"
+                modern = ("hints", "blocks")
+                if grid.get("format") in modern and (
+                    before is None or before.get("format") not in modern
                 ):
                     lead = (
                         "First-order Taylor models of the critical orbit replace the "
@@ -453,12 +479,19 @@ def annotate_rows(rows: list[dict[str, object]]) -> None:
                     lead = (
                         f"{row['area_note']} " if row.get("area_note") else "Finer certified grid. "
                     )
+                weights = (
+                    f" Cells of the blocks of depth {grid['coarsest']} count with "
+                    "their weights."
+                    if grid.get("format") == "blocks"
+                    and grid["coarsest"] != grid["finest"]
+                    else ""
+                )
                 reasons = (
                     (reasons + " " if steps else lead)
                     + f"Depth {grid['depth']}: {grid['cells']} unresolved cells of "
                     f"side $2^{{-{grid['depth']}}}$ in the upper half-plane (the "
                     "lower half is the mirror image), unresolved area "
-                    rf"$\le {grid['exact']}\approx {grid['area']:.3f}$."
+                    rf"$\le {grid['exact']}\approx {grid['area']:.3f}$." + weights
                 )
             if delta < -EPS:
                 row["note"] = reasons
@@ -973,18 +1006,30 @@ def _grid_regions(
 
 
 TILE_ENTRY = re.compile(r"\(⟨(-?\d+), (-?\d+), (\d+)⟩,\s*\[([^\]]*)\]\)")
+MODULE_DEPTH = re.compile(r"cellsH \((\d+) - p\.1\.k\)")
+
+
+def _module_order(name: str) -> tuple[int, ...]:
+    """Order of the tile modules: ``G<block>_<part>`` by block and part, the earlier
+    ``Part<index>`` by index."""
+    stem = Path(name).stem
+    return tuple(int(v) for v in re.findall(r"\d+", stem))
 
 
 def tile_texts(repo_root: Path, sha: str) -> list[str]:
-    """The tile modules of a commit (or of the working tree)."""
+    """The tile modules of a commit (or of the working tree), in order."""
     if sha == "worktree":
-        return [
-            path.read_text(encoding="utf-8")
-            for path in sorted((repo_root / "Mlc" / "GridTiles").glob("Part*.lean"))
-        ]
-    names = _git(
-        repo_root, "ls-tree", "-r", "--name-only", sha, "--", "Mlc/GridTiles"
-    ).splitlines()
+        paths = sorted(
+            (repo_root / "Mlc" / "GridTiles").glob("*.lean"),
+            key=lambda path: _module_order(path.name),
+        )
+        return [path.read_text(encoding="utf-8") for path in paths]
+    names = sorted(
+        _git(
+            repo_root, "ls-tree", "-r", "--name-only", sha, "--", "Mlc/GridTiles"
+        ).splitlines(),
+        key=_module_order,
+    )
     return [
         subprocess.run(
             ["git", "show", f"{sha}:{name}"],
@@ -998,15 +1043,19 @@ def tile_texts(repo_root: Path, sha: str) -> list[str]:
 
 
 def hint_squares(
-    texts: list[str], depth: int
+    texts: list[str], depth: int, scale: int | None = None
 ) -> tuple[list[tuple[int, int, int]], list[tuple[int, int, int]], int]:
     """Replay the hint streams of the tile modules (``verifyTree``): the squares
     certified inside M, the unresolved squares and the number of unresolved
-    finest cells."""
+    finest cells, weighed to cells of side ``2^-scale`` (a module states its own
+    depth; ``depth`` is used for modules that do not)."""
+    scale = depth if scale is None else scale
     inside: list[tuple[int, int, int]] = []
     unresolved: list[tuple[int, int, int]] = []
     cells = 0
     for text in texts:
+        stated = MODULE_DEPTH.search(text)
+        module_depth = int(stated.group(1)) if stated else depth
         for entry in TILE_ENTRY.finditer(text):
             x, y, k = int(entry[1]), int(entry[2]), int(entry[3])
             hints = [int(v) for v in entry[4].split(",") if v.strip()]
@@ -1014,13 +1063,13 @@ def hint_squares(
 
             def walk(x: int, y: int, k: int) -> None:
                 nonlocal cells
-                fuel = depth - k
+                fuel = module_depth - k
                 index = position[0]
                 position[0] += 1
                 hint = hints[index] if index < len(hints) else 0
                 if hint == 0 or (hint == 1 and fuel == 0):
                     unresolved.append((x, y, k))
-                    cells += 4**fuel
+                    cells += 4**fuel * 4 ** (scale - module_depth)
                 elif hint == 1:
                     for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1)):
                         walk(2 * x + dx, 2 * y + dy, k + 1)
@@ -1051,13 +1100,13 @@ def squares_to_regions(
 
 @functools.lru_cache(maxsize=None)
 def _hint_regions(
-    repo_root: Path, sha: str, depth: int, cells: int
+    repo_root: Path, sha: str, depth: int, weight: int, scale: int
 ) -> tuple[dict[str, object], ...]:
-    inside, unresolved, found = hint_squares(tile_texts(repo_root, sha), depth)
-    if found != cells:
+    inside, unresolved, found = hint_squares(tile_texts(repo_root, sha), depth, scale)
+    if found != weight:
         print(
             f"warning: the tiles of {sha} leave {found} unresolved cells; the commit "
-            f"proved {cells}, so its regions are omitted",
+            f"proved {weight}, so its regions are omitted",
             file=sys.stderr,
         )
         return ()
@@ -1075,9 +1124,15 @@ def grid_regions(
     In both cases the number of unresolved cells must equal the count that the
     commit proved; otherwise no regions are returned.
     """
-    if grid.get("format") == "hints":
+    if grid.get("format") in ("hints", "blocks"):
         return list(
-            _hint_regions(repo_root, sha, int(grid["depth"]), int(grid["cells"]))
+            _hint_regions(
+                repo_root,
+                sha,
+                int(grid["depth"]),
+                int(grid["weight"]),
+                int(grid["scale"]),
+            )
         )
     return list(
         _grid_regions(
@@ -1161,15 +1216,18 @@ def map_layers(
             if regions:
                 how = (
                     "Taylor-model certificates"
-                    if grid.get("format") == "hints"
+                    if grid.get("format") in ("hints", "blocks")
                     else f"periods up to {grid['pmax']}, {grid['J']} orbit steps"
+                )
+                depth_text = (
+                    f"{grid['finest']}" if grid.get("format") == "blocks" else f"{grid['depth']}"
                 )
                 layers.append(
                     {
                         "sha": row["sha"],
                         "color": str(layer["color"]),
                         "title": (
-                            f"Kernel-checked grid of depth {grid['depth']}: {how} · "
+                            f"Kernel-checked grid of depth {depth_text}: {how} · "
                             + MAP_MEANING["interior"]
                         ),
                         "regions": regions[:1],

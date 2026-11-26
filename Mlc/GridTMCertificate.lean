@@ -654,18 +654,74 @@ lemma volume_list_le_G (D : ℕ) : ∀ L : List (Sq × List ℕ), (∀ p ∈ L, 
             push_cast
             ring
 
-/-- The grid bound for a list of tiles (squares of level at most `D` with their hint
-streams) that cover every root square. Only the upper half-plane is classified, and
-the lower half is its mirror image. -/
-theorem unresolved_volume_le_symG (D : ℕ) (L : List (Sq × List ℕ))
-    (hk : ∀ p ∈ L, p.1.k ≤ D)
-    (hcov : coverAll D rootsUp (L.map Prod.fst) = true) :
+/-- The weight of a module in terms of the count of its tiles; the generated aggregator
+uses this lemma for every module and the equality of the module (see
+`scripts/generate_grid_tiles.py`). -/
+theorem moduleWeight_eq (S D : ℕ) (L : List (Sq × List ℕ)) :
+    moduleWeight S (D, L) = (L.map fun p => cellsH (D - p.1.k) p.1 p.2).sum * 4 ^ (S - D) :=
+  rfl
+
+lemma volume_modules_le (S : ℕ) : ∀ ms : List TileModule,
+    (∀ m ∈ ms, ∀ p ∈ m.2, p.1.k ≤ m.1) → (∀ m ∈ ms, m.1 ≤ S) →
+    volume (Unresolved ∩ ⋃ p ∈ moduleTiles ms, p.1.set) ≤
+      ENNReal.ofReal (((ms.map (moduleWeight S)).sum : ℝ) / 4 ^ S) := by
+  intro ms
+  induction ms with
+  | nil => intro _ _; simp [moduleTiles]
+  | cons m ms ih =>
+      intro hk hS
+      have hm : ∀ p ∈ m.2, p.1.k ≤ m.1 := hk m (by simp)
+      have hmS : m.1 ≤ S := hS m (by simp)
+      have hk' : ∀ m' ∈ ms, ∀ p ∈ m'.2, p.1.k ≤ m'.1 := fun m' h => hk m' (by simp [h])
+      have hS' : ∀ m' ∈ ms, m'.1 ≤ S := fun m' h => hS m' (by simp [h])
+      have hsub : Unresolved ∩ ⋃ p ∈ moduleTiles (m :: ms), p.1.set ⊆
+          (Unresolved ∩ ⋃ p ∈ m.2, p.1.set) ∪ (Unresolved ∩ ⋃ p ∈ moduleTiles ms, p.1.set) := by
+        intro c ⟨hU, hc⟩
+        simp only [moduleTiles, List.flatMap_cons, List.mem_append, Set.mem_iUnion,
+          exists_prop] at hc
+        obtain ⟨p, hp, hcp⟩ := hc
+        rcases hp with hp | hp
+        · exact Or.inl ⟨hU, by simp only [Set.mem_iUnion, exists_prop]; exact ⟨p, hp, hcp⟩⟩
+        · exact Or.inr ⟨hU, by
+            simp only [moduleTiles, Set.mem_iUnion, exists_prop]; exact ⟨p, hp, hcp⟩⟩
+      have hhead := volume_list_le_G m.1 m.2 hm
+      have hexp : (4 : ℝ) ^ S = 4 ^ m.1 * 4 ^ (S - m.1) := by
+        rw [← pow_add]; congr 1; omega
+      have hw : (moduleWeight S m : ℝ) / 4 ^ S =
+          ((m.2.map fun p => cellsH (m.1 - p.1.k) p.1 p.2).sum : ℝ) / 4 ^ m.1 := by
+        unfold moduleWeight
+        push_cast
+        rw [hexp]
+        field_simp
+      calc volume (Unresolved ∩ ⋃ p ∈ moduleTiles (m :: ms), p.1.set)
+          ≤ volume ((Unresolved ∩ ⋃ p ∈ m.2, p.1.set) ∪
+              (Unresolved ∩ ⋃ p ∈ moduleTiles ms, p.1.set)) := measure_mono hsub
+        _ ≤ volume (Unresolved ∩ ⋃ p ∈ m.2, p.1.set) +
+              volume (Unresolved ∩ ⋃ p ∈ moduleTiles ms, p.1.set) := measure_union_le _ _
+        _ ≤ ENNReal.ofReal (((m.2.map fun p => cellsH (m.1 - p.1.k) p.1 p.2).sum : ℝ) / 4 ^ m.1) +
+              ENNReal.ofReal (((ms.map (moduleWeight S)).sum : ℝ) / 4 ^ S) :=
+            add_le_add hhead (ih hk' hS')
+        _ = ENNReal.ofReal ((((m :: ms).map (moduleWeight S)).sum : ℝ) / 4 ^ S) := by
+            rw [← hw, ← ENNReal.ofReal_add (by positivity) (by positivity)]
+            congr 1
+            simp only [List.map_cons, List.sum_cons]
+            push_cast
+            ring
+
+/-- The grid bound for a list of modules: the tiles (squares of level at most the depth
+of their module, with hint streams) cover every root square, and the unresolved cells
+of every module are counted at the depth of the module and weighed to the common side
+`2 ^ (-S)`. Only the upper half-plane is classified, and the lower half is its mirror
+image. -/
+theorem unresolved_volume_le_symM (S f : ℕ) (ms : List TileModule)
+    (hk : ∀ m ∈ ms, ∀ p ∈ m.2, p.1.k ≤ m.1) (hS : ∀ m ∈ ms, m.1 ≤ S)
+    (hcov : coverAll f rootsUp ((moduleTiles ms).map Prod.fst) = true) :
     volume Unresolved ≤
-      2 * ENNReal.ofReal (((L.map fun p => cellsH (D - p.1.k) p.1 p.2).sum : ℝ) / 4 ^ D) := by
+      2 * ENNReal.ofReal (((ms.map (moduleWeight S)).sum : ℝ) / 4 ^ S) := by
+  set L := moduleTiles ms with hL
   set A : Set ℂ := Unresolved ∩ ⋃ p ∈ L, p.1.set with hA
-  have hAle : volume A ≤
-      ENNReal.ofReal (((L.map fun p => cellsH (D - p.1.k) p.1 p.2).sum : ℝ) / 4 ^ D) :=
-    volume_list_le_G D L hk
+  have hAle : volume A ≤ ENNReal.ofReal (((ms.map (moduleWeight S)).sum : ℝ) / 4 ^ S) :=
+    volume_modules_le S ms hk hS
   have hAm : MeasurableSet A := by
     refine measurableSet_unresolved.inter ?_
     refine MeasurableSet.biUnion (List.finite_toSet L).countable ?_
@@ -675,7 +731,7 @@ theorem unresolved_volume_le_symG (D : ℕ) (L : List (Sq × List ℕ))
     intro c hc
     simp only [Set.mem_iUnion, exists_prop] at hc
     obtain ⟨r, hr, hcr⟩ := hc
-    have h1 := coverAll_sound D rootsUp _ hcov r hr hcr
+    have h1 := coverAll_sound f rootsUp _ hcov r hr hcr
     simp only [Set.mem_iUnion, exists_prop, List.mem_map] at h1 ⊢
     obtain ⟨s, ⟨p, hp, rfl⟩, hcs⟩ := h1
     exact ⟨p, hp, hcs⟩
@@ -693,10 +749,9 @@ theorem unresolved_volume_le_symG (D : ℕ) (L : List (Sq × List ℕ))
   calc volume Unresolved ≤ volume (A ∪ conj ⁻¹' A) := measure_mono hsub
     _ ≤ volume A + volume (conj ⁻¹' A) := measure_union_le _ _
     _ = volume A + volume A := by rw [volume_conj_preimage A hAm]
-    _ ≤ ENNReal.ofReal (((L.map fun p => cellsH (D - p.1.k) p.1 p.2).sum : ℝ) / 4 ^ D) +
-        ENNReal.ofReal (((L.map fun p => cellsH (D - p.1.k) p.1 p.2).sum : ℝ) / 4 ^ D) :=
-        add_le_add hAle hAle
-    _ = 2 * ENNReal.ofReal (((L.map fun p => cellsH (D - p.1.k) p.1 p.2).sum : ℝ) / 4 ^ D) := by
+    _ ≤ ENNReal.ofReal (((ms.map (moduleWeight S)).sum : ℝ) / 4 ^ S) +
+        ENNReal.ofReal (((ms.map (moduleWeight S)).sum : ℝ) / 4 ^ S) := add_le_add hAle hAle
+    _ = 2 * ENNReal.ofReal (((ms.map (moduleWeight S)).sum : ℝ) / 4 ^ S) := by
         rw [two_mul]
 
 end MLC.Certified

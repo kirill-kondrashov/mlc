@@ -59,7 +59,7 @@ frontier other than Problems 4.3 and 4.4 is exposed.
 | Virtual Julia sets and a priori transfer | [VirtualMolecule.lean](Mlc/Research/VirtualMolecule.lean) |
 | Fixed-point models of the critical orbit and the certificates | [GridDefs.lean](Mlc/GridDefs.lean) |
 | Soundness of the models, the certificates and the area bound | [GridCertificate.lean](Mlc/GridCertificate.lean), [GridTMCertificate.lean](Mlc/GridTMCertificate.lean) |
-| Grid parameters and checked count | [GridParams.lean](Mlc/GridParams.lean), [GridCertified.lean](Mlc/GridCertified.lean) |
+| Checked count and area bound | [GridCertified.lean](Mlc/GridCertified.lean) |
 | Problems 4.3 and 4.4 | [Dudko.lean](Mlc/Dudko.lean) |
 | Categorical root | [CategoricalRoot.lean](Mlc/CategoricalRoot.lean) |
 | Compatibility root | [Core.lean](Mlc/Core.lean) |
@@ -82,13 +82,16 @@ lie outside `M` or inside `M`. The unresolved finest cells therefore cover
 `unresolved_volume_le_grid`. The upper half-plane is covered by tiles and the
 lower half follows by conjugation symmetry. The count is checked by kernel
 reduction (`decide +kernel`, no `native_decide`) in the generated modules
-`Mlc/GridTiles/Part*.lean`, which import only `Mlc.GridDefs`, are arranged in
-twelve import chains (at most twelve kernel checks run at once), and are produced
-by `python3 scripts/refine_grid.py` and `python3 scripts/generate_grid_tiles.py`
-from `Mlc/GridParams.lean`. The
-depth-11 check takes about 7 CPU hours (about 40 minutes of wall time
-on 22 cores) and about 2.5 GB of memory per running module; a smaller machine
-needs fewer import chains (`CHAINS` in the generator).
+`Mlc/GridTiles/G*.lean`, which import only `Mlc.GridDefs`. A module holds the
+tiles of one block of four root squares (a heavy block is split into several
+modules) and states the depth at which it counts its unresolved cells, so that
+refining some blocks leaves the other modules unchanged and Lake keeps their
+builds. The modules are produced by `python3 scripts/refine_grid.py` and
+`python3 scripts/generate_grid_tiles.py`. The depth-11 grid took about 7 CPU
+hours (about 40 minutes of wall time on 22 cores); refining the blocks with
+`Re c < -3/4` to depth 12 took about 16 minutes more. A running module needs
+about 2.5 GB of memory, and Lake runs as many modules at once as the machine has
+cores, so a machine with little memory needs fewer parallel jobs.
 
 ```bash
 make build

@@ -163,6 +163,19 @@ def verifyTree : ℕ → Sq → List ℕ → ℕ × List ℕ
 /-- Unresolved finest cells below the square `q` for the stream `hs`. -/
 def cellsH (F : ℕ) (q : Sq) (hs : List ℕ) : ℕ := (verifyTree F q hs).1
 
+/-- A module of tiles with the depth at which its unresolved cells are counted: the
+tiles are squares with hint streams, and a module depth `D` makes `cellsH (D - k)` count
+the cells of side `2 ^ (-D)` below a tile of level `k`. -/
+abbrev TileModule := ℕ × List (Sq × List ℕ)
+
+/-- The tiles of a list of modules, in order. -/
+def moduleTiles (ms : List TileModule) : List (Sq × List ℕ) := ms.flatMap Prod.snd
+
+/-- The unresolved cells of a module, in units of the cells of side `2 ^ (-S)` (for
+`S` at least the depth of the module). -/
+def moduleWeight (S : ℕ) (m : TileModule) : ℕ :=
+  (m.2.map fun p => cellsH (m.1 - p.1.k) p.1 p.2).sum * 4 ^ (S - m.1)
+
 /-- Walk over the squares of `L` in the order of a depth-first traversal: `r` is
 covered if its first square is `r`, or if its four children are covered in turn.
 The result is the list of the squares that are left. -/
