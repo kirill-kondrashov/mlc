@@ -204,20 +204,19 @@ outside `M` when the model leaves the disk of radius 2, and as inside `M` when a
 moving disk centered at the model returns into itself, which gives a bounded
 critical orbit for every parameter of the square. These squares are removed, and
 the remaining cells in the upper half-plane (the lower half is the mirror image)
-cover `M ∖ int M`. The cells have side `2^-12`, and side `2^-13` for
-`Re c < -1/8` and for `-1/8 ≤ Re c < 0`, `Im c < 1`, which is
-574632704 cells of side `2^-16`; the shells
+cover `M ∖ int M`. They are counted at side `2^-13`, 8694258 of them, which is
+556432512 cells of side `2^-16`; the shells
 of the hyperbolic components are certified by squares of side `2^-10` and `2^-11`
-with inside certificates of up to 960 and 240 model steps, which costs the kernel
-the same per unit of area as `2^-12` cells with 60 steps:
+with inside certificates of up to 960 and 240 model steps (a coarse square costs
+the kernel the same per unit of area as a cell of side `2^-12` with 60 steps):
 
 ```text
 R ⊆ M ∖ int M
-μ*(R) ≤ 2 · 574632704 / 4^16 ≈ 0.2676
-q(R) ≤ 0.0213.
+μ*(R) ≤ 2 · 556432512 / 4^16 ≈ 0.2591
+q(R) ≤ 0.0206.
 ```
 
-The resolved share is therefore at least `97.87%`, a 47-fold reduction of the
+The resolved share is therefore at least `97.94%`, a 48-fold reduction of the
 unresolved area. The earlier classifier with disk enclosures stopped at `11.2%`
 (`q(R) ≤ 0.1117`): the disks lose the phases of the derivative, so squares at a
 few cell widths from `M` stay unresolved, and a fixed trapping disk needs a
@@ -290,7 +289,11 @@ from the open root obligations and the existence of
 The grid cannot reach `100%` without an input about `∂M`: the unresolved
 cells at depth `d` cover a neighbourhood of `∂M` whose area decreases to
 `area(∂M)`, and the measured ratio of one level to the next is `0.83–0.87`, so
-every further level costs about three times more for a smaller gain. Dudko's
+every further level costs about three times more for a smaller gain. At depth 14
+the search resolves 7% of the children of the unresolved cells of depth 13
+(outside certificates of at most 32 steps), at about `3·10⁻¹⁰` of area per step
+of the model, while depth 13 gave `1.1·10⁻⁹`; checking it would take about six
+hours on 20 cores for a gain of `0.02`, that is `0.15%` of the share. Dudko's
 survey states what is expected and what it needs:
 
 - the introduction: "The area of `∂M` is expected to be 0, see §3.8";

@@ -115,7 +115,8 @@ minutes. Coarsening the shells changes the modules of most blocks, so the check
 of its 6830 modules (20 million steps of the model) is a full rebuild. Refining
 the blocks with `Re c < -3/4` to depth 13 checks their 5542 modules again (17
 million steps, 8 million of them new) and took about an hour of wall time on 20
-cores, and the blocks up to `Re c < -1/8` took about another hour. The
+cores, the blocks up to `Re c < -1/8` took about another hour, and the remaining
+blocks about forty minutes. The
 aggregator of 12286 modules needs a thread stack larger than the default of 8 MB
 (`weakLeanArgs` in `lakefile.lean`, which stay out of the build trace). A running
 module needs about 2.5 GB of memory, and Lake runs as many modules at once as the
