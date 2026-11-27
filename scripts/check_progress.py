@@ -40,17 +40,32 @@ def main() -> int:
     staged_debt = float(staged["debt_percent"])
     head_area = float(head["area_upper_percent"])
     staged_area = float(staged["area_upper_percent"])
+    head_classes = float(head.get("classes_share", 0.0))
+    staged_classes = float(staged.get("classes_share", 0.0))
     print(f"Formalization frontier debt: {head_debt:.3f}% -> {staged_debt:.3f}%")
     print(
         "Certified resolved share: "
         f"{100.0 - head_area:.4f}% -> {100.0 - staged_area:.4f}% "
         f"(unresolved area bound {head_area:.4f}% -> {staged_area:.4f}%)"
     )
-    if staged_debt > head_debt + 1e-12 or staged_area >= head_area:
+    print(f"Classes with a Lean certificate: {head_classes:.3%} -> {staged_classes:.3%}")
+    eps = 1e-12
+    worse = (
+        staged_debt > head_debt + eps
+        or staged_area > head_area + eps
+        or staged_classes < head_classes - eps
+    )
+    better = (
+        staged_debt < head_debt - eps
+        or staged_area < head_area - eps
+        or staged_classes > head_classes + eps
+    )
+    if worse or not better:
         print(
-            "Refusing commit: staged Lean changes must strictly increase the "
-            "certified resolved share (decrease the unresolved-area bound) "
-            "and must not increase the formalization-debt proxy.",
+            "Refusing commit: staged Lean changes must improve at least one of "
+            "the formalization-debt proxy (lower), the certified resolved share "
+            "(higher) and the share of classes with a Lean certificate (higher), "
+            "and must worsen none of them.",
             file=sys.stderr,
         )
         return 1

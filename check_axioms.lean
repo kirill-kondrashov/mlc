@@ -1,11 +1,11 @@
-import Mlc.Core
+import Mlc
 import Lean
 
 open Lean Meta
 
 def main : IO UInt32 := do
   initSearchPath (← findSysroot)
-  let env ← importModules #[{ module := `Mlc.Core }] {}
+  let env ← importModules #[{ module := `Mlc }] {}
 
   let rootName := ``MLC.mlc_conjecture
   let categoricalName := ``MLC.Categorical.categorical_mlc_conjecture

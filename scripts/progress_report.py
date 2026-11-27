@@ -35,9 +35,15 @@ import subprocess
 import sys
 import time
 
+from programme import classes_share, open_lemmas
+
 # The root theorem is declared as `theorem mlc_conjecture` inside `namespace MLC`,
 # so its qualified name never occurs in the concatenated sources.
 ROOT_THEOREM = re.compile(r"^theorem\s+mlc_conjecture\b", re.MULTILINE)
+# The skeleton of the near-degenerate argument and the assembly of the programme are
+# theorems of `Mlc/Research/Degeneration.lean` and `Mlc/ProgrammeRoot.lean`.
+SKELETON_THEOREM = re.compile(r"^\s*theorem\s+aPrioriBounds_of_uniform\b", re.MULTILINE)
+PROGRAMME_THEOREM = re.compile(r"^\s*theorem\s+mlc_of_programme\b", re.MULTILINE)
 
 PROGRESS_MILESTONES = (
     ("Conditional root", ROOT_THEOREM, 1),
@@ -50,6 +56,8 @@ PROGRESS_MILESTONES = (
     ("Residual-area envelope", "residualOuterArea_le_four_pi", 1),
     ("Certified interior parameter ball", "ball_quarter_subset_interior_mandelbrot", 1),
     ("Kernel-checked grid bound", "unresolved_volume_le_grid", 2),
+    ("A priori bounds from uniform control", SKELETON_THEOREM, 1),
+    ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )
 
@@ -274,6 +282,8 @@ def progress_metrics_from_text(lean_text: str) -> dict[str, object]:
         "area_upper_percent": area_percent,
         "area_symbols": area_symbols,
         "open_frontier": open_roots,
+        "open_lemmas": len(open_lemmas(lean_text)),
+        "classes_share": classes_share(lean_text),
         "milestone_weight": achieved_weight,
         "milestones": [item["label"] for item in achieved],
     }
@@ -1390,9 +1400,15 @@ def stats_html(rows: list[dict[str, object]]) -> str:
 def profile_html(rows: list[dict[str, object]]) -> str:
     """Coverage-Uncertainty Profile, shown as certified shares (1 - component)."""
     area = float(rows[-1]["area_upper_percent"]) / 100.0
+    classes = float(rows[-1].get("classes_share", 0.0))
     components = (
         ("Area", 1.0 - area, "resolved share of the 4π envelope"),
-        ("Classes", 0.0, "weight of parameter classes with a Lean certificate"),
+        (
+            "Classes",
+            classes,
+            "weight of parameter classes with a Lean certificate, with partial credit "
+            "for the proved lemmas of a class",
+        ),
         ("Complexity", 0.0, "return depth and relative period retired"),
         ("Budgets", 0.0, "quantitative separation budgets secured"),
     )
@@ -1408,13 +1424,17 @@ def profile_html(rows: list[dict[str, object]]) -> str:
         f"{esc(format_percent(100.0 * overall))}</div>"
         '<div class="k">Overall</div></div>'
     )
+    open_lemmas_now = int(rows[-1].get("open_lemmas", 0))
     return (
         '<section class="p-card"><h2>Coverage-Uncertainty Profile · certified '
         f'shares</h2><div class="profile-grid">{cells}</div>'
         '<p class="p-foot">Each share is 100% minus the corresponding component. '
-        "Only the area component has moved; the class, complexity and budget "
-        "components stay at the conservative value 0% until a class "
-        "certificate exists. Overall is the mean of the four shares.</p></section>"
+        "The classes of the programme are seven, with equal weights; each needs the "
+        f"lemmas of its chain, and {open_lemmas_now} lemmas of the programme are still "
+        "open. The proof of one lemma lowers the uncertainty of every class that needs "
+        "it by the lemma's share of the class. The complexity and budget components stay "
+        "at the conservative value 0% until a class certificate exists. Overall is the "
+        "mean of the four shares.</p></section>"
     )
 
 
@@ -1465,8 +1485,9 @@ def progress_fragment_html(repo_root: Path, rows: list[dict[str, object]]) -> st
 <section class="p-card">
 <h2>Next routes <span class="chip">planning priors</span></h2>
 {routes_html()}
-<p class="p-foot">The commit hook requires the resolved share to increase,
-while the formalization-debt proxy must not increase ({float(rows[-1]['debt_percent']):.3f}% now).</p>
+<p class="p-foot">The commit hook requires a Lean commit to improve the resolved share, the
+share of classes with a Lean certificate, or the formalization-debt proxy
+({float(rows[-1]['debt_percent']):.3f}% now), and to worsen none of them.</p>
 </section>
 </div>"""
 

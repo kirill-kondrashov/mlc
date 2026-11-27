@@ -36,7 +36,15 @@ MLC.Problem44VirtualMoleculeData p43 →
 LocallyConnectedSpace MLC.mandelbrotSet
 ```
 
-`MLC.RootInput` has exactly those two fields. Problem 4.4 is represented by
+`MLC.RootInput` has exactly those two fields. Both are decomposed further in
+`Mlc/ProgrammeRoot.lean`: the structure `MLC.Research.ProgrammeInput` has one
+field per lemma (a transfer lemma, four published cases, two lemmas of
+Problem 4.3 and six of Problem 4.4), and `MLC.mlc_of_programme` proves in Lean,
+for every geometric dictionary, that the lemmas give `RootInput`. The degeneration
+recursion of §4.1–§4.3 behind it is checked in `Mlc/Research/Degeneration.lean`
+(`WidthTower.aPrioriBounds_of_uniform`). The lemmas are hypotheses, each with its
+source and an attack plan in the [roadmap](ROADMAP.md); the graph shows them as open
+lemmas and published cases. Problem 4.4 is represented by
 the Kahn--Dudko--Lyubich virtual-Julia programme: Cantor small Julia sets,
 partially invariant connected hulls in `J_c`, first-return prefixes of the
 critical orbit, phase--parameter realization, a dynamical separation budget,
@@ -53,9 +61,11 @@ three kernel axioms at the bottom to the statement of MLC at the top (the head).
 Its ten vertebrae are milestone theorems of the library, in an order that the
 generator checks against the dependency graph. Every other declaration hangs on
 the branch of the lowest vertebra that needs it. The tips of the branches are
-the two open problems of the root (red), the targets of Dudko's programme that
+the two open problems of the root (red), the lemmas into which they are decomposed
+(orange, with the published cases in teal), the targets of Dudko's programme that
 are not formalized (amber, dashed: Conjecture 3.6, the area of `∂M`, the virtual
-subcases of Problem 4.4), the kernel-checked grid (cyan), and the checked
+subcases of Problem 4.4, the sub-steps of the pseudo-Siegel strategy), the
+kernel-checked grid (cyan), and the checked
 lemmas (green). Hover a node to light its way to the head, click it for the
 statement, the Lean name and its declarations, and use the search to find any
 declaration. The bubble on a node counts the declarations that hang on it (its
@@ -73,6 +83,11 @@ grid certificates, and a table by level of the spine.
 | Filled Julia compactness and connectedness | [FilledJuliaConnected.lean](Mlc/FilledJuliaConnected.lean) |
 | Minimal connected hulls | [ConnectedHull.lean](Mlc/Research/ConnectedHull.lean) |
 | Virtual Julia sets and a priori transfer | [VirtualMolecule.lean](Mlc/Research/VirtualMolecule.lean) |
+| Degeneration recursion: a priori bounds from uniform control | [Degeneration.lean](Mlc/Research/Degeneration.lean) |
+| Case tree of the reduction and the geometric dictionary | [CaseTree.lean](Mlc/Research/CaseTree.lean) |
+| Published cases as lemmas | [Published.lean](Mlc/Research/Published.lean) |
+| Problem 4.3 and Problem 4.4 as lemmas | [Problem43.lean](Mlc/Research/Problem43.lean), [Problem44.lean](Mlc/Research/Problem44.lean) |
+| The lemmas imply the root | [ProgrammeRoot.lean](Mlc/ProgrammeRoot.lean) |
 | Fixed-point models of the critical orbit and the certificates | [GridDefs.lean](Mlc/GridDefs.lean) |
 | Soundness of the models, the certificates and the area bound | [GridCertificate.lean](Mlc/GridCertificate.lean), [GridTMCertificate.lean](Mlc/GridTMCertificate.lean) |
 | Checked count and area bound | [GridCertified.lean](Mlc/GridCertified.lean) |

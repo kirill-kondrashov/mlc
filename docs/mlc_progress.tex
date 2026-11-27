@@ -75,6 +75,16 @@ statements:
         separation budget.
 \end{enumerate}
 
+Both are decomposed into lemmas in \texttt{Mlc/ProgrammeRoot.lean}: the
+structure \texttt{ProgrammeInput} has one field per lemma, thirteen in all (a
+transfer lemma, four published cases, two lemmas of Problem~4.3 and six of
+Problem~4.4), and \texttt{mlc\_of\_programme} proves in Lean that they give the
+root input. The skeleton of the argument of \S4.1--\S4.3 is checked: a uniform
+growth bound for the degeneration of the renormalization levels and a dichotomy
+with a period-independent error give a priori bounds for every tower
+(\texttt{aPrioriBounds\_of\_uniform}). The lemmas are hypotheses; the roadmap
+lists their sources and an attack plan for each.
+
 \section{Progress dashboard}
 
 The baseline is the state of the literature: the first commit whose formal
@@ -150,8 +160,9 @@ The formalization-debt proxy is
        {1+\text{achieved milestone weight}}.
 \]
 It is an audit gate rather than a measure of the Mandelbrot residual set.
-The commit hook rejects a proof-progress commit unless the certified resolved
-share strictly increases and this value does not increase.
+The commit hook rejects a proof-progress commit unless it improves the certified
+resolved share, the share of classes with a Lean certificate, or this value, and
+worsens none of them.
 
 \begin{table}[ht]
   \centering\footnotesize
@@ -199,8 +210,11 @@ where:
 
 Each component is nonincreasing when a class certificate is retained. For a
 catalogued class \(C_i\), completion strictly decreases the class component
-by at least its assigned weight. The profile is a dashboard invariant; its
-components record how much of the parameter space remains uncertain.
+by at least its assigned weight. The catalogue has seven classes of equal
+weight, each with the lemmas of its chain; the proof of one lemma lowers the
+class component by the lemma's share of every class that needs it. The profile
+is a dashboard invariant; its components record how much of the parameter space
+remains uncertain.
 
 \section{Route priors}
 

@@ -37,7 +37,7 @@ from spine_graph import SIDE_ROOTS, build_model, spine_page_html
 
 DECL_RE = re.compile(
     r"^\s*(?:(?:noncomputable|private|protected|unsafe|partial|mutual)\s+)*"
-    r"(lemma|theorem|def|abbrev|axiom|structure|class|instance)\s+([^\s(:=\[{]+)"
+    r"(lemma|theorem|def|abbrev|axiom|structure|inductive|class|instance)\s+([^\s(:=\[{]+)"
 )
 NS_RE = re.compile(r"^\s*namespace\s+([A-Za-z0-9_.']+)\s*$")
 SECTION_RE = re.compile(r"^\s*(?:noncomputable\s+)?section\b")

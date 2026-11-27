@@ -11,7 +11,8 @@ LocallyConnectedSpace MLC.mandelbrotSet
 with an axiom frontier limited to Lean's standard foundations. The active proof
 must retain the invariant that every declaration is connected to
 `MLC.mlc_conjecture`. The graph currently exposes two open mathematical
-inputs: Problem 4.3 and Problem 4.4.
+inputs: Problem 4.3 and Problem 4.4, and the thirteen lemmas into which
+`Mlc/ProgrammeRoot.lean` decomposes them (see the programme tree below).
 
 Problem 4.3 requires pseudo-Siegel a priori bounds and a realization for all
 remaining unbounded satellite quadratic-like cases. Problem 4.4 requires
@@ -56,7 +57,8 @@ prioritized classes:
 
 Every class definition must use dynamical data such as first-return type,
 relative period, renormalization phase, or geometric control. A class may not
-be defined by the local-connectivity conclusion itself.
+be defined by the local-connectivity conclusion itself. The classes of the
+table are refined, with their lemmas, in the programme tree below.
 
 ## Workstreams
 
@@ -145,6 +147,126 @@ The final coverage theorem must prove
 ```
 
 for the actual candidate system `A`.
+
+## The programme tree: Problems 4.3 and 4.4 as lemmas
+
+`Mlc/ProgrammeRoot.lean` decomposes the two open inputs of `RootInput` into thirteen
+lemmas, the fields of `MLC.Research.ProgrammeInput`, and `MLC.mlc_of_programme` proves in
+Lean that the lemmas give `RootInput` and hence MLC, for every geometric dictionary
+`G : Geometry` (the assignment of a class, a tower and a virtual tower to each parameter).
+The lemmas are hypotheses; what is proved is the logic that joins them. The graph shows
+each lemma as a node, and `scripts/programme.py` is the catalogue.
+
+### The case tree
+
+Dudko's argument reduces local connectivity at a boundary parameter `c` to a priori bounds
+for the quadratic-like renormalization tower of `c`, case by case. The seven classes, equal
+in weight in the profile, and the lemmas that each needs:
+
+| Class (`BoundaryClass`) | Type of the renormalization | Source | Lemmas |
+| --- | --- | --- | --- |
+| `finite` | not infinitely renormalizable | Yoccoz, Hubbard | Y |
+| `neutral` | irrationally indifferent | Theorem 4.2 | N |
+| `boundedType` | bounded relative periods | Theorem 4.1 (Kahn; Dudko–Lyubich) | B, T |
+| `antiMolecule` | primitive levels far from the Molecule | Kahn–Lyubich, §4.2 | A, T |
+| `unboundedSatellite` | unbounded relative periods at satellite levels | **Problem 4.3** | G, D, T |
+| `virtualBounded` | virtual satellite chain of bounded periods, `n ≫ 1` | **Problem 4.4** | VJ, VT1, VD1, VT |
+| `virtualNearNeutral` | virtual near-neutral step | **Problem 4.4** | VJ, VG2, VD2, VT |
+
+### What is proved
+
+The skeleton of §4.1–§4.3 is checked in `Mlc/Research/Degeneration.lean`, with the
+degeneration `W_k = W(f_k)` of the levels as abstract positive numbers and the geometric
+inputs as hypotheses:
+
+* `aPrioriBounds_of_uniform`: a growth bound `W_{k+1} ≤ Δ W_k` and the dichotomy (4.6)
+  with an additive error that does not depend on the period give `sup_k W_k < ∞` for every
+  tower, whatever its relative periods. The second alternative of the dichotomy, a jump by
+  `C_δ`, is excluded by choosing `C_δ > Δ`, and the first alternative, iterated at a
+  distance `n₀` with `c 2^{n₀} ≥ 2`, bounds the sequence.
+* `aPrioriBounds_of_bounded`: for relative periods bounded by `P`, the Teichmüller
+  contraction and the dichotomy with a period-dependent error suffice (the error takes
+  finitely many values): the argument behind Theorem 4.1.
+* `aPrioriBounds_of_strongAmplification`: the primitive levels, (4.3) with (4.5).
+* `ReturnBudget.ofBound`: a bound `B` on the degeneration is a return budget with constant
+  loss, so that the existing kernel (`ParameterRealization`) consumes it.
+
+The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
+`mlc_of_programme`) uses only the three kernel axioms.
+
+### What is read into the survey
+
+The survey states the cases, Theorems 4.1 and 4.2, the two problems, and, for Problem 4.4,
+the strategy of partially invariant virtual Julia sets. It does not state the lemmas G, D,
+VT1, VD1, VG2, VD2. They are the reading proposed here, from the place where the proof of
+Theorem 4.1 stops: its two uniformities fail for unbounded relative periods, the factor
+`Δ^p` of the Teichmüller contraction (§4.3: "Alternative (ii) is prevented by the Teichmüller
+contraction") and the additive error `O_{p_n}(1)` of (4.3) (§4.2: "the period `p_n` is
+assumed to be big but still bounded"). The pseudo-Siegel disks of Theorem 4.2 are the
+survey's tool for the near-neutral case, and the right loop of Figure 14 is its strategy for
+the satellite case. Whether pseudo-Siegel disks give the uniform growth and the uniform
+dichotomy is the question that Problem 4.3 asks.
+
+### Attack plans
+
+Each lemma is attacked separately; its proof lowers the uncertainty of every class that
+needs it, by its share of the class (a class with `m` lemmas gains `1/(7m)` of the classes
+component per proved lemma). Statements marked *heuristic* are the proposal of this
+roadmap, not claims of the survey.
+
+* **T, VT (transfer).** The Kahn–Lyubich quasi-additivity law turns a priori bounds into
+  lower bounds on the moduli of the annuli between nested pieces, and Grötzsch's inequality
+  shrinks the pieces when the moduli add up (`ConnectedNest.SeparationEstimate` with a
+  divergent budget is already checked). First step: define the conformal modulus of an
+  annulus and prove Grötzsch's inequality for it (the Yoccoz package uses a Gaussian
+  weighted area as a proxy, which is not a conformal invariant). Second step: the
+  phase–parameter relation of Lyubich (§3.9). Risk: the conformal geometry is not in
+  Mathlib.
+* **Y, B, A, N (published).** Formalize the cited theorems in the form of a parameter
+  realization. Y is Yoccoz's puzzle theorem; B, A and N are long research papers. They are
+  listed so that the size of the formalization gap is visible; they are not near-term
+  targets.
+* **G (uniform growth).** The survey bounds the jump of the degeneration between
+  consecutive levels by a factor that is exponential in the period (§4.3). *Heuristic:* the
+  exponential comes from `q` successive pullbacks that each may lose a constant factor of
+  the modulus; if the `q` iterates can be replaced by one map of a pseudo-Siegel disk into
+  itself, the loss need not be exponential in `q`. The neutral case is Theorem 4.2, and the
+  satellite case is the right loop of Figure 14, the antirenormalization relative to `β`
+  (PS1–PS3). First step (proposal): the almost-invariance with a geometric error (PS2) for
+  a sequence of holomorphic self-maps of a disk, where Mathlib's Schwarz lemma applies.
+* **D (uniform dichotomy).** The survey attributes the additive error `O_p(1)` to a variant
+  of the thin–thick decomposition (§4.1) and says that pseudo-Siegel disks are built to
+  consume most of the invariant degeneration (§4, near-neutral levels; PS4). *Heuristic:*
+  the invariant degeneration is the part that the decomposition cannot bound uniformly in
+  `p`, and the rest is controlled by the Wave Lemma. First step (proposal): state PS4 as an
+  inequality between extremal widths and check that it gives the uniform error by the
+  argument of §4.3.
+* **VJ.** The minimal connected hull in `K_c` of the Cantor small Julia set and the critical
+  return window exists in Lean (`VirtualJuliaNest.carrier`); the lemma is that it lies inside
+  `J_c` and is partially invariant. First step (proposal): the real parameters, where the
+  MLC is known (§4.3 with §4.2, [14]), as a test of the statement.
+* **VT1, VD1.** *Heuristic:* the virtual levels of a bounded chain behave like the satellite
+  levels of Theorem 4.1, with the critical orbit contained in the hull only up to a finite
+  number of returns, so that the Teichmüller contraction is applied to a partially
+  invariant system. First step (proposal): the first return map to the virtual hull and
+  its degree.
+* **VG2, VD2.** The near-neutral step is a big relative period in the virtual chain; the
+  uniform bounds are those of G and D for the virtual hull, after the pseudo-Siegel
+  regularization (Figure 14, left loop). They wait for G and D.
+
+None of the lemmas that depend on conformal geometry can be started in Lean before the
+modulus and Grötzsch's inequality are formalized, which is the first real step of every
+route.
+
+### Caveats
+
+* The dictionary `Geometry` is a parameter, not a construction: `cls`, `tower` and `vtower`
+  are not defined from the dynamics of `f_c`. The theorem `mlc_of_programme` holds for every
+  dictionary, so a faithful dictionary is what makes the lemmas statements about `M`.
+* The widths are abstract positive numbers; nothing in the repository defines an
+  extremal width or a conformal modulus.
+* The classes are combinatorial, as the method requires: no class is defined by a
+  local-connectivity conclusion.
 
 ## Route planning priors
 
@@ -241,11 +363,13 @@ global envelope (the 20-fold gate `q(R) ≤ 0.05` is reached):
 q(R) ≤ 0.01.
 ```
 
-This target requires certified coverage of parameter classes. No commit is
-accepted as proof progress unless the certified
-resolved share strictly increases (the residual-area envelope strictly
-decreases) and the repository's formalization-debt proxy does not increase.
-The latter is
+This target requires certified coverage of parameter classes. No commit that
+stages Lean sources is accepted unless it improves at least one of three
+quantities and worsens none: the certified resolved share (the residual-area
+envelope decreases), the share of parameter classes with a Lean certificate (the
+proof of one lemma of a class raises it by the lemma's share of the class), and
+the repository's formalization-debt proxy (it decreases when a milestone
+theorem is added). The latter is
 
 ```text
 2 / (1 + achieved milestone weight),

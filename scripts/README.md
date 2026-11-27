@@ -19,6 +19,14 @@ search over the declarations, zoom, category filters, the counts of theorems,
 lemmas and declarations by level of the spine, and the **Progress** tab (the
 controls of the figure disappear there).
 
+`programme.py` is the catalogue of the programme for Problems 4.3 and 4.4: the
+seven classes of boundary parameters, the thirteen lemmas (the fields of
+`MLC.Research.ProgrammeInput` in `Mlc/ProgrammeRoot.lean`), their sources, and
+the status of each, open while it is a field and proved once its theorem exists.
+The generator fails if the catalogue and the Lean structure disagree; the graph
+draws the lemmas as nodes, and the progress report derives the classes component of
+the Coverage-Uncertainty Profile from the catalogue.
+
 `progress_report.py` computes the progress numbers from Git history. The
 **Progress** tab shows the certified resolved share `100% − μ*(R) / 4π` of the
 unresolved set `R` as a number, a table of the commits after the literature
@@ -39,9 +47,12 @@ measure zero would also give it, so the share is read with the count of open
 root obligations.
 
 The repository hook runs `scripts/check_progress.py`. A commit that stages Lean
-sources (`Mlc.lean`, `Mlc/**/*.lean`) must strictly increase the certified
-resolved share and must not increase the dependency-graph milestone debt before
-Git accepts it; commits that stage only documents and scripts pass unchecked.
+sources (`Mlc.lean`, `Mlc/**/*.lean`) must improve at least one of the certified
+resolved share, the share of parameter classes with a Lean certificate and the
+dependency-graph milestone debt (which falls when a milestone theorem is added),
+and must worsen none of them, before Git accepts it; commits that stage only
+documents and scripts pass unchecked. The classes and the lemmas of the programme
+for Problems 4.3 and 4.4 are catalogued in `scripts/programme.py`.
 
 `grid_hints.lean` is the search program of the certified grid, compiled natively
 by `lake build gridhints`. It subdivides squares that it cannot certify and

@@ -26,6 +26,16 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from progress_report import PROGRESS_CSS, PROGRESS_ROUTES
+from programme import (
+    CLASSES,
+    LEMMAS,
+    PROGRAMME_ROOT,
+    PSEUDO_SIEGEL,
+    check_catalogue,
+    class_shares,
+    open_lemmas,
+    proved_lemmas,
+)
 
 # Geometry of the figure, in user units of the SVG.
 WIDTH = 1500.0
@@ -49,6 +59,7 @@ KIND_GROUP = {
     "abbrev": "def",
     "instance": "def",
     "structure": "str",
+    "inductive": "str",
     "class": "str",
     "axiom": "ax",
 }
@@ -145,7 +156,7 @@ SPINE = (
 HEAD_LEAN = "MLC.mlc_conjecture"
 # Results that no vertebra needs: checked in Lean, but not part of the proof of MLC. They
 # hang on the programme's open targets and must be connected to the graph like the rest.
-SIDE_ROOTS = ("MLC.Research.unresolved_volume_eq_zero_of_porous",)
+SIDE_ROOTS = ("MLC.Research.unresolved_volume_eq_zero_of_porous", PROGRAMME_ROOT)
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
 BUD_TITLES = {
@@ -696,15 +707,16 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         ),
         below=True,
     )
-    side_names: set[str] = set()
+    side_names: dict[str, set[str]] = {}
     for side in SIDE_ROOTS:
         if side not in fq_index:
             raise RuntimeError(f"Side result not found: {side}")
-        side_names |= closure(edges, side)
-    side_names -= set(owner_index) | spine_names
-    side_names &= set(reachable)
-    if SIDE_ROOTS and side_names:
-        side_decl = fq_index[SIDE_ROOTS[0]]
+        names = closure(edges, side) - set(owner_index) - spine_names
+        side_names[side] = names & set(reachable)
+    area_root = SIDE_ROOTS[0]
+    area_names = side_names[area_root]
+    if area_names:
+        side_decl = fq_index[area_root]
         measure = Node(
             id="z:measure",
             kind="bud",
@@ -718,17 +730,67 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
                 "eq_zero_of_porous). The geometric input, the porosity of ∂M, is the "
                 "open part of Route Z."
             ),
-            lean=SIDE_ROOTS[0],
+            lean=area_root,
             file=side_decl.file,
             line=side_decl.line,
-            count=len(side_names),
+            count=len(area_names),
         )
-        register(sorted(side_names), measure)
+        register(sorted(area_names), measure)
         measure.stat = stat_line(measure.stats)
         measure.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
         add_child(area, measure, below=True)
         extras.append(measure)
-    add_child(
+
+    # The programme: the lemmas of Problems 4.3 and 4.4 as nodes, then the checked assembly.
+    root_text = ""
+    root_file = repo_root / "Mlc" / "ProgrammeRoot.lean"
+    if root_file.is_file():
+        root_text = root_file.read_text(encoding="utf-8")
+    issues = check_catalogue(root_text) if root_text else ["Mlc/ProgrammeRoot.lean is missing"]
+    if issues:
+        raise RuntimeError("Programme catalogue out of date: " + "; ".join(issues))
+    open_keys = set(open_lemmas(root_text))
+    lemma_nodes: dict[str, Node] = {}
+    for lemma in LEMMAS:
+        if lemma.lean not in fq_index:
+            raise RuntimeError(f"Lemma not found in the sources: {lemma.lean}")
+        file, line, doc = from_decl(lemma.lean)
+        is_open = lemma.key in open_keys
+        node = make(
+            Node(
+                id=f"lemma:{lemma.key}",
+                kind="tip",
+                cat=(
+                    "checked"
+                    if not is_open
+                    else "published" if lemma.kind == "published" else "lemma"
+                ),
+                title=lemma.title,
+                sub=lemma.sub,
+                text=f"{lemma.text} Source: {lemma.source}. "
+                + ("Open: a field of ProgrammeInput." if is_open else "Proved."),
+                lean=lemma.lean,
+                file=file,
+                line=line,
+            )
+        )
+        node.members.append(member_row(fq_index[lemma.lean]))
+        add_stats(node.stats, [lemma.lean], fq_index)
+        search.append({**node.members[0], "o": node.id})
+        lemma_nodes[lemma.key] = node
+
+    def add_lemma(parent: Node, key: str, below: bool = False) -> Node:
+        return add_child(parent, lemma_nodes[key], below=below)
+
+    add_lemma(p43, "unboundedGrowth")
+    for sid, title, sub, text in PSEUDO_SIEGEL:
+        add_child(
+            lemma_nodes["unboundedGrowth"],
+            Node(id=f"paper:{sid}", kind="tip", cat="informal", title=title, sub=sub, text=text),
+            below=True,
+        )
+    add_lemma(p43, "unboundedDichotomy")
+    satellite = add_child(
         p44,
         Node(
             id="paper:satellite",
@@ -743,7 +805,9 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             ),
         ),
     )
-    add_child(
+    add_lemma(satellite, "virtualTeichmuller", below=True)
+    add_lemma(satellite, "virtualDichotomy", below=True)
+    neutral = add_child(
         p44,
         Node(
             id="paper:neutral",
@@ -757,25 +821,86 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             ),
         ),
     )
-    phase = next(i for i, v in enumerate(SPINE) if v.key == "phase")
-    attach(
-        phase,
-        make(
-            Node(
-                id="paper:unified",
-                kind="tip",
-                cat="informal",
-                title="Unified phase–parameter transfer",
-                sub=f"Route 4 · prior {prior('4')}",
-                text=(
-                    "Planning route 4, conditional on genuine geometry: "
-                    + str(route("4")["next"]).replace("$", "")
-                ),
-                parent=vertebrae[phase].id,
-            )
-        ),
-        1,
+    add_lemma(neutral, "virtualGrowth", below=True)
+    add_lemma(neutral, "virtualUniformDichotomy", below=True)
+    add_lemma(p44, "virtualJulia")
+    add_lemma(p44, "virtualTransfer")
+
+    published = make(
+        Node(
+            id="pub:cases",
+            kind="tip",
+            cat="published",
+            title="Published cases",
+            sub="§4.1–§4.4 · literature",
+            text=(
+                "The classes of boundary parameters that the survey treats by published "
+                "theorems: the parameters that are not infinitely renormalizable (Yoccoz, "
+                "Hubbard), bounded type (Theorem 4.1), the anti-Molecule condition "
+                "(Kahn–Lyubich) and neutral parameters (Theorem 4.2). Each is one lemma "
+                "about the geometric dictionary, a field of ProgrammeInput; none is "
+                "formalized."
+            ),
+            parent=vertebrae[dudko].id,
+        )
     )
+    attach(dudko, published, -1)
+    for key in ("yoccoz", "boundedType", "antiMolecule", "neutral"):
+        add_lemma(published, key, below=True)
+
+    programme_names = side_names[PROGRAMME_ROOT] - {lemma.lean for lemma in LEMMAS}
+    if programme_names:
+        root_decl = fq_index[PROGRAMME_ROOT]
+        shares = class_shares(proved_lemmas(root_text))
+        assembly = make(
+            Node(
+                id="prog:assembly",
+                kind="bud",
+                cat="checked",
+                title="Programme assembly",
+                sub=f"{len(LEMMAS)} lemmas ⇒ Problems 4.3, 4.4",
+                text=(
+                    "Checked in Lean (MLC.mlc_of_programme): for every geometric dictionary, "
+                    f"the {len(LEMMAS)} lemmas of ProgrammeInput give RootInput, that is the "
+                    "candidate system with its realization (Problem 4.3) and the "
+                    "virtual-Molecule completion (Problem 4.4), hence MLC. The degeneration "
+                    "recursion of §4.1–§4.3 is proved: uniform growth and a dichotomy with a "
+                    "period-independent error give a priori bounds for every tower "
+                    "(WidthTower.aPrioriBounds_of_uniform), and bounded type needs the "
+                    "Teichmüller contraction and the dichotomy "
+                    "(WidthTower.aPrioriBounds_of_bounded). Seven classes of parameters, "
+                    f"{sum(shares.values()):.2f} of them certified, with {len(open_keys)} "
+                    "open lemmas."
+                ),
+                lean=PROGRAMME_ROOT,
+                file=root_decl.file,
+                line=root_decl.line,
+                count=len(programme_names),
+                parent=vertebrae[dudko].id,
+            )
+        )
+        register(sorted(programme_names), assembly)
+        assembly.stat = stat_line(assembly.stats)
+        assembly.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
+        attach(dudko, assembly, 1)
+        extras.append(assembly)
+    phase = next(i for i, v in enumerate(SPINE) if v.key == "phase")
+    unified = make(
+        Node(
+            id="paper:unified",
+            kind="tip",
+            cat="informal",
+            title="Unified phase–parameter transfer",
+            sub=f"Route 4 · prior {prior('4')}",
+            text=(
+                "Planning route 4, conditional on genuine geometry: "
+                + str(route("4")["next"]).replace("$", "")
+            ),
+            parent=vertebrae[phase].id,
+        )
+    )
+    attach(phase, unified, 1)
+    add_lemma(unified, "transfer", below=True)
     # Ground: the kernel axioms below the first vertebra.
     ground = [
         make(
@@ -1137,6 +1262,8 @@ def render_svg(model: dict[str, object], width: float, height: float) -> str:
 
 LEGEND = (
     ("open", "Open problem", "open"),
+    ("lemma", "Open lemma", "lemma"),
+    ("published", "Published, not formalized", "published"),
     ("informal", "Not formalized", "informal"),
     ("checked", "Checked lemmas", "checked"),
     ("num", "Certified computation", "num"),
@@ -1154,7 +1281,15 @@ def model_json(model: dict[str, object], width: float, height: float) -> str:
         for node in [head, *vertebrae[::-1]]
     ]
     levels.extend(
-        {"id": node.id, "title": f"Route Z · {node.title.lower()}", "stats": node.stats}
+        {
+            "id": node.id,
+            "title": (
+                f"Route Z · {node.title.lower()}"
+                if node.id.startswith("z:")
+                else f"Programme · {node.title.lower()}"
+            ),
+            "stats": node.stats,
+        }
         for node in model["extras"]
     )
     payload = {
@@ -1202,6 +1337,8 @@ STYLE = """
   --checked: #15803d; --checked-bg: #dcfce7;
   --num: #0e7490; --num-bg: #cffafe;
   --open: #dc2626; --open-bg: #fee2e2;
+  --lemma: #ea580c; --lemma-bg: #ffedd5;
+  --published: #0f766e; --published-bg: #ccfbf1;
   --informal: #b45309; --informal-bg: #fef3c7;
   --axiom: #475569; --axiom-bg: #e2e8f0;
 }
@@ -1214,6 +1351,8 @@ STYLE = """
   --checked: #4ade80; --checked-bg: #0f2e1c;
   --num: #22d3ee; --num-bg: #0b2f3a;
   --open: #f87171; --open-bg: #3a1216;
+  --lemma: #fb923c; --lemma-bg: #3a1e0c;
+  --published: #2dd4bf; --published-bg: #0b2f2c;
   --informal: #fbbf24; --informal-bg: #35260a;
   --axiom: #cbd5e1; --axiom-bg: #1c2940;
 }
@@ -1277,6 +1416,8 @@ body { margin: 0; font-family: "IBM Plex Sans", "Segoe UI", sans-serif; backgrou
 .cat-checked { --n: var(--checked); --nb: var(--checked-bg); }
 .cat-num { --n: var(--num); --nb: var(--num-bg); }
 .cat-open { --n: var(--open); --nb: var(--open-bg); }
+.cat-lemma { --n: var(--lemma); --nb: var(--lemma-bg); }
+.cat-published { --n: var(--published); --nb: var(--published-bg); }
 .cat-informal { --n: var(--informal); --nb: var(--informal-bg); }
 .cat-axiom { --n: var(--axiom); --nb: var(--axiom-bg); }
 .cat-spine { --n: var(--spine); --nb: var(--spine-bg); }
@@ -1285,7 +1426,7 @@ body { margin: 0; font-family: "IBM Plex Sans", "Segoe UI", sans-serif; backgrou
 #spine .cord-core { fill: none; stroke: var(--cord-core); stroke-width: 8; stroke-linecap: round; }
 #spine .chevron { fill: none; stroke: var(--muted); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; opacity: 0.7; }
 #spine .link { fill: none; stroke: var(--n, var(--link)); stroke-width: 2.6; opacity: 0.75; transition: opacity .12s, stroke-width .12s; }
-#spine .link.cat-informal { stroke-dasharray: 7 5; }
+#spine .link.cat-informal, #spine .link.cat-published { stroke-dasharray: 7 5; }
 #spine .node { cursor: pointer; transition: opacity .15s; outline: none; }
 #spine .node .shape { fill: var(--nb); stroke: var(--n); stroke-width: 1.8; transition: stroke-width .12s; }
 #spine .node .t { fill: var(--text); font-weight: 600; text-anchor: middle; }
@@ -1311,12 +1452,15 @@ body { margin: 0; font-family: "IBM Plex Sans", "Segoe UI", sans-serif; backgrou
 .panel ul.facts li { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; border-bottom: 1px dotted var(--border); }
 #spine .node .head-t { font-size: 30px; font-weight: 700; letter-spacing: 0.06em; }
 #spine .node.cat-informal .shape { stroke-dasharray: 7 4; }
+#spine .node.cat-published .shape { stroke-dasharray: 3 3; }
+#spine .node.cat-lemma .shape { stroke-width: 2.4; }
 #spine .node.cat-open .shape { stroke-width: 2.8; filter: drop-shadow(0 0 5px var(--n)); animation: pulse 2.6s ease-in-out infinite; }
 #spine .node:hover .shape, #spine .node:focus-visible .shape, #spine .node.hl .shape { stroke-width: 3.2; }
 #spine .node.sel .shape { stroke-width: 4; }
 #spine .link.hl { opacity: 1; stroke-width: 4.4; }
 #spine.tracing .node:not(.hl), #spine.tracing .link:not(.hl) { opacity: 0.32; }
 #spine.hide-open [data-cat="open"], #spine.hide-informal [data-cat="informal"], #spine.hide-checked [data-cat="checked"],
+#spine.hide-lemma [data-cat="lemma"], #spine.hide-published [data-cat="published"],
 #spine.hide-num [data-cat="num"], #spine.hide-axiom [data-cat="axiom"] { opacity: 0.1; }
 @keyframes pulse { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: 0.45; } }
 @media (prefers-reduced-motion: reduce) { #spine .node.cat-open .shape { animation: none; } }
@@ -1353,6 +1497,7 @@ SCRIPT = r"""
   };
   const CAT_NAME = {
     checked: "Checked in Lean", num: "Kernel-checked computation", open: "Open problem (explicit hypothesis)",
+    lemma: "Open lemma (statement in Lean, proof open)", published: "Published theorem, not formalized",
     informal: "Not formalized", axiom: "Kernel axiom", spine: "Checked in Lean", head: "Conditional on RootInput",
   };
   let selected = null;
@@ -1491,7 +1636,9 @@ SCRIPT = r"""
       <p>The spine climbs from the three kernel axioms at the bottom to the statement of MLC at the top.
       Each vertebra is a theorem of the Lean library, and each one builds on the vertebrae below it.</p>
       <p>Branches carry what a vertebra needs: checked lemmas, the kernel-checked grid, and at the tips
-      the <b style="color:var(--open)">open problems</b> of the root and the
+      the <b style="color:var(--open)">open problems</b> of the root, the
+      <b style="color:var(--lemma)">open lemmas</b> into which they are decomposed, the
+      <b style="color:var(--published)">published cases</b> and the
       <b style="color:var(--informal)">targets of Dudko's programme</b> that are not formalized.</p>
       <p class="hint">Hover a node to light its way to the head. Click it for the statement, the Lean name
       and the declarations behind it. Search finds any declaration. Ctrl and the wheel zoom; drag moves.</p>
@@ -1675,6 +1822,7 @@ def spine_page_html(title: str, model: dict[str, object], metrics: dict[str, obj
     other = totals["def"] + totals["str"] + totals["ax"]
     summary = (
         f"Resolved share {percent:.3f}% · {int(metrics.get('open_frontier', 0))} open problems · "
+        f"{int(metrics.get('open_lemmas', 0))} open lemmas · "
         f"{totals['n']:,} declarations: {totals['thm']:,} theorems, {totals['lem']:,} lemmas, "
         f"{other:,} definitions, structures and axioms · {by_hand:,} written by hand, "
         f"{totals['gen']:,} generated (the certificates of the grid)"
