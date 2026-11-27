@@ -104,7 +104,10 @@ the parallel law, \(W(G\setminus G')\ge\delta^{-1}W(G)\) and the pullback law
 modulus on the model case: in the plane with Lebesgue measure, the radial segments of the
 annulus \(\{r<|z|<R\}\) have extremal length \(\log(R/r)/2\pi\) and its separating circles
 \(2\pi/\log(R/r)\) (\texttt{extLength\_radialFamily}, \texttt{extLength\_circleFamily} in
-\texttt{Mlc/Research/AnnulusModulus.lean}). The three statements of Problem~4.3 and the a priori
+\texttt{Mlc/Research/AnnulusModulus.lean}). The same holds for a rectangle: the horizontal
+segments of \((x_0,x_1]\times(y_0,y_1]\) have extremal length \((x_1-x_0)/(y_1-y_0)\)
+(\texttt{extLength\_horizFamily} in \texttt{Mlc/Research/RectangleModulus.lean}), which
+computes the widths of the rectangles of Figure~13. The three statements of Problem~4.3 and the a priori
 bounds are invariant under the removal of a finite prefix of levels, which is the
 untuning of a tuned parameter (\texttt{lemmas\_shift\_iff} in
 \texttt{Mlc/Research/TailInvariance.lean}): they hold for a tower exactly when they hold

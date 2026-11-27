@@ -35,6 +35,10 @@ ANNULUS_ROOTS = (
     "MLC.Research.extLength_circleFamily_eq_extWidth_radialFamily",
     "MLC.Research.extLength_radialFamily_add_le",
 )
+# The results of Mlc/Research/RectangleModulus.lean that no other result uses.
+RECTANGLE_ROOTS = (
+    "MLC.Research.extWidth_horizFamily",
+)
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 

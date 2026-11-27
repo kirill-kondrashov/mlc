@@ -28,6 +28,7 @@ from pathlib import Path
 from progress_report import PROGRESS_CSS, PROGRESS_ROUTES
 from programme import (
     ANNULUS_ROOTS,
+    RECTANGLE_ROOTS,
     CLASSES,
     GROTZSCH_ROOT,
     LEMMAS,
@@ -171,6 +172,7 @@ SIDE_ROOTS = (
     PULLBACK_ROOT,
     *TAIL_ROOTS,
     *ANNULUS_ROOTS,
+    *RECTANGLE_ROOTS,
 )
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
@@ -1046,21 +1048,23 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
     attach(phase, unified, 1)
     add_lemma(unified, "transfer", below=True)
     side_bud(
-        ANNULUS_ROOTS,
-        "prog:annulus",
-        "Modulus of a round annulus",
-        "radial and circle families: log(R/r)/2π",
+        (*ANNULUS_ROOTS, *RECTANGLE_ROOTS),
+        "prog:modulus",
+        "Moduli of the model domains",
+        "round annulus and rectangle",
         "Checked in Lean (extLength_radialFamily, extLength_circleFamily, "
-        "extLength_radialFamily_mul_circleFamily, extLength_radialFamily_add_le). In the plane "
-        "with Lebesgue measure, the "
+        "extLength_radialFamily_mul_circleFamily, extLength_radialFamily_add_le, "
+        "extLength_horizFamily, extWidth_horizFamily). In the plane with Lebesgue measure, the "
         "extremal length of the radial segments of the annulus {r < |z| < R}, the curves that "
         "join its boundary circles, is log(R/r)/2π, and that of the circles that separate "
-        "them is 2π/log(R/r): the extremal-length theory of ExtremalLength.lean agrees with "
-        "the classical modulus (Cauchy–Schwarz in polar coordinates for the upper bounds, the "
-        "metric 1/|z| for the lower bounds), and its series law gives the Grötzsch inequality "
-        "for concentric annuli. This is the first step of the transfer lemma. The modulus of "
-        "annuli that are not round, the conformal invariance and the Teichmüller bound that "
-        "turn moduli into shrinking stay open.",
+        "them is 2π/log(R/r); the extremal length of the horizontal segments of a rectangle, "
+        "which join its vertical sides, is width/height. So the extremal-length theory of "
+        "ExtremalLength.lean agrees with the classical modulus on both model domains "
+        "(Cauchy–Schwarz and Fubini for the upper bounds, a characteristic metric for the "
+        "lower bounds), and its series law gives the Grötzsch inequality for concentric "
+        "annuli. This is the first step of the transfer lemma and the model of the rectangles "
+        "of the survey (Figure 13). The modulus of domains that are not round, the conformal "
+        "invariance and the Teichmüller bound that turn moduli into shrinking stay open.",
         lemma_nodes["transfer"],
     )
     add_child(

@@ -258,6 +258,13 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   `ExtremalLength.lean` gives Grötzsch's inequality for concentric annuli
   (`extLength_radialFamily_add_le`). The upper bounds are the
   Cauchy–Schwarz inequality in polar coordinates, the lower bounds the metric `1 / |z|`.
+* `Mlc/Research/RectangleModulus.lean`: the second model domain, the rectangle
+  `(x₀, x₁] × (y₀, y₁]` with Lebesgue measure. The family of horizontal segments, which join the
+  vertical sides, has extremal length `(x₁ − x₀) / (y₁ − y₀)` (`extLength_horizFamily`) and
+  extremal width `(y₁ − y₀) / (x₁ − x₀)` (`extWidth_horizFamily`): the widths of the rectangles
+  `G ⊃ G′` of the survey (Figure 13, the estimate (4.6)) are computed, not assumed. The upper
+  bound is Cauchy–Schwarz along a segment with Fubini, the lower bound the characteristic
+  function of the rectangle.
 
 The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
 `mlc_of_programme`) uses only the three kernel axioms.
@@ -323,8 +330,9 @@ roadmap, not claims of the survey.
   shrinks the pieces when the moduli add up (`ConnectedNest.SeparationEstimate` with a
   divergent budget is already checked). Grötzsch's inequality is proved for the extremal
   length of abstract length measures (`ExtremalLength.lean`: series and parallel laws).
-  First step (done, `AnnulusModulus.lean`): the modulus of a round annulus in the plane as the
-  extremal length of its radii and of its circles, in polar coordinates (the Yoccoz package uses
+  First step (done, `AnnulusModulus.lean` and `RectangleModulus.lean`): the moduli of the round
+  annulus and of the rectangle in the plane as extremal lengths, in polar and in Cartesian
+  coordinates (the Yoccoz package uses
   a Gaussian weighted area as a proxy, which changes under conformal maps). Next: the conformal
   invariance of the modulus under injective holomorphic maps (the pullback law with `d = 1` for
   the length measures of paths), the modulus of a general annulus, and the Teichmüller bound (a
@@ -380,11 +388,11 @@ roadmap, not claims of the survey.
   cap at large relative period and the linear error are those of G and D for the virtual hull,
   after the pseudo-Siegel regularization (Figure 14, left loop). They wait for G and D.
 
-The abstract extremal length, its laws and the modulus of a round annulus exist
-(`ExtremalLength.lean`, `AnnulusModulus.lean`). What the lemmas that depend on conformal
-geometry still need is the link between them and the dynamics: the conformal invariance of the
-modulus, the modulus of general annuli with the Teichmüller bound, then the families of curves
-of a quadratic-like map. That is the first real step of every route.
+The abstract extremal length, its laws and the moduli of the round annulus and of the rectangle
+exist (`ExtremalLength.lean`, `AnnulusModulus.lean`, `RectangleModulus.lean`). What the lemmas that
+depend on conformal geometry still need is the link between them and the dynamics: the conformal
+invariance of the modulus, the modulus of general annuli with the Teichmüller bound, then the
+families of curves of a quadratic-like map. That is the first real step of every route.
 
 ### Rays, the lamination and tuning
 
