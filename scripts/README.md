@@ -1,7 +1,8 @@
 # MLC Scripts
 
 Utility scripts for Lean dependency-graph generation, progress reporting, and
-local serving. They use only the Python standard library.
+local serving. They use the Python standard library; the map of the Progress tab
+also needs `numpy` (`pip install -r scripts/requirements.txt`).
 
 The interactive graph is one 2D figure, the proof spine (`spine_graph.py`):
 
@@ -29,9 +30,15 @@ the Coverage-Uncertainty Profile from the catalogue.
 
 `progress_report.py` computes the progress numbers from Git history. The
 **Progress** tab shows the certified resolved share `100% − μ*(R) / 4π` of the
-unresolved set `R` as a number, a table of the commits after the literature
-baseline (date, commit, description, share, and what it resolved), and a vector
-map of `M` marking the parameters certified by each commit. The literature
+unresolved set `R` as a number, then the map of `M` with the list of the commits
+that certified its regions (the map on the left, the list on the right), then a
+table of the commits after the literature baseline (date, commit, description,
+share, and what it resolved). The map marks the parameters certified by each
+commit: `map_raster.py` composites the 600 000 certified rectangles of the grids,
+with the exact coverage of every pixel, into one PNG (about 2500 × 2200 pixels)
+that the SVG embeds, since the same rectangles as vector paths weigh 18 MB and
+some browsers draw nothing for them; the axes, the disks and the numerical outline
+of `∂M` stay vector. The literature
 baseline is the first commit of the history whose `RootInput` has exactly the
 fields `Problem43PseudoSiegelAPrioriBoundsData` and
 `Problem44VirtualMoleculeData`, found by a binary search over the first-parent
@@ -45,6 +52,9 @@ The same data feeds `docs/mlc_progress.tex` through `progress_commits.tex`,
 priors. The share `100%` corresponds to `R = ∅` (MLC), but a nonempty `R` of
 measure zero would also give it, so the share is read with the count of open
 root obligations.
+
+The map is drawn by `map_raster.py`; `python3 scripts/test_map_raster.py` checks its pixel
+coverage against a direct computation (`make test-scripts`).
 
 The repository hook runs `scripts/check_progress.py`. A commit that stages Lean
 sources (`Mlc.lean`, `Mlc/**/*.lean`) must improve at least one of the certified

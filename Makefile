@@ -1,4 +1,4 @@
-.PHONY: all build check check-progress install-hooks cache clean graphs serve report-pdf
+.PHONY: all build check check-progress test-scripts install-hooks cache clean graphs serve report-pdf
 
 all: check
 
@@ -13,6 +13,9 @@ check: build
 
 check-progress:
 	python3 scripts/check_progress.py
+
+test-scripts:
+	python3 scripts/test_map_raster.py
 
 install-hooks:
 	git config core.hooksPath .githooks

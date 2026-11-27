@@ -174,8 +174,9 @@ GRID_PALETTE = (
 )
 TARGET_PERCENT = 1.0  # second gate: a hundredfold reduction of the unresolved area
 MIN_TARGET_PERCENT = 5.0  # first gate: a twentyfold reduction, i.e. a 95% resolved share
-MAP_WINDOW = (-2.3, 0.8, -1.4, 1.4)
-MAP_GRID = (620, 560)
+MAP_WINDOW = (-2.15, 0.45, -1.25, 1.25)
+MAP_GRID = (520, 500)
+MAP_SCALE = 4  # pixels of the raster of the certified regions per unit of MAP_GRID
 MAP_ITERATIONS = 120
 EPS = 1e-12
 
@@ -1171,16 +1172,23 @@ def grid_point(x: float, y: float) -> tuple[float, float]:
     return (x - x0) / (x1 - x0) * nx, (y1 - y) / (y1 - y0) * ny
 
 
+def region_paint(region: dict[str, object], color: str) -> tuple[str, float]:
+    """The fill color and the opacity of a filled region."""
+    role = region["role"]
+    if role == "exterior":
+        return color, 0.22
+    if role == "unresolved":
+        return "#f59e0b", 0.5
+    return color, 0.9
+
+
 def region_svg(region: dict[str, object], color: str) -> str:
     role = region["role"]
     if role == "envelope":
         style = f'fill="none" stroke="{color}" stroke-width="2.2" stroke-dasharray="9 6"'
-    elif role == "exterior":
-        style = f'fill="{color}" fill-opacity="0.22" stroke="none"'
-    elif role == "unresolved":
-        style = 'fill="#f59e0b" fill-opacity="0.5" stroke="none"'
     else:
-        style = f'fill="{color}" fill-opacity="0.9" stroke="none"'
+        fill, opacity = region_paint(region, color)
+        style = f'fill="{fill}" fill-opacity="{opacity}" stroke="none"'
     if region["kind"] == "disk":
         x0, x1, _, _ = MAP_WINDOW
         scale = MAP_GRID[0] / (x1 - x0)
@@ -1266,6 +1274,48 @@ def map_layers(
     return layers
 
 
+def map_painting(repo_root: Path, rows: list[dict[str, object]]) -> list[str]:
+    """SVG elements of the certified regions, in paint order.
+
+    The filled rectangles of consecutive regions are composited into one PNG: the 600 000
+    rectangles of the grid layers would weigh 18 MB as vector paths. Disks and the dashed
+    envelope stay vector shapes, between the images, so that the stacking is kept.
+    """
+    import map_raster  # numpy is needed to draw the map only, not by the commit hook
+
+    nx, ny = MAP_GRID
+    elements: list[str] = []
+    batch: list[tuple[object, tuple[float, float, float], float]] = []
+
+    def flush() -> None:
+        if not batch:
+            return
+        canvas = map_raster.composite(batch, nx * MAP_SCALE, ny * MAP_SCALE)
+        uri = map_raster.png_data_uri(map_raster.encode_png(canvas))
+        elements.append(
+            f'<image x="0" y="0" width="{nx}" height="{ny}" preserveAspectRatio="none" '
+            f'xlink:href="{uri}"/>'
+        )
+        batch.clear()
+
+    # A newer commit certifies a larger area, so its layer is painted first;
+    # every older, smaller layer is painted over it and stays visible.
+    for layer in reversed(map_layers(repo_root, rows)):
+        color = str(layer["color"])
+        for region in layer["regions"]:
+            if region["kind"] == "rects" and region["role"] != "envelope":
+                fill, opacity = region_paint(region, color)
+                pixels = map_raster.rect_pixels(
+                    region["rects"], MAP_WINDOW, MAP_GRID, MAP_SCALE
+                )
+                batch.append((pixels, map_raster.hex_rgb(fill), opacity))
+            else:
+                flush()
+                elements.append(region_svg(region, color))
+    flush()
+    return elements
+
+
 def parameter_map_svg(repo_root: Path, rows: list[dict[str, object]]) -> str:
     """Map of M; every colour marks the parameters certified by one commit."""
     nx, ny = MAP_GRID
@@ -1273,13 +1323,7 @@ def parameter_map_svg(repo_root: Path, rows: list[dict[str, object]]) -> str:
     margin_left, margin_bottom, margin_top, margin_right = 46, 44, 10, 10
     total_w = nx + margin_left + margin_right
     total_h = ny + margin_top + margin_bottom
-    # A newer commit certifies a larger area, so its layer is painted first;
-    # every older, smaller layer is painted over it and stays visible.
-    layers = [
-        region_svg(region, str(layer["color"]))
-        for layer in reversed(map_layers(repo_root, rows))
-        for region in layer["regions"]
-    ]
+    layers = map_painting(repo_root, rows)
     grid = []
     labels = []
     for value in (-2, -1, 0):
@@ -1452,30 +1496,39 @@ def callout_html() -> str:
     return f'<aside class="callout"><b>How to read the number.</b> {html_rich(text)}</aside>'
 
 
-def progress_fragment_html(repo_root: Path, rows: list[dict[str, object]]) -> str:
-    svg = parameter_map_svg(repo_root, rows)
+def progress_fragment_html(
+    repo_root: Path, rows: list[dict[str, object]], svg: str | None = None
+) -> str:
+    if svg is None:
+        svg = parameter_map_svg(repo_root, rows)
     baseline = esc(rows[0]["sha"])
     caption = html_rich(
         "Parameter plane $c=x+iy$. White outline: numerical rendering of the "
         "border of $M$ (an illustration that the Lean proof does not use). A "
         "colour marks the parameters certified by the commit with the same "
-        "colour in the table. The layers are stacked from the newest, largest "
-        "region at the bottom to the oldest on top."
+        "colour in the list and in the table below. The layers are stacked from the "
+        "newest, largest region at the bottom to the oldest on top."
     )
     return f"""<div class="progress-section">
-<div class="p-hero">
-<div class="p-hero-left">
+<div class="p-info">
 {stats_html(rows)}
 {profile_html(rows)}
 {callout_html()}
 </div>
 <figure class="p-card p-map">
 <h2>{html_rich("Certified region on $M$")}</h2>
+<div class="p-map-body">
+<div class="p-map-view">
 {svg}
+<p class="p-open"><a href="progress_map.svg" target="_blank" rel="noopener">Open the map in its own tab</a></p>
+</div>
+<div class="p-map-list">
+<h3>Commits that certified the regions</h3>
 {map_legend_html(repo_root, rows)}
+</div>
+</div>
 <figcaption>{caption}</figcaption>
 </figure>
-</div>
 <section class="p-card">
 <h2>Commits after the literature baseline <code>{baseline}</code></h2>
 <div class="table-wrap">
@@ -1496,7 +1549,8 @@ PROGRESS_CSS = """
 .progress-section {
   --p-accent: #0369a1; --p-good: #15803d; --p-good-bg: rgba(21, 128, 61, 0.09);
   --p-soft: rgba(100, 116, 139, 0.08);
-  display: grid; gap: 20px; max-width: 1480px; margin: 0 auto;
+  display: grid; gap: 20px; max-width: 1640px; margin: 0 auto;
+  grid-template-columns: minmax(0, 1fr);
   color: var(--text); font-size: 14px; line-height: 1.5;
 }
 :root[data-theme="dark"] .progress-section {
@@ -1515,14 +1569,15 @@ PROGRESS_CSS = """
   letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
 }
 .p-card > h2 code { text-transform: none; letter-spacing: 0; }
-.p-hero {
-  display: grid; gap: 20px; align-items: start;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);
-}
-@media (max-width: 1000px) { .p-hero { grid-template-columns: 1fr; } }
+.p-info { display: grid; gap: 14px; }
+.p-info .callout { margin-top: 0; }
 .stats { display: grid; gap: 14px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 @media (max-width: 700px) { .stats { grid-template-columns: 1fr; } }
 .stat.primary { grid-column: 1 / -1; border-color: var(--p-accent); }
+@media (min-width: 1100px) {
+  .stats { grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr)); }
+  .stat.primary { grid-column: auto; }
+}
 .stat-label {
   font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
   text-transform: uppercase; color: var(--muted);
@@ -1588,9 +1643,20 @@ math.tex {
   font-family: "STIX Two Math", "Latin Modern Math", "Cambria Math", "DejaVu Math TeX Gyre", math;
   font-size: 1.1em;
 }
+.p-map-body {
+  display: grid; gap: 28px; align-items: start;
+  grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+}
+@media (max-width: 1000px) { .p-map-body { grid-template-columns: 1fr; } }
 .p-map svg { display: block; width: 100%; height: auto; border-radius: 8px; }
-.p-map figcaption { margin-top: 10px; font-size: 12.5px; color: var(--muted); }
-.map-legend { list-style: none; margin: 12px 0 0; padding: 0; font-size: 13px; }
+.p-map figcaption { margin-top: 14px; font-size: 12.5px; color: var(--muted); }
+.p-open { margin: 8px 0 0; font-size: 12.5px; }
+.p-open a { color: var(--p-accent); }
+.p-map-list h3 {
+  margin: 0 0 8px; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.map-legend { list-style: none; margin: 0; padding: 0; font-size: 13px; }
 .map-legend li { display: flex; align-items: baseline; gap: 6px; margin: 4px 0; }
 .map-legend li span:last-child { color: var(--text); }
 .map-legend .swatch { flex: none; }
@@ -1741,14 +1807,13 @@ def routes_tex() -> str:
 def write_progress_assets(repo_root: Path, output_dir: Path) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     rows = commit_progress_history(repo_root)
-    fragment = progress_fragment_html(repo_root, rows)
+    svg = parameter_map_svg(repo_root, rows)
+    fragment = progress_fragment_html(repo_root, rows, svg)
     (output_dir / "progress_fragment.html").write_text(fragment, encoding="utf-8")
     (output_dir / "progress.html").write_text(
         standalone_html(fragment), encoding="utf-8"
     )
-    (output_dir / "progress_map.svg").write_text(
-        parameter_map_svg(repo_root, rows), encoding="utf-8"
-    )
+    (output_dir / "progress_map.svg").write_text(svg, encoding="utf-8")
     (output_dir / "progress_commits.tex").write_text(
         commits_tex(rows), encoding="utf-8"
     )
