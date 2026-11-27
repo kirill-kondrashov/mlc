@@ -38,7 +38,9 @@ ROW_PAD = 20.0
 MIN_LEAF_H = 62.0
 HEAD_W, HEAD_H = 500.0, 128.0
 MIN_BUD = 3  # smaller groups of declarations are listed in the vertebra panel only
-TILE_NAME = re.compile(r"^MLC\.Certified\.(tiles|part|w)_\d+_\d+$")
+TILE_NAME = re.compile(
+    r"^MLC\.Certified\.(?:(?:tiles|part|w)_\d+_\d+|(?:gridPart|gridSum)_\d+)$"
+)
 # Declaration kinds of the Lean source, grouped for the counts of the figure.
 KIND_GROUP = {
     "theorem": "thm",
@@ -141,6 +143,9 @@ SPINE = (
     ),
 )
 HEAD_LEAN = "MLC.mlc_conjecture"
+# Results that no vertebra needs: checked in Lean, but not part of the proof of MLC. They
+# hang on the programme's open targets and must be connected to the graph like the rest.
+SIDE_ROOTS = ("MLC.Research.unresolved_volume_eq_zero_of_porous",)
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
 BUD_TITLES = {
@@ -396,6 +401,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
     base_url, commit = repository_url(repo_root)
 
     nodes: dict[str, Node] = {}
+    extras: list[Node] = []
 
     def make(node: Node) -> Node:
         nodes[node.id] = node
@@ -650,7 +656,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             ),
         ),
     )
-    add_child(
+    area = add_child(
         conjecture,
         Node(
             id="paper:area",
@@ -663,11 +669,65 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
                 "cases of MLC and for the Area Problem of ∂M, whose area is "
                 "expected to be 0. A zero-area boundary makes the unresolved set "
                 "null, so the certified share of the grid becomes 100%; it does "
-                "not give MLC. Not formalized."
+                "not give MLC. Not formalized; the measure step of the route "
+                "proposed in ROADMAP.md is checked in Lean (below)."
             ),
         ),
         below=True,
     )
+    add_child(
+        area,
+        Node(
+            id="paper:porosity",
+            kind="tip",
+            cat="informal",
+            title="Porosity of ∂M",
+            sub="holes at all scales · from the programme",
+            text=(
+                "Route Z, geometric step (proposed in ROADMAP.md; the survey does not "
+                "state it). At every point of ∂M and at arbitrarily small scales r, "
+                "a ball of radius αr inside B(c, r) misses ∂M. The Molecule regime "
+                "expects substantial hyperbolic components at all scales (Dudko §3), "
+                "the quadratic-like regime needs the a priori bounds of Problems 4.3 "
+                "and 4.4, and the renorm-expanding regime transfers the porosity of "
+                "J_c to M by the almost-linear puzzle–parapuzzle relation. "
+                "Not formalized."
+            ),
+        ),
+        below=True,
+    )
+    side_names: set[str] = set()
+    for side in SIDE_ROOTS:
+        if side not in fq_index:
+            raise RuntimeError(f"Side result not found: {side}")
+        side_names |= closure(edges, side)
+    side_names -= set(owner_index) | spine_names
+    side_names &= set(reachable)
+    if SIDE_ROOTS and side_names:
+        side_decl = fq_index[SIDE_ROOTS[0]]
+        measure = Node(
+            id="z:measure",
+            kind="bud",
+            cat="checked",
+            title="Measure step",
+            sub="porous at each point ⇒ area 0",
+            text=(
+                "Checked in Lean: a measurable set that is porous at each of its points "
+                "has measure zero, by Lebesgue's density theorem; applied to the "
+                "unresolved set it gives volume 0 (MLC.Research.unresolved_volume_"
+                "eq_zero_of_porous). The geometric input, the porosity of ∂M, is the "
+                "open part of Route Z."
+            ),
+            lean=SIDE_ROOTS[0],
+            file=side_decl.file,
+            line=side_decl.line,
+            count=len(side_names),
+        )
+        register(sorted(side_names), measure)
+        measure.stat = stat_line(measure.stats)
+        measure.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
+        add_child(area, measure, below=True)
+        extras.append(measure)
     add_child(
         p44,
         Node(
@@ -799,6 +859,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "commit": commit,
         "parameters": parameters,
         "owner_index": owner_index,
+        "extras": extras,
     }
 
 
@@ -843,16 +904,26 @@ def layout(model: dict[str, object]) -> tuple[float, float]:
     count = len(vertebrae)
     for index in range(count - 1, -1, -1):
         node = vertebrae[index]
-        stack_left = sum(tree_height(t) for t in left.get(index, []))
-        stack_right = sum(tree_height(t) for t in right.get(index, []))
-        row = max(node.h + 2 * ROW_PAD, stack_left + 8, stack_right + 8)
-        node.x, node.y = CENTER, cursor + row / 2
-        for trees, stack in ((left.get(index, []), stack_left), (right.get(index, []), stack_right)):
-            top = node.y - stack / 2
+        # A side with one tree is aligned on the root of the tree, so that the link from
+        # the vertebra is level; several trees are centered on the vertebra.
+        sides = []
+        for trees in (left.get(index, []), right.get(index, [])):
+            total = sum(tree_height(t) for t in trees)
+            anchor = total / 2
+            if len(trees) == 1:
+                place_tree(trees[0], 0, 0.0)
+                anchor = trees[0].y
+            sides.append((trees, total, anchor))
+        used = [(total, anchor) for trees, total, anchor in sides if trees]
+        up = max([node.h / 2 + ROW_PAD] + [anchor + 4 for _, anchor in used])
+        down = max([node.h / 2 + ROW_PAD] + [total - anchor + 4 for total, anchor in used])
+        node.x, node.y = CENTER, cursor + up
+        for trees, total, anchor in sides:
+            top = node.y - anchor
             for tree in trees:
                 place_tree(tree, 0, top)
                 top += tree_height(tree)
-        cursor += row
+        cursor += up + down
     base = cursor + 40
     spacing = 22.0
     total = sum(n.w for n in ground) + spacing * (len(ground) - 1)
@@ -1082,6 +1153,10 @@ def model_json(model: dict[str, object], width: float, height: float) -> str:
         {"id": node.id, "title": node.title, "stats": node.level}
         for node in [head, *vertebrae[::-1]]
     ]
+    levels.extend(
+        {"id": node.id, "title": f"Route Z · {node.title.lower()}", "stats": node.stats}
+        for node in model["extras"]
+    )
     payload = {
         "width": width,
         "height": height,

@@ -11,7 +11,10 @@ consecutive root squares, which share one depth, and a heavy block is split into
 several modules. The modules of a block depend only on the streams of its
 roots, so refining some blocks leaves the other modules unchanged and Lake
 keeps their builds. ``Mlc/GridCertified.lean`` combines the per-module equalities
-into the final bound.
+into the final bound; it works in chunks of ``CHUNK`` modules, because ``simp``
+and the kernel recurse once per element of a list and overflow the stack on a list
+of thousands of modules, and its two membership checks are Boolean ``all`` loops
+for the same reason.
 
 The kernel evaluates ``cellsH`` on every tile, so the hints are not trusted: a
 wrong certificate only enlarges the count, and the count of every module is
@@ -30,6 +33,7 @@ BLOCK = 4  # consecutive root squares of a block
 SCALE = 16  # the weights of the final bound count cells of side 2^-SCALE
 MODULE_COST = 4000.0  # kernel work of a module, in steps of the model
 MODULE_HINTS = 6000  # hints of a module
+CHUNK = 500  # modules per chunk of the aggregator
 LADDER = 40  # Lean: ladderLen
 PERIODS = 8  # Lean: periodLen
 LEAF_COST = 0.02  # a hint without certificate costs little
@@ -214,22 +218,49 @@ def main() -> None:
             old.unlink()
     names = [f"{block}_{part}" for block, part, _, _ in modules]
     imports = "\n".join(f"import Mlc.GridTiles.G{name}" for name in names)
-    pairs = ",\n     ".join(
-        ", ".join(
-            f"({modules[i][2]}, tiles_{names[i]})"
-            for i in range(start, min(start + 6, len(names)))
+    # The aggregator works in chunks: `simp` and the kernel recurse once per module of a
+    # list, which overflows the stack on thousands of modules.
+    chunks = [
+        list(range(start, min(start + CHUNK, len(names))))
+        for start in range(0, len(names), CHUNK)
+    ]
+
+    def chunk_pairs(ids: list[int]) -> str:
+        return ",\n     ".join(
+            ", ".join(
+                f"({modules[i][2]}, tiles_{names[i]})" for i in ids[start : start + 6]
+            )
+            for start in range(0, len(ids), 6)
         )
-        for start in range(0, len(names), 6)
+
+    def module_cells(i: int) -> int:
+        return sum(n.cells for n, _ in modules[i][3])
+
+    parts = "\n\n".join(
+        f"set_option maxRecDepth 100000 in\n"
+        f"noncomputable def gridPart_{k} : List TileModule :=\n  [{chunk_pairs(ids)}]"
+        for k, ids in enumerate(chunks)
     )
-    lemmas = ", ".join(f"w_{name}" for name in names)
+    union = " ++ ".join(f"gridPart_{k}" for k in range(len(chunks)))
     bridges = "\n\n".join(
         f"theorem w_{names[i]} :\n"
         f"    moduleWeight {SCALE} ({modules[i][2]}, tiles_{names[i]}) =\n"
-        f"      {sum(n.cells for n, _ in modules[i][3])} * 4 ^ ({SCALE} - {modules[i][2]}) :=\n"
+        f"      {module_cells(i)} * 4 ^ ({SCALE} - {modules[i][2]}) :=\n"
         f"  (moduleWeight_eq {SCALE} {modules[i][2]} tiles_{names[i]}).trans\n"
         f"    (congrArg (· * 4 ^ ({SCALE} - {modules[i][2]})) part_{names[i]})"
         for i in range(len(names))
     )
+    sums = "\n\n".join(
+        f"set_option maxRecDepth 100000 in\n"
+        f"theorem gridSum_{k} :\n"
+        f"    ((gridPart_{k}).map (moduleWeight gridDepth)).sum = "
+        f"{sum(module_cells(i) * 4 ** (SCALE - modules[i][2]) for i in ids)} := by\n"
+        f"  simp only [gridPart_{k}, gridDepth, List.map_cons, List.map_nil, List.sum_cons,\n"
+        f"    List.sum_nil, {', '.join('w_' + names[i] for i in ids)}]\n"
+        f"  decide +kernel"
+        for k, ids in enumerate(chunks)
+    )
+    chunk_lemmas = ", ".join(f"gridSum_{k}" for k in range(len(chunks)))
     write_if_changed(
         repo / "Mlc" / "GridCertified.lean",
         f"""import Mlc.GridTMCertificate
@@ -262,33 +293,49 @@ def gridDepth : ℕ := {SCALE}
 `2 ^ (-gridDepth)`: a cell counted at a coarser depth weighs `4 ^ (gridDepth - depth)`. -/
 def gridCells : ℕ := {total}
 
-set_option maxRecDepth 100000 in
+{parts}
+
 /-- The modules of tiles, each with the depth at which its cells are counted, in the
 order of a depth-first traversal of the root squares. -/
 noncomputable def gridModules : List TileModule :=
-  [{pairs}]
+  {union}
 
 set_option maxRecDepth 100000000 in
 theorem gridModules_cover :
     coverAll 20 rootsUp ((moduleTiles gridModules).map Prod.fst) = true := by
   decide +kernel
 
+-- The two checks below run over a list of thousands of modules: a Boolean `all` is
+-- evaluated by the kernel in a loop, while `decide` on a bounded quantifier recurses
+-- once per module and overflows the stack.
 set_option maxRecDepth 100000000 in
-theorem gridModules_level : ∀ m ∈ gridModules, ∀ p ∈ m.2, p.1.k ≤ m.1 := by
+theorem gridModules_level_check :
+    gridModules.all (fun m => m.2.all fun p => decide (p.1.k ≤ m.1)) = true := by
   decide +kernel
 
+theorem gridModules_level : ∀ m ∈ gridModules, ∀ p ∈ m.2, p.1.k ≤ m.1 := by
+  intro m hm p hp
+  have h := List.all_eq_true.mp gridModules_level_check m hm
+  exact of_decide_eq_true (List.all_eq_true.mp h p hp)
+
 set_option maxRecDepth 100000000 in
-theorem gridModules_depth : ∀ m ∈ gridModules, m.1 ≤ gridDepth := by
+theorem gridModules_depth_check :
+    gridModules.all (fun m => decide (m.1 ≤ gridDepth)) = true := by
   decide +kernel
+
+theorem gridModules_depth : ∀ m ∈ gridModules, m.1 ≤ gridDepth := by
+  intro m hm
+  exact of_decide_eq_true (List.all_eq_true.mp gridModules_depth_check m hm)
 
 /-- The weights of the modules, from the counts that the kernel checked in the modules. -/
 {bridges}
 
-set_option maxRecDepth 100000 in
+-- The weights of the chunks of modules.
+{sums}
+
 theorem gridCells_eq : (gridModules.map (moduleWeight gridDepth)).sum = gridCells := by
-  simp only [gridModules, gridDepth, gridCells, List.map_cons, List.map_nil, List.sum_cons,
-    List.sum_nil, {lemmas}]
-  decide +kernel
+  simp only [gridModules, gridCells, List.map_append, List.sum_append, {chunk_lemmas}] <;>
+    decide +kernel
 
 /-- The certified area bound for the non-interior part of the Mandelbrot set. -/
 theorem unresolved_volume_le_grid :

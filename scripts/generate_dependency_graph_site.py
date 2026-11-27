@@ -4,9 +4,10 @@
 The graph is declaration-level and cross-file (all `Mlc/*.lean`). Edges come
 from the constants in elaborated Lean types and proof terms; generated
 projection and constructor paths are collapsed to source declarations. The
-graph is validated (rooted, acyclic, exactly the ground axioms, exactly the two
-open problems of Dudko) and drawn as one 2D figure, the spine of the proof
-(see `spine_graph.py`).
+graph is validated (rooted at `mlc_conjecture` and at the side results of the
+programme such as the measure step of Route Z, acyclic, exactly the ground
+axioms, exactly the two open problems of Dudko) and drawn as one 2D figure, the
+spine of the proof (see `spine_graph.py`).
 
 Output layout:
   site/
@@ -31,7 +32,7 @@ from collections import deque
 from graphlib import CycleError, TopologicalSorter
 
 from progress_report import progress_metrics_from_worktree, write_progress_assets
-from spine_graph import build_model, spine_page_html
+from spine_graph import SIDE_ROOTS, build_model, spine_page_html
 
 
 DECL_RE = re.compile(
@@ -311,8 +312,13 @@ def build_payload(
     root: Decl,
     axiom_frontier: set[str],
 ) -> dict[str, object]:
-    """The rooted graph (reachable declarations, dependency edges, kernel axioms)."""
+    """The rooted graph: the declarations reachable from the root and from the side results,
+    the dependency edges, and the kernel axioms."""
     reachable, _ = rooted_closure(root.fq_name, edges)
+    for side in SIDE_ROOTS:
+        if side not in fq_index:
+            raise RuntimeError(f"Side result not found: {side}")
+        reachable |= rooted_closure(side, edges)[0]
     reachable |= axiom_frontier
     nodes = [
         {
@@ -331,7 +337,12 @@ def build_payload(
     edge_payload.extend(
         {"source": root.fq_name, "target": name} for name in sorted(axiom_frontier)
     )
-    return {"root": root.fq_name, "nodes": nodes, "edges": edge_payload}
+    return {
+        "root": root.fq_name,
+        "side_roots": list(SIDE_ROOTS),
+        "nodes": nodes,
+        "edges": edge_payload,
+    }
 
 
 def validate_research_graph(
@@ -344,6 +355,8 @@ def validate_research_graph(
             raise RuntimeError("Graph edge has an unknown endpoint")
         adjacency[edge["source"]].add(edge["target"])
     reachable, _ = rooted_closure(payload["root"], adjacency)
+    for side in payload.get("side_roots", []):
+        reachable |= rooted_closure(side, adjacency)[0]
     if reachable != set(nodes):
         raise RuntimeError("The root graph contains disconnected declarations")
     local_declarations = set(declarations) - set(EMBEDDED_AXIOMS)

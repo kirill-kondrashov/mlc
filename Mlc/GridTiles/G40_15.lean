@@ -10,10 +10,8 @@ counted at depth 12.
 namespace MLC.Certified
 
 def tiles_40_15 : List (Sq × List ℕ) :=
-  [(⟨-187, 17, 8⟩,
-    [1, 245849, 204891, 245849, 204891]),
-  (⟨-93, 8, 7⟩,
-    [1, 163929, 123131, 204883, 133211])]
+  [(⟨-379, 8, 9⟩,
+    [1, 327771, 286813, 327773, 286813])]
 
 set_option maxRecDepth 100000000 in
 theorem part_40_15 :

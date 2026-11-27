@@ -17,11 +17,13 @@ can share the work) and prints `L x y k count hint...` for each of them, where
 parameters are the largest period `pmax ≤ periodLen`, the largest number `J` of
 steps of an outside certificate, the largest number `cap` of steps before an
 inside certificate (a cheap certificate is worth more area per step of the
-kernel), and `own ∈ {0, 1}`, which says whether the square itself is certified
-first (`0` for a leaf of an earlier grid, which an equal search failed to certify).
+kernel), and `own ∈ {0, 1, 2}`, which says whether the square itself is certified
+first (`0` for a leaf of an earlier grid, which an equal search failed to certify;
+`2` accepts only an inside certificate, for coarsening a region of unresolved cells).
 
 The driver `scripts/refine_grid.py` calls the program on the unresolved cells of
-the current grid, and `lake build gridhints` compiles it.
+the current grid, `scripts/coarsen_grid.py` calls it on coarser squares that hold
+only unresolved cells, and `lake build gridhints` compiles it.
 -/
 
 open MLC.Certified
@@ -59,8 +61,10 @@ def tryIn (q : Sq) (t : TBall) (n : Nat) (ps : List Nat) : Option Nat :=
       then some (2 * ((n * periodLen + i) * ladderLen + j) + 3) else none
 
 /-- One pass over the steps `0, …, J`: the hint of the first certificate. The
-floating-point orbit `(zr, zi)` of the center selects the periods that are tried. -/
-def searchPass (q : Sq) (J cap pmax : Nat) : Option Nat :=
+floating-point orbit `(zr, zi)` of the center selects the periods that are tried.
+With `insideOnly` the pass accepts no outside certificate and stops as soon as the
+floating-point orbit of the center leaves the disk of radius 2. -/
+def searchPass (q : Sq) (J cap pmax : Nat) (insideOnly : Bool := false) : Option Nat :=
   go J 0 TBall.zero 0 0
 where
   cr : Float := Float.ofInt q.ca / 281474976710656.0
@@ -73,11 +77,13 @@ where
     else none
   go : Nat → Nat → TBall → Float → Float → Option Nat
     | 0, n, t, zr, zi =>
-        if escaped (t.toBall q.rc) then some (2 * n + 2) else inside n t zr zi
+        if escaped (t.toBall q.rc) then (if insideOnly then none else some (2 * n + 2))
+        else inside n t zr zi
     | f + 1, n, t, zr, zi =>
         let m := t.toBall q.rc
-        if escaped m then some (2 * n + 2)
+        if escaped m then (if insideOnly then none else some (2 * n + 2))
         else if 8 * SN < m.R then none
+        else if insideOnly && 4.0 < zr * zr + zi * zi then none
         else
           match inside n t zr zi with
           | some h => some h
@@ -85,18 +91,20 @@ where
               go f (n + 1) (tmStep q.ca q.cb q.rc t)
                 (zr * zr - zi * zi + cr) (2 * zr * zi + ci)
 
-/-- The hint stream of the subtree below `q`, `f` levels deep. -/
-def search (J cap pmax : Nat) (own : Bool) : Nat → Sq → List Nat
+/-- The hint stream of the subtree below `q`, `f` levels deep. `own` is `0` when
+the square itself is not certified, `1` when it is, and `2` when only an inside
+certificate is accepted for it. -/
+def search (J cap pmax : Nat) (own : Nat) : Nat → Sq → List Nat
   | 0, q =>
-      match (if own then searchPass q J cap pmax else none) with
+      match (if own != 0 then searchPass q J cap pmax (own == 2) else none) with
       | some h => [h]
       | none => [0]
   | f + 1, q =>
-      match (if own then searchPass q J cap pmax else none) with
+      match (if own != 0 then searchPass q J cap pmax (own == 2) else none) with
       | some h => [h]
       | none =>
-          1 :: (search J cap pmax true f q.c00 ++ search J cap pmax true f q.c10 ++
-            search J cap pmax true f q.c01 ++ search J cap pmax true f q.c11)
+          1 :: (search J cap pmax 1 f q.c00 ++ search J cap pmax 1 f q.c10 ++
+            search J cap pmax 1 f q.c01 ++ search J cap pmax 1 f q.c11)
 
 def parseSquare (s : String) : Option Sq :=
   match (s.splitOn " ").map String.toInt? with
@@ -112,7 +120,7 @@ def main (args : List String) : IO UInt32 := do
         if i % stride == start then
           match parseSquare line with
           | some q =>
-              let hs := search J cap pmax (own != 0) F q
+              let hs := search J cap pmax own F q
               let r := verifyTree F q hs
               if r.2 ≠ [] then throw (IO.userError s!"unused hints at {q.x} {q.y} {q.k}")
               IO.println s!"L {q.x} {q.y} {q.k} {r.1} {String.intercalate " " (hs.map toString)}"

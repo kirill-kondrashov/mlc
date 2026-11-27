@@ -203,16 +203,19 @@ orbit (center, derivative at the center, remainder) certifies a square as
 outside `M` when the model leaves the disk of radius 2, and as inside `M` when a
 moving disk centered at the model returns into itself, which gives a bounded
 critical orbit for every parameter of the square. These squares are removed, and
-the remaining 2642413 cells of side `2^-12` in the upper half-plane (the lower
-half is the mirror image) cover `M ∖ int M`:
+the remaining cells in the upper half-plane (the lower half is the mirror image)
+cover `M ∖ int M`. They are counted at side `2^-12`, 2421967 of them; the shells
+of the hyperbolic components are certified by squares of side `2^-10` and `2^-11`
+with inside certificates of up to 960 and 240 model steps, which costs the kernel
+the same per unit of area as `2^-12` cells with 60 steps:
 
 ```text
 R ⊆ M ∖ int M
-μ*(R) ≤ 2 · 2642413 / 4^12 ≈ 0.3150
-q(R) ≤ 0.0251.
+μ*(R) ≤ 2 · 2421967 / 4^12 ≈ 0.2887
+q(R) ≤ 0.0230.
 ```
 
-The resolved share is therefore at least `97.49%`, a 40-fold reduction of the
+The resolved share is therefore at least `97.70%`, a 44-fold reduction of the
 unresolved area. The earlier classifier with disk enclosures stopped at `11.2%`
 (`q(R) ≤ 0.1117`): the disks lose the phases of the derivative, so squares at a
 few cell widths from `M` stay unresolved, and a fixed trapping disk needs a
@@ -279,6 +282,55 @@ is not known to decide the area of `∂M`, since a locally connected planar
 continuum can have a boundary of positive area. Completion is therefore read
 from the open root obligations and the existence of
 `mlc_conjecture_unconditional`, never from the share alone.
+
+### The area of `∂M`: route Z
+
+The grid cannot reach `100%` without an input about `∂M`: the unresolved
+cells at depth `d` cover a neighbourhood of `∂M` whose area decreases to
+`area(∂M)`, and the measured ratio of one level to the next is `0.83–0.87`, so
+every further level costs about three times more for a smaller gain. Dudko's
+survey states what is expected and what it needs:
+
+- the introduction: "The area of `∂M` is expected to be 0, see §3.8";
+- §3.8: Conjecture 3.6 (hyperbolicity of the Molecule renormalization), whose
+  completion requires Problem 4.3, and which "is likely required for the
+  satellite cases of Conjecture 1.2 and the Area Problem of `∂M`";
+- §3, after the neutral renormalization: "Conjecturally, there is no
+  renorm-expanding regime on the Molecule: every parameter there has
+  substantial hyperbolic components in all scales";
+- Question 3.1: at a scale `δ` of `c ∈ ∂M` there are three regimes, a
+  Tan Lei similarity between `M` and `J_c` when all hyperbolic components are
+  small relative to `δ`, near-neutral effects when a component of size `≫ δ`
+  reaches the scale, and quadratic-like features when the components of size
+  comparable to `δ` dominate.
+
+A proof of area zero would make the unresolved bound `0` and the share `100%`
+(MLC stays a separate statement). The proposed method, which the survey does not
+state, reads the three regimes as a porosity statement and finishes with
+Lebesgue's density theorem:
+
+1. *Measure step (no dynamics).* If for every `c ∈ ∂M` there are `α > 0`,
+   radii `r_n → 0` and points `y_n` with `B(y_n, α r_n) ⊆ B(c, r_n) ∖ ∂M`, then
+   `area(∂M) = 0`. At a Lebesgue density point of `∂M` the proportion of
+   `∂M` in `B(c, r_n)` tends to `1`, while the hole `B(y_n, α r_n)` removes the
+   fixed proportion `α²`. This step is a Lean theorem on its own
+   (`Mlc/Research/AreaZero.lean`): `volume_eq_zero_of_porous` for a measurable
+   set that is porous at each of its points, from Mathlib's density theorem for
+   doubling measures (`IsUnifLocDoublingMeasure.ae_tendsto_measure_inter_div`),
+   and `unresolved_volume_eq_zero_of_porous`, which states it for the unresolved
+   set `M ∖ int M = ∂M`. Both use only the three kernel axioms.
+2. *Geometric step.* The programme must supply the holes. In the Molecule regime
+   they are the substantial hyperbolic components of every scale; in the
+   quadratic-like regime they come from the a priori bounds (Problems 4.3 and
+   4.4); in the renorm-expanding regime the almost-linear puzzle–parapuzzle
+   relation transfers the porosity of `J_c` to `M`.
+3. *Bookkeeping.* Route Z stays outside the root: `RootInput` keeps exactly
+   Problems 4.3 and 4.4, and `unresolved_volume_eq_zero_of_porous` takes the
+   porosity of step 2 as its hypothesis. The dependency graph treats it as a
+   side result next to the root (`SIDE_ROOTS` in `scripts/spine_graph.py`).
+
+The proof spine shows the chain Problem 4.3, Conjecture 3.6, area of `∂M` as
+amber branches that are not formalized.
 
 ### Coverage-Uncertainty Profile
 

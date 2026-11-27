@@ -10,14 +10,14 @@ counted at depth 12.
 namespace MLC.Certified
 
 def tiles_40_50 : List (Sq × List ℕ) :=
-  [(⟨-183, 37, 8⟩,
-    [1, 245849, 204891, 245849, 204891]),
-  (⟨-91, 18, 7⟩,
-    [1, 163929, 133211, 204885, 133531])]
+  [(⟨-377, 26, 9⟩,
+    [1, 327773, 286813, 327773, 287133]),
+  (⟨-378, 27, 9⟩,
+    [1, 450643, 368733, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 409691])]
 
 set_option maxRecDepth 100000000 in
 theorem part_40_50 :
-    (tiles_40_50.map fun p => cellsH (12 - p.1.k) p.1 p.2).sum = 0 := by
+    (tiles_40_50.map fun p => cellsH (12 - p.1.k) p.1 p.2).sum = 16 := by
   decide +kernel
 
 end MLC.Certified
