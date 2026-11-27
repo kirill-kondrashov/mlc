@@ -16,7 +16,7 @@ check-progress:
 
 test-scripts:
 	python3 scripts/test_map_raster.py
-	python3 scripts/test_progress_history.py
+	python3 scripts/test_progress_ledger.py
 
 install-hooks:
 	git config core.hooksPath .githooks

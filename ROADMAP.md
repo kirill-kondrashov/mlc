@@ -373,6 +373,102 @@ that depend on conformal geometry still need is the link between them and the dy
 modulus of an annulus and its conformal invariance, then the families of curves of a
 quadratic-like map. That is the first real step of every route.
 
+### Rays, the lamination and tuning
+
+The formalization proves local connectivity through connected parameter nests (the Yoccoz
+scheme: nested connected neighbourhoods that shrink to the point), and no external ray enters it.
+Rays and laminations are classical and are not formalized (they need the Riemann map of the
+complement of `M`, which Mathlib does not have). They give equivalent forms of the goal and a
+precise description of the points that stay open.
+
+**Equivalent forms of MLC** (Carathéodory; Douady–Hubbard; Thurston; Schleicher):
+
+1. *Rays.* The inverse of the Douady–Hubbard map `Φ_M : ℂ ∖ M → ℂ ∖ closed unit disk` extends
+   continuously to the circle, so every parameter ray `R_M(t)` lands and the landing map is
+   continuous.
+2. *Lamination.* `M` is homeomorphic to the quotient of the closed disk by the quadratic minor
+   lamination: `t ∼ t'` exactly when `R_M(t)` and `R_M(t')` land at the same point. On rational
+   angles the relation is known (Douady–Hubbard, Thurston); MLC says that the lamination is the
+   whole landing relation.
+3. *Fibers.* The fiber of `c` is the set of the points that no pair of rational rays landing
+   together separates from `c`. `M` is locally connected exactly when every fiber is a point
+   (Schleicher, *On fibers and local connectivity of Mandelbrot and Multibrot sets*).
+
+**Which landing points stay open.** The fibers of the parameters that are not infinitely
+renormalizable are points (Yoccoz, Hubbard), and the lemmas Y, N, B, A and QG give the same for
+the other published classes, so the rays whose impressions meet those classes land. A ray that
+fails to land has an impression that is a non-trivial continuum, contained in a non-trivial
+fiber, and a non-trivial fiber consists of infinitely renormalizable parameters of the classes
+`unboundedSatellite`, `virtualBounded` and `virtualNearNeutral`. So the rays land at points where
+local connectivity is known, except possibly at the parameters of Problems 4.3 and 4.4. This is
+what the tree decomposes: Lemmas TC′, G, D (and VT1, VD1, VG2, VD2) bound the degeneration, Lemma
+T turns the bound into shrinking nested parameter pieces, shrinking pieces make the fiber a
+point, and a trivial fiber is the landing of the ray. The ray form adds no hypothesis; it
+locates the lemmas in the plane of angles (the open angles are those of the infinitely
+renormalizable parameters outside the published classes, a set of unknown measure) and it is the
+form in which the final statement would be read.
+
+**Tuning: exact combinatorial similarity, no metric one.** Tuning `τ_w : M → M_w ⊂ M` by a
+hyperbolic center `w` (Douady–Hubbard straightening) is a homeomorphism onto a little copy, and
+the copy is cut out of `M` by a renormalization window, so `M` is locally connected at a point of
+`M_w` other than its root exactly when it is at the untuned point. For an infinitely
+renormalizable `c' = τ_{w_1} ∘ τ_{w_2} ∘ …` this reduces local connectivity to the shrinking of
+the nested copies, `diam M_k → 0`, that is, to the a priori bounds together with the transfer
+Lemma T. The copies are exactly similar to `M` in the combinatorics (the lamination of the copy
+is the substitution of the lamination of `M`) and only asymptotically similar in the metric: a
+homeomorphism does not control the diameter of the image of a set (a Hölder estimate does not
+iterate to a contraction), and that control is what the molecule conjecture asks, as the
+hyperbolicity of the renormalization (Conjectures 3.5 and 3.6, Problem 3.1 of the survey). The
+survey derives the hyperbolicity from the a priori bounds (Conjecture 3.6 needs Problem 4.3) and
+the bounds from the hyperbolicity only a posteriori, so the hyperbolicity is available as a
+hypothesis for a conditional route and cannot close the problems unconditionally.
+
+What the structure gives that can be used now:
+
+* **Tail invariance** (`Mlc/Research/TailInvariance.lean`, checked in Lean). In the abstract model
+  of the towers, the Teichmüller contraction TC′, the cap G, the linear dichotomy D and the a
+  priori bounds hold for a tower exactly when they hold for the tower without its first `n`
+  levels (`lemmas_shift_iff`, `aPrioriBounds_shift_iff`); the constants change by quantities that
+  the prefix determines. So the open classes are saturated under tuning by a bounded prefix, and
+  it suffices to prove the lemmas for the tail. This is the grouping that the combinatorics
+  supports: it removes bounded prefixes and removes nothing else, since the hard parameters have
+  no bounded prefix to strip.
+* **Metric similarity as the hypothesis to prove.** What a proof of Lemmas G and D must supply is
+  the uniform comparison of the degeneration of `c` and of `τ_w(c)` with constants independent of
+  `w` for relative periods of `w` that are unbounded (the pseudo-Siegel disks of PS1–PS4 are the
+  survey's way to get it at the near-neutral steps).
+* **Rays and fibers as the target form** (to formalize): rational parameter rays and their
+  landing, fibers, and the equivalence "all fibers are points ⇒ locally connected", as an
+  abstract topological theorem about a compact set with a family of separating pairs. It is
+  independent of the dynamics, so it can be proved before the geometry and reduces the final
+  statement of the tree to the triviality of fibers.
+
+### The grid and the self-similarity of `M`
+
+The kernel-checked grid and the structure above meet in one question: whether the many little
+copies of `M` along the dendritic filaments can be covered in groups. The data of the grid say
+how the cost grows. The unresolved cells counted at depth 9, 10, 11, 12 and 13 are 67 609,
+224 189, 761 108, 2.42·10⁶ and 8.69·10⁶, a factor 3.2–3.6 per level (the count grows like
+`h^{-1.77}` for cells of side `h`), while the certified bound of the unresolved area is 0.516,
+0.428, 0.363, 0.289 and 0.259, a decrease of 12–17% per level. Every level costs a factor 3.4 in
+kernel work and lowers the bound a little, and the exponent tends to 2 (the boundary of `M` has
+Hausdorff dimension 2, Shishikura), so a hundredfold reduction by subdivision does not exist.
+The unresolved layer is the neighbourhood of the part of `∂M` made of copies and their
+filaments; each piece of `M` of the size of a cell must be surrounded by certified cells, and no
+covering by squares is much cheaper.
+
+A grouping by similarity needs more than the combinatorial similarity: the certificate of a
+cell is arithmetic on its coordinates, and a model copy certifies a neighbour only with an
+effective bound on the distortion of the tuning homeomorphism, the estimate of Problems 4.3 and
+4.4 again (for Misiurewicz points, Tan Lei's asymptotic similarity with `J_c` has no effective
+constants). What stays possible is cheaper certificates, not fewer cells: second-order Taylor
+models certify larger squares at the same distance from `∂M`, and a covering of a copy by a disk
+around its center needs an effective size estimate of the copy. Merging the modules does not
+reduce the kernel work, which is the sum over the certificates, and the memory of a module grows with its work (2.4 GB for 13 seconds), so the modules cannot be
+merged much; the build outputs shrink with `noncomputable` data (measured on a small tile: the
+`.c` drops by 90% and the `.olean` by 42%, the fixed part of an `.olean` being 25 KB), which is a
+matter of storage. The area is a by-product of the grid, and the grid stays at depth 13.
+
 ### Caveats
 
 * The dictionary `Geometry` is a parameter of the statements: `cls`, `tower` and `vtower`
@@ -391,14 +487,17 @@ quadratic-like map. That is the first real step of every route.
 The live graph and LaTeX report use the following broad planning ranges. They
 are research-management priors:
 
-| Route | Expected relative residual reduction | Success prior |
+| Route | Planned residual reduction | Success prior |
 | --- | ---: | ---: |
 | Problem 4.3 pseudo-Siegel control for remaining unbounded satellite cases | 10–30% | 12% |
 | Problem 4.4 virtual bounded-period satellite interpolation | 24–46% | 20% |
 | Problem 4.4 virtual near-neutral interpolation | 18–42% | 12% |
 | Unified phase-parameter transfer conditional on genuine geometry | 38–72% | 45% |
 
-The final route is conditional and cannot itself discharge Problems 4.3 and
+The planned residual reduction is a relative research-management prior for the
+residual set, the parameters that the published theorems leave open, and is
+unrelated to the area of the grid or to the resolved share below. The final route is
+conditional and cannot itself discharge Problems 4.3 and
 4.4. Re-estimate each range only after a concrete class theorem, theorem-level
 collar estimate, or parameter realization is added.
 
@@ -456,8 +555,13 @@ R ⊆ M ∖ int M
 q(R) ≤ 0.0206.
 ```
 
-The resolved share is therefore at least `97.94%`, a 48-fold reduction of the
-unresolved area. The earlier classifier with disk enclosures stopped at `11.2%`
+The resolved share is therefore at least `97.94%` of the disk envelope `|c| ≤ 2` (area
+`4π`). The share is a by-product of the kernel-checked grid: the cells that no
+certificate removes form a neighbourhood of `∂M` at the resolution of the grid, whose area
+shrinks with the depth, and the share says nothing about the classes that the published
+theorems leave open (the area of those parameters is unknown, expected to be small,
+without a certificate). The report states no factor of reduction relative to the
+literature. The earlier classifier with disk enclosures stopped at `11.2%`
 (`q(R) ≤ 0.1117`): the disks lose the phases of the derivative, so squares at a
 few cell widths from `M` stay unresolved, and a fixed trapping disk needs a
 cell of side `s` to lie at distance about `√s` from the boundary of a
@@ -473,19 +577,20 @@ R_next = R \ C
 μ*(R_next) ≤ μ*(R).
 ```
 
-The next numerical research gate is a verified 100-fold reduction of the
-global envelope (the 20-fold gate `q(R) ≤ 0.05` is reached):
+The next numerical gate is a resolved share of 99% (the gate of 95%,
+`q(R) ≤ 0.05`, is reached):
 
 ```text
 μ*(R) ≤ 4π / 100 = π / 25 ≈ 0.125664
 q(R) ≤ 0.01.
 ```
 
-This target requires certified coverage of parameter classes. No commit that
+Passing this gate requires a finer grid or a certified covering estimate of the
+neighbourhood of `∂M`. No commit that
 stages Lean sources is accepted unless it improves at least one of three
 quantities and worsens none: the certified resolved share (the residual-area
 envelope decreases), the share of parameter classes with a Lean certificate (the
-proof of one lemma of a class raises it by the lemma's share of the class), and
+proof of one statement of a class raises it by the statement's share of the class), and
 the repository's formalization-debt proxy (it decreases when a milestone
 theorem is added). The latter is
 
@@ -508,10 +613,16 @@ reported with:
 - the axiom frontier.
 
 The Progress tab, the README and the status report show the **resolved share**
-`100% − q(R)` as a number in a table of the commits after the literature
-baseline, each with the result that raised it. The baseline is the first commit
-whose formal root is exactly Dudko's Problems 4.3 and 4.4; its row lists the two
-open problems, and a larger share is better.
+`100% − q(R)` as a number in a numbered table of the updates after the literature
+baseline, each with its date and the result that raised it; the updates are stored in
+the progress ledger (`docs/progress`), which survives squash merges. The baseline
+(update 0) is the state of the literature: MLC follows from Dudko's Problems 4.3 and
+4.4, which stay open. The area `4π` only normalizes the scale of the share, the area of
+the parameters that the published theorems leave open is unknown (expected to be small,
+without a certificate), and the baseline row lists the two open problems and claims no
+unresolved area. A larger share is better, and it measures the grid; the progress on the
+two problems is the number of open statements of the programme and the share of classes
+with a Lean certificate, which the tab shows next to it.
 
 ### Reading the value 100%
 

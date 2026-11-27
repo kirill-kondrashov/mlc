@@ -1,7 +1,12 @@
 # Continuous integration
 
 The workflows are `.github/workflows/lean_action_ci.yml` (build and check) and
-`.github/workflows/graph_pages.yml` (the graph site, deployed after a successful build of `main`).
+`.github/workflows/graph_pages.yml` (the graph site and the progress page, built after a
+successful build of `main` and deployed; a push to a branch `ci/**` builds the site to test a
+change of the pipeline and deploys nothing). The progress page reads the ledger
+`docs/progress/ledger.json` from the tree, so the shallow checkout of the workflows suffices; the
+job `Scripts` runs the tests of the scripts and `python scripts/check_progress.py --ledger`, which
+fails when the last update of the ledger lags the Lean sources (the commit hook records it).
 
 ## Why the build is not one job
 

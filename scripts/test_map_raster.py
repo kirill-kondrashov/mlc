@@ -8,7 +8,14 @@ import zlib
 
 import numpy as np
 
-from map_raster import composite, coverage, encode_png, rect_pixels
+from map_raster import (
+    composite,
+    coverage,
+    decode_png_gray,
+    encode_png,
+    encode_png_gray,
+    rect_pixels,
+)
 
 
 def brute_force(rects: np.ndarray, width: int, height: int) -> np.ndarray:
@@ -71,6 +78,42 @@ def test_composite_and_png() -> None:
     start = png.index(b"IDAT") + 4
     length = struct.unpack(">I", png[start - 8 : start - 4])[0]
     assert len(zlib.decompress(png[start : start + length])) == 8 * (1 + 4 * 8)
+
+
+def png_with_filters(image: np.ndarray, kinds: list[int]) -> bytes:
+    """An 8-bit grayscale PNG whose row `y` is stored with the PNG filter type `kinds[y]`."""
+    height, width = image.shape
+    stream = bytearray()
+    for y in range(height):
+        stream.append(kinds[y])
+        for x in range(width):
+            left = int(image[y, x - 1]) if x else 0
+            up = int(image[y - 1, x]) if y else 0
+            upper_left = int(image[y - 1, x - 1]) if x and y else 0
+            slope = left + up - upper_left
+            nearest = min((abs(slope - v), i, v) for i, v in enumerate((left, up, upper_left)))[2]
+            predicted = (0, left, up, (left + up) // 2, nearest)[kinds[y]]
+            stream.append((int(image[y, x]) - predicted) & 255)
+
+    def chunk(kind: bytes, data: bytes) -> bytes:
+        body = kind + data
+        return struct.pack(">I", len(data)) + body + struct.pack(">I", zlib.crc32(body))
+
+    return (
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 0, 0, 0, 0))
+        + chunk(b"IDAT", zlib.compress(bytes(stream)))
+        + chunk(b"IEND", b"")
+    )
+
+
+def test_decode_png_gray_reads_every_filter_type() -> None:
+    rng = np.random.default_rng(3)
+    image = rng.integers(0, 256, size=(9, 13), dtype=np.uint8)
+    image[3:6] = 255
+    png = png_with_filters(image, [0, 1, 2, 3, 4, 4, 3, 2, 1])
+    assert np.array_equal(decode_png_gray(png), image)
+    assert np.array_equal(decode_png_gray(encode_png_gray(image)), image)
 
 
 if __name__ == "__main__":

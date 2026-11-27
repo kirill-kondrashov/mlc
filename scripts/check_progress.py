@@ -1,9 +1,24 @@
 #!/usr/bin/env python3
-"""Reject staged commits that do not improve both progress metrics."""
+"""The pre-commit policy of the proof progress and the check of the progress ledger.
+
+    check_progress.py            the hook: a commit that stages Lean sources must improve
+                                 at least one progress metric and worsen none; the hook
+                                 then records the update in the ledger when the ledger lags
+                                 the staged tree, and stages docs/progress
+    check_progress.py --ledger   the consistency check that CI runs: the ledger is
+                                 well-formed and its last update matches the tree (no Git
+                                 history is read)
+
+The title and the note of an update that the hook records come from the environment
+variables PROGRESS_TITLE and PROGRESS_NOTE; without a title it is derived from the new
+milestones or from the depth of the grid.
+"""
 
 from __future__ import annotations
 
 from pathlib import Path
+import argparse
+import os
 import subprocess
 import sys
 
@@ -29,8 +44,60 @@ def staged_lean_sources(repo_root: Path) -> list[str]:
     ]
 
 
+def check_ledger(repo_root: Path) -> int:
+    """Fail when the ledger is malformed or lags the working tree."""
+    from progress_ledger import check_problems  # numpy is needed to record, not to check
+
+    problems = check_problems(repo_root)
+    for problem in problems:
+        print(problem, file=sys.stderr)
+    if not problems:
+        print("The progress ledger matches the tree.")
+    return 1 if problems else 0
+
+
+def record_update(repo_root: Path, staged: dict[str, object]) -> int:
+    """Append the update of the staged tree to the ledger when the ledger lags it, and stage
+    docs/progress with the new entry, the masks of a grid update included."""
+    from progress_ledger import (
+        LedgerError,
+        derive_title,
+        differing_metrics,
+        read_ledger,
+        record,
+    )
+
+    try:
+        entries = read_ledger(repo_root)
+        if differing_metrics(entries[-1], staged):
+            title = os.environ.get("PROGRESS_TITLE", "").strip() or derive_title(
+                entries[-1], staged
+            )
+            entry = record(
+                repo_root,
+                title,
+                os.environ.get("PROGRESS_NOTE", "").strip(),
+                staged=True,
+                metrics=staged,
+            )
+            print(f"Progress ledger: recorded update {len(entries)}: {entry['subject']}")
+        subprocess.run(["git", "add", "--", "docs/progress"], cwd=repo_root, check=True)
+    except LedgerError as exc:
+        print(f"Refusing commit: {exc}", file=sys.stderr)
+        return 1
+    return 0
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    parser.add_argument(
+        "--ledger",
+        action="store_true",
+        help="only check that the progress ledger matches the tree",
+    )
     repo_root = Path(__file__).resolve().parents[1]
+    if parser.parse_args().ledger:
+        return check_ledger(repo_root)
     if not staged_lean_sources(repo_root):
         print("No staged Lean sources: the progress check applies to proof changes.")
         return 0
@@ -69,7 +136,7 @@ def main() -> int:
             file=sys.stderr,
         )
         return 1
-    return 0
+    return record_update(repo_root, staged)
 
 
 if __name__ == "__main__":

@@ -48,6 +48,11 @@ jobs:
           make test-scripts
           python scripts/test_ci_grid.py
 
+      # The last update of docs/progress/ledger.json must describe the tree (the commit hook
+      # records it; see scripts/README.md).
+      - name: Check the progress ledger
+        run: python scripts/check_progress.py --ledger
+
   plan:
     name: Plan
     runs-on: ubuntu-latest

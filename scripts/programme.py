@@ -23,6 +23,12 @@ SHARPNESS_ROOT = "MLC.Research.WidthTower.uniformities_necessary"
 GROTZSCH_ROOT = "MLC.Research.extWidth_ge_of_series"
 PARALLEL_ROOT = "MLC.Research.extWidth_parallel_finset"
 PULLBACK_ROOT = "MLC.Research.extWidth_pullback_le"
+# The results of Mlc/Research/TailInvariance.lean that no other result uses.
+TAIL_ROOTS = (
+    "MLC.Research.WidthTower.lemmas_shift_iff",
+    "MLC.Research.WidthTower.aPrioriBounds_of_shift_tails",
+    "MLC.Research.WidthTower.shift_shift",
+)
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 
