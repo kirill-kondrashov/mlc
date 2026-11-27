@@ -49,6 +49,7 @@ SHARPNESS_THEOREM = re.compile(r"^\s*theorem\s+uniformities_necessary\b", re.MUL
 JUMPCAP_THEOREM = re.compile(r"^\s*theorem\s+aPrioriBounds_iff_jumpCap\b", re.MULTILINE)
 GROTZSCH_THEOREM = re.compile(r"^\s*theorem\s+extWidth_ge_of_series\b", re.MULTILINE)
 TAIL_THEOREM = re.compile(r"^\s*theorem\s+lemmas_shift_iff\b", re.MULTILINE)
+ANNULUS_THEOREM = re.compile(r"^\s*theorem\s+extLength_radialFamily\b", re.MULTILINE)
 PROGRAMME_THEOREM = re.compile(r"^\s*theorem\s+mlc_of_programme\b", re.MULTILINE)
 
 PROGRESS_MILESTONES = (
@@ -67,6 +68,7 @@ PROGRESS_MILESTONES = (
     ("A priori bounds are equivalent to a jump cap", JUMPCAP_THEOREM, 1),
     ("Extremal length: series and parallel laws", GROTZSCH_THEOREM, 1),
     ("Tail invariance of the Problem 4.3 statements", TAIL_THEOREM, 1),
+    ("Modulus of a round annulus as an extremal length", ANNULUS_THEOREM, 1),
     ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )

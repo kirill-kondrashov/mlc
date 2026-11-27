@@ -100,7 +100,11 @@ degeneration is unbounded in some classes of unbounded satellite type
 case. The conformal estimates behind the Gr\"otzsch step (4.6) and the Teichm\"uller
 contraction are proved in \texttt{Mlc/Research/ExtremalLength.lean}: the series law,
 the parallel law, \(W(G\setminus G')\ge\delta^{-1}W(G)\) and the pullback law
-\(W(\Gamma_X)\le d\,W(\Gamma_Y)\). The three statements of Problem~4.3 and the a priori
+\(W(\Gamma_X)\le d\,W(\Gamma_Y)\). The abstract extremal length agrees with the classical
+modulus on the model case: in the plane with Lebesgue measure, the radial segments of the
+annulus \(\{r<|z|<R\}\) have extremal length \(\log(R/r)/2\pi\) and its separating circles
+\(2\pi/\log(R/r)\) (\texttt{extLength\_radialFamily}, \texttt{extLength\_circleFamily} in
+\texttt{Mlc/Research/AnnulusModulus.lean}). The three statements of Problem~4.3 and the a priori
 bounds are invariant under the removal of a finite prefix of levels, which is the
 untuning of a tuned parameter (\texttt{lemmas\_shift\_iff} in
 \texttt{Mlc/Research/TailInvariance.lean}): they hold for a tower exactly when they hold

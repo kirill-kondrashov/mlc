@@ -29,6 +29,12 @@ TAIL_ROOTS = (
     "MLC.Research.WidthTower.aPrioriBounds_of_shift_tails",
     "MLC.Research.WidthTower.shift_shift",
 )
+# The results of Mlc/Research/AnnulusModulus.lean that no other result uses.
+ANNULUS_ROOTS = (
+    "MLC.Research.extLength_radialFamily_mul_circleFamily",
+    "MLC.Research.extLength_circleFamily_eq_extWidth_radialFamily",
+    "MLC.Research.extLength_radialFamily_add_le",
+)
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 

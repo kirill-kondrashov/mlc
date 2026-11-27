@@ -1291,5 +1291,55 @@
       "Tail invariance of the Problem 4.3 statements",
       "MLC from the lemmas of the programme"
     ]
+  },
+  {
+    "id": "2026-11-27-compute-the-modulus-of-a-round-annulus-from-the",
+    "timestamp": "2026-11-27T23:02:31+01:00",
+    "subject": "Compute the modulus of a round annulus from the extremal-length definition",
+    "area_note": "The radial segments of the annulus have extremal length log(R/r)/2π and the separating circles 2π/log(R/r), so the abstract extremal length is the classical modulus and its series law gives Grötzsch's inequality for concentric annuli.",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 8694258,
+      "depth": 13,
+      "weight": 556432512,
+      "scale": 16,
+      "finest": 13,
+      "coarsest": 13,
+      "area": 0.2591090798377991,
+      "percent": 2.0619245428089137,
+      "exact": "2\\cdot 8694258/4^{13}"
+    },
+    "area_exact": "2\\cdot 8694258/4^{13}",
+    "debt_percent": 9.090909090909092,
+    "area_upper_percent": 2.0619245428089137,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 16,
+    "classes_share": 0.0,
+    "milestone_weight": 21,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound",
+      "A priori bounds from uniform control",
+      "Both uniformities are necessary",
+      "A priori bounds are equivalent to a jump cap",
+      "Extremal length: series and parallel laws",
+      "Tail invariance of the Problem 4.3 statements",
+      "Modulus of a round annulus as an extremal length",
+      "MLC from the lemmas of the programme"
+    ]
   }
 ]

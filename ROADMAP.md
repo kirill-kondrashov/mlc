@@ -249,6 +249,15 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   contraction, and conformal invariance for `d = 1`). This is the conformal
   foundation of PS4, of the amplification (4.3) and of TC; the dynamical families remain
   open, and the widths of the towers are not yet extremal widths of such families.
+* `Mlc/Research/AnnulusModulus.lean`: the model case of the theory, the round annulus
+  `{r < |z| < R}` of the plane with Lebesgue measure, in polar coordinates. The family of radial
+  segments, which join the boundary circles, has extremal length `log (R / r) / (2π)`
+  (`extLength_radialFamily`); the family of circles, which separate them, has `2π / log (R / r)`
+  (`extLength_circleFamily`); the two are reciprocal (`extLength_radialFamily_mul_circleFamily`).
+  So the abstract definition is the classical modulus, and the series law of
+  `ExtremalLength.lean` gives Grötzsch's inequality for concentric annuli
+  (`extLength_radialFamily_add_le`). The upper bounds are the
+  Cauchy–Schwarz inequality in polar coordinates, the lower bounds the metric `1 / |z|`.
 
 The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
 `mlc_of_programme`) uses only the three kernel axioms.
@@ -314,11 +323,14 @@ roadmap, not claims of the survey.
   shrinks the pieces when the moduli add up (`ConnectedNest.SeparationEstimate` with a
   divergent budget is already checked). Grötzsch's inequality is proved for the extremal
   length of abstract length measures (`ExtremalLength.lean`: series and parallel laws).
-  First step: the modulus of a round annulus in the plane as the extremal length of its
-  circles and its radii (polar coordinates), and its conformal invariance (the Yoccoz
-  package uses a Gaussian weighted area as a proxy, which changes under conformal maps).
-  Second step: the phase–parameter relation of Lyubich (§3.9). Risk: the conformal geometry
-  is not in Mathlib.
+  First step (done, `AnnulusModulus.lean`): the modulus of a round annulus in the plane as the
+  extremal length of its radii and of its circles, in polar coordinates (the Yoccoz package uses
+  a Gaussian weighted area as a proxy, which changes under conformal maps). Next: the conformal
+  invariance of the modulus under injective holomorphic maps (the pullback law with `d = 1` for
+  the length measures of paths), the modulus of a general annulus, and the Teichmüller bound (a
+  ring around a continuum of diameter `ε` in a disk of radius `R` has modulus at most
+  `(1/2π) log(16R/ε)`, which turns moduli into shrinking). Then the phase–parameter relation of
+  Lyubich (§3.9). Risk: the conformal geometry is not in Mathlib.
 * **Y, TC, B, A, N, QG (published).** Formalize the cited theorems in the form of a parameter
   realization or of the estimate. Y is Yoccoz's puzzle theorem; TC is the Teichmüller
   contraction of §4.3; B, A and N are long research papers; QG is the 71-page theorem of
@@ -368,10 +380,11 @@ roadmap, not claims of the survey.
   cap at large relative period and the linear error are those of G and D for the virtual hull,
   after the pseudo-Siegel regularization (Figure 14, left loop). They wait for G and D.
 
-The abstract extremal length and its laws exist (`ExtremalLength.lean`). What the lemmas
-that depend on conformal geometry still need is the link between them and the dynamics: the
-modulus of an annulus and its conformal invariance, then the families of curves of a
-quadratic-like map. That is the first real step of every route.
+The abstract extremal length, its laws and the modulus of a round annulus exist
+(`ExtremalLength.lean`, `AnnulusModulus.lean`). What the lemmas that depend on conformal
+geometry still need is the link between them and the dynamics: the conformal invariance of the
+modulus, the modulus of general annuli with the Teichmüller bound, then the families of curves
+of a quadratic-like map. That is the first real step of every route.
 
 ### Rays, the lamination and tuning
 
