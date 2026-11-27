@@ -204,20 +204,20 @@ outside `M` when the model leaves the disk of radius 2, and as inside `M` when a
 moving disk centered at the model returns into itself, which gives a bounded
 critical orbit for every parameter of the square. These squares are removed, and
 the remaining cells in the upper half-plane (the lower half is the mirror image)
-cover `M ∖ int M`. The cells have side `2^-12`, and side `2^-13` in the blocks
-with `Re c < -3/4` (with the block `-3/4 ≤ Re c < -5/8`, `0 ≤ Im c < 1/2`), which is
-596256192 cells of side `2^-16`; the shells
+cover `M ∖ int M`. The cells have side `2^-12`, and side `2^-13` for
+`Re c < -1/8` and for `-1/8 ≤ Re c < 0`, `Im c < 1`, which is
+574632704 cells of side `2^-16`; the shells
 of the hyperbolic components are certified by squares of side `2^-10` and `2^-11`
 with inside certificates of up to 960 and 240 model steps, which costs the kernel
 the same per unit of area as `2^-12` cells with 60 steps:
 
 ```text
 R ⊆ M ∖ int M
-μ*(R) ≤ 2 · 596256192 / 4^16 ≈ 0.2777
-q(R) ≤ 0.0221.
+μ*(R) ≤ 2 · 574632704 / 4^16 ≈ 0.2676
+q(R) ≤ 0.0213.
 ```
 
-The resolved share is therefore at least `97.79%`, a 45-fold reduction of the
+The resolved share is therefore at least `97.87%`, a 47-fold reduction of the
 unresolved area. The earlier classifier with disk enclosures stopped at `11.2%`
 (`q(R) ≤ 0.1117`): the disks lose the phases of the derivative, so squares at a
 few cell widths from `M` stay unresolved, and a fixed trapping disk needs a

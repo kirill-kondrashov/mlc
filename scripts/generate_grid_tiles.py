@@ -14,7 +14,9 @@ keeps their builds. ``Mlc/GridCertified.lean`` combines the per-module equalitie
 into the final bound; it works in chunks of ``CHUNK`` modules, because ``simp``
 and the kernel recurse once per element of a list and overflow the stack on a list
 of thousands of modules, and its two membership checks are Boolean ``all`` loops
-for the same reason.
+for the same reason. The elaboration of its 12000 bridge theorems needs a thread
+stack larger than the default of 8 MB; the lakefile sets it with ``weakLeanArgs``,
+which keep the traces of the modules.
 
 The kernel evaluates ``cellsH`` on every tile, so the hints are not trusted: a
 wrong certificate only enlarges the count, and the count of every module is
