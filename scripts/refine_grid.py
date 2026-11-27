@@ -5,7 +5,9 @@ The unresolved cells of the finest level of the selected blocks (read from the
 tile modules ``Mlc/GridTiles``) are subdivided and searched again by the native
 program ``gridhints`` (``lake build gridhints``, source ``scripts/grid_hints.lean``).
 The result is a file of hint streams, one line ``R x y fuel count hint...`` per
-root square, in which the selected blocks are one level deeper. Then run
+root square, in which the selected blocks are one level deeper. A subtree of a
+selected block that holds no certificate is written as the single hint ``0``,
+which the kernel counts as all its finest cells. Then run
 
     python3 scripts/generate_grid_tiles.py --hints FILE
 
@@ -132,6 +134,30 @@ def count_cells(stream, pos, fuel):
         cells, cursor = count_cells(stream, cursor, fuel - 1)
         total += cells
     return total, cursor
+
+
+def prune(stream, pos, fuel, out):
+    """Copy the subtree at ``pos`` to ``out``, replacing a subtree that holds no
+    certificate by the hint ``0`` at its root: ``verifyTree`` counts all its finest
+    cells as unresolved either way. Returns the position after the subtree and whether
+    it holds a certificate."""
+    hint = stream[pos]
+    if hint >= 2:
+        out.append(hint)
+        return pos + 1, True
+    if hint == 0 or fuel == 0:
+        out.append(0)
+        return pos + 1, False
+    mark = len(out)
+    out.append(1)
+    cursor, found = pos + 1, False
+    for _ in CHILDREN:
+        cursor, has = prune(stream, cursor, fuel - 1, out)
+        found = found or has
+    if not found:
+        del out[mark:]
+        out.append(0)
+    return cursor, found
 
 
 def steps_of(hint: int) -> int:
@@ -263,6 +289,11 @@ def main() -> None:
             stream, _ = walk(stream, 0, xy[0], xy[1], ROOT_LEVEL, fuel, replace)
             assert not missing, f"no search result for {missing[:3]}"
             fuel += 1
+            before = count_cells(stream, 0, fuel)[0]
+            pruned: list[int] = []
+            prune(stream, 0, fuel, pruned)
+            assert count_cells(pruned, 0, fuel)[0] == before
+            stream = pruned
         cells, end = count_cells(stream, 0, fuel)
         assert end == len(stream)
         new_total += cells * 4 ** (16 - ROOT_LEVEL - fuel)

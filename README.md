@@ -112,10 +112,12 @@ hours (about 40 minutes of wall time on 22 cores); refining the blocks with
 `Re c < -3/4` to depth 12 took about 16 minutes more, the blocks with
 `-3/4 ≤ Re c < 0` about 24 minutes, and the blocks with `Re c ≥ 0` about 14
 minutes. Coarsening the shells changes the modules of most blocks, so the check
-of its 6830 modules (20 million steps of the model) is a full rebuild. A running
-module needs
-about 2.5 GB of memory, and Lake runs as many modules at once as the machine has
-cores, so a machine with little memory needs fewer parallel jobs.
+of its 6830 modules (20 million steps of the model) is a full rebuild. Refining
+the blocks with `Re c < -3/4` to depth 13 checks their 5542 modules again (17
+million steps, 8 million of them new) and took about an hour of wall time on 20
+cores. A running module needs about 2.5 GB of memory, and Lake runs as many
+modules at once as the machine has cores, so a machine with little memory needs
+fewer parallel jobs.
 
 ```bash
 make build
