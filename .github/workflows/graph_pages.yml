@@ -35,8 +35,10 @@ jobs:
       - name: Install Python packages
         run: python -m pip install -r scripts/requirements.txt
 
-      - name: Test the map raster
-        run: python scripts/test_map_raster.py
+      - name: Test the progress scripts
+        run: |
+          python scripts/test_map_raster.py
+          python scripts/test_progress_history.py
 
       - name: Install Elan
         run: |

@@ -362,14 +362,55 @@ def has_literature_root(repo_root: Path, ref: str) -> bool:
     return fields == list(OPEN_ROOT_SYMBOLS)
 
 
-def literature_baseline(repo_root: Path) -> str:
+ARCHIVE_TAGS = "progress-archive/*"
+
+
+def progress_history(repo_root: Path) -> list[str]:
+    """The commits that the progress table replays, oldest first.
+
+    This is the first-parent history of HEAD. A squash merge folds a whole branch into
+    one commit, and the table would lose the steps of the branch; a tag
+    ``progress-archive/N`` on the tip of the branch keeps them. The squash commit has the
+    tree of the tip (when the base did not move in between), and is replaced by the
+    first-parent commits that the branch added to its base.
+    """
+    lines = _git(
+        repo_root, "log", "--reverse", "--first-parent", "--format=%H %T", "HEAD"
+    ).splitlines()
+    chain = [line.split()[0] for line in lines]
+    trees = [line.split()[1] for line in lines]
+    on_chain = set(chain)
+    tips: dict[str, str] = {}
+    try:
+        for tag in _git(repo_root, "tag", "--list", ARCHIVE_TAGS).split():
+            tip = _git(repo_root, "rev-parse", f"{tag}^{{commit}}")
+            if tip not in on_chain:
+                tips[_git(repo_root, "rev-parse", f"{tip}^{{tree}}")] = tip
+    except subprocess.CalledProcessError:
+        return chain
+    history: list[str] = []
+    for index, (commit, tree) in enumerate(zip(chain, trees)):
+        tip = tips.pop(tree, None) if index > 0 else None
+        if tip is not None:
+            branch = _git(
+                repo_root, "rev-list", "--reverse", "--first-parent", f"{chain[index - 1]}..{tip}"
+            ).split()
+            if branch:
+                history.extend(branch)
+                continue
+        history.append(commit)
+    return history
+
+
+def literature_baseline(repo_root: Path, history: list[str] | None = None) -> str:
     """The first commit of the history whose formal root is exactly Dudko's
     Problems 4.3 and 4.4: the state of the literature (MLC follows from them).
 
-    The test is monotone along the first-parent history, so a binary search
+    The test is monotone along the history of `progress_history`, so a binary search
     finds the commit.
     """
-    history = _git(repo_root, "rev-list", "--reverse", "--first-parent", "HEAD").splitlines()
+    if history is None:
+        history = progress_history(repo_root)
     if not history or not has_literature_root(repo_root, history[-1]):
         raise RuntimeError("The root of HEAD is not Dudko's Problems 4.3 and 4.4")
     low, high = 0, len(history) - 1
@@ -390,17 +431,13 @@ LITERATURE_NAME = "the literature baseline"
 
 
 def commit_progress_history(repo_root: Path) -> list[dict[str, object]]:
+    history = progress_history(repo_root)
     try:
-        base = literature_baseline(repo_root)
+        base = literature_baseline(repo_root, history)
         base_name = LITERATURE_NAME
-        chain = _git(
-            repo_root, "rev-list", "--reverse", "--first-parent", f"{base}..HEAD"
-        ).splitlines()
-        refs = [base] + [line for line in chain if line]
+        refs = history[history.index(base) :]
     except (RuntimeError, subprocess.CalledProcessError):
-        refs = _git(
-            repo_root, "rev-list", "--reverse", "--first-parent", "-12", "HEAD"
-        ).splitlines()
+        refs = history[-12:]
         base_name = "HEAD~12"
     rows: list[dict[str, object]] = []
     for index, ref in enumerate(refs):

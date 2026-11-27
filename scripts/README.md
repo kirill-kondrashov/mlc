@@ -42,7 +42,7 @@ of `∂M` stay vector. The literature
 baseline is the first commit of the history whose `RootInput` has exactly the
 fields `Problem43PseudoSiegelAPrioriBoundsData` and
 `Problem44VirtualMoleculeData`, found by a binary search over the first-parent
-history; its row lists the two open problems. Every grid commit gets its own
+history (`progress_history`); its row lists the two open problems. Every grid commit gets its own
 colour: `export_grid_regions.lean pmax J fuel` reproduces the squares of its
 grid, and the report uses them only when the number of unresolved cells equals
 the count that the commit proved. Texts with formulas are written with
@@ -53,8 +53,24 @@ priors. The share `100%` corresponds to `R = ∅` (MLC), but a nonempty `R` of
 measure zero would also give it, so the share is read with the count of open
 root obligations.
 
+**Squash merges.** The table and the map are replayed from the first-parent history, and a
+squash merge folds a whole branch into one commit of `main`: the table would keep one row
+and the map would lose every layer of the branch. Tag the tip of the branch before it is
+deleted, and push the tag:
+
+```sh
+git tag -a progress-archive/N <tip of the branch> -m "<what the branch did>"
+git push origin progress-archive/N
+```
+
+`progress_history` replaces the squash commit by the first-parent commits that the branch
+added, when the tree of the squash commit is the tree of a tagged tip (that holds when `main`
+did not move while the branch lived). A branch that is merged without squashing (a
+fast-forward, or a rebase) needs no tag, and a squash commit without a tag stays one row.
+`python3 scripts/test_progress_history.py` checks these cases on temporary repositories.
+
 The map is drawn by `map_raster.py`; `python3 scripts/test_map_raster.py` checks its pixel
-coverage against a direct computation (`make test-scripts`).
+coverage against a direct computation (`make test-scripts` runs both tests).
 
 The repository hook runs `scripts/check_progress.py`. A commit that stages Lean
 sources (`Mlc.lean`, `Mlc/**/*.lean`) must improve at least one of the certified
