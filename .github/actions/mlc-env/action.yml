@@ -1,0 +1,34 @@
+name: Lean environment
+description: >-
+  Install the Lean toolchain with elan and fetch the Mathlib build cache. Every job uses the whole
+  cache, so that all jobs see the same Mathlib build outputs (the traces of the grid tiles depend
+  on their hashes).
+
+inputs:
+  free-disk:
+    description: Delete large preinstalled toolchains first (the full build needs about 20 GB).
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Free disk space
+      if: ${{ inputs.free-disk == 'true' }}
+      shell: bash
+      run: |
+        df -h / | tail -1
+        sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+        df -h / | tail -1
+
+    - name: Install elan
+      shell: bash
+      run: |
+        curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+        echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+    - name: Fetch the Mathlib cache
+      shell: bash
+      run: |
+        export PATH="$HOME/.elan/bin:$PATH"
+        lake exe cache get

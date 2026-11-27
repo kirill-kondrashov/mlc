@@ -1,4 +1,4 @@
-.PHONY: all build check check-progress test-scripts install-hooks cache clean graphs serve report-pdf
+.PHONY: all build check check-progress test-scripts install-hooks cache clean graphs serve report-pdf seed
 
 all: check
 
@@ -39,8 +39,14 @@ report-pdf: graphs
 	lake exe cache get
 	touch .cache_marker
 
+# Publish the local build outputs of the grid tiles as the seed of CI (docs/ci.md).
+seed: build
+	python3 scripts/ci_grid.py pack --with-defs --level 10 --out .ci/tiles-all.tar.zst
+	python3 scripts/ci_grid.py seed-push --archive .ci/tiles-all.tar.zst
+
 clean:
 	rm -f .cache_marker
+	rm -rf .ci
 	rm -f docs/mlc_progress.aux docs/mlc_progress.log docs/mlc_progress.out docs/mlc_progress.toc
-	rm -f docs/mlc_progress.pdf docs/mlc_progress_map.pdf
+	rm -f docs/mlc_progress_map.pdf
 	rm -f docs/mlc_progress_commits.tex docs/mlc_progress_routes.tex
