@@ -31,6 +31,7 @@ from programme import (
     LEMMAS,
     PROGRAMME_ROOT,
     PSEUDO_SIEGEL,
+    SHARPNESS_ROOT,
     check_catalogue,
     class_shares,
     open_lemmas,
@@ -156,7 +157,7 @@ SPINE = (
 HEAD_LEAN = "MLC.mlc_conjecture"
 # Results that no vertebra needs: checked in Lean, but not part of the proof of MLC. They
 # hang on the programme's open targets and must be connected to the graph like the rest.
-SIDE_ROOTS = ("MLC.Research.unresolved_volume_eq_zero_of_porous", PROGRAMME_ROOT)
+SIDE_ROOTS = ("MLC.Research.unresolved_volume_eq_zero_of_porous", PROGRAMME_ROOT, SHARPNESS_ROOT)
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
 BUD_TITLES = {
@@ -708,11 +709,13 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         below=True,
     )
     side_names: dict[str, set[str]] = {}
+    claimed: set[str] = set()
     for side in SIDE_ROOTS:
         if side not in fq_index:
             raise RuntimeError(f"Side result not found: {side}")
-        names = closure(edges, side) - set(owner_index) - spine_names
+        names = closure(edges, side) - set(owner_index) - spine_names - claimed
         side_names[side] = names & set(reachable)
+        claimed |= side_names[side]
     area_root = SIDE_ROOTS[0]
     area_names = side_names[area_root]
     if area_names:
@@ -790,6 +793,39 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             below=True,
         )
     add_lemma(p43, "unboundedDichotomy")
+    sharp_names = side_names[SHARPNESS_ROOT]
+    if sharp_names:
+        sharp_decl = fq_index[SHARPNESS_ROOT]
+        sharpness = make(
+            Node(
+                id="prog:sharpness",
+                kind="bud",
+                cat="checked",
+                title="Why both G and D are needed",
+                sub="two towers with unbounded degeneration",
+                text=(
+                    "Checked in Lean (WidthTower.uniformities_necessary). Neither lemma can "
+                    "be dropped from the recursion. (1) A tower of unbounded relative periods "
+                    "with a uniform growth bound and the dichotomy (4.6) with the error "
+                    "p·h(p), h unbounded (a quadratic error, for instance), has unbounded "
+                    "degeneration: a linear error is the threshold (Lemma D). (2) The tower "
+                    "of widths (k+1)! satisfies the Teichmüller contraction and the dichotomy "
+                    "with a linear error and has unbounded degeneration: the growth bound "
+                    "must be uniform in the relative period (Lemma G). With "
+                    "aPrioriBounds_of_uniform: the uniform versions of G and D suffice, and "
+                    "the period-dependent versions of the survey do not."
+                ),
+                lean=SHARPNESS_ROOT,
+                file=sharp_decl.file,
+                line=sharp_decl.line,
+                count=len(sharp_names),
+            )
+        )
+        register(sorted(sharp_names), sharpness)
+        sharpness.stat = stat_line(sharpness.stats)
+        sharpness.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
+        add_child(lemma_nodes["unboundedDichotomy"], sharpness, below=True)
+        extras.append(sharpness)
     satellite = add_child(
         p44,
         Node(
@@ -822,7 +858,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         ),
     )
     add_lemma(neutral, "virtualGrowth", below=True)
-    add_lemma(neutral, "virtualUniformDichotomy", below=True)
+    add_lemma(neutral, "virtualLinearDichotomy", below=True)
     add_lemma(p44, "virtualJulia")
     add_lemma(p44, "virtualTransfer")
 
@@ -864,8 +900,8 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
                     f"the {len(LEMMAS)} lemmas of ProgrammeInput give RootInput, that is the "
                     "candidate system with its realization (Problem 4.3) and the "
                     "virtual-Molecule completion (Problem 4.4), hence MLC. The degeneration "
-                    "recursion of §4.1–§4.3 is proved: uniform growth and a dichotomy with a "
-                    "period-independent error give a priori bounds for every tower "
+                    "recursion of §4.1–§4.3 is proved: uniform growth and a dichotomy with an "
+                    "error at most linear in the period give a priori bounds for every tower "
                     "(WidthTower.aPrioriBounds_of_uniform), and bounded type needs the "
                     "Teichmüller contraction and the dichotomy "
                     "(WidthTower.aPrioriBounds_of_bounded). Seven classes of parameters, "

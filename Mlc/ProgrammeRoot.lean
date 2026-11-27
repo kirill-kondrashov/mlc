@@ -19,7 +19,7 @@ they follow from finer lemmas, one structure field each:
 | `neutral` | Theorem 4.2 | Dudko–Lyubich |
 | `unboundedGrowth`, `unboundedDichotomy` | Problem 4.3 | proposed reading of §4.4 |
 | `virtualJulia`, `virtualTeichmuller`, `virtualDichotomy`, `virtualGrowth`,
-  `virtualUniformDichotomy`, `virtualTransfer` | Problem 4.4 | proposed reading of §4.5 |
+  `virtualLinearDichotomy`, `virtualTransfer` | Problem 4.4 | proposed reading of §4.5 |
 
 The theorem `mlc_of_programme` is proved in Lean from these fields for every geometric
 dictionary; the fields themselves are hypotheses, not proved. When a lemma is proved, its
@@ -44,7 +44,7 @@ structure Research.ProgrammeInput (G : Geometry) : Prop where
   neutral : G.Neutral
   /-- Problem 4.3: uniform growth across satellite levels of large relative period -/
   unboundedGrowth : G.UnboundedGrowth
-  /-- Problem 4.3: the dichotomy with a period-independent error -/
+  /-- Problem 4.3: the dichotomy with an error at most linear in the period -/
   unboundedDichotomy : G.UnboundedDichotomy
   /-- Problem 4.4: partially invariant virtual Julia sets -/
   virtualJulia : G.VirtualJulia
@@ -54,8 +54,8 @@ structure Research.ProgrammeInput (G : Geometry) : Prop where
   virtualDichotomy : G.VirtualDichotomy
   /-- Problem 4.4, virtual near-neutral: uniform growth -/
   virtualGrowth : G.VirtualGrowth
-  /-- Problem 4.4, virtual near-neutral: the uniform dichotomy -/
-  virtualUniformDichotomy : G.VirtualUniformDichotomy
+  /-- Problem 4.4, virtual near-neutral: the dichotomy with an error linear in the period -/
+  virtualLinearDichotomy : G.VirtualLinearDichotomy
   /-- Problem 4.4: the virtual phase–parameter transfer -/
   virtualTransfer : G.VirtualTransfer
 
@@ -84,9 +84,9 @@ theorem completion (h : ProgrammeInput G) : G.system.VirtualMoleculeCompletion :
           hc hi hcls
         exact Or.inl (G.eligible_of_hasBound hB)
       · exact Or.inr (G.virtualControl h.virtualJulia h.virtualTeichmuller h.virtualDichotomy
-          h.virtualGrowth h.virtualUniformDichotomy h.virtualTransfer hc hi (Or.inl hcls))
+          h.virtualGrowth h.virtualLinearDichotomy h.virtualTransfer hc hi (Or.inl hcls))
       · exact Or.inr (G.virtualControl h.virtualJulia h.virtualTeichmuller h.virtualDichotomy
-          h.virtualGrowth h.virtualUniformDichotomy h.virtualTransfer hc hi (Or.inr hcls)) }
+          h.virtualGrowth h.virtualLinearDichotomy h.virtualTransfer hc hi (Or.inr hcls)) }
 
 /-- The lemmas of the programme give the first open input of the root: a candidate system
 with its realization. -/

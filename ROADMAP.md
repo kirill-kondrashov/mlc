@@ -180,10 +180,26 @@ degeneration `W_k = W(f_k)` of the levels as abstract positive numbers and the g
 inputs as hypotheses:
 
 * `aPrioriBounds_of_uniform`: a growth bound `W_{k+1} ≤ Δ W_k` and the dichotomy (4.6)
-  with an additive error that does not depend on the period give `sup_k W_k < ∞` for every
-  tower, whatever its relative periods. The second alternative of the dichotomy, a jump by
-  `C_δ`, is excluded by choosing `C_δ > Δ`, and the first alternative, iterated at a
-  distance `n₀` with `c 2^{n₀} ≥ 2`, bounds the sequence.
+  with an additive error at most linear in the period, `E(p) = A p`, give `sup_k W_k < ∞`
+  for every tower, whatever its relative periods. The second alternative of the dichotomy,
+  a jump by `C_δ`, is excluded by choosing `C_δ > Δ`, and the first alternative, iterated at
+  a distance `n₀` with `c 2^{n₀} ≥ 2`, gives `2 W_{k+n₀} ≤ W_k + 2A/c`, which bounds the
+  sequence.
+* `uniformities_necessary`: both uniformities are needed. (i) By `exists_unbounded_of_superlinear`,
+  for every monotone, positive, unbounded `h`, the tower with relative periods `k + 2` and
+  widths `h(k+1)` satisfies the Teichmüller contraction (the factor `h(P)/h(1)` for relative
+  periods up to `P`), a uniform growth bound when `h` grows by a bounded factor, and the
+  amplification with the error `p h(p)` (so the dichotomy, with its first alternative at
+  every pair of levels), and its degeneration is unbounded. With `h(x) = x + 1` (growth
+  factor 2, quadratic error) this is `exists_unbounded_of_growth_dichotomy`: linear is the
+  threshold of the error, even with a uniform growth bound. (ii) The tower with relative
+  periods `k + 2` and widths `(k+1)!` (jump factor `k + 2` at every level, which the
+  Teichmüller contraction allows) satisfies the dichotomy with a linear error, because for
+  every threshold `C` the jump alternative covers all levels above `⌈C⌉` and the finitely
+  many lower levels need a small `c` only (`exists_unbounded_of_teichmuller_linearDichotomy`):
+  a growth bound that depends on the relative period is not enough, even with a linear
+  error. So the inputs of Theorem 4.1 with period-dependent constants leave a gap exactly at
+  unbounded relative periods, and Lemmas G and D are the two halves of it, neither redundant.
 * `aPrioriBounds_of_bounded`: for relative periods bounded by `P`, the Teichmüller
   contraction and the dichotomy with a period-dependent error suffice (the error takes
   finitely many values): the argument behind Theorem 4.1.
@@ -204,7 +220,7 @@ Theorem 4.1 stops: its two uniformities fail for unbounded relative periods, the
 contraction") and the additive error `O_{p_n}(1)` of (4.3) (§4.2: "the period `p_n` is
 assumed to be big but still bounded"). The pseudo-Siegel disks of Theorem 4.2 are the
 survey's tool for the near-neutral case, and the right loop of Figure 14 is its strategy for
-the satellite case. Whether pseudo-Siegel disks give the uniform growth and the uniform
+the satellite case. Whether pseudo-Siegel disks give the uniform growth and the linear
 dichotomy is the question that Problem 4.3 asks.
 
 ### Attack plans
@@ -234,13 +250,14 @@ roadmap, not claims of the survey.
   satellite case is the right loop of Figure 14, the antirenormalization relative to `β`
   (PS1–PS3). First step (proposal): the almost-invariance with a geometric error (PS2) for
   a sequence of holomorphic self-maps of a disk, where Mathlib's Schwarz lemma applies.
-* **D (uniform dichotomy).** The survey attributes the additive error `O_p(1)` to a variant
+* **D (linear dichotomy).** The survey attributes the additive error `O_p(1)` to a variant
   of the thin–thick decomposition (§4.1) and says that pseudo-Siegel disks are built to
   consume most of the invariant degeneration (§4, near-neutral levels; PS4). *Heuristic:*
   the invariant degeneration is the part that the decomposition cannot bound uniformly in
-  `p`, and the rest is controlled by the Wave Lemma. First step (proposal): state PS4 as an
-  inequality between extremal widths and check that it gives the uniform error by the
-  argument of §4.3.
+  `p`, and the rest is controlled by the Wave Lemma. The statement asks for an error at most
+  linear in `p` (each of the `p` small Julia sets contributes a bounded error), the sharp
+  threshold of the recursion. First step (proposal): state PS4 as an inequality between
+  extremal widths and check that it gives the linear error by the argument of §4.3.
 * **VJ.** The minimal connected hull in `K_c` of the Cantor small Julia set and the critical
   return window exists in Lean (`VirtualJuliaNest.carrier`); the lemma is that it lies inside
   `J_c` and is partially invariant. First step (proposal): the real parameters, where the
@@ -260,7 +277,7 @@ route.
 
 ### Caveats
 
-* The dictionary `Geometry` is a parameter, not a construction: `cls`, `tower` and `vtower`
+* The dictionary `Geometry` is a parameter of the statements: `cls`, `tower` and `vtower`
   are not defined from the dynamics of `f_c`. The theorem `mlc_of_programme` holds for every
   dictionary, so a faithful dictionary is what makes the lemmas statements about `M`.
 * The widths are abstract positive numbers; nothing in the repository defines an

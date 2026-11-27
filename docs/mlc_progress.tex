@@ -81,9 +81,16 @@ transfer lemma, four published cases, two lemmas of Problem~4.3 and six of
 Problem~4.4), and \texttt{mlc\_of\_programme} proves in Lean that they give the
 root input. The skeleton of the argument of \S4.1--\S4.3 is checked: a uniform
 growth bound for the degeneration of the renormalization levels and a dichotomy
-with a period-independent error give a priori bounds for every tower
-(\texttt{aPrioriBounds\_of\_uniform}). The lemmas are hypotheses; the roadmap
-lists their sources and an attack plan for each.
+with an error at most linear in the period give a priori bounds for every tower
+(\texttt{aPrioriBounds\_of\_uniform}). Both uniformities are necessary
+(\texttt{uniformities\_necessary}): for every unbounded \(h\), a tower with
+unbounded relative periods satisfies the Teichm\"uller contraction, a uniform
+growth bound and the dichotomy with the error \(p\,h(p)\) and has unbounded
+degeneration, so a linear error is the threshold; and the tower of widths
+\((k+1)!\) satisfies the Teichm\"uller contraction and the dichotomy with a
+linear error but has unbounded degeneration, so the growth bound must be
+uniform in the relative period. The lemmas
+are hypotheses; the roadmap lists their sources and an attack plan for each.
 
 \section{Progress dashboard}
 

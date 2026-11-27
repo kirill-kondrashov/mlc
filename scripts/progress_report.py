@@ -40,9 +40,11 @@ from programme import classes_share, open_lemmas
 # The root theorem is declared as `theorem mlc_conjecture` inside `namespace MLC`,
 # so its qualified name never occurs in the concatenated sources.
 ROOT_THEOREM = re.compile(r"^theorem\s+mlc_conjecture\b", re.MULTILINE)
-# The skeleton of the near-degenerate argument and the assembly of the programme are
-# theorems of `Mlc/Research/Degeneration.lean` and `Mlc/ProgrammeRoot.lean`.
+# The skeleton of the near-degenerate argument, the proof that its two uniformities are
+# necessary, and the assembly of the programme are theorems of
+# `Mlc/Research/Degeneration.lean` and `Mlc/ProgrammeRoot.lean`.
 SKELETON_THEOREM = re.compile(r"^\s*theorem\s+aPrioriBounds_of_uniform\b", re.MULTILINE)
+SHARPNESS_THEOREM = re.compile(r"^\s*theorem\s+uniformities_necessary\b", re.MULTILINE)
 PROGRAMME_THEOREM = re.compile(r"^\s*theorem\s+mlc_of_programme\b", re.MULTILINE)
 
 PROGRESS_MILESTONES = (
@@ -57,6 +59,7 @@ PROGRESS_MILESTONES = (
     ("Certified interior parameter ball", "ball_quarter_subset_interior_mandelbrot", 1),
     ("Kernel-checked grid bound", "unresolved_volume_le_grid", 2),
     ("A priori bounds from uniform control", SKELETON_THEOREM, 1),
+    ("Both uniformities are necessary", SHARPNESS_THEOREM, 1),
     ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )

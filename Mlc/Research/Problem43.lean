@@ -14,15 +14,22 @@ Teichmüller contraction"). For relative periods that are not bounded, both step
 exactly one place each:
 
 * the factor of the jump is not uniform, so `C_δ` cannot be chosen above it;
-* the additive error `O_{p_n}(1)` of the amplification (4.3) is not uniform
-  (§4.2: "the period `p_n` is assumed to be big but still bounded").
+* the additive error `O_{p_n}(1)` of the amplification (4.3) depends on the period without
+  a control (§4.2: "the period `p_n` is assumed to be big but still bounded").
 
-`WidthTower.aPrioriBounds_of_uniform` shows that these two uniformities suffice for the a
-priori bounds, whatever the relative periods are. So, in the reading proposed here, Problem
-4.3 is the pair of lemmas below. The survey does not state them: it states that pseudo-Siegel
-disks absorb the invariant degeneration in the neutral case (Theorem 4.2, the left loop of
-Figure 14) and that the right loop of Figure 14, the antirenormalization relative to `β`,
-is the strategy for the remaining near-neutral satellite cases.
+`WidthTower.aPrioriBounds_of_uniform` shows that two uniformities suffice for the a priori
+bounds, whatever the relative periods are: a uniform growth bound, and an additive error at
+most linear in the period (each of the `p` small Julia sets contributes a bounded error).
+`WidthTower.uniformities_necessary` shows that neither can be dropped: a uniform growth bound
+with the error `p · h(p)`, `h` unbounded (a quadratic error, for instance), leaves the
+degeneration unbounded (`exists_unbounded_of_superlinear`, so linear is the threshold), and
+so does the Teichmüller contraction with a linear error but a growth bound that depends on
+the relative period (the tower of widths `(k + 1)!`). So, in
+the reading proposed here, Problem 4.3 is the pair of lemmas below. The survey does not state
+them: it states that pseudo-Siegel disks absorb the invariant degeneration in the neutral case
+(Theorem 4.2, the left loop of Figure 14) and that the right loop of Figure 14, the
+antirenormalization relative to `β`, is the strategy for the remaining near-neutral satellite
+cases.
 
 The sub-steps through which the lemmas are expected to be proved (proposed, not formalized):
 
@@ -36,8 +43,8 @@ The sub-steps through which the lemmas are expected to be proved (proposed, not 
 * **PS4** the degeneration along combinatorially invariant rectangles is absorbed by `Ẑ^{[m]}`
   (Figure 13, "if `G` is invariant rel `δ`, then `W(G ∖ G') ≥ C_δ W(G)`"), which gives the
   growth bound uniformly in the relative period (PS1–PS4 give `UnboundedGrowth`), and
-  the same estimate with the Wave Lemma gives the amplification with a uniform error
-  (`UnboundedDichotomy`).
+  the same estimate with the Wave Lemma gives the amplification with an error linear in the
+  period (`UnboundedDichotomy`).
 -/
 
 namespace MLC.Research
@@ -60,12 +67,12 @@ def UnboundedGrowth : Prop :=
       ∃ T Δ, G.tower c = some T ∧ T.GrowthBound Δ
 
 /-- **Lemma D (Problem 4.3).** At a parameter of the class of unbounded satellite type, the
-dichotomy (4.6) holds with an additive error that does not depend on the period: either the
+dichotomy (4.6) holds with an additive error at most linear in the period: either the
 amplification (4.3) holds, or the degeneration jumps by the factor `C_δ`. -/
 def UnboundedDichotomy : Prop :=
   ∀ c ∈ MLC.Quadratic.MandelbrotSet, c ∉ interior MLC.Quadratic.MandelbrotSet →
     G.cls c = .unboundedSatellite →
-      ∃ T, G.tower c = some T ∧ T.UniformDichotomy
+      ∃ T, G.tower c = some T ∧ T.LinearDichotomy
 
 /-- Lemmas G and D give a priori bounds at the parameters of unbounded satellite type. -/
 theorem hasBound_of_unbounded (hG : G.UnboundedGrowth) (hD : G.UnboundedDichotomy) {c : ℂ}

@@ -27,9 +27,10 @@ The decomposition proposed here follows the three parts of `VirtualMoleculeAPrio
 * **Lemmas VT1, VD1** (first subcase): the Teichmüller contraction and the dichotomy (4.6) for
   the virtual levels of bounded relative periods, so that `WidthTower.aPrioriBounds_of_bounded`
   gives a priori bounds for the virtual degeneration;
-* **Lemmas VG2, VD2** (second subcase): the uniform growth bound and the uniform dichotomy
-  for the virtual near-neutral step, which need the pseudo-Siegel regularization of
-  Problem 4.3, so that `WidthTower.aPrioriBounds_of_uniform` applies;
+* **Lemmas VG2, VD2** (second subcase): the uniform growth bound and the dichotomy with an
+  error at most linear in the period for the virtual near-neutral step, which need the
+  pseudo-Siegel regularization of Problem 4.3, so that `WidthTower.aPrioriBounds_of_uniform`
+  applies;
 * **Lemma VT** the virtual phase–parameter transfer: a degeneration bound on the virtual levels
   gives a connected parameter nest, a phase–parameter chart into the virtual hulls and the
   dynamical separation estimate of the canonical budget.
@@ -81,10 +82,10 @@ def VirtualGrowth : Prop :=
     G.cls c = .virtualNearNeutral → ∃ T Δ, G.vtower c = some T ∧ T.GrowthBound Δ
 
 /-- **Lemma VD2 (Problem 4.4, virtual near-neutral).** The dichotomy (4.6) holds for the
-virtual levels with an error that does not depend on the period. -/
-def VirtualUniformDichotomy : Prop :=
+virtual levels with an additive error at most linear in the period. -/
+def VirtualLinearDichotomy : Prop :=
   ∀ c ∈ MLC.Quadratic.MandelbrotSet, c ∉ interior MLC.Quadratic.MandelbrotSet →
-    G.cls c = .virtualNearNeutral → ∃ T, G.vtower c = some T ∧ T.UniformDichotomy
+    G.cls c = .virtualNearNeutral → ∃ T, G.vtower c = some T ∧ T.LinearDichotomy
 
 /-- **Lemma VT (Problem 4.4).** The virtual phase–parameter transfer: a degeneration bound
 on the virtual levels gives a connected parameter nest, a phase–parameter chart into the
@@ -98,7 +99,7 @@ def VirtualTransfer : Prop :=
 
 /-- The lemmas VT1, VD1, VG2 and VD2 give a priori bounds for the virtual degeneration. -/
 theorem virtual_hasBound (hT1 : G.VirtualTeichmuller) (hD1 : G.VirtualDichotomy)
-    (hG2 : G.VirtualGrowth) (hD2 : G.VirtualUniformDichotomy) {c : ℂ}
+    (hG2 : G.VirtualGrowth) (hD2 : G.VirtualLinearDichotomy) {c : ℂ}
     (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hi : c ∉ interior MLC.Quadratic.MandelbrotSet)
     (hv : G.IsVirtual c) :
     ∃ (B : ℝ), 0 < B ∧ ∃ T, G.vtower c = some T ∧ ∀ k, T.width k ≤ B := by
@@ -122,7 +123,7 @@ theorem virtual_hasBound (hT1 : G.VirtualTeichmuller) (hD1 : G.VirtualDichotomy)
 /-- **Virtual a priori control.** The lemmas of Problem 4.4 give the a priori-control package of
 the virtual Molecule at every parameter of the two virtual subcases. -/
 theorem virtualControl (hJ : G.VirtualJulia) (hT1 : G.VirtualTeichmuller)
-    (hD1 : G.VirtualDichotomy) (hG2 : G.VirtualGrowth) (hD2 : G.VirtualUniformDichotomy)
+    (hD1 : G.VirtualDichotomy) (hG2 : G.VirtualGrowth) (hD2 : G.VirtualLinearDichotomy)
     (hVT : G.VirtualTransfer) {c : ℂ} (hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (hi : c ∉ interior MLC.Quadratic.MandelbrotSet) (hv : G.IsVirtual c) :
     Nonempty (VirtualMoleculeAPrioriControl c) := by

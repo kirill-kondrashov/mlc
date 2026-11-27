@@ -19,6 +19,7 @@ import re
 from dataclasses import dataclass
 
 PROGRAMME_ROOT = "MLC.mlc_of_programme"
+SHARPNESS_ROOT = "MLC.Research.WidthTower.uniformities_necessary"
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 
@@ -106,12 +107,12 @@ LEMMAS: tuple[Lemma, ...] = (
     Lemma(
         "unboundedDichotomy",
         f"{GEOMETRY}.UnboundedDichotomy",
-        "Lemma D · uniform dichotomy",
+        "Lemma D · linear dichotomy",
         "Problem 4.3",
         "problem43",
         "§4.2–§4.3, the additive error O_p(1); proposed reading",
         "At a parameter of unbounded satellite type the dichotomy (4.6) holds with an "
-        "additive error that does not depend on the period: the amplification holds, or "
+        "additive error at most linear in the period: the amplification holds, or "
         "the degeneration jumps by C_δ.",
     ),
     Lemma(
@@ -155,14 +156,14 @@ LEMMAS: tuple[Lemma, ...] = (
         "most a fixed factor from a level to the next.",
     ),
     Lemma(
-        "virtualUniformDichotomy",
-        f"{GEOMETRY}.VirtualUniformDichotomy",
-        "Lemma VD2 · virtual uniform dichotomy",
+        "virtualLinearDichotomy",
+        f"{GEOMETRY}.VirtualLinearDichotomy",
+        "Lemma VD2 · virtual linear dichotomy",
         "virtual near-neutral",
         "problem44",
         "§4.5 with §4.4; proposed reading",
         "The dichotomy (4.6) holds for the virtual levels of the near-neutral subcase with "
-        "an additive error that does not depend on the period.",
+        "an additive error at most linear in the period.",
     ),
     Lemma(
         "virtualTransfer",
@@ -188,7 +189,7 @@ CLASSES: tuple[tuple[str, str, tuple[str, ...]], ...] = (
     ("virtualBounded", "Virtual bounded type (Problem 4.4)",
      ("virtualJulia", "virtualTeichmuller", "virtualDichotomy", "virtualTransfer")),
     ("virtualNearNeutral", "Virtual near-neutral (Problem 4.4)",
-     ("virtualJulia", "virtualGrowth", "virtualUniformDichotomy", "virtualTransfer")),
+     ("virtualJulia", "virtualGrowth", "virtualLinearDichotomy", "virtualTransfer")),
 )
 
 LEMMA = {lemma.key: lemma for lemma in LEMMAS}
