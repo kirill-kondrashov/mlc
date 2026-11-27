@@ -1,10 +1,8 @@
-import Mlc.ParameterComponentApproximation
-import Mlc.Research.Programme
+import Mlc.Dudko
 import Mathlib.Topology.Connected.LocallyConnected
+import Mathlib.Topology.Category.TopCat.Basic
 
 namespace MLC
-
-open Quadratic
 
 noncomputable section
 
@@ -12,16 +10,15 @@ noncomputable section
 abbrev mandelbrotSet : Set ℂ :=
   MLC.Quadratic.MandelbrotSet
 
-/-- The active root exposes the research system, its analytic realization,
-and the separate global coverage obligation. No Dudko conjecture is assumed. -/
+/-- The active root exposes exactly the two open problems identified by Dudko:
+    pseudo-Siegel a priori bounds and virtual-Molecule a priori completion. -/
 structure RootInput where
-  system : Research.CandidateSystem
-  realization : system.Realization
-  coverage : system.Coverage
+  problem43 : Problem43PseudoSiegelAPrioriBoundsData
+  problem44 : Problem44VirtualMoleculeData problem43
 
 theorem RootInput.locallyConnectedSpace (h : RootInput) :
     LocallyConnectedSpace mandelbrotSet :=
-  h.system.locallyConnectedSpace_of_realization_coverage h.realization h.coverage
+  mlc_of_problem43_problem44 h.problem43 h.problem44
 
 namespace Categorical
 
@@ -51,12 +48,6 @@ theorem categorical_mlc_conjecture
     MLCConjecture := by
   change LocallyConnectedSpace MLC.mandelbrotSet
   exact h.locallyConnectedSpace
-
-/-- Convenience form of the repaired categorical root theorem. -/
-theorem categorical_mlc_conjecture_of_uniformOuterBuffer
-    (hbuffer : ParameterComponent.MandelbrotUniformOuterBuffer) :
-    MLCConjecture :=
-  ParameterComponent.mandelbrot_locallyConnected_of_uniformOuterBuffer hbuffer
 
 /-- The usual and categorical root propositions are equivalent. -/
 theorem mlc_conjecture_iff_categorical :

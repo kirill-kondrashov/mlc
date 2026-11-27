@@ -1,5 +1,4 @@
 import Mlc.Research.ReturnBudget
-import Mlc.Quadratic.Complex.ParaPuzzleBasis
 import Mathlib.Topology.Connected.LocallyConnected
 
 /-!
@@ -22,6 +21,41 @@ theorem locallyConnectedSpace_iff_pointwise (S : Set ℂ) :
     LocallyConnectedSpace S ↔ ∀ c : S, LocallyConnectedAtSet S c := by
   exact locallyConnectedSpace_iff_connected_subsets
 
+theorem hasBasis_nhds_of_iInter_singleton
+    {α : Type*} [TopologicalSpace α] [T2Space α]
+    {K : ℕ → Set α} (h_compact : ∀ n, IsCompact (K n))
+    (h_nested : ∀ n, K (n + 1) ⊆ K n)
+    {x : α} (h_inter : (⋂ n, K n) = {x})
+    (h_nhd : ∀ n, K n ∈ 𝓝 x) :
+    (𝓝 x).HasBasis (fun _ => True) K := by
+  refine ⟨fun U => ⟨fun hU => ?_, fun ⟨n, _, hn_sub⟩ => ?_⟩⟩
+  · obtain ⟨V, hV_sub, hV_open, hxV⟩ := mem_nhds_iff.mp hU
+    by_contra! h_neg
+    let F := fun n => K n \ V
+    have hF_nonempty : ∀ n, (F n).Nonempty := by
+      intro n
+      rw [Set.diff_nonempty]
+      intro h_sub
+      exact (h_neg n trivial) (h_sub.trans hV_sub)
+    have hF_nested : ∀ n, F (n + 1) ⊆ F n :=
+      fun n => diff_subset_diff (h_nested n) (subset_refl V)
+    have hF_compact : ∀ n, IsCompact (F n) :=
+      fun n => (h_compact n).diff hV_open
+    have hF_closed : ∀ n, IsClosed (F n) :=
+      fun n => (hF_compact n).isClosed
+    obtain ⟨y, hy⟩ :=
+      IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed
+        F hF_nested hF_nonempty (hF_compact 0) hF_closed
+    have h_inter_F : (⋂ n, F n) = (⋂ n, K n) \ V := by
+      ext z
+      simp [F, forall_and]
+    rw [h_inter_F, h_inter] at hy
+    have h_empty : ({x} : Set α) \ V = ∅ :=
+      Set.diff_eq_empty.mpr (singleton_subset_iff.mpr hxV)
+    rw [h_empty] at hy
+    exact (Set.mem_empty_iff_false y).mp hy
+  · exact mem_of_superset (h_nhd n) hn_sub
+
 /-- Actual parameter subsets; shrinking is not a field. -/
 structure ConnectedNest (S : Set ℂ) (c : ℂ) where
   piece : ℕ → Set ℂ
@@ -43,21 +77,12 @@ theorem mem_closure (n : ℕ) : c ∈ closure (D.piece n) :=
 
 theorem mem_kernel : c ∈ D.kernel := mem_iInter.mpr D.mem_closure
 
-theorem kernel_nonempty : D.kernel.Nonempty := ⟨c, D.mem_kernel⟩
-
 theorem closure_nested (n : ℕ) :
     closure (D.piece (n + 1)) ⊆ closure (D.piece n) :=
   closure_mono (D.nested n)
 
-theorem closure_antitone : Antitone (fun n => closure (D.piece n)) :=
-  antitone_nat_of_succ_le D.closure_nested
-
 theorem kernel_subset_closure (n : ℕ) : D.kernel ⊆ closure (D.piece n) :=
   iInter_subset _ n
-
-theorem kernel_compact : IsCompact D.kernel := by
-  exact (D.compact_closure 0).of_isClosed_subset
-    (isClosed_iInter fun _ => isClosed_closure) (D.kernel_subset_closure 0)
 
 theorem closure_mem_nhds (n : ℕ) : closure (D.piece n) ∈ 𝓝 c :=
   mem_of_superset ((D.open_piece n).mem_nhds (D.contains n)) subset_closure
@@ -135,7 +160,7 @@ theorem kernel_eq_singleton
 
 theorem closure_basis_of_singleton (h : D.kernel = {c}) :
     (𝓝 c).HasBasis (fun _ : ℕ => True) (fun n => closure (D.piece n)) :=
-  MLC.Quadratic.hasBasis_nhds_of_iInter_singleton
+  hasBasis_nhds_of_iInter_singleton
     D.compact_closure D.closure_nested h D.closure_mem_nhds
 
 theorem piece_cofinal_of_singleton (h : D.kernel = {c}) :

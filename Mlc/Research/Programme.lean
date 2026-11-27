@@ -1,5 +1,5 @@
 import Mlc.Research.ParameterGeometry
-import Mlc.CategoricalMandelbrot
+import Yoccoz.Quadratic.Complex.Basic
 
 /-!
 # Research frontier of the active MLC root
@@ -7,7 +7,7 @@ import Mlc.CategoricalMandelbrot
 `CandidateSystem.admissible` must eventually be defined by genuine quadratic
 returns and their geometric data. It is an explicit parameter, not an
 uninterpreted project axiom or a predicate known to extend published classes.
-M1 realization, global coverage, and publication novelty are separate claims.
+M1 realization and global coverage are separate claims.
 -/
 
 namespace MLC.Research
@@ -75,10 +75,6 @@ def Coverage : Prop :=
   ∀ c ∈ MLC.Quadratic.MandelbrotSet,
     c ∈ interior MLC.Quadratic.MandelbrotSet ∨ A.Eligible c
 
-theorem eligible_of_data {c : ℂ} {b : ReturnBudget}
-    (hadm : A.admissible c b) (hcontrol : b.LinearLossControl) : A.Eligible c :=
-  ⟨b, hadm, hcontrol⟩
-
 theorem realize_eligible (h : A.Realization) {c : ℂ}
     (hc : c ∈ MLC.Quadratic.MandelbrotSet) (he : A.Eligible c) :
     ∃ b : ReturnBudget, b.LinearLossControl ∧
@@ -106,18 +102,6 @@ theorem locallyConnectedSpace_of_realization_coverage
   apply (locallyConnectedSpace_iff_pointwise _).mpr
   intro c
   exact A.locallyConnectedAt_covered h c.property (hcover c c.property)
-
-/-- The additional witness required before claiming an extension of the
-published parameter range. `published` must be independently specified. -/
-def StrictExtension (published : Set ℂ) : Prop :=
-  ∃ c ∈ MLC.Quadratic.MandelbrotSet, A.Eligible c ∧ c ∉ published
-
-theorem extension_point_is_locallyConnected
-    {published : Set ℂ} (h : A.Realization) (hext : A.StrictExtension published) :
-    ∃ c, ∃ hc : c ∈ MLC.Quadratic.MandelbrotSet,
-      c ∉ published ∧ LocallyConnectedAtSet MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  obtain ⟨c, hc, he, hp⟩ := hext
-  exact ⟨c, hc, hp, A.locallyConnectedAt_eligible h hc he⟩
 
 end CandidateSystem
 

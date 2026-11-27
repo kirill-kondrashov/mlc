@@ -12,8 +12,7 @@ import Mathlib.Topology.MetricSpace.Bounded
 /-!
 # Filled Julia set connectivity
 
-Proves `IsConnected (K c)` for `c ∈ MandelbrotSet`, replacing an earlier
-axiom-backed placeholder.
+Proves `IsConnected (K c)` for `c ∈ MandelbrotSet`.
 
 ## Proof outline
 
@@ -268,6 +267,42 @@ theorem isPreconnected_iInter_of_sequence {X : Type*} [TopologicalSpace X]
     rcases this with hxU | hxV
     · exact absurd ⟨x, hx, hxU⟩ hA_ne
     · exact hxV
+
+/-! ## Compactness of the filled Julia set and Julia set -/
+
+theorem mem_filled_julia_iff_orbit_le_escape_radius (c z : ℂ) :
+    z ∈ K c ↔ ∀ n, ‖orbit c z n‖ ≤ R c := by
+  constructor
+  · rintro ⟨M, hM⟩ n
+    by_contra hnot
+    have hgt : R c < ‖orbit c z n‖ := lt_of_not_ge hnot
+    obtain ⟨N, hN⟩ := escape_lemma (c := c) (z := z) n hgt M
+    exact (not_lt_of_ge (hM (max N n))) (hN (max N n) (le_max_left _ _))
+  · intro h
+    exact ⟨R c, h⟩
+
+theorem filled_julia_set_compact (c : ℂ) :
+    IsCompact (K c) := by
+  let S : ℕ → Set ℂ := fun n => {z | ‖orbit c z n‖ ≤ R c}
+  have hclosed : ∀ n, IsClosed (S n) := by
+    intro n
+    exact isClosed_le ((continuous_orbit c n).norm) continuous_const
+  have heq : K c = ⋂ n, S n := by
+    ext z
+    rw [mem_filled_julia_iff_orbit_le_escape_radius]
+    simp [S]
+  rw [heq]
+  have hsubset : (⋂ n, S n) ⊆ S 0 := iInter_subset S 0
+  apply (isCompact_closedBall (0 : ℂ) (R c)).of_isClosed_subset
+  · exact isClosed_iInter hclosed
+  · intro z hz
+    rw [Metric.mem_closedBall, dist_zero_right]
+    simpa [S] using hsubset hz
+
+theorem julia_subset_filled_julia (c : ℂ) :
+    J c ⊆ K c :=
+  frontier_subset_closure.trans
+    (closure_subset_iff_isClosed.mpr (filled_julia_set_compact c).isClosed)
 
 /-! ## Part 3: Filled Julia set connectivity -/
 

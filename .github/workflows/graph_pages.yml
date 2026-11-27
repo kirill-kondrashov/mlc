@@ -25,14 +25,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install Poetry
-        run: pip install poetry
+      - name: Install Python packages
+        run: python -m pip install -r scripts/requirements.txt
+
+      - name: Test the map raster
+        run: python scripts/test_map_raster.py
 
       - name: Install Elan
         run: |
@@ -54,9 +58,7 @@ jobs:
         run: make build
 
       - name: Generate dependency graph site
-        run: |
-          cd scripts
-          poetry run python generate_dependency_graph_site.py --output site
+        run: python scripts/generate_dependency_graph_site.py --output site
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

@@ -1,0 +1,1912 @@
+#!/usr/bin/env python3
+"""The proof of `MLC.mlc_conjecture` as one 2D figure: a spine with branches.
+
+The spine climbs from the kernel axioms (bottom) to the statement of MLC (the
+head). Its vertebrae are milestone theorems of the Lean library; the order is
+checked against the declaration graph, so a vertebra never uses a higher one.
+Every other declaration hangs on the branch of the lowest vertebra that needs
+it (grouped by file). The tips of the branches are the open problems of the
+root, the targets of Dudko's programme that are not formalized, the kernel
+axioms, and the checked machinery.
+
+The figure is laid out here, so the page needs no layout code: it is an inline
+SVG with about sixty elements. The script of the page only adds hover, search,
+the side panel, zoom and the theme.
+"""
+
+from __future__ import annotations
+
+import html
+import json
+import math
+import re
+import subprocess
+import textwrap
+from dataclasses import dataclass, field
+from pathlib import Path
+
+from progress_report import PROGRESS_CSS, PROGRESS_ROUTES
+from programme import (
+    CLASSES,
+    LEMMAS,
+    PROGRAMME_ROOT,
+    PSEUDO_SIEGEL,
+    SHARPNESS_ROOT,
+    check_catalogue,
+    class_shares,
+    open_lemmas,
+    proved_lemmas,
+)
+
+# Geometry of the figure, in user units of the SVG.
+WIDTH = 1500.0
+CENTER = WIDTH / 2
+VERTEBRA_W = 300.0
+NODE_W = 204.0
+LINK_GAP = 44.0
+CHAIN_GAP = 24.0
+ROW_PAD = 20.0
+MIN_LEAF_H = 62.0
+HEAD_W, HEAD_H = 500.0, 128.0
+MIN_BUD = 3  # smaller groups of declarations are listed in the vertebra panel only
+TILE_NAME = re.compile(
+    r"^MLC\.Certified\.(?:(?:tiles|part|w)_\d+_\d+|(?:gridPart|gridSum)_\d+)$"
+)
+# Declaration kinds of the Lean source, grouped for the counts of the figure.
+KIND_GROUP = {
+    "theorem": "thm",
+    "lemma": "lem",
+    "def": "def",
+    "abbrev": "def",
+    "instance": "def",
+    "structure": "str",
+    "inductive": "str",
+    "class": "str",
+    "axiom": "ax",
+}
+STAT_KEYS = ("thm", "lem", "def", "str", "ax")
+KIND_WORDS = {
+    "thm": ("theorem", "theorems"),
+    "lem": ("lemma", "lemmas"),
+    "def": ("definition", "definitions"),
+    "str": ("structure", "structures"),
+    "ax": ("axiom", "axioms"),
+}
+GRID_FILES = {
+    "Mlc/GridCertified.lean": "tiles",
+    "Mlc/GridTiles/*": "tiles",
+    "Mlc/GridTMCertificate.lean": "soundness",
+    "Mlc/GridCertificate.lean": "soundness",
+    "Mlc/GridDefs.lean": "models",
+}
+
+
+@dataclass(frozen=True)
+class Vertebra:
+    key: str
+    title: str
+    lean: str
+    claim: str
+
+
+# Bottom to top. Each vertebra is a theorem or definition of the library.
+SPINE = (
+    Vertebra(
+        "budgets",
+        "Return budgets",
+        "MLC.Research.ReturnBudget.unbounded_of_linearLossControl",
+        "A return budget with linear loss has unbounded total cost.",
+    ),
+    Vertebra(
+        "nests",
+        "Connected nests",
+        "MLC.Research.ParameterRealization.locallyConnectedAt",
+        "A connected parameter nest with a divergent budget gives "
+        "local connectivity at c.",
+    ),
+    Vertebra(
+        "candidates",
+        "Candidate systems",
+        "MLC.Research.CandidateSystem.locallyConnectedSpace_of_realization_coverage",
+        "Realization and coverage make M locally connected.",
+    ),
+    Vertebra(
+        "phase",
+        "Phase–parameter transfer",
+        "MLC.Research.VirtualPhaseParameter.parameterSeparationEstimate",
+        "A separation estimate of a virtual hull transfers to the parameter nest.",
+    ),
+    Vertebra(
+        "control",
+        "A priori control",
+        "MLC.Research.VirtualMoleculeAPrioriControl.parameterRealization",
+        "A priori control data give a parameter realization.",
+    ),
+    Vertebra(
+        "virtual",
+        "Virtual realization",
+        "MLC.Research.CandidateSystem.withVirtualMolecule_realization",
+        "The realization of Problem 4.3 extends to every virtual a priori control.",
+    ),
+    Vertebra(
+        "completion",
+        "Completion ⇔ coverage",
+        "MLC.Research.CandidateSystem.withVirtualMolecule_coverage_iff_completion",
+        "Global coverage is the virtual-Molecule completion, "
+        "with the checked area envelope.",
+    ),
+    Vertebra(
+        "dudko",
+        "Dudko's frontier",
+        "MLC.mlc_of_problem43_problem44",
+        "Problems 4.3 and 4.4 imply local connectivity of M.",
+    ),
+    Vertebra(
+        "root",
+        "Root input",
+        "MLC.RootInput.locallyConnectedSpace",
+        "RootInput, the pair of Problems 4.3 and 4.4, makes M locally connected.",
+    ),
+    Vertebra(
+        "category",
+        "Categorical form",
+        "MLC.Categorical.categorical_mlc_conjecture",
+        "The categorical statement MLCConjecture holds under RootInput.",
+    ),
+)
+HEAD_LEAN = "MLC.mlc_conjecture"
+# Results that no vertebra needs: checked in Lean, but not part of the proof of MLC. They
+# hang on the programme's open targets and must be connected to the graph like the rest.
+SIDE_ROOTS = ("MLC.Research.unresolved_volume_eq_zero_of_porous", PROGRAMME_ROOT, SHARPNESS_ROOT)
+
+# Titles of the support branches, by file; a pair (vertebra, file) overrides them.
+BUD_TITLES = {
+    "Mlc/Research/ReturnBudget.lean": (
+        "Return-budget arithmetic",
+        "weights, costs, harmonic divergence",
+    ),
+    "Mlc/Research/ParameterGeometry.lean": (
+        "Connected parameter nests",
+        "kernel, closure basis, separation",
+    ),
+    "Mlc/Research/Programme.lean": (
+        "Candidate systems",
+        "eligibility, realization, coverage",
+    ),
+    "Mlc/FilledJuliaConnected.lean": (
+        "Filled Julia sets",
+        "compact and connected for c ∈ M",
+    ),
+    "Mlc/Research/ConnectedHull.lean": (
+        "Minimal connected hulls",
+        "directed intersections of continua",
+    ),
+    "Mlc/MandelbrotCompact.lean": (
+        "The set M",
+        "compact, M ⊆ B̄(0,2), B(0,¼) ⊆ int M",
+    ),
+    "Mlc/Research/VirtualMolecule.lean": (
+        "Virtual Julia nests",
+        "first returns, carriers, phase parameters",
+    ),
+    "Mlc/CategoricalRoot.lean": (
+        "Categorical statement",
+        "TopCat object, MLCConjecture",
+    ),
+}
+BUD_OVERRIDES = {
+    ("control", "Mlc/Research/VirtualMolecule.lean"): (
+        "A priori control package",
+        "hull in J, partial invariance, budget",
+    ),
+    ("completion", "Mlc/Research/VirtualMolecule.lean"): (
+        "Residual set and area envelope",
+        "outer area ≤ 4π, ≤ 63π/16, ≤ grid bound",
+    ),
+}
+GRID_TITLES = {
+    "tiles": ("Kernel-checked tiles", "certified cells and their count"),
+    "soundness": ("Soundness of the certificates", "Taylor models, disks, area"),
+    "models": ("Fixed-point models", "orbit enclosures and the search"),
+}
+
+OPEN_PROBLEMS = {
+    "MLC.Problem43PseudoSiegelAPrioriBoundsData": {
+        "title": "Problem 4.3",
+        "sub": "Route 1 · pseudo-Siegel a priori bounds",
+        "text": (
+            "Dudko, Problem 4.3: establish pseudo-Siegel a priori bounds in the "
+            "remaining unbounded satellite quasi-linear cases. In Lean it is a "
+            "candidate system together with the realization of its admissible "
+            "returns, an explicit hypothesis of mlc_conjecture."
+        ),
+        "route": "1",
+    },
+    "MLC.Problem44VirtualMoleculeData": {
+        "title": "Problem 4.4",
+        "sub": "Routes 2, 3 · virtual Molecule",
+        "text": (
+            "Dudko, Interpolation Problem 4.4: develop a Virtual Molecule version "
+            "of the Near-Degenerate Regime. In Lean it is the virtual-Molecule "
+            "completion of the candidate system, an explicit hypothesis of "
+            "mlc_conjecture."
+        ),
+        "route": "2",
+    },
+}
+
+
+def route(identifier: str) -> dict[str, object]:
+    return next(r for r in PROGRESS_ROUTES if r["id"] == identifier)
+
+
+def prior(identifier: str) -> str:
+    return f"{float(route(identifier)['probability']) * 100:.0f}%"
+
+
+def new_stats() -> dict[str, int]:
+    """Counts of declarations: by kind, in all (n), generated (gen*), and lines of source."""
+    return {
+        **{key: 0 for key in STAT_KEYS},
+        "n": 0,
+        "gen": 0,
+        "gen_thm": 0,
+        "gen_def": 0,
+        "lines": 0,
+    }
+
+
+def add_stats(total: dict[str, int], names, fq_index) -> dict[str, int]:
+    """Add the declarations of ``names`` to ``total``; generated ones count apart from lines."""
+    for name in names:
+        decl = fq_index[name]
+        group = KIND_GROUP.get(decl.kind, "def")
+        total[group] += 1
+        total["n"] += 1
+        if TILE_NAME.match(name):
+            total["gen"] += 1
+            total["gen_thm" if group == "thm" else "gen_def"] += 1
+        else:
+            total["lines"] += max(1, decl.end_line - decl.line + 1)
+    return total
+
+
+STAT_WORDS = {"thm": "thm", "lem": "lem", "def": "def", "str": "struct"}
+
+
+def stat_line(stats: dict[str, int]) -> str:
+    """``17 thm · 4 lem · 2 def``: the non-zero counts by kind."""
+    parts = [f"{stats[key]:,} {word}" for key, word in STAT_WORDS.items() if stats[key]]
+    return " · ".join(parts)
+
+
+@dataclass
+class Node:
+    id: str
+    kind: str  # head | vertebra | bud | tip | ground
+    cat: str  # checked | num | open | informal | axiom | spine | head
+    title: str
+    sub: str = ""
+    text: str = ""
+    lean: str = ""
+    file: str = ""
+    line: int = 0
+    count: int = 0
+    parent: str = ""
+    side: int = 0
+    below: bool = False  # drawn under its parent instead of beyond it
+    stats: dict[str, int] = field(default_factory=lambda: new_stats())
+    level: dict[str, int] = field(default_factory=lambda: new_stats())
+    stat: str = ""
+    children: list["Node"] = field(default_factory=list)
+    members: list[dict[str, object]] = field(default_factory=list)
+    x: float = 0.0
+    y: float = 0.0
+    w: float = NODE_W
+    h: float = 0.0
+    lines: list[str] = field(default_factory=list)
+    sublines: list[str] = field(default_factory=list)
+
+
+def wrap(text: str, width: int, limit: int = 3) -> list[str]:
+    lines = textwrap.wrap(text, width=width, break_long_words=True) or [""]
+    if len(lines) > limit:
+        lines = lines[:limit]
+        lines[-1] = lines[-1].rstrip(".,; ") + "…"
+    return lines
+
+
+def closure(edges: dict[str, set[str]], start: str) -> set[str]:
+    seen = {start}
+    stack = [start]
+    while stack:
+        current = stack.pop()
+        for nxt in edges.get(current, ()):
+            if nxt not in seen:
+                seen.add(nxt)
+                stack.append(nxt)
+    return seen
+
+
+def docstring(repo_root: Path, file: str, line: int) -> str:
+    """The docstring directly above a declaration, flattened to one paragraph."""
+    path = repo_root / file
+    if not path.is_file() or line <= 0:
+        return ""
+    lines = path.read_text(encoding="utf-8").splitlines()
+    index = line - 2
+    while index >= 0 and lines[index].lstrip().startswith("@["):
+        index -= 1
+    if index < 0 or not lines[index].rstrip().endswith("-/"):
+        return ""
+    end = index
+    while index >= 0 and "/--" not in lines[index]:
+        index -= 1
+    if index < 0:
+        return ""
+    body = " ".join(lines[index : end + 1])
+    body = body.replace("/--", "").replace("-/", "")
+    return re.sub(r"\s+", " ", body).strip()
+
+
+def repository_url(repo_root: Path) -> tuple[str, str]:
+    """GitHub base URL and the commit of the working tree, for source links."""
+    try:
+        remote = subprocess.run(
+            ["git", "remote", "get-url", "origin"],
+            cwd=repo_root, check=True, text=True, capture_output=True,
+        ).stdout.strip()
+        commit = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=repo_root, check=True, text=True, capture_output=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return "", ""
+    found = re.search(r"github[^:/]*[:/]+([^/:]+)/([^/.]+?)(?:\.git)?$", remote)
+    if not found:
+        return "", ""
+    return f"https://github.com/{found.group(1)}/{found.group(2)}", commit
+
+
+def short(name: str) -> str:
+    return name[4:] if name.startswith("MLC.") else name
+
+
+def member_row(decl) -> dict[str, object]:
+    return {"n": short(decl.fq_name), "k": decl.kind, "f": decl.file, "l": decl.line}
+
+
+def check_spine(fq_index, edges, reachable: set[str]) -> list[set[str]]:
+    """Every milestone exists, is reachable from the head, and no vertebra uses a higher one."""
+    names = [v.lean for v in SPINE] + [HEAD_LEAN]
+    for name in names:
+        if name not in fq_index:
+            raise RuntimeError(f"Spine milestone not found: {name}")
+        if name not in reachable:
+            raise RuntimeError(f"Spine milestone is not reachable from the root: {name}")
+    closures = [closure(edges, name) for name in names]
+    for low, name in enumerate(names):
+        for high in range(low + 1, len(names)):
+            if names[high] in closures[low]:
+                raise RuntimeError(
+                    f"Spine order violated: {name} depends on the higher milestone {names[high]}"
+                )
+    return closures
+
+
+def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) -> dict[str, object]:
+    closures = check_spine(fq_index, edges, reachable)
+    spine_names = {v.lean for v in SPINE} | {HEAD_LEAN}
+    open_names = set(OPEN_PROBLEMS)
+
+    owner_index: dict[str, int] = {}
+    for name in sorted(reachable):
+        if name in spine_names:
+            continue
+        for index, members in enumerate(closures):
+            if name in members:
+                owner_index[name] = index
+                break
+
+    grid = metrics.get("grid") or {}
+    tile_modules = len(list((repo_root / "Mlc" / "GridTiles").glob("G*.lean")))
+    base_url, commit = repository_url(repo_root)
+
+    nodes: dict[str, Node] = {}
+    extras: list[Node] = []
+
+    def make(node: Node) -> Node:
+        nodes[node.id] = node
+        return node
+
+    def from_decl(name: str) -> tuple[str, int, str]:
+        decl = fq_index[name]
+        return decl.file, decl.line, docstring(repo_root, decl.file, decl.line)
+
+    head_decl = fq_index[HEAD_LEAN]
+    head = make(
+        Node(
+            id="head",
+            kind="head",
+            cat="head",
+            title="MLC",
+            sub="M is locally connected",
+            text=(
+                "The theorem mlc_conjecture proves LocallyConnectedSpace for the "
+                "Mandelbrot set from RootInput, the two open problems of Dudko. "
+                "The kernel uses only propext, Quot.sound and Classical.choice."
+            ),
+            lean=HEAD_LEAN,
+            file=head_decl.file,
+            line=head_decl.line,
+        )
+    )
+    vertebrae: list[Node] = []
+    for index, spec in enumerate(SPINE):
+        file, line, doc = from_decl(spec.lean)
+        vertebrae.append(
+            make(
+                Node(
+                    id=f"v:{spec.key}",
+                    kind="vertebra",
+                    cat="spine",
+                    title=spec.title,
+                    sub=spec.claim,
+                    text=spec.claim + (" " + doc if doc and doc not in spec.claim else ""),
+                    lean=spec.lean,
+                    file=file,
+                    line=line,
+                    w=VERTEBRA_W,
+                )
+            )
+        )
+    for node in vertebrae:
+        node.members.append(member_row(fq_index[node.lean]))
+    head.members.append(member_row(head_decl))
+    for node in [*vertebrae, head]:
+        add_stats(node.stats, [node.lean], fq_index)
+
+    def owner_node(index: int) -> Node:
+        return head if index == len(SPINE) else vertebrae[index]
+
+    def owner_key(owner: Node) -> str:
+        return owner.id.split(":", 1)[-1]
+
+    # Totals of a level: the milestone with everything that first hangs on it.
+    for index, owner in enumerate([*vertebrae, head]):
+        add_stats(owner.level, [owner.lean], fq_index)
+    for name, index in owner_index.items():
+        add_stats(owner_node(index).level, [name], fq_index)
+
+    # Groups of declarations: (owner, file) -> names
+    groups: dict[tuple[int, str], list[str]] = {}
+    for name, index in owner_index.items():
+        file = fq_index[name].file
+        if "GridTiles" in file:
+            file = "Mlc/GridTiles/*"
+        groups.setdefault((index, file), []).append(name)
+
+    drawn_buds: dict[int, list[Node]] = {}
+    search: list[dict[str, object]] = []
+
+    def register(names: list[str], owner: Node) -> None:
+        add_stats(owner.stats, names, fq_index)
+        for name in sorted(names):
+            if TILE_NAME.match(name):
+                continue
+            decl = fq_index[name]
+            row = member_row(decl)
+            owner.members.append(row)
+            search.append({**row, "o": owner.id})
+
+    for node in [*vertebrae, head]:
+        search.append({**node.members[0], "o": node.id})
+
+    grid_owner = next(
+        (index for (index, file) in groups if file == "Mlc/GridCertified.lean"), None
+    )
+    grid_nodes: dict[str, Node] = {}
+    for (index, file), names in sorted(groups.items()):
+        owner = owner_node(index)
+        if file == "Mlc/Dudko.lean":
+            for name in names:
+                if name in open_names:
+                    continue
+                register([name], owner)
+            continue
+        if file in GRID_FILES:
+            part = GRID_FILES[file]
+            title, sub = GRID_TITLES[part]
+            node = grid_nodes.get(part)
+            if node is None:
+                node = make(
+                    Node(
+                        id=f"b:{owner_key(owner)}:grid-{part}",
+                        kind="bud",
+                        cat="num",
+                        title=title,
+                        sub=sub,
+                        file=file,
+                        parent=owner.id,
+                        side=1,
+                    )
+                )
+                grid_nodes[part] = node
+            node.count += len(names)
+            register(names, node)
+            continue
+        key = (SPINE[index].key if index < len(SPINE) else "head", file)
+        listed = key in BUD_OVERRIDES or (
+            file in BUD_TITLES and len([n for n in names if not TILE_NAME.match(n)]) >= MIN_BUD
+        )
+        if not listed:
+            register(names, owner)
+            continue
+        title, sub = BUD_OVERRIDES.get(key) or BUD_TITLES[file]
+        node = make(
+            Node(
+                id=f"b:{owner_key(owner)}:{Path(file).stem}",
+                kind="bud",
+                cat="checked",
+                title=title,
+                sub=sub,
+                text=f"Declarations of {file} that the milestone "
+                f"“{owner.title}” needs first.",
+                file=file,
+                count=len(names),
+                parent=owner.id,
+            )
+        )
+        register(names, node)
+        drawn_buds.setdefault(index, []).append(node)
+
+    for part, node in grid_nodes.items():
+        node.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
+    if "tiles" in grid_nodes:
+        tiles = grid_nodes["tiles"]
+        percent = 100.0 - float(metrics.get("area_upper_percent", 100.0))
+        tiles.sub = (
+            f"{tile_modules:,} modules · {percent:.3f}% resolved"
+            if tile_modules
+            else tiles.sub
+        )
+        tiles.text = (
+            f"The grid is stored as {tile_modules:,} Lean modules generated by a script. "
+            "Each module lists squares of the grid with their certificates (one "
+            "definition) and proves, by kernel computation, how many unresolved cells "
+            "they leave (one theorem); the aggregator adds one more theorem per module. "
+            f"Together they are {tiles.stats['gen']:,} of the declarations of the library. "
+            f"Unresolved area ≤ {float(grid.get('area', 0.0)):.4f}, "
+            f"which is {percent:.3f}% of the envelope 4π resolved. "
+            "The limit of finer grids is the area of ∂M, whose vanishing is the open "
+            "Area problem in the Problem 4.3 branch."
+        )
+        tiles.lean = "MLC.Certified.unresolved_volume_le_grid"
+        if tiles.lean in fq_index:
+            tiles.file, tiles.line = fq_index[tiles.lean].file, fq_index[tiles.lean].line
+    for part, text in (
+        ("soundness", "The theorems that make a certificate imply membership in M, "
+         "outside M, and a bound on the area."),
+        ("models", "Definitions of the fixed-point Taylor models, the escape and "
+         "closure tests, and the verifier of hint streams."),
+    ):
+        if part in grid_nodes:
+            grid_nodes[part].text = text
+
+    # Branch trees: left and right of every vertebra.
+    left: dict[int, list[Node]] = {}
+    right: dict[int, list[Node]] = {}
+
+    def attach(index: int, node: Node, side: int) -> None:
+        node.side = side
+        (left if side < 0 else right).setdefault(index, []).append(node)
+
+    def add_child(parent: Node, child: Node, below: bool = False) -> Node:
+        make(child)
+        child.parent = parent.id
+        child.side = parent.side
+        child.below = below
+        parent.children.append(child)
+        return child
+
+    # Support branches alternate between the sides, the larger ones first.
+    for index in range(len(SPINE) + 1):
+        buds = sorted(drawn_buds.get(index, []), key=lambda n: -n.count)
+        side = -1
+        for bud in buds:
+            attach(index, bud, side)
+            side = -side
+
+    if grid_owner is not None and grid_nodes:
+        order = [grid_nodes[p] for p in ("tiles", "soundness", "models") if p in grid_nodes]
+        attach(grid_owner, order[0], 1)
+        for index, (upper, lower) in enumerate(zip(order, order[1:])):
+            add_child(upper, lower, below=index > 0)
+
+    # Open problems and the targets that the programme attaches to them.
+    dudko = next(i for i, v in enumerate(SPINE) if v.key == "dudko")
+    problem_nodes: dict[str, Node] = {}
+    for name, info in OPEN_PROBLEMS.items():
+        file, line, doc = from_decl(name)
+        problem = make(
+            Node(
+                id=f"open:{info['title'].split()[-1]}",
+                kind="tip",
+                cat="open",
+                title=f"{info['title']} · open",
+                sub=str(info["sub"]),
+                text=f"{info['text']} Planning prior of route {info['route']}: "
+                f"{prior(str(info['route']))}.",
+                lean=name,
+                file=file,
+                line=line,
+                parent=vertebrae[dudko].id,
+            )
+        )
+        problem.members.append(member_row(fq_index[name]))
+        add_stats(problem.stats, [name], fq_index)
+        search.append({**problem.members[0], "o": problem.id})
+        problem_nodes[name] = problem
+
+    p43 = problem_nodes["MLC.Problem43PseudoSiegelAPrioriBoundsData"]
+    p44 = problem_nodes["MLC.Problem44VirtualMoleculeData"]
+    attach(dudko, p43, -1)
+    attach(dudko, p44, 1)
+    conjecture = add_child(
+        p43,
+        Node(
+            id="paper:conj36",
+            kind="tip",
+            cat="informal",
+            title="Conjecture 3.6",
+            sub="hyperbolic Molecule renormalization",
+            text=(
+                "Dudko §3.8: there is a hyperbolic renormalization with "
+                "one-dimensional unstable manifolds parametrized by the sped-up "
+                "Molecule map. The completion of Problem 4.3 is required for it. "
+                "Not formalized."
+            ),
+        ),
+    )
+    area = add_child(
+        conjecture,
+        Node(
+            id="paper:area",
+            kind="tip",
+            cat="informal",
+            title="Area of ∂M = 0",
+            sub="expected · gives a 100% share",
+            text=(
+                "Dudko §3.8: Conjecture 3.6 is likely required for the satellite "
+                "cases of MLC and for the Area Problem of ∂M, whose area is "
+                "expected to be 0. A zero-area boundary makes the unresolved set "
+                "null, so the certified share of the grid becomes 100%; it does "
+                "not give MLC. Not formalized; the measure step of the route "
+                "proposed in ROADMAP.md is checked in Lean (below)."
+            ),
+        ),
+        below=True,
+    )
+    add_child(
+        area,
+        Node(
+            id="paper:porosity",
+            kind="tip",
+            cat="informal",
+            title="Porosity of ∂M",
+            sub="holes at all scales · from the programme",
+            text=(
+                "Route Z, geometric step (proposed in ROADMAP.md; the survey does not "
+                "state it). At every point of ∂M and at arbitrarily small scales r, "
+                "a ball of radius αr inside B(c, r) misses ∂M. The Molecule regime "
+                "expects substantial hyperbolic components at all scales (Dudko §3), "
+                "the quadratic-like regime needs the a priori bounds of Problems 4.3 "
+                "and 4.4, and the renorm-expanding regime transfers the porosity of "
+                "J_c to M by the almost-linear puzzle–parapuzzle relation. "
+                "Not formalized."
+            ),
+        ),
+        below=True,
+    )
+    side_names: dict[str, set[str]] = {}
+    claimed: set[str] = set()
+    for side in SIDE_ROOTS:
+        if side not in fq_index:
+            raise RuntimeError(f"Side result not found: {side}")
+        names = closure(edges, side) - set(owner_index) - spine_names - claimed
+        side_names[side] = names & set(reachable)
+        claimed |= side_names[side]
+    area_root = SIDE_ROOTS[0]
+    area_names = side_names[area_root]
+    if area_names:
+        side_decl = fq_index[area_root]
+        measure = Node(
+            id="z:measure",
+            kind="bud",
+            cat="checked",
+            title="Measure step",
+            sub="porous at each point ⇒ area 0",
+            text=(
+                "Checked in Lean: a measurable set that is porous at each of its points "
+                "has measure zero, by Lebesgue's density theorem; applied to the "
+                "unresolved set it gives volume 0 (MLC.Research.unresolved_volume_"
+                "eq_zero_of_porous). The geometric input, the porosity of ∂M, is the "
+                "open part of Route Z."
+            ),
+            lean=area_root,
+            file=side_decl.file,
+            line=side_decl.line,
+            count=len(area_names),
+        )
+        register(sorted(area_names), measure)
+        measure.stat = stat_line(measure.stats)
+        measure.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
+        add_child(area, measure, below=True)
+        extras.append(measure)
+
+    # The programme: the lemmas of Problems 4.3 and 4.4 as nodes, then the checked assembly.
+    root_text = ""
+    root_file = repo_root / "Mlc" / "ProgrammeRoot.lean"
+    if root_file.is_file():
+        root_text = root_file.read_text(encoding="utf-8")
+    issues = check_catalogue(root_text) if root_text else ["Mlc/ProgrammeRoot.lean is missing"]
+    if issues:
+        raise RuntimeError("Programme catalogue out of date: " + "; ".join(issues))
+    open_keys = set(open_lemmas(root_text))
+    lemma_nodes: dict[str, Node] = {}
+    for lemma in LEMMAS:
+        if lemma.lean not in fq_index:
+            raise RuntimeError(f"Lemma not found in the sources: {lemma.lean}")
+        file, line, doc = from_decl(lemma.lean)
+        is_open = lemma.key in open_keys
+        node = make(
+            Node(
+                id=f"lemma:{lemma.key}",
+                kind="tip",
+                cat=(
+                    "checked"
+                    if not is_open
+                    else "published" if lemma.kind == "published" else "lemma"
+                ),
+                title=lemma.title,
+                sub=lemma.sub,
+                text=f"{lemma.text} Source: {lemma.source}. "
+                + ("Open: a field of ProgrammeInput." if is_open else "Proved."),
+                lean=lemma.lean,
+                file=file,
+                line=line,
+            )
+        )
+        node.members.append(member_row(fq_index[lemma.lean]))
+        add_stats(node.stats, [lemma.lean], fq_index)
+        search.append({**node.members[0], "o": node.id})
+        lemma_nodes[lemma.key] = node
+
+    def add_lemma(parent: Node, key: str, below: bool = False) -> Node:
+        return add_child(parent, lemma_nodes[key], below=below)
+
+    add_lemma(p43, "unboundedGrowth")
+    for sid, title, sub, text in PSEUDO_SIEGEL:
+        add_child(
+            lemma_nodes["unboundedGrowth"],
+            Node(id=f"paper:{sid}", kind="tip", cat="informal", title=title, sub=sub, text=text),
+            below=True,
+        )
+    add_lemma(p43, "unboundedDichotomy")
+    sharp_names = side_names[SHARPNESS_ROOT]
+    if sharp_names:
+        sharp_decl = fq_index[SHARPNESS_ROOT]
+        sharpness = make(
+            Node(
+                id="prog:sharpness",
+                kind="bud",
+                cat="checked",
+                title="Why both G and D are needed",
+                sub="two towers with unbounded degeneration",
+                text=(
+                    "Checked in Lean (WidthTower.uniformities_necessary). Neither lemma can "
+                    "be dropped from the recursion. (1) A tower of unbounded relative periods "
+                    "with a uniform growth bound and the dichotomy (4.6) with the error "
+                    "p·h(p), h unbounded (a quadratic error, for instance), has unbounded "
+                    "degeneration: a linear error is the threshold (Lemma D). (2) The tower "
+                    "of widths (k+1)! satisfies the Teichmüller contraction and the dichotomy "
+                    "with a linear error and has unbounded degeneration: the growth bound "
+                    "must be uniform in the relative period (Lemma G). With "
+                    "aPrioriBounds_of_uniform: the uniform versions of G and D suffice, and "
+                    "the period-dependent versions of the survey do not."
+                ),
+                lean=SHARPNESS_ROOT,
+                file=sharp_decl.file,
+                line=sharp_decl.line,
+                count=len(sharp_names),
+            )
+        )
+        register(sorted(sharp_names), sharpness)
+        sharpness.stat = stat_line(sharpness.stats)
+        sharpness.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
+        add_child(lemma_nodes["unboundedDichotomy"], sharpness, below=True)
+        extras.append(sharpness)
+    satellite = add_child(
+        p44,
+        Node(
+            id="paper:satellite",
+            kind="tip",
+            cat="informal",
+            title="Virtual bounded-type satellite",
+            sub=f"Route 2 · prior {prior('2')}",
+            text=(
+                "Dudko §4.5, first subcase of the virtual Molecule: n ≫ 1 with "
+                "bounded relative periods of M(s+1) rel M(s). Planning route 2: "
+                + str(route("2")["next"]).replace("$", "")
+            ),
+        ),
+    )
+    add_lemma(satellite, "virtualTeichmuller", below=True)
+    add_lemma(satellite, "virtualDichotomy", below=True)
+    neutral = add_child(
+        p44,
+        Node(
+            id="paper:neutral",
+            kind="tip",
+            cat="informal",
+            title="Virtual near-Neutral",
+            sub=f"Route 3 · prior {prior('3')}",
+            text=(
+                "Dudko §4.5, second subcase of the virtual Molecule: n = 0. "
+                "Planning route 3: " + str(route("3")["next"]).replace("$", "")
+            ),
+        ),
+    )
+    add_lemma(neutral, "virtualGrowth", below=True)
+    add_lemma(neutral, "virtualLinearDichotomy", below=True)
+    add_lemma(p44, "virtualJulia")
+    add_lemma(p44, "virtualTransfer")
+
+    published = make(
+        Node(
+            id="pub:cases",
+            kind="tip",
+            cat="published",
+            title="Published cases",
+            sub="§4.1–§4.4 · literature",
+            text=(
+                "The classes of boundary parameters that the survey treats by published "
+                "theorems: the parameters that are not infinitely renormalizable (Yoccoz, "
+                "Hubbard), bounded type (Theorem 4.1), the anti-Molecule condition "
+                "(Kahn–Lyubich) and neutral parameters (Theorem 4.2). Each is one lemma "
+                "about the geometric dictionary, a field of ProgrammeInput; none is "
+                "formalized."
+            ),
+            parent=vertebrae[dudko].id,
+        )
+    )
+    attach(dudko, published, -1)
+    for key in ("yoccoz", "boundedType", "antiMolecule", "neutral"):
+        add_lemma(published, key, below=True)
+
+    programme_names = side_names[PROGRAMME_ROOT] - {lemma.lean for lemma in LEMMAS}
+    if programme_names:
+        root_decl = fq_index[PROGRAMME_ROOT]
+        shares = class_shares(proved_lemmas(root_text))
+        assembly = make(
+            Node(
+                id="prog:assembly",
+                kind="bud",
+                cat="checked",
+                title="Programme assembly",
+                sub=f"{len(LEMMAS)} lemmas ⇒ Problems 4.3, 4.4",
+                text=(
+                    "Checked in Lean (MLC.mlc_of_programme): for every geometric dictionary, "
+                    f"the {len(LEMMAS)} lemmas of ProgrammeInput give RootInput, that is the "
+                    "candidate system with its realization (Problem 4.3) and the "
+                    "virtual-Molecule completion (Problem 4.4), hence MLC. The degeneration "
+                    "recursion of §4.1–§4.3 is proved: uniform growth and a dichotomy with an "
+                    "error at most linear in the period give a priori bounds for every tower "
+                    "(WidthTower.aPrioriBounds_of_uniform), and bounded type needs the "
+                    "Teichmüller contraction and the dichotomy "
+                    "(WidthTower.aPrioriBounds_of_bounded). Seven classes of parameters, "
+                    f"{sum(shares.values()):.2f} of them certified, with {len(open_keys)} "
+                    "open lemmas."
+                ),
+                lean=PROGRAMME_ROOT,
+                file=root_decl.file,
+                line=root_decl.line,
+                count=len(programme_names),
+                parent=vertebrae[dudko].id,
+            )
+        )
+        register(sorted(programme_names), assembly)
+        assembly.stat = stat_line(assembly.stats)
+        assembly.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
+        attach(dudko, assembly, 1)
+        extras.append(assembly)
+    phase = next(i for i, v in enumerate(SPINE) if v.key == "phase")
+    unified = make(
+        Node(
+            id="paper:unified",
+            kind="tip",
+            cat="informal",
+            title="Unified phase–parameter transfer",
+            sub=f"Route 4 · prior {prior('4')}",
+            text=(
+                "Planning route 4, conditional on genuine geometry: "
+                + str(route("4")["next"]).replace("$", "")
+            ),
+            parent=vertebrae[phase].id,
+        )
+    )
+    attach(phase, unified, 1)
+    add_lemma(unified, "transfer", below=True)
+    # Ground: the kernel axioms below the first vertebra.
+    ground = [
+        make(
+            Node(
+                id=f"axiom:{name}",
+                kind="ground",
+                cat="axiom",
+                title=name,
+                sub="kernel axiom",
+                text=f"{name} is one of the three axioms that the kernel uses. "
+                "The proof of mlc_conjecture depends on no other axiom.",
+                lean=name,
+                parent=vertebrae[0].id,
+            )
+        )
+        for name in sorted(axioms)
+    ]
+    for node in ground:
+        search.append({"n": node.title, "k": "axiom", "f": "[Lean core]", "l": 0, "o": node.id})
+    ground.append(
+        make(
+            Node(
+                id="ground:mathlib",
+                kind="ground",
+                cat="axiom",
+                title="Mathlib · Yoccoz",
+                sub="imported libraries",
+                text="The library imports Mathlib and the Yoccoz package; their "
+                "declarations are not part of this graph, and they add no axioms "
+                "beyond the three of the kernel.",
+                parent=vertebrae[0].id,
+            )
+        )
+    )
+    # Text layout and the heights of the nodes.
+    for index, node in enumerate([*vertebrae, head]):
+        hand = node.level["n"] - node.level["gen"]
+        node.stat = f"{hand:,} declarations · {node.level['lines']:,} lines" + (
+            f" + {node.level['gen']:,} generated" if node.level["gen"] else ""
+        )
+    for node in nodes.values():
+        if node.kind == "bud":
+            node.stat = stat_line(node.stats)
+    for node in nodes.values():
+        if node.kind == "vertebra":
+            node.lines = wrap(node.title, 30, 1)
+            node.sublines = wrap(node.sub, 40, 3)
+            node.h = 16 + 19 * len(node.lines) + 15 * len(node.sublines) + 17
+        elif node.kind == "head":
+            node.w, node.h = HEAD_W, HEAD_H
+        else:
+            node.lines = wrap(node.title, 23, 2)
+            node.sublines = wrap(node.sub, 29, 2)
+            node.h = 14 + 17 * len(node.lines) + 14 * len(node.sublines) + 6
+            if node.stat:
+                node.h += 15
+            if node.kind == "ground":
+                node.w = 168.0
+
+    totals = add_stats(new_stats(), list(fq_index), fq_index)
+    generated_bytes = sum(
+        path.stat().st_size for path in (repo_root / "Mlc" / "GridTiles").glob("G*.lean")
+    )
+    aggregator = repo_root / "Mlc" / "GridCertified.lean"
+    if aggregator.is_file():
+        generated_bytes += aggregator.stat().st_size
+    parameters = {
+        "tile_modules": tile_modules,
+        "totals": totals,
+        "generated_mb": generated_bytes / 1e6,
+    }
+    return {
+        "nodes": nodes,
+        "vertebrae": vertebrae,
+        "head": head,
+        "ground": ground,
+        "left": left,
+        "right": right,
+        "search": search,
+        "base_url": base_url,
+        "commit": commit,
+        "parameters": parameters,
+        "owner_index": owner_index,
+        "extras": extras,
+    }
+
+
+def tree_height(node: Node) -> float:
+    own = max(MIN_LEAF_H, node.h + 14)
+    if not node.children:
+        return own
+    if node.children[0].below:
+        return own + sum(tree_height(child) for child in node.children)
+    return max(own, sum(tree_height(child) for child in node.children))
+
+
+def place_tree(node: Node, depth: int, top: float) -> None:
+    """Place a node and its subtree; children go beyond it, or under it when `below`."""
+    own = max(MIN_LEAF_H, node.h + 14)
+    offset = VERTEBRA_W / 2 + LINK_GAP + NODE_W / 2 + depth * (NODE_W + CHAIN_GAP)
+    node.x = CENTER + node.side * offset
+    if node.children and node.children[0].below:
+        node.y = top + own / 2
+        cursor = top + own
+        for child in node.children:
+            place_tree(child, depth, cursor)
+            cursor += tree_height(child)
+        return
+    cursor = top
+    centers = []
+    for child in node.children:
+        place_tree(child, depth + 1, cursor)
+        centers.append(child.y)
+        cursor += tree_height(child)
+    node.y = sum(centers) / len(centers) if centers else top + tree_height(node) / 2
+
+
+def layout(model: dict[str, object]) -> tuple[float, float]:
+    head: Node = model["head"]
+    vertebrae: list[Node] = model["vertebrae"]
+    ground: list[Node] = model["ground"]
+    left, right = model["left"], model["right"]
+
+    head.x, head.y = CENTER, 40 + HEAD_H / 2
+    cursor = head.y + HEAD_H / 2 + 54
+    count = len(vertebrae)
+    for index in range(count - 1, -1, -1):
+        node = vertebrae[index]
+        # A side with one tree is aligned on the root of the tree, so that the link from
+        # the vertebra is level; several trees are centered on the vertebra.
+        sides = []
+        for trees in (left.get(index, []), right.get(index, [])):
+            total = sum(tree_height(t) for t in trees)
+            anchor = total / 2
+            if len(trees) == 1:
+                place_tree(trees[0], 0, 0.0)
+                anchor = trees[0].y
+            sides.append((trees, total, anchor))
+        used = [(total, anchor) for trees, total, anchor in sides if trees]
+        up = max([node.h / 2 + ROW_PAD] + [anchor + 4 for _, anchor in used])
+        down = max([node.h / 2 + ROW_PAD] + [total - anchor + 4 for total, anchor in used])
+        node.x, node.y = CENTER, cursor + up
+        for trees, total, anchor in sides:
+            top = node.y - anchor
+            for tree in trees:
+                place_tree(tree, 0, top)
+                top += tree_height(tree)
+        cursor += up + down
+    base = cursor + 40
+    spacing = 22.0
+    total = sum(n.w for n in ground) + spacing * (len(ground) - 1)
+    start = CENTER - total / 2
+    for node in ground:
+        node.x = start + node.w / 2
+        node.y = base + node.h / 2
+        start += node.w + spacing
+    height = base + max((n.h for n in ground), default=0) + 48
+    return WIDTH, height
+
+
+def link_path(parent: Node, child: Node) -> str:
+    if child.kind == "ground":
+        x0, y0 = parent.x, parent.y + parent.h / 2
+        x1, y1 = child.x, child.y - child.h / 2
+        mid = (y0 + y1) / 2
+        return f"M{x0:.1f},{y0:.1f} C{x0:.1f},{mid:.1f} {x1:.1f},{mid:.1f} {x1:.1f},{y1:.1f}"
+    if child.below:
+        x0, y0 = parent.x, parent.y + parent.h / 2
+        x1, y1 = child.x, child.y - child.h / 2
+        return f"M{x0:.1f},{y0:.1f} L{x1:.1f},{y1:.1f}"
+    side = child.side
+    x0 = parent.x + side * parent.w / 2
+    y0 = parent.y
+    x1 = child.x - side * child.w / 2
+    y1 = child.y
+    dx = abs(x1 - x0) * 0.5
+    return (
+        f"M{x0:.1f},{y0:.1f} C{x0 + side * dx:.1f},{y0:.1f} "
+        f"{x1 - side * dx:.1f},{y1:.1f} {x1:.1f},{y1:.1f}"
+    )
+
+
+def path_to_head(model: dict[str, object], node: Node) -> list[str]:
+    """Node ids from a node to the head along the branch and the spine."""
+    nodes: dict[str, Node] = model["nodes"]
+    vertebrae: list[Node] = model["vertebrae"]
+    if node.kind == "head":
+        return [node.id]
+    path = [node.id]
+    current = node
+    while current.parent:
+        current = nodes[current.parent]
+        path.append(current.id)
+    if current.kind == "vertebra":
+        index = vertebrae.index(current)
+        path.extend(v.id for v in vertebrae[index + 1 :])
+    if path[-1] != "head":
+        path.append("head")
+    return path
+
+
+def text_block(node: Node, title_size: float, sub_size: float) -> str:
+    title_lh = title_size + 3
+    sub_lh = sub_size + 2.5
+    stat_lh = 14.0
+    total = title_lh * len(node.lines) + sub_lh * len(node.sublines)
+    if node.stat:
+        total += stat_lh + 2
+    y = node.y - total / 2 + title_size
+    out = []
+    for line in node.lines:
+        out.append(
+            f'<text class="t" x="{node.x:.1f}" y="{y:.1f}" font-size="{title_size}">'
+            f"{html.escape(line)}</text>"
+        )
+        y += title_lh
+    y += 0.5
+    for line in node.sublines:
+        out.append(
+            f'<text class="s" x="{node.x:.1f}" y="{y:.1f}" font-size="{sub_size}">'
+            f"{html.escape(line)}</text>"
+        )
+        y += sub_lh
+    if node.stat:
+        out.append(
+            f'<text class="st" x="{node.x:.1f}" y="{y + 3:.1f}" font-size="{sub_size - 0.5}">'
+            f"{html.escape(node.stat)}</text>"
+        )
+    return "".join(out)
+
+
+def compact(count: int) -> str:
+    """``15k`` for 15074, ``1.2k`` for 1234, the number itself below a thousand."""
+    if count >= 10000:
+        return f"{round(count / 1000)}k"
+    if count >= 1000:
+        return f"{count / 1000:.1f}k"
+    return str(count)
+
+
+def stats_title(stats: dict[str, int], what: str) -> str:
+    """Tooltip of a bubble: the count with the split by kind."""
+    kinds = ", ".join(
+        f"{stats[key]:,} {KIND_WORDS[key][0 if stats[key] == 1 else 1]}"
+        for key in STAT_KEYS
+        if stats[key]
+    )
+    return f"{stats['n']:,} {what}: {kinds}"
+
+
+def bubble(node: Node, stats: dict[str, int], what: str) -> str:
+    """A badge on the outer top corner of a node; its radius grows with the log of the count."""
+    count = stats["n"]
+    if count <= 0:
+        return ""
+    radius = 8.5 + 3.4 * math.log10(1 + count)
+    outward = node.side or (-1 if node.kind == "vertebra" else 1)
+    cx = node.x + outward * (node.w / 2 - 4)
+    cy = node.y - node.h / 2 + 3
+    label = compact(count)
+    size = 10.5 if len(label) <= 3 else 9.5
+    return (
+        f'<g class="bubble"><title>{html.escape(stats_title(stats, what))}</title>'
+        f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{radius:.1f}"/>'
+        f'<text x="{cx:.1f}" y="{cy + size * 0.36:.1f}" font-size="{size}">{label}</text></g>'
+    )
+
+
+def node_svg(model: dict[str, object], node: Node) -> str:
+    path = path_to_head(model, node)
+    cat = node.cat
+    attrs = (
+        f'class="node {node.kind} cat-{cat}" data-id="{html.escape(node.id)}" '
+        f'data-cat="{cat}" data-path="{html.escape(" ".join(path))}" '
+        f'tabindex="0" role="button" aria-label="{html.escape(node.title)}"'
+    )
+    if node.kind == "head":
+        shape = (
+            f'<rect class="shape" x="{node.x - node.w / 2:.1f}" y="{node.y - node.h / 2:.1f}" '
+            f'width="{node.w}" height="{node.h}" rx="56"/>'
+        )
+        body = (
+            f'<text class="t head-t" x="{node.x:.1f}" y="{node.y - 14:.1f}">MLC</text>'
+            f'<text class="s" x="{node.x:.1f}" y="{node.y + 10:.1f}" font-size="15">'
+            "The Mandelbrot set is locally connected</text>"
+            f'<text class="m" x="{node.x:.1f}" y="{node.y + 30:.1f}" font-size="12">'
+            "mlc_conjecture (h : RootInput) : LocallyConnectedSpace M</text>"
+            f'<text class="cond" x="{node.x:.1f}" y="{node.y + 49:.1f}" font-size="12">'
+            "conditional on Problems 4.3 and 4.4</text>"
+        )
+        everything = bubble(node, model["parameters"]["totals"], "declarations in the library")
+        return f"<g {attrs}>{shape}{body}{everything}</g>"
+    radius = 14 if node.kind == "vertebra" else 12
+    shape = (
+        f'<rect class="shape" x="{node.x - node.w / 2:.1f}" y="{node.y - node.h / 2:.1f}" '
+        f'width="{node.w}" height="{node.h:.1f}" rx="{radius}"/>'
+    )
+    if node.kind == "vertebra":
+        body = text_block(node, 15.5, 12.5)
+        number = model["vertebrae"].index(node) + 1
+        body += (
+            f'<text class="num" x="{node.x - node.w / 2 + 15:.1f}" y="{node.y + 4:.1f}">{number}</text>'
+        )
+        body += bubble(node, node.level, "declarations on this level")
+    else:
+        body = text_block(node, 13.5, 11.5)
+        if node.kind == "bud":
+            body += bubble(node, node.stats, "declarations")
+    return f"<g {attrs}>{shape}{body}</g>"
+
+
+def render_svg(model: dict[str, object], width: float, height: float) -> str:
+    nodes: dict[str, Node] = model["nodes"]
+    vertebrae: list[Node] = model["vertebrae"]
+    head: Node = model["head"]
+    ground: list[Node] = model["ground"]
+
+    cord_top = head.y + head.h / 2
+    cord_bottom = ground[0].y - ground[0].h / 2 - 8 if ground else height - 40
+    parts = [
+        f'<svg id="spine" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" '
+        f'width="{width:.0f}" height="{height:.0f}" role="group" '
+        'aria-label="Proof spine from the kernel axioms to MLC">'
+    ]
+    parts.append(
+        f'<path class="cord" d="M{CENTER},{cord_top:.1f} L{CENTER},{cord_bottom:.1f}"/>'
+        f'<path class="cord-core" d="M{CENTER},{cord_top:.1f} L{CENTER},{cord_bottom:.1f}"/>'
+    )
+    # Direction marks on the cord: the argument climbs towards the head.
+    ordered = [*vertebrae[::-1], head]
+    for upper, lower in zip(ordered, ordered[1:]):
+        gap_top = upper.y + upper.h / 2
+        gap_bottom = lower.y - lower.h / 2
+        if gap_bottom - gap_top > 18:
+            mid = (gap_top + gap_bottom) / 2
+            parts.append(
+                f'<path class="chevron" d="M{CENTER - 7},{mid + 4:.1f} L{CENTER},{mid - 5:.1f} '
+                f'L{CENTER + 7},{mid + 4:.1f}"/>'
+            )
+    # Links.
+    links = []
+    for node in nodes.values():
+        if not node.parent:
+            continue
+        parent = nodes[node.parent]
+        links.append(
+            f'<path class="link cat-{node.cat}" data-to="{html.escape(node.id)}" '
+            f'd="{link_path(parent, node)}"/>'
+        )
+    parts.append(f'<g class="links">{"".join(links)}</g>')
+    parts.append(
+        '<g class="nodes">'
+        + "".join(node_svg(model, node) for node in nodes.values())
+        + "</g>"
+    )
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+LEGEND = (
+    ("open", "Open problem", "open"),
+    ("lemma", "Open lemma", "lemma"),
+    ("published", "Published, not formalized", "published"),
+    ("informal", "Not formalized", "informal"),
+    ("checked", "Checked lemmas", "checked"),
+    ("num", "Certified computation", "num"),
+    ("axiom", "Kernel axiom", "axiom"),
+)
+
+
+def model_json(model: dict[str, object], width: float, height: float) -> str:
+    nodes: dict[str, Node] = model["nodes"]
+    vertebrae: list[Node] = model["vertebrae"]
+    head: Node = model["head"]
+    parameters = model["parameters"]
+    levels = [
+        {"id": node.id, "title": node.title, "stats": node.level}
+        for node in [head, *vertebrae[::-1]]
+    ]
+    levels.extend(
+        {
+            "id": node.id,
+            "title": (
+                f"Route Z · {node.title.lower()}"
+                if node.id.startswith("z:")
+                else f"Programme · {node.title.lower()}"
+            ),
+            "stats": node.stats,
+        }
+        for node in model["extras"]
+    )
+    payload = {
+        "width": width,
+        "height": height,
+        "base": model["base_url"],
+        "commit": model["commit"],
+        "totals": parameters["totals"],
+        "modules": parameters["tile_modules"],
+        "generated_mb": round(parameters["generated_mb"], 1),
+        "levels": levels,
+        "nodes": {
+            node.id: {
+                "id": node.id,
+                "kind": node.kind,
+                "cat": node.cat,
+                "title": node.title,
+                "sub": node.sub,
+                "text": node.text,
+                "lean": node.lean,
+                "file": node.file,
+                "line": node.line,
+                "count": node.count,
+                "stats": node.stats,
+                "level": node.level if node.kind in ("vertebra", "head") else None,
+                "path": path_to_head(model, node),
+                "members": node.members[:120],
+                "more": max(0, len(node.members) - 120),
+            }
+            for node in nodes.values()
+        },
+        "search": model["search"],
+    }
+    text = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+    return text.replace("</", "<\\/")
+
+
+STYLE = """
+:root {
+  --bg: #f5f7fb; --panel: #ffffff; --text: #0f172a; --muted: #475569; --border: #dbe2ea;
+  --button-bg: #f8fafc; --stage: #fbfcfe;
+  --cord: #94a3b8; --cord-core: #e2e8f0; --link: #94a3b8;
+  --spine: #0369a1; --spine-bg: #e0f2fe;
+  --head: #6d28d9; --head-bg: #ede9fe;
+  --checked: #15803d; --checked-bg: #dcfce7;
+  --num: #0e7490; --num-bg: #cffafe;
+  --open: #dc2626; --open-bg: #fee2e2;
+  --lemma: #ea580c; --lemma-bg: #ffedd5;
+  --published: #0f766e; --published-bg: #ccfbf1;
+  --informal: #b45309; --informal-bg: #fef3c7;
+  --axiom: #475569; --axiom-bg: #e2e8f0;
+}
+:root[data-theme="dark"] {
+  --bg: #0b1220; --panel: #101a2d; --text: #dbe7ff; --muted: #9db0cf; --border: #20304d;
+  --button-bg: #13203a; --stage: #070e1c;
+  --cord: #3b5a86; --cord-core: #1d2f4d; --link: #4b6288;
+  --spine: #7dd3fc; --spine-bg: #0c2a45;
+  --head: #c4b5fd; --head-bg: #2a1f55;
+  --checked: #4ade80; --checked-bg: #0f2e1c;
+  --num: #22d3ee; --num-bg: #0b2f3a;
+  --open: #f87171; --open-bg: #3a1216;
+  --lemma: #fb923c; --lemma-bg: #3a1e0c;
+  --published: #2dd4bf; --published-bg: #0b2f2c;
+  --informal: #fbbf24; --informal-bg: #35260a;
+  --axiom: #cbd5e1; --axiom-bg: #1c2940;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "IBM Plex Sans", "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+.wrap { display: grid; grid-template-rows: auto minmax(0, 1fr); height: 100vh; }
+.toolbar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 10px 16px;
+  border-bottom: 1px solid var(--border); background: var(--panel);
+}
+.toolbar h1 { margin: 0; font-size: 17px; font-weight: 600; }
+.toolbar .meta { color: var(--muted); font-size: 13px; }
+.toolbar label.search { position: relative; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.toolbar input, .toolbar button {
+  font: inherit; font-size: 13px; color: var(--text); background: var(--button-bg);
+  border: 1px solid var(--border); border-radius: 6px; padding: 5px 9px;
+}
+.toolbar input { width: 250px; }
+.toolbar button { cursor: pointer; }
+.toolbar button:hover { border-color: var(--muted); }
+.btns { display: inline-flex; gap: 6px; margin-left: auto; }
+#results {
+  position: absolute; top: 100%; left: 48px; z-index: 20; width: 380px; max-height: 320px; overflow: auto;
+  margin: 4px 0 0; padding: 4px; list-style: none; background: var(--panel); color: var(--text);
+  border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+}
+#results[hidden] { display: none; }
+#results li { padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 12.5px; }
+#results li:hover, #results li.on { background: var(--button-bg); }
+#results .where { display: block; color: var(--muted); font-size: 11.5px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; flex-basis: 100%; }
+.legend button {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 12px; padding: 3px 9px; border-radius: 999px;
+}
+.legend .dot { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--c); background: var(--cb); }
+.legend .dot.dashed { border-style: dashed; }
+.legend button[aria-pressed="false"] { opacity: 0.45; }
+.content { display: grid; grid-template-columns: minmax(0, 1fr) 360px; min-height: 0; }
+.stage { overflow: auto; min-height: 0; background: var(--stage); cursor: grab; }
+.stage.drag { cursor: grabbing; user-select: none; }
+.stage svg { display: block; margin: 0 auto; }
+.panel { overflow: auto; padding: 16px 18px 28px; border-left: 1px solid var(--border); background: var(--panel); font-size: 13.5px; line-height: 1.5; }
+.panel h2 { margin: 0 0 6px; font-size: 16px; }
+.panel h3 { margin: 16px 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.panel p { margin: 6px 0; }
+.panel code { font-family: "IBM Plex Mono", "SFMono-Regular", monospace; font-size: 12px; overflow-wrap: anywhere; }
+.panel .badge {
+  display: inline-block; margin-bottom: 8px; padding: 1px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 600;
+  color: var(--n); background: var(--nb); border: 1px solid var(--n);
+}
+.panel ol.trail { margin: 0; padding-left: 20px; color: var(--muted); font-size: 12.5px; }
+.panel ol.trail li { cursor: pointer; }
+.panel ol.trail li:hover { color: var(--text); }
+.panel ul.members { margin: 0; padding: 0; list-style: none; max-height: 340px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; }
+.panel ul.members li { padding: 3px 9px; font-size: 12px; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+.panel ul.members li:last-child { border-bottom: 0; }
+.panel ul.members li.hit { background: var(--informal-bg); }
+.panel ul.members .k { display: inline-block; min-width: 54px; color: var(--muted); font-size: 11px; }
+.panel a { color: var(--spine); }
+.hint { color: var(--muted); font-size: 12.5px; }
+.cat-checked { --n: var(--checked); --nb: var(--checked-bg); }
+.cat-num { --n: var(--num); --nb: var(--num-bg); }
+.cat-open { --n: var(--open); --nb: var(--open-bg); }
+.cat-lemma { --n: var(--lemma); --nb: var(--lemma-bg); }
+.cat-published { --n: var(--published); --nb: var(--published-bg); }
+.cat-informal { --n: var(--informal); --nb: var(--informal-bg); }
+.cat-axiom { --n: var(--axiom); --nb: var(--axiom-bg); }
+.cat-spine { --n: var(--spine); --nb: var(--spine-bg); }
+.cat-head { --n: var(--head); --nb: var(--head-bg); }
+#spine .cord { fill: none; stroke: var(--cord); stroke-width: 22; stroke-linecap: round; }
+#spine .cord-core { fill: none; stroke: var(--cord-core); stroke-width: 8; stroke-linecap: round; }
+#spine .chevron { fill: none; stroke: var(--muted); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; opacity: 0.7; }
+#spine .link { fill: none; stroke: var(--n, var(--link)); stroke-width: 2.6; opacity: 0.75; transition: opacity .12s, stroke-width .12s; }
+#spine .link.cat-informal, #spine .link.cat-published { stroke-dasharray: 7 5; }
+#spine .node { cursor: pointer; transition: opacity .15s; outline: none; }
+#spine .node .shape { fill: var(--nb); stroke: var(--n); stroke-width: 1.8; transition: stroke-width .12s; }
+#spine .node .t { fill: var(--text); font-weight: 600; text-anchor: middle; }
+#spine .node .s { fill: var(--muted); text-anchor: middle; }
+#spine .node .m { fill: var(--muted); text-anchor: middle; font-family: "IBM Plex Mono", "SFMono-Regular", monospace; }
+#spine .node .num { fill: var(--n); font-size: 13px; font-weight: 700; text-anchor: middle; opacity: 0.85; }
+#spine .node .cond { fill: var(--informal); text-anchor: middle; font-weight: 600; }
+#spine .node .st { fill: var(--n); text-anchor: middle; font-weight: 600; }
+#spine .bubble circle { fill: var(--n); stroke: var(--stage); stroke-width: 2.2; }
+#spine .bubble text { fill: var(--bg); font-weight: 700; text-anchor: middle; }
+.zoombox { display: inline-flex; gap: 6px; }
+.progress-mode .spine-only { display: none !important; }
+.panel table.scale { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
+.panel table.scale th { text-align: right; font-weight: 600; color: var(--muted); padding: 2px 4px; font-size: 11px; }
+.panel table.scale th:first-child, .panel table.scale td:first-child { text-align: left; }
+.panel table.scale td { padding: 3px 4px; border-top: 1px solid var(--border); text-align: right; font-variant-numeric: tabular-nums; vertical-align: top; }
+.panel table.scale tr[data-go] { cursor: pointer; }
+.panel table.scale tr[data-go]:hover { background: var(--button-bg); }
+.panel .bar { height: 4px; border-radius: 2px; background: var(--border); margin-top: 3px; }
+.panel .bar i { display: block; height: 100%; border-radius: 2px; background: var(--spine); }
+.panel .gen { color: var(--muted); font-size: 10.5px; }
+.panel ul.facts { margin: 6px 0; padding: 0; list-style: none; }
+.panel ul.facts li { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; border-bottom: 1px dotted var(--border); }
+#spine .node .head-t { font-size: 30px; font-weight: 700; letter-spacing: 0.06em; }
+#spine .node.cat-informal .shape { stroke-dasharray: 7 4; }
+#spine .node.cat-published .shape { stroke-dasharray: 3 3; }
+#spine .node.cat-lemma .shape { stroke-width: 2.4; }
+#spine .node.cat-open .shape { stroke-width: 2.8; filter: drop-shadow(0 0 5px var(--n)); animation: pulse 2.6s ease-in-out infinite; }
+#spine .node:hover .shape, #spine .node:focus-visible .shape, #spine .node.hl .shape { stroke-width: 3.2; }
+#spine .node.sel .shape { stroke-width: 4; }
+#spine .link.hl { opacity: 1; stroke-width: 4.4; }
+#spine.tracing .node:not(.hl), #spine.tracing .link:not(.hl) { opacity: 0.32; }
+#spine.hide-open [data-cat="open"], #spine.hide-informal [data-cat="informal"], #spine.hide-checked [data-cat="checked"],
+#spine.hide-lemma [data-cat="lemma"], #spine.hide-published [data-cat="published"],
+#spine.hide-num [data-cat="num"], #spine.hide-axiom [data-cat="axiom"] { opacity: 0.1; }
+@keyframes pulse { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: 0.45; } }
+@media (prefers-reduced-motion: reduce) { #spine .node.cat-open .shape { animation: none; } }
+.progress-panel { display: none; padding: 22px 26px 40px; overflow: auto; min-height: 0; background: var(--bg); }
+@media (max-width: 900px) {
+  .wrap { height: auto; min-height: 100vh; }
+  .content { grid-template-columns: 1fr; }
+  .stage { height: 70vh; }
+  .panel { border-left: 0; border-top: 1px solid var(--border); }
+}
+"""
+
+SCRIPT = r"""
+(function () {
+  const data = JSON.parse(document.getElementById("spine-data").textContent);
+  const svg = document.getElementById("spine");
+  const stage = document.getElementById("stage");
+  const panel = document.getElementById("panel");
+  const searchEl = document.getElementById("search");
+  const resultsEl = document.getElementById("results");
+  const graphPanelEl = document.getElementById("graphPanel");
+  const progressPanelEl = document.getElementById("progressPanel");
+  const progressGraphicEl = document.getElementById("progressGraphic");
+  const progressBtn = document.getElementById("progressBtn");
+  const themeBtn = document.getElementById("themeBtn");
+  const THEME_KEY = "mlc_graph_theme";
+  const els = {};
+  svg.querySelectorAll(".node").forEach((g) => { els[g.dataset.id] = g; });
+  const linkOf = {};
+  svg.querySelectorAll(".link").forEach((p) => { linkOf[p.dataset.to] = p; });
+  const KIND_NAME = {
+    head: "Statement", vertebra: "Milestone theorem", bud: "Supporting declarations",
+    tip: "Branch tip", ground: "Kernel axiom",
+  };
+  const CAT_NAME = {
+    checked: "Checked in Lean", num: "Kernel-checked computation", open: "Open problem (explicit hypothesis)",
+    lemma: "Open lemma (statement in Lean, proof open)", published: "Published theorem, not formalized",
+    informal: "Not formalized", axiom: "Kernel axiom", spine: "Checked in Lean", head: "Conditional on RootInput",
+  };
+  let selected = null;
+
+  function esc(text) {
+    return String(text == null ? "" : text).replace(/[&<>"']/g, (c) => (
+      { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  // Zoom: the SVG is scaled by its CSS size and the stage scrolls.
+  let zoom = 1;
+  function applyZoom(anchorX, anchorY) {
+    const before = { w: svg.clientWidth, h: svg.clientHeight };
+    svg.style.width = Math.round(data.width * zoom) + "px";
+    svg.style.height = Math.round(data.height * zoom) + "px";
+    if (anchorX != null && before.w) {
+      const k = svg.clientWidth / before.w;
+      stage.scrollLeft = (stage.scrollLeft + anchorX) * k - anchorX;
+      stage.scrollTop = (stage.scrollTop + anchorY) * k - anchorY;
+    }
+  }
+  function setZoom(next, ax, ay) {
+    zoom = Math.max(0.35, Math.min(2.4, next));
+    applyZoom(ax, ay);
+  }
+  function fit() {
+    zoom = Math.max(0.35, Math.min(1.6, (stage.clientWidth - 8) / data.width));
+    applyZoom();
+    stage.scrollTo(0, 0);
+  }
+  document.getElementById("zoomIn").addEventListener("click", () => setZoom(zoom * 1.2, stage.clientWidth / 2, stage.clientHeight / 2));
+  document.getElementById("zoomOut").addEventListener("click", () => setZoom(zoom / 1.2, stage.clientWidth / 2, stage.clientHeight / 2));
+  document.getElementById("fitBtn").addEventListener("click", fit);
+  stage.addEventListener("wheel", (ev) => {
+    if (!(ev.ctrlKey || ev.metaKey)) return;
+    ev.preventDefault();
+    const box = stage.getBoundingClientRect();
+    setZoom(zoom * (ev.deltaY < 0 ? 1.1 : 1 / 1.1), ev.clientX - box.left, ev.clientY - box.top);
+  }, { passive: false });
+  let drag = null;
+  stage.addEventListener("pointerdown", (ev) => {
+    if (ev.target.closest(".node") || ev.button !== 0) return;
+    drag = { x: ev.clientX, y: ev.clientY, sx: stage.scrollLeft, sy: stage.scrollTop };
+    stage.classList.add("drag");
+    stage.setPointerCapture(ev.pointerId);
+  });
+  stage.addEventListener("pointermove", (ev) => {
+    if (!drag) return;
+    stage.scrollLeft = drag.sx - (ev.clientX - drag.x);
+    stage.scrollTop = drag.sy - (ev.clientY - drag.y);
+  });
+  const endDrag = () => { drag = null; stage.classList.remove("drag"); };
+  stage.addEventListener("pointerup", endDrag);
+  stage.addEventListener("pointercancel", endDrag);
+
+  // Tracing: a node lights the way to the head.
+  function trace(id) {
+    clearTrace();
+    const node = data.nodes[id];
+    if (!node) return;
+    svg.classList.add("tracing");
+    node.path.forEach((step) => {
+      if (els[step]) els[step].classList.add("hl");
+      if (linkOf[step]) linkOf[step].classList.add("hl");
+    });
+  }
+  function clearTrace() {
+    svg.classList.remove("tracing");
+    svg.querySelectorAll(".hl").forEach((e) => e.classList.remove("hl"));
+  }
+  svg.addEventListener("pointerover", (ev) => {
+    const g = ev.target.closest(".node");
+    if (g) trace(g.dataset.id);
+  });
+  svg.addEventListener("pointerout", (ev) => {
+    if (!ev.target.closest(".node")) return;
+    if (selected) trace(selected); else clearTrace();
+  });
+  svg.addEventListener("focusin", (ev) => {
+    const g = ev.target.closest(".node");
+    if (g) trace(g.dataset.id);
+  });
+
+  function sourceLink(node, file, line) {
+    if (!data.base || !file || file.startsWith("[")) return "";
+    return `${data.base}/blob/${data.commit}/${file}${line ? "#L" + line : ""}`;
+  }
+
+  function fmt(n) { return Number(n).toLocaleString("en-US"); }
+
+  // Counts of declarations, by kind and by source, for the overview and for a node.
+  function factsList(s) {
+    const rows = [
+      ["Theorems", s.thm], ["Lemmas", s.lem], ["Definitions", s.def], ["Structures", s.str], ["Axioms", s.ax],
+    ].filter((r) => r[1]).map((r) => `<li><span>${r[0]}</span><b>${fmt(r[1])}</b></li>`);
+    if (s.lines) rows.push(`<li><span>Lines of Lean (hand-written)</span><b>${fmt(s.lines)}</b></li>`);
+    if (s.gen) rows.push(`<li><span>Generated by a script</span><b>${fmt(s.gen)}</b></li>`);
+    return `<ul class="facts">${rows.join("")}</ul>`;
+  }
+
+  function scaleSection() {
+    const t = data.totals;
+    const hand = t.n - t.gen;
+    const rows = data.levels.map((lv) => {
+      const s = lv.stats;
+      return { id: lv.id, title: lv.title, hand: s.n - s.gen, thm: s.thm - s.gen_thm, lem: s.lem, lines: s.lines, gen: s.gen };
+    });
+    const peak = Math.max(1, ...rows.map((r) => r.hand));
+    const body = rows.map((r) => `<tr data-go="${esc(r.id)}"><td>${esc(r.title)}
+      <div class="bar"><i style="width:${(100 * r.hand / peak).toFixed(1)}%"></i></div></td>
+      <td>${fmt(r.hand)}</td><td>${fmt(r.thm)}</td><td>${fmt(r.lem)}</td><td>${fmt(r.lines)}</td></tr>`).join("");
+    return `
+      <h3>Scale of the formalization</h3>
+      <p><b>${fmt(t.n)}</b> declarations: ${fmt(t.thm)} theorems, ${fmt(t.lem)} lemmas,
+      ${fmt(t.def + t.str + t.ax)} definitions, structures and axioms.</p>
+      <p><b>${fmt(hand)}</b> are written by hand (${fmt(t.thm - t.gen_thm)} theorems, ${fmt(t.lem)} lemmas,
+      ${fmt(t.lines)} lines of Lean). The other <b>${fmt(t.gen)}</b> are generated: ${fmt(data.modules)} modules
+      (${data.generated_mb} MB) with the certificates of the kernel-checked grid, ${fmt(t.gen_thm)} theorems and
+      ${fmt(t.gen_def)} definitions that the kernel evaluates.</p>
+      <p class="hint">The bubble on a node counts the declarations that hang on it; its size grows
+      with the logarithm of the count. A level is a vertebra with everything that first hangs on it.</p>
+      <table class="scale"><thead><tr><th>Level (top to bottom)</th><th>By hand</th><th>Thm</th><th>Lem</th><th>Lines</th></tr></thead>
+      <tbody>${body}</tbody></table>
+      <p class="hint">The grid adds ${fmt(t.gen)} generated declarations to the level “Completion ⇔ coverage”.</p>`;
+  }
+
+  function overview(keepHash) {
+    selected = null;
+    if (!keepHash && window.history && history.replaceState) {
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+    svg.querySelectorAll(".sel").forEach((e) => e.classList.remove("sel"));
+    clearTrace();
+    panel.innerHTML = `
+      <h2>How to read the figure</h2>
+      <p>The spine climbs from the three kernel axioms at the bottom to the statement of MLC at the top.
+      Each vertebra is a theorem of the Lean library, and each one builds on the vertebrae below it.</p>
+      <p>Branches carry what a vertebra needs: checked lemmas, the kernel-checked grid, and at the tips
+      the <b style="color:var(--open)">open problems</b> of the root, the
+      <b style="color:var(--lemma)">open lemmas</b> into which they are decomposed, the
+      <b style="color:var(--published)">published cases</b> and the
+      <b style="color:var(--informal)">targets of Dudko's programme</b> that are not formalized.</p>
+      <p class="hint">Hover a node to light its way to the head. Click it for the statement, the Lean name
+      and the declarations behind it. Search finds any declaration. Ctrl and the wheel zoom; drag moves.</p>
+      ${scaleSection()}`;
+    panel.querySelectorAll("tr[data-go]").forEach((tr) => tr.addEventListener("click", () => select(tr.dataset.go)));
+  }
+
+  function select(id, focusName) {
+    const node = data.nodes[id];
+    if (!node) return;
+    selected = id;
+    if (window.history && history.replaceState) history.replaceState(null, "", "#n=" + encodeURIComponent(id));
+    svg.querySelectorAll(".sel").forEach((e) => e.classList.remove("sel"));
+    if (els[id]) {
+      els[id].classList.add("sel");
+      const box = els[id].getBoundingClientRect();
+      const view = stage.getBoundingClientRect();
+      if (box.top < view.top + 40 || box.bottom > view.bottom - 40 || box.left < view.left || box.right > view.right) {
+        const dy = box.top + box.height / 2 - (view.top + view.height / 2);
+        const dx = box.left + box.width / 2 - (view.left + view.width / 2);
+        stage.scrollBy({ top: dy, left: dx, behavior: "smooth" });
+      }
+    }
+    trace(id);
+    const link = sourceLink(node, node.file, node.line);
+    const trail = node.path.slice(1).map((step) => data.nodes[step]).filter(Boolean);
+    const where = node.file && !node.file.startsWith("[")
+      ? `<p><code>${esc(node.file)}${node.line ? ":" + node.line : ""}</code>${link ? ` · <a href="${esc(link)}" target="_blank" rel="noopener">source</a>` : ""}</p>` : "";
+    const lean = node.lean ? `<p>Lean: <code>${esc(node.lean)}</code></p>` : "";
+    const count = node.count ? `<p class="hint">${node.count.toLocaleString()} declarations in this group.</p>` : "";
+    const scale = node.level
+      ? `<h3>This level with its branches</h3>${factsList(node.level)}`
+      : (node.stats && node.stats.n > 1 ? `<h3>Declarations by kind</h3>${factsList(node.stats)}` : "");
+    const rows = node.members.map((m) => {
+      const hit = focusName && m.n === focusName ? " class=\"hit\"" : "";
+      return `<li${hit}><span class="k">${esc(m.k)}</span>${esc(m.n)}<br><span class="hint">${esc(m.f)}:${m.l}</span></li>`;
+    }).join("");
+    const members = node.members.length > 1 || node.kind === "bud"
+      ? `<h3>Declarations</h3><ul class="members">${rows}</ul>${node.more ? `<p class="hint">and ${node.more} more.</p>` : ""}` : "";
+    const trailHtml = trail.length
+      ? `<h3>Way to the head</h3><ol class="trail">${trail.map((t) => `<li data-go="${esc(t.id)}">${esc(t.title)}</li>`).join("")}</ol>` : "";
+    panel.innerHTML = `
+      <span class="badge cat-${esc(node.cat)}">${esc(CAT_NAME[node.cat] || node.cat)}</span>
+      <h2>${esc(node.title)}</h2>
+      <p class="hint">${esc(KIND_NAME[node.kind] || "")}${node.sub && node.kind !== "vertebra" ? " · " + esc(node.sub) : ""}</p>
+      ${node.text ? `<p>${esc(node.text)}</p>` : ""}${lean}${where}${count}${scale}${members}${trailHtml}`;
+    const hit = panel.querySelector("li.hit");
+    if (hit) hit.scrollIntoView({ block: "center" });
+    panel.querySelectorAll("[data-go]").forEach((li) => li.addEventListener("click", () => select(li.dataset.go)));
+  }
+
+  svg.addEventListener("click", (ev) => {
+    const g = ev.target.closest(".node");
+    if (g) select(g.dataset.id); else overview();
+  });
+  svg.addEventListener("keydown", (ev) => {
+    const g = ev.target.closest(".node");
+    if (g && (ev.key === "Enter" || ev.key === " ")) { ev.preventDefault(); select(g.dataset.id); }
+    if (ev.key === "Escape") overview();
+  });
+
+  // Search over the declarations of the figure.
+  let hits = [];
+  let cursor = -1;
+  function runSearch() {
+    const q = searchEl.value.trim().toLowerCase();
+    hits = [];
+    if (q.length >= 2) {
+      for (const row of data.search) {
+        if (row.n.toLowerCase().includes(q)) hits.push(row);
+        if (hits.length >= 14) break;
+      }
+    }
+    cursor = -1;
+    resultsEl.hidden = hits.length === 0;
+    resultsEl.innerHTML = hits.map((row, i) => {
+      const owner = data.nodes[row.o];
+      return `<li data-i="${i}">${esc(row.n)}<span class="where">${esc(row.k)} · ${esc(owner ? owner.title : "")}</span></li>`;
+    }).join("");
+  }
+  function pick(i) {
+    const row = hits[i];
+    if (!row) return;
+    resultsEl.hidden = true;
+    select(row.o, row.n);
+  }
+  searchEl.addEventListener("input", runSearch);
+  searchEl.addEventListener("keydown", (ev) => {
+    if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
+      ev.preventDefault();
+      cursor = Math.max(0, Math.min(hits.length - 1, cursor + (ev.key === "ArrowDown" ? 1 : -1)));
+      resultsEl.querySelectorAll("li").forEach((li, i) => li.classList.toggle("on", i === cursor));
+    } else if (ev.key === "Enter") {
+      pick(cursor >= 0 ? cursor : 0);
+    } else if (ev.key === "Escape") {
+      resultsEl.hidden = true;
+    }
+  });
+  resultsEl.addEventListener("click", (ev) => {
+    const li = ev.target.closest("li");
+    if (li) pick(Number(li.dataset.i));
+  });
+  document.addEventListener("click", (ev) => {
+    if (!ev.target.closest(".search")) resultsEl.hidden = true;
+  });
+
+  // Legend chips hide a category of nodes.
+  document.querySelectorAll(".legend button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const on = btn.getAttribute("aria-pressed") !== "true";
+      btn.setAttribute("aria-pressed", String(on));
+      svg.classList.toggle("hide-" + btn.dataset.cat, !on);
+    });
+  });
+
+  // Theme and the progress view.
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    try { localStorage.setItem(THEME_KEY, theme); } catch (_err) {}
+    themeBtn.textContent = theme === "dark" ? "Theme: Dark" : "Theme: Light";
+  }
+  let saved = null;
+  try { saved = localStorage.getItem(THEME_KEY); } catch (_err) {}
+  applyTheme(saved === "dark" || saved === "light" ? saved
+    : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+  themeBtn.addEventListener("click", () => {
+    applyTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark");
+  });
+
+  let progressLoaded = false;
+  async function loadProgress() {
+    if (progressLoaded) return;
+    progressLoaded = true;
+    try {
+      const response = await fetch("progress_fragment.html", { cache: "no-store" });
+      if (!response.ok) throw new Error("Failed to load progress_fragment.html");
+      progressGraphicEl.innerHTML = await response.text();
+    } catch (err) {
+      progressLoaded = false;
+      progressGraphicEl.textContent = String(err && err.message ? err.message : err);
+    }
+  }
+  function setProgress(visible) {
+    graphPanelEl.style.display = visible ? "none" : "grid";
+    progressPanelEl.style.display = visible ? "block" : "none";
+    document.body.classList.toggle("progress-mode", visible);
+    progressBtn.textContent = visible ? "View: Spine" : "View: Progress";
+    if (window.history && history.replaceState) {
+      history.replaceState(null, "", visible ? "#progress" : location.pathname + location.search);
+    }
+    if (visible) loadProgress(); else fit();
+  }
+  progressBtn.addEventListener("click", () => setProgress(progressPanelEl.style.display !== "block"));
+
+  fit();
+  overview(true);
+  window.addEventListener("resize", () => { if (progressPanelEl.style.display !== "block") fit(); });
+  function followHash() {
+    const hash = location.hash;
+    const progressOn = progressPanelEl.style.display === "block";
+    if (hash === "#progress") {
+      if (!progressOn) setProgress(true);
+      return;
+    }
+    if (progressOn) setProgress(false);
+    if (hash.startsWith("#n=")) select(decodeURIComponent(hash.slice(3)));
+  }
+  window.addEventListener("hashchange", followHash);
+  followHash();
+})();
+"""
+
+
+def spine_page_html(title: str, model: dict[str, object], metrics: dict[str, object]) -> str:
+    width, height = layout(model)
+    svg = render_svg(model, width, height)
+    data = model_json(model, width, height)
+    percent = 100.0 - float(metrics.get("area_upper_percent", 100.0))
+    totals = model["parameters"]["totals"]
+    by_hand = totals["n"] - totals["gen"]
+    other = totals["def"] + totals["str"] + totals["ax"]
+    summary = (
+        f"Resolved share {percent:.3f}% · {int(metrics.get('open_frontier', 0))} open problems · "
+        f"{int(metrics.get('open_lemmas', 0))} open lemmas · "
+        f"{totals['n']:,} declarations: {totals['thm']:,} theorems, {totals['lem']:,} lemmas, "
+        f"{other:,} definitions, structures and axioms · {by_hand:,} written by hand, "
+        f"{totals['gen']:,} generated (the certificates of the grid)"
+    )
+    chips = "".join(
+        f'<li><button type="button" data-cat="{cat}" aria-pressed="true">'
+        f'<span class="dot{" dashed" if cat == "informal" else ""}" '
+        f'style="--c:var(--{cat});--cb:var(--{cat}-bg)"></span>{html.escape(label)}</button></li>'
+        for cat, label, _ in LEGEND
+    )
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:,">
+<title>{html.escape(title)}</title>
+<style>{STYLE}
+{PROGRESS_CSS}</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="toolbar">
+    <h1>{html.escape(title)}</h1>
+    <span class="meta" id="summary">{html.escape(summary)}</span>
+    <label class="search spine-only">Search
+      <input id="search" type="search" placeholder="declaration name" autocomplete="off">
+      <ul id="results" hidden></ul>
+    </label>
+    <div class="btns">
+      <span class="zoombox spine-only">
+        <button id="zoomOut" type="button" title="Zoom out">−</button>
+        <button id="zoomIn" type="button" title="Zoom in">+</button>
+        <button id="fitBtn" type="button" title="Fit the figure to the width">Fit</button>
+      </span>
+      <button id="progressBtn" type="button">View: Progress</button>
+      <button id="themeBtn" type="button">Theme</button>
+    </div>
+    <ul class="legend spine-only" id="legend">{chips}</ul>
+  </header>
+  <main class="content" id="graphPanel">
+    <div class="stage" id="stage">{svg}</div>
+    <aside class="panel" id="panel"></aside>
+  </main>
+  <section class="progress-panel" id="progressPanel"><div id="progressGraphic">Loading progress…</div></section>
+</div>
+<script id="spine-data" type="application/json">{data}</script>
+<script>{SCRIPT}</script>
+</body>
+</html>
+"""
