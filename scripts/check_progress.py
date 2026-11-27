@@ -81,6 +81,10 @@ def record_update(repo_root: Path, staged: dict[str, object]) -> int:
                 metrics=staged,
             )
             print(f"Progress ledger: recorded update {len(entries)}: {entry['subject']}")
+            print(
+                "The report docs/mlc_progress.pdf lacks this update: run `make report-pdf` "
+                "and commit the PDF."
+            )
         subprocess.run(["git", "add", "--", "docs/progress"], cwd=repo_root, check=True)
     except LedgerError as exc:
         print(f"Refusing commit: {exc}", file=sys.stderr)

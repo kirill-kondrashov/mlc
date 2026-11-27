@@ -101,7 +101,11 @@ an update too. The repository hook
 its title is `$PROGRESS_TITLE` or, without it, derived from the new milestones or the depth
 of the grid; its note is `$PROGRESS_NOTE`; its date is now; the hook stages `docs/progress`.
 A commit that stages only documents and scripts passes unchecked and imports no `numpy`.
-`python3 scripts/check_progress.py --ledger` is the consistency check for CI. A squash
+`python3 scripts/check_progress.py --ledger` is the consistency check for CI. The committed
+report `docs/mlc_progress.pdf` lists the updates. To include a new update in it, stage the Lean
+changes, record the update (`progress_ledger.py add --staged ...`), run `make report-pdf`, stage
+the PDF and commit; the hook then finds the ledger up to date. When the hook records the update
+itself, the PDF stays one update behind until the next `make report-pdf`. A squash
 merge brings the entries and the masks of the branch with it. When two branches both
 append updates, resolve the conflict of `ledger.json` by keeping both sides in the order
 of their dates.
