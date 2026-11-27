@@ -35,8 +35,12 @@ import subprocess
 import sys
 import time
 
+# The root theorem is declared as `theorem mlc_conjecture` inside `namespace MLC`,
+# so its qualified name never occurs in the concatenated sources.
+ROOT_THEOREM = re.compile(r"^theorem\s+mlc_conjecture\b", re.MULTILINE)
+
 PROGRESS_MILESTONES = (
-    ("Conditional root", "MLC.mlc_conjecture", 1),
+    ("Conditional root", ROOT_THEOREM, 1),
     ("Harmonic budget", "UnboundedBudget", 1),
     ("Connected parameter nest", "ConnectedNest", 1),
     ("Virtual-Molecule bridge", "VirtualMoleculeAPrioriControl", 2),
@@ -230,11 +234,17 @@ def grid_bound(lean_text: str) -> dict[str, object] | None:
     }
 
 
+def symbol_present(symbol: str | re.Pattern[str], lean_text: str) -> bool:
+    if isinstance(symbol, re.Pattern):
+        return symbol.search(lean_text) is not None
+    return symbol in lean_text
+
+
 def progress_metrics_from_text(lean_text: str) -> dict[str, object]:
     achieved = [
         {"label": label, "weight": weight}
         for label, symbol, weight in PROGRESS_MILESTONES
-        if symbol in lean_text
+        if symbol_present(symbol, lean_text)
     ]
     achieved_weight = sum(item["weight"] for item in achieved)
     open_roots = (
