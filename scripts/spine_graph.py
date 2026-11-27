@@ -28,9 +28,12 @@ from pathlib import Path
 from progress_report import PROGRESS_CSS, PROGRESS_ROUTES
 from programme import (
     CLASSES,
+    GROTZSCH_ROOT,
     LEMMAS,
+    PARALLEL_ROOT,
     PROGRAMME_ROOT,
     PSEUDO_SIEGEL,
+    PULLBACK_ROOT,
     SHARPNESS_ROOT,
     check_catalogue,
     class_shares,
@@ -157,7 +160,14 @@ SPINE = (
 HEAD_LEAN = "MLC.mlc_conjecture"
 # Results that no vertebra needs: checked in Lean, but not part of the proof of MLC. They
 # hang on the programme's open targets and must be connected to the graph like the rest.
-SIDE_ROOTS = ("MLC.Research.unresolved_volume_eq_zero_of_porous", PROGRAMME_ROOT, SHARPNESS_ROOT)
+SIDE_ROOTS = (
+    "MLC.Research.unresolved_volume_eq_zero_of_porous",
+    PROGRAMME_ROOT,
+    SHARPNESS_ROOT,
+    GROTZSCH_ROOT,
+    PARALLEL_ROOT,
+    PULLBACK_ROOT,
+)
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
 BUD_TITLES = {
@@ -785,47 +795,105 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
     def add_lemma(parent: Node, key: str, below: bool = False) -> Node:
         return add_child(parent, lemma_nodes[key], below=below)
 
-    add_lemma(p43, "unboundedGrowth")
+    add_lemma(p43, "unboundedTeichmuller")
+    add_lemma(p43, "unboundedJumpCap")
+    ps_nodes: dict[str, Node] = {}
     for sid, title, sub, text in PSEUDO_SIEGEL:
-        add_child(
-            lemma_nodes["unboundedGrowth"],
+        ps_nodes[sid] = add_child(
+            lemma_nodes["unboundedJumpCap"],
             Node(id=f"paper:{sid}", kind="tip", cat="informal", title=title, sub=sub, text=text),
             below=True,
         )
     add_lemma(p43, "unboundedDichotomy")
-    sharp_names = side_names[SHARPNESS_ROOT]
-    if sharp_names:
-        sharp_decl = fq_index[SHARPNESS_ROOT]
-        sharpness = make(
+
+    def side_bud(root: str, node_id: str, title: str, sub: str, text: str, parent: Node) -> None:
+        """A checked branch: the declarations that only this side result needs."""
+        names = side_names[root]
+        if not names:
+            return
+        decl = fq_index[root]
+        bud = make(
             Node(
-                id="prog:sharpness",
+                id=node_id,
                 kind="bud",
                 cat="checked",
-                title="Why both G and D are needed",
-                sub="two towers with unbounded degeneration",
-                text=(
-                    "Checked in Lean (WidthTower.uniformities_necessary). Neither lemma can "
-                    "be dropped from the recursion. (1) A tower of unbounded relative periods "
-                    "with a uniform growth bound and the dichotomy (4.6) with the error "
-                    "p·h(p), h unbounded (a quadratic error, for instance), has unbounded "
-                    "degeneration: a linear error is the threshold (Lemma D). (2) The tower "
-                    "of widths (k+1)! satisfies the Teichmüller contraction and the dichotomy "
-                    "with a linear error and has unbounded degeneration: the growth bound "
-                    "must be uniform in the relative period (Lemma G). With "
-                    "aPrioriBounds_of_uniform: the uniform versions of G and D suffice, and "
-                    "the period-dependent versions of the survey do not."
-                ),
-                lean=SHARPNESS_ROOT,
-                file=sharp_decl.file,
-                line=sharp_decl.line,
-                count=len(sharp_names),
+                title=title,
+                sub=sub,
+                text=text,
+                lean=root,
+                file=decl.file,
+                line=decl.line,
+                count=len(names),
             )
         )
-        register(sorted(sharp_names), sharpness)
-        sharpness.stat = stat_line(sharpness.stats)
-        sharpness.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
-        add_child(lemma_nodes["unboundedDichotomy"], sharpness, below=True)
-        extras.append(sharpness)
+        register(sorted(names), bud)
+        bud.stat = stat_line(bud.stats)
+        bud.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
+        add_child(parent, bud, below=True)
+        extras.append(bud)
+
+    side_bud(
+        SHARPNESS_ROOT,
+        "prog:sharpness",
+        "Why both G and D are needed",
+        "cap ⇔ a priori bounds; two counterexamples",
+        "Checked in Lean (WidthTower.uniformities_necessary, "
+        "WidthTower.aPrioriBounds_iff_jumpCap). Given the linear dichotomy, a "
+        "tower has a priori bounds if and only if its jumps are capped, so the "
+        "cap of Lemma G is the weakest hypothesis of its kind. Neither lemma "
+        "can be dropped. (1) A tower of unbounded relative periods with a "
+        "uniform growth bound (which caps the jumps) and the dichotomy (4.6) with "
+        "the error p·h(p), h unbounded (a quadratic error, for instance), has "
+        "unbounded degeneration: a linear error is the threshold (Lemma D). "
+        "(2) The tower of widths (k+1)! satisfies the Teichmüller contraction and "
+        "the dichotomy with a linear error, has uncapped jumps and unbounded "
+        "degeneration (Lemma G).",
+        lemma_nodes["unboundedDichotomy"],
+    )
+    side_bud(
+        PARALLEL_ROOT,
+        "prog:parallel",
+        "Parallel law (4.1)",
+        "p families in disjoint regions ⇒ widths add",
+        "Checked in Lean (extWidth_parallel_finset, extWidth_parallel). The extremal "
+        "width of a family of curves is defined for length measures with an area "
+        "measure. The widths of families that live in pairwise disjoint regions add up: "
+        "with p small Julia sets of equal degeneration W(f₁) in disjoint neighbourhoods, "
+        "the total degeneration around them is at least p·W(f₁), the main term of (4.1) "
+        "and the source of the factor p in the amplification (4.3). The thin–thick "
+        "decomposition (the additive error) and the vertical proportion of Kahn stay open.",
+        lemma_nodes["unboundedDichotomy"],
+    )
+    side_bud(
+        GROTZSCH_ROOT,
+        "prog:grotzsch",
+        "Grötzsch step (4.6)",
+        "series law ⇒ W(G ∖ G′) ≥ δ⁻¹ W(G)",
+        "Checked in Lean (extWidth_ge_of_series, extLength_series, extLength_mono, "
+        "extWidth_ge_of_complement). Curves that cross two disjoint regions in succession "
+        "have extremal length at least the sum of the extremal lengths of the two pieces "
+        "(the Grötzsch inequality). If the lift G′ carries the fraction 1 − δ of the "
+        "extremal length of the rectangle G, the subcurves G ∖ G′ through the "
+        "preperiodic Julia sets have width at least δ⁻¹ W(G): the estimate (4.6) with "
+        "C_δ = δ⁻¹ → ∞. This is the conformal-geometry foundation of PS4; the dynamical "
+        "input, the families G ∖ G′ and G′ for the pseudo-Siegel disks, stays open.",
+        ps_nodes["ps4"],
+    )
+    side_bud(
+        PULLBACK_ROOT,
+        "prog:pullback",
+        "Pullback law (contraction)",
+        "W(ΓX) ≤ d · W(ΓY) for a map of degree d",
+        "Checked in Lean (extWidth_pullback_le, extLength_pullback_le). If a map φ carries "
+        "the curves of a family ΓX to curves of ΓY and its area multiplicity is at most d "
+        "(the area formula for a holomorphic map of degree d), then W(ΓX) ≤ d · W(ΓY). "
+        "This is the mechanism of the Teichmüller contraction: p iterations of a "
+        "quadratic-like map have multiplicity at most 2^p, so the width of a pulled-back "
+        "family grows by at most 2^p; for d = 1 it is conformal invariance. The "
+        "tower-level statement, W(f_{m+1}) ≤ Δ_P W(f_m), needs the families of the "
+        "renormalization levels and stays open.",
+        lemma_nodes["unboundedTeichmuller"],
+    )
     satellite = add_child(
         p44,
         Node(
@@ -841,7 +909,6 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             ),
         ),
     )
-    add_lemma(satellite, "virtualTeichmuller", below=True)
     add_lemma(satellite, "virtualDichotomy", below=True)
     neutral = add_child(
         p44,
@@ -857,8 +924,9 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             ),
         ),
     )
-    add_lemma(neutral, "virtualGrowth", below=True)
+    add_lemma(neutral, "virtualJumpCap", below=True)
     add_lemma(neutral, "virtualLinearDichotomy", below=True)
+    add_lemma(p44, "virtualTeichmuller")
     add_lemma(p44, "virtualJulia")
     add_lemma(p44, "virtualTransfer")
 
@@ -870,10 +938,12 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             title="Published cases",
             sub="§4.1–§4.4 · literature",
             text=(
-                "The classes of boundary parameters that the survey treats by published "
-                "theorems: the parameters that are not infinitely renormalizable (Yoccoz, "
-                "Hubbard), bounded type (Theorem 4.1), the anti-Molecule condition "
-                "(Kahn–Lyubich) and neutral parameters (Theorem 4.2). Each is one lemma "
+                "The classes of boundary parameters and the estimates that the literature "
+                "treats by published theorems: the parameters that are not infinitely "
+                "renormalizable (Yoccoz, Hubbard), the Teichmüller contraction for bounded "
+                "type (§4.3), bounded type (Theorem 4.1), the anti-Molecule condition "
+                "(Kahn–Lyubich), neutral parameters (Theorem 4.2) and the satellite types of "
+                "quadratic growth (Cheraghi–Shishikura, Theorem D). Each is one lemma "
                 "about the geometric dictionary, a field of ProgrammeInput; none is "
                 "formalized."
             ),
@@ -881,7 +951,14 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         )
     )
     attach(dudko, published, -1)
-    for key in ("yoccoz", "boundedType", "antiMolecule", "neutral"):
+    for key in (
+        "yoccoz",
+        "teichmuller",
+        "boundedType",
+        "antiMolecule",
+        "neutral",
+        "quadraticGrowth",
+    ):
         add_lemma(published, key, below=True)
 
     programme_names = side_names[PROGRAMME_ROOT] - {lemma.lean for lemma in LEMMAS}
@@ -900,11 +977,12 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
                     f"the {len(LEMMAS)} lemmas of ProgrammeInput give RootInput, that is the "
                     "candidate system with its realization (Problem 4.3) and the "
                     "virtual-Molecule completion (Problem 4.4), hence MLC. The degeneration "
-                    "recursion of §4.1–§4.3 is proved: uniform growth and a dichotomy with an "
-                    "error at most linear in the period give a priori bounds for every tower "
-                    "(WidthTower.aPrioriBounds_of_uniform), and bounded type needs the "
-                    "Teichmüller contraction and the dichotomy "
-                    "(WidthTower.aPrioriBounds_of_bounded). Seven classes of parameters, "
+                    "recursion of §4.1–§4.3 is proved: a cap on the jumps of the degeneration "
+                    "and a dichotomy with an error at most linear in the period give a priori "
+                    "bounds for every tower (WidthTower.aPrioriBounds_of_jumpCap), and bounded "
+                    "type needs the Teichmüller contraction and the dichotomy "
+                    "(WidthTower.aPrioriBounds_of_bounded). "
+                    f"{len(CLASSES)} classes of parameters, "
                     f"{sum(shares.values()):.2f} of them certified, with {len(open_keys)} "
                     "open lemmas."
                 ),

@@ -11,7 +11,7 @@ LocallyConnectedSpace MLC.mandelbrotSet
 with an axiom frontier limited to Lean's standard foundations. The active proof
 must retain the invariant that every declaration is connected to
 `MLC.mlc_conjecture`. The graph currently exposes two open mathematical
-inputs: Problem 4.3 and Problem 4.4, and the thirteen lemmas into which
+inputs: Problem 4.3 and Problem 4.4, and the sixteen lemmas into which
 `Mlc/ProgrammeRoot.lean` decomposes them (see the programme tree below).
 
 Problem 4.3 requires pseudo-Siegel a priori bounds and a realization for all
@@ -39,6 +39,22 @@ A successful cycle must replace a mathematical
 field or open predicate by a proof, a theorem constructor, or a strict logical
 classification.
 
+Method notes from Alpöge's remark on his Lean proof of the Riemann hypothesis
+(https://alpo.ge/remark.pdf; a narrative, the proof itself is the Lean development):
+
+- **A model situation first.** The remark starts from a setting where the method is known to
+  work and transports its mechanism, with the technical work done by the machine. Here the
+  model situation is the neutral case (Theorem 4.2, the left loop of Figure 14) and the
+  transported mechanism is PS1–PS4 for the right loop (the satellite case, Problem 4.3).
+- **The formal development is the artifact.** The statement of every component is a named
+  Lean declaration, and the open parts are an explicit list: the 16 fields of
+  `ProgrammeInput` and nothing else (`make check` audits the axioms of the root).
+- **A timeline of components.** The programme tree and the Progress table play the role of
+  the timeline: each lemma has a source, a status and an attack plan.
+- **Independent verification.** The remark relies on a full compile, an axiom list, a kernel
+  replay and a second checker. For this repository the analogue is a replay of the grid
+  certificates and of the programme theorems by an independent kernel; it is not done yet.
+
 ## Class hierarchy
 
 The final coverage argument should organize every `c ∈ M` into disjoint or
@@ -50,6 +66,7 @@ prioritized classes:
 | Non-renormalizable and positive-core-entropy parameters | Primitive pull-off and principal/puzzle expansion | Published literature; substantial Lean work remains |
 | Bounded-type primitive and satellite ql parameters | Uniform ql bounds plus parapuzzle shrinkage | Published literature; substantial Lean work remains |
 | Anti-Molecule primitive parameters | Puzzle levels and phase-parameter transfer | Published literature; substantial Lean work remains |
+| Satellite types of quadratic growth (`QG_N`) | Near-parabolic renormalization (Cheraghi–Shishikura, Theorem D) | Published preprint; substantial Lean work remains |
 | Remaining unbounded satellite ql parameters | Pseudo-Siegel a priori bounds | Problem 4.3 |
 | Virtual bounded-period satellite chains | Virtual-Molecule width amplification | Problem 4.4 |
 | Virtual near-neutral chains | Pseudo-Siegel regularization and interpolation | Problem 4.4 |
@@ -150,7 +167,7 @@ for the actual candidate system `A`.
 
 ## The programme tree: Problems 4.3 and 4.4 as lemmas
 
-`Mlc/ProgrammeRoot.lean` decomposes the two open inputs of `RootInput` into thirteen
+`Mlc/ProgrammeRoot.lean` decomposes the two open inputs of `RootInput` into sixteen
 lemmas, the fields of `MLC.Research.ProgrammeInput`, and `MLC.mlc_of_programme` proves in
 Lean that the lemmas give `RootInput` and hence MLC, for every geometric dictionary
 `G : Geometry` (the assignment of a class, a tower and a virtual tower to each parameter).
@@ -160,32 +177,44 @@ each lemma as a node, and `scripts/programme.py` is the catalogue.
 ### The case tree
 
 Dudko's argument reduces local connectivity at a boundary parameter `c` to a priori bounds
-for the quadratic-like renormalization tower of `c`, case by case. The seven classes, equal
+for the quadratic-like renormalization tower of `c`, case by case. The eight classes, equal
 in weight in the profile, and the lemmas that each needs:
 
 | Class (`BoundaryClass`) | Type of the renormalization | Source | Lemmas |
 | --- | --- | --- | --- |
 | `finite` | not infinitely renormalizable | Yoccoz, Hubbard | Y |
 | `neutral` | irrationally indifferent | Theorem 4.2 | N |
-| `boundedType` | bounded relative periods | Theorem 4.1 (Kahn; Dudko–Lyubich) | B, T |
+| `boundedType` | bounded relative periods | Theorem 4.1 (Kahn; Dudko–Lyubich) | TC, B, T |
 | `antiMolecule` | primitive levels far from the Molecule | Kahn–Lyubich, §4.2 | A, T |
-| `unboundedSatellite` | unbounded relative periods at satellite levels | **Problem 4.3** | G, D, T |
+| `quadraticGrowth` | satellite types of quadratic growth, `QG_N` | Cheraghi–Shishikura, Theorem D | QG |
+| `unboundedSatellite` | unbounded relative periods at satellite levels, outside `QG_N` | **Problem 4.3** | TC′, G, D, T |
 | `virtualBounded` | virtual satellite chain of bounded periods, `n ≫ 1` | **Problem 4.4** | VJ, VT1, VD1, VT |
-| `virtualNearNeutral` | virtual near-neutral step | **Problem 4.4** | VJ, VG2, VD2, VT |
+| `virtualNearNeutral` | virtual near-neutral step | **Problem 4.4** | VJ, VT1, VG2, VD2, VT |
 
 ### What is proved
 
 The skeleton of §4.1–§4.3 is checked in `Mlc/Research/Degeneration.lean`, with the
-degeneration `W_k = W(f_k)` of the levels as abstract positive numbers and the geometric
-inputs as hypotheses:
+degeneration `W_k` of the levels as abstract positive numbers and the geometric
+inputs as hypotheses. For the towers of the quadratic-like classes `W_k = W(f_k)` is the
+degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel degeneration
+(see "What is read into the survey").
 
-* `aPrioriBounds_of_uniform`: a growth bound `W_{k+1} ≤ Δ W_k` and the dichotomy (4.6)
-  with an additive error at most linear in the period, `E(p) = A p`, give `sup_k W_k < ∞`
-  for every tower, whatever its relative periods. The second alternative of the dichotomy,
-  a jump by `C_δ`, is excluded by choosing `C_δ > Δ`, and the first alternative, iterated at
-  a distance `n₀` with `c 2^{n₀} ≥ 2`, gives `2 W_{k+n₀} ≤ W_k + 2A/c`, which bounds the
-  sequence.
-* `uniformities_necessary`: both uniformities are needed. (i) By `exists_unbounded_of_superlinear`,
+* `aPrioriBounds_of_jumpCap`: a cap on the jumps of the degeneration (`JumpCap C₀ B₀`: a jump
+  `W_{m+1} ≥ C₀ W_m` lands below the ceiling `B₀`) and the dichotomy (4.6) with an additive
+  error at most linear in the period, `E(p) = A p`, give `sup_k W_k < ∞` for every tower,
+  whatever its relative periods. In the second alternative of the dichotomy, a jump by `C₀`,
+  the deeper degeneration is below the ceiling, so `W_{k+n₀} ≤ B₀/C₀`; the first alternative,
+  iterated at a distance `n₀` with `c 2^{n₀} ≥ 2`, gives `2 W_{k+n₀} ≤ W_k + 2A/c`; both
+  bound the sequence.
+* `aPrioriBounds_iff_jumpCap`: given the linear dichotomy, a priori bounds hold if and only
+  if the jumps are capped, so the cap is the weakest hypothesis of its shape. A uniform
+  growth bound (`aPrioriBounds_of_uniform`, the earlier form of Lemma G) is a stronger one:
+  it caps the jumps (`jumpCap_of_growth`).
+* `aPrioriBounds_of_tails`: the Teichmüller contraction caps the jumps at the levels of
+  relative period at most `P₀` (`jumpCap_of_teichmuller`), so the cap is needed only at the
+  levels of relative period above `P₀`. The open content of Problem 4.3 is the tail, at large
+  relative period, of two estimates that the survey proves for bounded periods.
+* `uniformities_necessary`: both ingredients are needed. (i) By `exists_unbounded_of_superlinear`,
   for every monotone, positive, unbounded `h`, the tower with relative periods `k + 2` and
   widths `h(k+1)` satisfies the Teichmüller contraction (the factor `h(P)/h(1)` for relative
   periods up to `P`), a uniform growth bound when `h` grows by a bounded factor, and the
@@ -197,7 +226,7 @@ inputs as hypotheses:
   Teichmüller contraction allows) satisfies the dichotomy with a linear error, because for
   every threshold `C` the jump alternative covers all levels above `⌈C⌉` and the finitely
   many lower levels need a small `c` only (`exists_unbounded_of_teichmuller_linearDichotomy`):
-  a growth bound that depends on the relative period is not enough, even with a linear
+  its jumps are uncapped (`factTower_not_jumpCap`), and a cap is needed even with a linear
   error. So the inputs of Theorem 4.1 with period-dependent constants leave a gap exactly at
   unbounded relative periods, and Lemmas G and D are the two halves of it, neither redundant.
 * `aPrioriBounds_of_bounded`: for relative periods bounded by `P`, the Teichmüller
@@ -206,6 +235,20 @@ inputs as hypotheses:
 * `aPrioriBounds_of_strongAmplification`: the primitive levels, (4.3) with (4.5).
 * `ReturnBudget.ofBound`: a bound `B` on the degeneration is a return budget with constant
   loss, so that the existing kernel (`ParameterRealization`) consumes it.
+* `Mlc/Research/ExtremalLength.lean`: the extremal length of a family of curves, each given by
+  its length measure, for an area measure; no topology on the underlying space is needed.
+  Proved: comparison (`extLength_mono`); the series law, that is Grötzsch's inequality
+  (`extLength_series`: curves that cross two disjoint regions in succession have extremal
+  length at least the sum); the parallel law (`extWidth_parallel`, and for finitely many
+  families `extWidth_parallel_finset`: widths in pairwise disjoint regions add up, which is
+  the term `p W(f₁)` of (4.1)); the arithmetic of (4.6) (`extWidth_ge_of_series`: if the
+  lift `G′` carries the fraction `1 − δ` of the extremal length of `G`, the subcurves
+  `G ∖ G′` have width at least `δ⁻¹ W(G)`, so `C_δ = δ⁻¹ → ∞`); and the pullback law
+  (`extWidth_pullback_le`: if `φ` carries the curves of `ΓX` to curves of `ΓY` with area
+  multiplicity at most `d`, then `W(ΓX) ≤ d W(ΓY)`, the mechanism of the Teichmüller
+  contraction, and conformal invariance for `d = 1`). This is the conformal
+  foundation of PS4, of the amplification (4.3) and of TC; the dynamical families remain
+  open, and the widths of the towers are not yet extremal widths of such families.
 
 The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
 `mlc_of_programme`) uses only the three kernel axioms.
@@ -213,43 +256,94 @@ The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInpu
 ### What is read into the survey
 
 The survey states the cases, Theorems 4.1 and 4.2, the two problems, and, for Problem 4.4,
-the strategy of partially invariant virtual Julia sets. It does not state the lemmas G, D,
-VT1, VD1, VG2, VD2. They are the reading proposed here, from the place where the proof of
+the strategy of partially invariant virtual Julia sets. It does not state the lemmas TC′, G,
+D, VT1, VD1, VG2, VD2. They are the reading proposed here, from the place where the proof of
 Theorem 4.1 stops: its two uniformities fail for unbounded relative periods, the factor
 `Δ^p` of the Teichmüller contraction (§4.3: "Alternative (ii) is prevented by the Teichmüller
 contraction") and the additive error `O_{p_n}(1)` of (4.3) (§4.2: "the period `p_n` is
 assumed to be big but still bounded"). The pseudo-Siegel disks of Theorem 4.2 are the
 survey's tool for the near-neutral case, and the right loop of Figure 14 is its strategy for
-the satellite case. Whether pseudo-Siegel disks give the uniform growth and the linear
+the satellite case. Whether pseudo-Siegel disks give the jump cap and the linear
 dichotomy is the question that Problem 4.3 asks.
+
+A literature pass (arXiv sources, read in the text) sharpened the reading:
+
+* **The widths of Problem 4.3 are pseudo-Siegel widths.** The quadratic-like degeneration
+  `W(f_k)` is unbounded in some classes of unbounded satellite type: Sørensen's examples,
+  and the class `QG_N` of Cheraghi–Shishikura (arXiv:1509.07843, abstract and §1.4), lack
+  a priori bounds. A bound on `W(f_k)` for every unbounded satellite tower would be false.
+  The survey asks for *pseudo-Siegel* a priori bounds, with the invariant degeneration of the
+  parabolic fjords consumed by the disks (§4, before §4.1). So the tower of the class carries
+  the pseudo-Siegel degeneration, and Lemmas TC′, G and D are about it. In the neutral case
+  the bounds are uniform in the size of the continued-fraction entries (Dudko–Lyubich,
+  arXiv:2210.09280, Theorems 1.1–1.3).
+* **The Teichmüller contraction is published for bounded periods.** Dudko–Lyubich,
+  arXiv:2309.02107, Proposition 2.7, gives `W(Y_n ∖ X_n) = O(Δ_P^n)` with `Δ_P` depending on
+  the bound `P` of the relative periods; no source gives a factor uniform over unbounded
+  periods. Lemma TC is therefore stated for bounded type, and Lemma TC′ is the version for
+  the pseudo-Siegel degeneration (no regularization is needed away from rotation number 0).
+* **The error of the dichotomy is not given as a function of the period.** The thresholds
+  (`M(p)` in Kahn's Theorem 3.1, `C_{δ,P}` in the Wave Lemma estimate, the threshold of the
+  Covering Lemma, `C ≫_{p_n} 1` in §4.1 of arXiv:2309.02107) depend on `p` implicitly. A
+  decomposition with a linear topological error exists (Kahn–Lyubich, arXiv:2601.21905,
+  Theorem 3.9: `W(S) − O(|χ(S)|) ≤ 2 ∑ W(α) ≤ W(S)`, an error `O(p)` for a disk with `p`
+  holes), which is the evidence for the linear error of Lemma D, but it is not the dynamical
+  dichotomy. By `uniformities_necessary`, a superlinear error does not suffice, so the rate
+  in `p` is a genuine part of Problem 4.3.
+* **Partial results.** The class `QG_N` (Cheraghi–Shishikura, Theorem D; for example
+  `p_i = ±1`, `q_{i+1} ≥ q_i²`) has local connectivity of `M` by near-parabolic
+  renormalization, and is the published class `QG`; Levin proves rigidity under a faster
+  growth of the denominators. Dudko–Lyubich (arXiv:2309.02107, Theorems A–B) treat all
+  bounded relative periods. For Problem 4.4, Kahn–Kapiamba–Lyubich (arXiv:2606.27272,
+  "MLC for parabolically bounded primitive renormalization", Theorems A and C) prove a
+  priori bounds and MLC for primitive types that can approach the cusp of `M`, and describe
+  the general virtual renormalization as forthcoming. The sector bounds of Variation I (the
+  source [19] of the survey) are cited as a manuscript and were not found on arXiv; Variation
+  II (arXiv:2509.23031) extends the pseudo-Siegel bounds to `ψ^•`-quadratic-like Siegel
+  maps.
 
 ### Attack plans
 
 Each lemma is attacked separately; its proof lowers the uncertainty of every class that
-needs it, by its share of the class (a class with `m` lemmas gains `1/(7m)` of the classes
+needs it, by its share of the class (a class with `m` lemmas gains `1/(8m)` of the classes
 component per proved lemma). Statements marked *heuristic* are the proposal of this
 roadmap, not claims of the survey.
 
 * **T, VT (transfer).** The Kahn–Lyubich quasi-additivity law turns a priori bounds into
   lower bounds on the moduli of the annuli between nested pieces, and Grötzsch's inequality
   shrinks the pieces when the moduli add up (`ConnectedNest.SeparationEstimate` with a
-  divergent budget is already checked). First step: define the conformal modulus of an
-  annulus and prove Grötzsch's inequality for it (the Yoccoz package uses a Gaussian
-  weighted area as a proxy, which is not a conformal invariant). Second step: the
-  phase–parameter relation of Lyubich (§3.9). Risk: the conformal geometry is not in
-  Mathlib.
-* **Y, B, A, N (published).** Formalize the cited theorems in the form of a parameter
-  realization. Y is Yoccoz's puzzle theorem; B, A and N are long research papers. They are
-  listed so that the size of the formalization gap is visible; they are not near-term
-  targets.
-* **G (uniform growth).** The survey bounds the jump of the degeneration between
-  consecutive levels by a factor that is exponential in the period (§4.3). *Heuristic:* the
-  exponential comes from `q` successive pullbacks that each may lose a constant factor of
-  the modulus; if the `q` iterates can be replaced by one map of a pseudo-Siegel disk into
-  itself, the loss need not be exponential in `q`. The neutral case is Theorem 4.2, and the
-  satellite case is the right loop of Figure 14, the antirenormalization relative to `β`
-  (PS1–PS3). First step (proposal): the almost-invariance with a geometric error (PS2) for
-  a sequence of holomorphic self-maps of a disk, where Mathlib's Schwarz lemma applies.
+  divergent budget is already checked). Grötzsch's inequality is proved for the extremal
+  length of abstract length measures (`ExtremalLength.lean`: series and parallel laws).
+  First step: the modulus of a round annulus in the plane as the extremal length of its
+  circles and its radii (polar coordinates), and its conformal invariance (the Yoccoz
+  package uses a Gaussian weighted area as a proxy, which changes under conformal maps).
+  Second step: the phase–parameter relation of Lyubich (§3.9). Risk: the conformal geometry
+  is not in Mathlib.
+* **Y, TC, B, A, N, QG (published).** Formalize the cited theorems in the form of a parameter
+  realization or of the estimate. Y is Yoccoz's puzzle theorem; TC is the Teichmüller
+  contraction of §4.3; B, A and N are long research papers; QG is the 71-page theorem of
+  Cheraghi–Shishikura. They are listed so that the size of the formalization gap is visible;
+  they are not near-term targets.
+* **TC′ (pseudo-Siegel contraction).** *Heuristic:* at the levels of relative period at most
+  `P` the pseudo-Siegel degeneration is the quadratic-like one (no regularization away from
+  rotation number 0, §4.4), so TC′ is TC applied level by level; the new content is the
+  compatibility of the regularization of a level with the preceding level (PS1). The
+  pullback estimate for extremal widths is proved (`extWidth_pullback_le`: `W(ΓX) ≤ d W(ΓY)`
+  for a map of area multiplicity at most `d`); the next step (proposal) is its application
+  to the families of the renormalization levels, with `d = 2^p`.
+* **G (jump cap).** In alternative (ii) of §4.3 the degeneration of the deeper level jumps by
+  `C_δ`. The Teichmüller contraction excludes the jump while its factor `Δ^p` stays below
+  `C_δ`, which fails for unbounded `p`. The recursion needs only that a jump lands below a
+  ceiling (`aPrioriBounds_iff_jumpCap`). *Heuristic:* alternative (ii) comes from the
+  combinatorially invariant rectangles (Figure 13), and in the neutral case the pseudo-Siegel
+  disks are constructed to consume the invariant degeneration (Theorem 4.2, the left loop of
+  Figure 14), so that the deeper degeneration in a jump is bounded by the uniform
+  quasiconformal geometry of `Ẑ^{-1}` and `Ẑ^0`. The neutral case is the model situation, and
+  the satellite case is the right loop of Figure 14, the antirenormalization relative to `β`
+  (PS1–PS3). First step (proposal): the almost-invariance with a geometric error (PS2) for a
+  sequence of holomorphic self-maps of a disk, where Mathlib's Schwarz lemma applies; then
+  the absorption (PS4) as an inequality between extremal widths, whose arithmetic (4.6) is
+  proved (`extWidth_ge_of_series`).
 * **D (linear dichotomy).** The survey attributes the additive error `O_p(1)` to a variant
   of the thin–thick decomposition (§4.1) and says that pseudo-Siegel disks are built to
   consume most of the invariant degeneration (§4, near-neutral levels; PS4). *Heuristic:*
@@ -257,31 +351,38 @@ roadmap, not claims of the survey.
   `p`, and the rest is controlled by the Wave Lemma. The statement asks for an error at most
   linear in `p` (each of the `p` small Julia sets contributes a bounded error), the sharp
   threshold of the recursion. First step (proposal): state PS4 as an inequality between
-  extremal widths and check that it gives the linear error by the argument of §4.3.
+  extremal widths and check that it gives the linear error by the argument of §4.3. The
+  main term `p W(f₁)` of the amplification is the parallel law (`extWidth_parallel_finset`);
+  what remains is the error, that is the thin–thick decomposition with a linear error in the
+  dynamical setting.
 * **VJ.** The minimal connected hull in `K_c` of the Cantor small Julia set and the critical
   return window exists in Lean (`VirtualJuliaNest.carrier`); the lemma is that it lies inside
   `J_c` and is partially invariant. First step (proposal): the real parameters, where the
   MLC is known (§4.3 with §4.2, [14]), as a test of the statement.
 * **VT1, VD1.** *Heuristic:* the virtual levels of a bounded chain behave like the satellite
   levels of Theorem 4.1, with the critical orbit contained in the hull only up to a finite
-  number of returns, so that the Teichmüller contraction is applied to a partially
-  invariant system. First step (proposal): the first return map to the virtual hull and
-  its degree.
+  number of returns, so that the Teichmüller contraction (VT1, shared with the near-neutral
+  subcase) is applied to a partially invariant system. First step (proposal): the first
+  return map to the virtual hull and its degree.
 * **VG2, VD2.** The near-neutral step is a big relative period in the virtual chain; the
-  uniform bounds are those of G and D for the virtual hull, after the pseudo-Siegel
-  regularization (Figure 14, left loop). They wait for G and D.
+  cap at large relative period and the linear error are those of G and D for the virtual hull,
+  after the pseudo-Siegel regularization (Figure 14, left loop). They wait for G and D.
 
-None of the lemmas that depend on conformal geometry can be started in Lean before the
-modulus and Grötzsch's inequality are formalized, which is the first real step of every
-route.
+The abstract extremal length and its laws exist (`ExtremalLength.lean`). What the lemmas
+that depend on conformal geometry still need is the link between them and the dynamics: the
+modulus of an annulus and its conformal invariance, then the families of curves of a
+quadratic-like map. That is the first real step of every route.
 
 ### Caveats
 
 * The dictionary `Geometry` is a parameter of the statements: `cls`, `tower` and `vtower`
   are not defined from the dynamics of `f_c`. The theorem `mlc_of_programme` holds for every
   dictionary, so a faithful dictionary is what makes the lemmas statements about `M`.
-* The widths are abstract positive numbers; nothing in the repository defines an
-  extremal width or a conformal modulus.
+* The widths of the towers are abstract positive numbers. `ExtremalLength.lean` defines an
+  extremal width for families of length measures, and the towers are not yet built from it.
+* The widths of the class of Problem 4.3 are pseudo-Siegel widths, a reading proposed here:
+  the survey does not define them, and the lemmas TC′, G and D are statements about
+  them.
 * The classes are combinatorial, as the method requires: no class is defined by a
   local-connectivity conclusion.
 

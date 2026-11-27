@@ -14,11 +14,13 @@ they follow from finer lemmas, one structure field each:
 | --- | --- | --- |
 | `transfer` | phase–parameter transfer | Kahn–Lyubich, Lyubich |
 | `yoccoz` | parameters that are not infinitely renormalizable | Yoccoz, Hubbard |
-| `boundedType` | Theorem 4.1 inputs | Dudko–Lyubich; Kahn |
+| `teichmuller` | Teichmüller contraction for bounded type, §4.3 | Dudko–Lyubich, arXiv:2309.02107 |
+| `boundedType` | dichotomy (4.6) of Theorem 4.1 | Dudko–Lyubich; Kahn |
 | `antiMolecule` | amplification (4.3), (4.5) | Kahn–Lyubich |
 | `neutral` | Theorem 4.2 | Dudko–Lyubich |
-| `unboundedGrowth`, `unboundedDichotomy` | Problem 4.3 | proposed reading of §4.4 |
-| `virtualJulia`, `virtualTeichmuller`, `virtualDichotomy`, `virtualGrowth`,
+| `quadraticGrowth` | Theorem D, the class `QG_N` | Cheraghi–Shishikura, arXiv:1509.07843 |
+| `unboundedTeichmuller`, `unboundedJumpCap`, `unboundedDichotomy` | Problem 4.3 | proposed reading of §4.4 |
+| `virtualJulia`, `virtualTeichmuller`, `virtualDichotomy`, `virtualJumpCap`,
   `virtualLinearDichotomy`, `virtualTransfer` | Problem 4.4 | proposed reading of §4.5 |
 
 The theorem `mlc_of_programme` is proved in Lean from these fields for every geometric
@@ -36,24 +38,32 @@ structure Research.ProgrammeInput (G : Geometry) : Prop where
   transfer : G.Transfer
   /-- published: the parameters that are not infinitely renormalizable -/
   yoccoz : G.Yoccoz
-  /-- published: Theorem 4.1, bounded type -/
+  /-- published: the Teichmüller contraction of the levels of bounded type, §4.3 -/
+  teichmuller : G.TeichmullerContraction
+  /-- published: Theorem 4.1, the dichotomy for bounded type -/
   boundedType : G.BoundedTypeInputs
   /-- published: the anti-Molecule condition, §4.1–§4.2 -/
   antiMolecule : G.AntiMoleculeInputs
   /-- published: Theorem 4.2, neutral parameters -/
   neutral : G.Neutral
-  /-- Problem 4.3: uniform growth across satellite levels of large relative period -/
-  unboundedGrowth : G.UnboundedGrowth
+  /-- published: Theorem D of Cheraghi–Shishikura, the satellite types of quadratic growth -/
+  quadraticGrowth : G.QuadraticGrowth
+  /-- Problem 4.3: the Teichmüller contraction for the pseudo-Siegel degeneration -/
+  unboundedTeichmuller : G.UnboundedTeichmuller
+  /-- Problem 4.3: the jumps of the degeneration at satellite levels of large relative period
+  are capped -/
+  unboundedJumpCap : G.UnboundedJumpCap
   /-- Problem 4.3: the dichotomy with an error at most linear in the period -/
   unboundedDichotomy : G.UnboundedDichotomy
   /-- Problem 4.4: partially invariant virtual Julia sets -/
   virtualJulia : G.VirtualJulia
-  /-- Problem 4.4, virtual bounded type: Teichmüller contraction -/
+  /-- Problem 4.4: Teichmüller contraction for the virtual levels -/
   virtualTeichmuller : G.VirtualTeichmuller
   /-- Problem 4.4, virtual bounded type: the dichotomy -/
   virtualDichotomy : G.VirtualDichotomy
-  /-- Problem 4.4, virtual near-neutral: uniform growth -/
-  virtualGrowth : G.VirtualGrowth
+  /-- Problem 4.4, virtual near-neutral: the jumps at levels of large relative period are
+  capped -/
+  virtualJumpCap : G.VirtualJumpCap
   /-- Problem 4.4, virtual near-neutral: the dichotomy with an error linear in the period -/
   virtualLinearDichotomy : G.VirtualLinearDichotomy
   /-- Problem 4.4: the virtual phase–parameter transfer -/
@@ -76,17 +86,19 @@ theorem completion (h : ProgrammeInput G) : G.system.VirtualMoleculeCompletion :
         exact Or.inl (G.eligible_of_realization hr hl)
       · obtain ⟨b, hl, hr⟩ := h.neutral c hc hi hcls
         exact Or.inl (G.eligible_of_realization hr hl)
-      · obtain ⟨B, hB⟩ := G.hasBound_of_bounded h.boundedType hc hi hcls
+      · obtain ⟨B, hB⟩ := G.hasBound_of_bounded h.teichmuller h.boundedType hc hi hcls
         exact Or.inl (G.eligible_of_hasBound hB)
       · obtain ⟨B, hB⟩ := G.hasBound_of_antiMolecule h.antiMolecule hc hi hcls
         exact Or.inl (G.eligible_of_hasBound hB)
-      · obtain ⟨B, hB⟩ := G.hasBound_of_unbounded h.unboundedGrowth h.unboundedDichotomy
-          hc hi hcls
+      · obtain ⟨b, hl, hr⟩ := h.quadraticGrowth c hc hi hcls
+        exact Or.inl (G.eligible_of_realization hr hl)
+      · obtain ⟨B, hB⟩ := G.hasBound_of_unbounded h.unboundedTeichmuller h.unboundedJumpCap
+          h.unboundedDichotomy hc hi hcls
         exact Or.inl (G.eligible_of_hasBound hB)
       · exact Or.inr (G.virtualControl h.virtualJulia h.virtualTeichmuller h.virtualDichotomy
-          h.virtualGrowth h.virtualLinearDichotomy h.virtualTransfer hc hi (Or.inl hcls))
+          h.virtualJumpCap h.virtualLinearDichotomy h.virtualTransfer hc hi (Or.inl hcls))
       · exact Or.inr (G.virtualControl h.virtualJulia h.virtualTeichmuller h.virtualDichotomy
-          h.virtualGrowth h.virtualLinearDichotomy h.virtualTransfer hc hi (Or.inr hcls)) }
+          h.virtualJumpCap h.virtualLinearDichotomy h.virtualTransfer hc hi (Or.inr hcls)) }
 
 /-- The lemmas of the programme give the first open input of the root: a candidate system
 with its realization. -/

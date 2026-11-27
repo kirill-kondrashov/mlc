@@ -38,11 +38,14 @@ LocallyConnectedSpace MLC.mandelbrotSet
 
 `MLC.RootInput` has exactly those two fields. Both are decomposed further in
 `Mlc/ProgrammeRoot.lean`: the structure `MLC.Research.ProgrammeInput` has one
-field per lemma (a transfer lemma, four published cases, two lemmas of
+field per lemma (a transfer lemma, six published cases, three lemmas of
 Problem 4.3 and six of Problem 4.4), and `MLC.mlc_of_programme` proves in Lean,
 for every geometric dictionary, that the lemmas give `RootInput`. The degeneration
 recursion of §4.1–§4.3 behind it is checked in `Mlc/Research/Degeneration.lean`
-(`WidthTower.aPrioriBounds_of_uniform`). The lemmas are hypotheses, each with its
+(`WidthTower.aPrioriBounds_of_jumpCap`, with its converse `aPrioriBounds_iff_jumpCap`),
+and the conformal estimate (4.6) in `Mlc/Research/ExtremalLength.lean`
+(`extWidth_ge_of_series`).
+The lemmas are hypotheses, each with its
 source and an attack plan in the [roadmap](ROADMAP.md); the graph shows them as open
 lemmas and published cases. Problem 4.4 is represented by
 the Kahn--Dudko--Lyubich virtual-Julia programme: Cantor small Julia sets,
@@ -84,6 +87,7 @@ grid certificates, and a table by level of the spine.
 | Minimal connected hulls | [ConnectedHull.lean](Mlc/Research/ConnectedHull.lean) |
 | Virtual Julia sets and a priori transfer | [VirtualMolecule.lean](Mlc/Research/VirtualMolecule.lean) |
 | Degeneration recursion: a priori bounds from uniform control | [Degeneration.lean](Mlc/Research/Degeneration.lean) |
+| Extremal length: series (Grötzsch), parallel and pullback laws, estimate (4.6) | [ExtremalLength.lean](Mlc/Research/ExtremalLength.lean) |
 | Case tree of the reduction and the geometric dictionary | [CaseTree.lean](Mlc/Research/CaseTree.lean) |
 | Published cases as lemmas | [Published.lean](Mlc/Research/Published.lean) |
 | Problem 4.3 and Problem 4.4 as lemmas | [Problem43.lean](Mlc/Research/Problem43.lean), [Problem44.lean](Mlc/Research/Problem44.lean) |

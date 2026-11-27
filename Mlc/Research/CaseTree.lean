@@ -17,9 +17,9 @@ module fixes the cases and the interface through which the geometric statements 
   on the degeneration gives the canonical return budget `ReturnBudget.ofBound B`, and the
   lemma `Geometry.Transfer` (the phase–parameter transfer of Kahn–Lyubich and Lyubich) turns it into a
   parameter realization.
-* The published cases are one lemma each (`yoccoz`, `boundedType`, `antiMolecule`,
-  `neutral` in `Mlc/Research/ProgrammeInput.lean`); Problems 4.3 and 4.4 are decomposed in
-  `Mlc/Research/Problem43.lean` and `Mlc/Research/Problem44.lean`.
+* The published cases are one lemma each (`yoccoz`, `teichmuller`, `boundedType`,
+  `antiMolecule`, `neutral`, `quadraticGrowth` in `Mlc/Research/Published.lean`); Problems 4.3
+  and 4.4 are decomposed in `Mlc/Research/Problem43.lean` and `Mlc/Research/Problem44.lean`.
 
 The classes are not defined by the conclusion: each is a combinatorial type of the
 renormalization of `c`.
@@ -46,8 +46,13 @@ inductive BoundaryClass
   /-- infinitely renormalizable, primitive levels far from the Molecule with large relative
   periods (§4.2: Kahn–Lyubich, the anti-Molecule condition). -/
   | antiMolecule
-  /-- infinitely renormalizable with unbounded relative periods at satellite levels:
-  Problem 4.3. -/
+  /-- infinitely satellite renormalizable with a type sequence of quadratic growth, the class
+  `QG_N` of Theorem D of Cheraghi–Shishikura: the relative periods are unbounded, and the
+  near-parabolic renormalization gives the local connectivity without quadratic-like a priori
+  bounds. -/
+  | quadraticGrowth
+  /-- infinitely renormalizable with unbounded relative periods at satellite levels, outside
+  the class of quadratic growth: Problem 4.3. -/
   | unboundedSatellite
   /-- primitive level close to the Molecule, with a long virtual satellite chain of bounded
   relative periods: the first subcase of Problem 4.4 (§4.5). -/
@@ -60,7 +65,16 @@ inductive BoundaryClass
 /-- The geometric dictionary of the programme. It assigns to a parameter its class, the
 tower of its renormalizations with the degeneration of the levels, and the tower of its
 virtual levels (the satellite chain of §4.5). Faithfulness of the dictionary to `f_c` is not
-a field: it is the content of the lemmas that take the dictionary as a parameter. -/
+a field: it is the content of the lemmas that take the dictionary as a parameter.
+
+The width of a level is the quadratic-like degeneration `W(f_k)` of (4.1) in the classes
+that the quadratic-like theory treats. In the class `unboundedSatellite` it is the
+*pseudo-Siegel* degeneration: the degeneration of the level once the pseudo-Siegel disks
+of its near-neutral steps have consumed the invariant degeneration of the parabolic fjords
+(§4, before §4.1). The quadratic-like degeneration is unbounded in some classes of unbounded
+satellite type (Sørensen; Cheraghi–Shishikura, §1.4: they lack a priori bounds), so a bound
+on it is not what Problem 4.3 asks for; Problem 4.3 asks for the bounds of the pseudo-Siegel
+degeneration. -/
 structure Geometry where
   cls : ℂ → BoundaryClass
   tower : ℂ → Option WidthTower

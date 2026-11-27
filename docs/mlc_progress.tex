@@ -76,20 +76,31 @@ statements:
 \end{enumerate}
 
 Both are decomposed into lemmas in \texttt{Mlc/ProgrammeRoot.lean}: the
-structure \texttt{ProgrammeInput} has one field per lemma, thirteen in all (a
-transfer lemma, four published cases, two lemmas of Problem~4.3 and six of
+structure \texttt{ProgrammeInput} has one field per lemma, sixteen in all (a
+transfer lemma, six published cases, three lemmas of Problem~4.3 and six of
 Problem~4.4), and \texttt{mlc\_of\_programme} proves in Lean that they give the
-root input. The skeleton of the argument of \S4.1--\S4.3 is checked: a uniform
-growth bound for the degeneration of the renormalization levels and a dichotomy
-with an error at most linear in the period give a priori bounds for every tower
-(\texttt{aPrioriBounds\_of\_uniform}). Both uniformities are necessary
+root input. The skeleton of the argument of \S4.1--\S4.3 is checked: a cap on the
+jumps of the degeneration of the renormalization levels (a jump by a fixed factor
+lands below a fixed ceiling) and a dichotomy with an error at most linear in the
+period give a priori bounds for every tower
+(\texttt{aPrioriBounds\_of\_jumpCap}). Given the dichotomy, the cap is also
+necessary for the a priori bounds (\texttt{aPrioriBounds\_iff\_jumpCap}), so it is
+the weakest hypothesis of its shape, and the Teichm\"uller contraction caps the
+jumps at the levels of small relative period, so that the open content is the
+tail at large relative period. Both ingredients are necessary
 (\texttt{uniformities\_necessary}): for every unbounded \(h\), a tower with
 unbounded relative periods satisfies the Teichm\"uller contraction, a uniform
 growth bound and the dichotomy with the error \(p\,h(p)\) and has unbounded
 degeneration, so a linear error is the threshold; and the tower of widths
 \((k+1)!\) satisfies the Teichm\"uller contraction and the dichotomy with a
-linear error but has unbounded degeneration, so the growth bound must be
-uniform in the relative period. The lemmas
+linear error but has uncapped jumps and unbounded degeneration. The widths of the
+class of Problem~4.3 are the pseudo-Siegel degenerations: the quadratic-like
+degeneration is unbounded in some classes of unbounded satellite type
+(S{\o}rensen; Cheraghi--Shishikura), whose class of quadratic growth is a published
+case. The conformal estimates behind the Gr\"otzsch step (4.6) and the Teichm\"uller
+contraction are proved in \texttt{Mlc/Research/ExtremalLength.lean}: the series law,
+the parallel law, \(W(G\setminus G')\ge\delta^{-1}W(G)\) and the pullback law
+\(W(\Gamma_X)\le d\,W(\Gamma_Y)\). The lemmas
 are hypotheses; the roadmap lists their sources and an attack plan for each.
 
 \section{Progress dashboard}
@@ -217,7 +228,7 @@ where:
 
 Each component is nonincreasing when a class certificate is retained. For a
 catalogued class \(C_i\), completion strictly decreases the class component
-by at least its assigned weight. The catalogue has seven classes of equal
+by at least its assigned weight. The catalogue has eight classes of equal
 weight, each with the lemmas of its chain; the proof of one lemma lowers the
 class component by the lemma's share of every class that needs it. The profile
 is a dashboard invariant; its components record how much of the parameter space

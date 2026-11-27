@@ -35,7 +35,7 @@ import subprocess
 import sys
 import time
 
-from programme import classes_share, open_lemmas
+from programme import CLASSES, classes_share, open_lemmas
 
 # The root theorem is declared as `theorem mlc_conjecture` inside `namespace MLC`,
 # so its qualified name never occurs in the concatenated sources.
@@ -45,6 +45,8 @@ ROOT_THEOREM = re.compile(r"^theorem\s+mlc_conjecture\b", re.MULTILINE)
 # `Mlc/Research/Degeneration.lean` and `Mlc/ProgrammeRoot.lean`.
 SKELETON_THEOREM = re.compile(r"^\s*theorem\s+aPrioriBounds_of_uniform\b", re.MULTILINE)
 SHARPNESS_THEOREM = re.compile(r"^\s*theorem\s+uniformities_necessary\b", re.MULTILINE)
+JUMPCAP_THEOREM = re.compile(r"^\s*theorem\s+aPrioriBounds_iff_jumpCap\b", re.MULTILINE)
+GROTZSCH_THEOREM = re.compile(r"^\s*theorem\s+extWidth_ge_of_series\b", re.MULTILINE)
 PROGRAMME_THEOREM = re.compile(r"^\s*theorem\s+mlc_of_programme\b", re.MULTILINE)
 
 PROGRESS_MILESTONES = (
@@ -60,6 +62,8 @@ PROGRESS_MILESTONES = (
     ("Kernel-checked grid bound", "unresolved_volume_le_grid", 2),
     ("A priori bounds from uniform control", SKELETON_THEOREM, 1),
     ("Both uniformities are necessary", SHARPNESS_THEOREM, 1),
+    ("A priori bounds are equivalent to a jump cap", JUMPCAP_THEOREM, 1),
+    ("Extremal length: series and parallel laws", GROTZSCH_THEOREM, 1),
     ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )
@@ -1513,7 +1517,7 @@ def profile_html(rows: list[dict[str, object]]) -> str:
         '<section class="p-card"><h2>Coverage-Uncertainty Profile · certified '
         f'shares</h2><div class="profile-grid">{cells}</div>'
         '<p class="p-foot">Each share is 100% minus the corresponding component. '
-        "The classes of the programme are seven, with equal weights; each needs the "
+        f"The programme has {len(CLASSES)} classes of equal weight; each needs the "
         f"lemmas of its chain, and {open_lemmas_now} lemmas of the programme are still "
         "open. The proof of one lemma lowers the uncertainty of every class that needs "
         "it by the lemma's share of the class. The complexity and budget components stay "

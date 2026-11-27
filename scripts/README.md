@@ -21,7 +21,7 @@ lemmas and declarations by level of the spine, and the **Progress** tab (the
 controls of the figure disappear there).
 
 `programme.py` is the catalogue of the programme for Problems 4.3 and 4.4: the
-seven classes of boundary parameters, the thirteen lemmas (the fields of
+eight classes of boundary parameters, the sixteen lemmas (the fields of
 `MLC.Research.ProgrammeInput` in `Mlc/ProgrammeRoot.lean`), their sources, and
 the status of each, open while it is a field and proved once its theorem exists.
 The generator fails if the catalogue and the Lean structure disagree; the graph

@@ -20,6 +20,9 @@ from dataclasses import dataclass
 
 PROGRAMME_ROOT = "MLC.mlc_of_programme"
 SHARPNESS_ROOT = "MLC.Research.WidthTower.uniformities_necessary"
+GROTZSCH_ROOT = "MLC.Research.extWidth_ge_of_series"
+PARALLEL_ROOT = "MLC.Research.extWidth_parallel_finset"
+PULLBACK_ROOT = "MLC.Research.extWidth_pullback_le"
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 
@@ -60,16 +63,29 @@ LEMMAS: tuple[Lemma, ...] = (
         "locally connected. Published; not formalized.",
     ),
     Lemma(
+        "teichmuller",
+        f"{GEOMETRY}.TeichmullerContraction",
+        "Lemma TC · Teichmüller contraction",
+        "§4.3 · bounded type",
+        "published",
+        "§4.3, 'Alternative (ii) is prevented by the Teichmüller contraction'; "
+        "Dudko–Lyubich, arXiv:2309.02107, Proposition 2.7 (W(Y_n ∖ X_n) = O(Δ_P^n))",
+        "For the tower of a parameter of bounded type, the degeneration grows from a level to "
+        "the next by at most a factor Δ_P that depends on the bound P of the relative period "
+        "of the level. It excludes a jump by C_δ. The sources state it for towers of "
+        "relative periods bounded by P. Published; not formalized.",
+    ),
+    Lemma(
         "boundedType",
         f"{GEOMETRY}.BoundedTypeInputs",
         "Lemma B · bounded type",
-        "Theorem 4.1 inputs",
+        "Theorem 4.1 · dichotomy (4.6)",
         "published",
         "Theorem 4.1 (Dudko–Lyubich, MLC at Feigenbaum points; Kahn for the primitive "
         "levels); (4.1), (4.6)",
-        "For bounded relative periods the Teichmüller contraction and the dichotomy (4.6) "
-        "hold; the a priori bounds follow (WidthTower.aPrioriBounds_of_bounded). "
-        "Published; not formalized.",
+        "At a parameter of bounded type the dichotomy (4.6) holds with an error that depends "
+        "on the period; with the Teichmüller contraction the a priori bounds follow "
+        "(WidthTower.aPrioriBounds_of_bounded). Published; not formalized.",
     ),
     Lemma(
         "antiMolecule",
@@ -93,16 +109,50 @@ LEMMAS: tuple[Lemma, ...] = (
         "priori bounds; not formalized.",
     ),
     Lemma(
-        "unboundedGrowth",
-        f"{GEOMETRY}.UnboundedGrowth",
-        "Lemma G · uniform growth",
+        "quadraticGrowth",
+        f"{GEOMETRY}.QuadraticGrowth",
+        "Lemma QG · quadratic growth",
+        "Cheraghi–Shishikura · Theorem D",
+        "published",
+        "Cheraghi–Shishikura, Satellite renormalization of quadratic polynomials, "
+        "arXiv:1509.07843, Theorem D (a preprint of 2015); Levin proves rigidity under a "
+        "faster growth of the denominators",
+        "At the parameters of satellite type whose type sequence is in the class QG_N "
+        "(b₁,₁ ≥ N, b_{i,j+1} ≥ b_{i,j}², b_{i+1,1} ≥ q_i²; for example p_i = ±1, q_1 ≥ N, "
+        "q_{i+1} ≥ q_i²) the pieces M(⟨p_i/q_i⟩_{i ≤ n}) have diameter at most Cλⁿ and M is "
+        "locally connected. The proof uses near-parabolic renormalization; these parameters "
+        "lack quadratic-like a priori bounds. Published; not formalized.",
+    ),
+    Lemma(
+        "unboundedTeichmuller",
+        f"{GEOMETRY}.UnboundedTeichmuller",
+        "Lemma TC′ · pseudo-Siegel contraction",
         "Problem 4.3",
         "problem43",
-        "§4.3 (Teichmüller contraction) and §4.4 (pseudo-Siegel disks); proposed reading",
-        "At a parameter of unbounded satellite type the degeneration grows by at most a "
-        "fixed factor from a level to the next, however large the relative period of the "
-        "satellite level is. The proof of Theorem 4.1 uses a factor that grows "
-        "exponentially with the period.",
+        "§4.3 with §4.4; proposed reading",
+        "At a parameter of unbounded satellite type outside the quadratic growth class, the "
+        "pseudo-Siegel degeneration of the levels grows from a level to the next by at most "
+        "a factor Δ_P that depends on the bound P of the relative period of the level: "
+        "Lemma TC for the pseudo-Siegel degeneration. At the levels whose rotation number "
+        "is away from 0 there is no regularization, so the published contraction applies "
+        "there.",
+    ),
+    Lemma(
+        "unboundedJumpCap",
+        f"{GEOMETRY}.UnboundedJumpCap",
+        "Lemma G · jump cap",
+        "Problem 4.3",
+        "problem43",
+        "§4.3 (alternative (ii)) and §4.4 (pseudo-Siegel disks consume the invariant "
+        "degeneration); proposed reading",
+        "At a parameter of unbounded satellite type, a jump of the pseudo-Siegel "
+        "degeneration by a fixed factor C₀ at a level of large relative period lands below "
+        "a fixed ceiling B₀: the invariant degeneration that alternative (ii) amplifies is "
+        "absorbed by the pseudo-Siegel disks. The quadratic-like degeneration itself is "
+        "unbounded in some of these classes (Sørensen; Cheraghi–Shishikura). With a linear "
+        "dichotomy the cap is equivalent to the a priori bounds "
+        "(WidthTower.aPrioriBounds_iff_jumpCap), and it is weaker than a uniform growth "
+        "bound.",
     ),
     Lemma(
         "unboundedDichotomy",
@@ -110,10 +160,13 @@ LEMMAS: tuple[Lemma, ...] = (
         "Lemma D · linear dichotomy",
         "Problem 4.3",
         "problem43",
-        "§4.2–§4.3, the additive error O_p(1); proposed reading",
-        "At a parameter of unbounded satellite type the dichotomy (4.6) holds with an "
-        "additive error at most linear in the period: the amplification holds, or "
-        "the degeneration jumps by C_δ.",
+        "§4.2–§4.3, the additive error O_p(1); Kahn–Lyubich, arXiv:2601.21905, Theorem 3.9 "
+        "(linear topological error); proposed reading",
+        "At a parameter of unbounded satellite type the dichotomy (4.6) holds for the "
+        "pseudo-Siegel degeneration with an additive error at most linear in the period: "
+        "the amplification holds, or the degeneration jumps by C_δ. The published constants "
+        "depend on the period implicitly, without a rate; a decomposition with a linear "
+        "topological error is known, but it is not the dynamical dichotomy.",
     ),
     Lemma(
         "virtualJulia",
@@ -130,11 +183,10 @@ LEMMAS: tuple[Lemma, ...] = (
         "virtualTeichmuller",
         f"{GEOMETRY}.VirtualTeichmuller",
         "Lemma VT1 · virtual Teichmüller",
-        "virtual bounded type",
+        "both virtual subcases",
         "problem44",
         "§4.5 with §4.3; proposed reading",
-        "The Teichmüller contraction holds for the virtual levels of bounded relative "
-        "periods.",
+        "The Teichmüller contraction holds for the virtual levels.",
     ),
     Lemma(
         "virtualDichotomy",
@@ -146,14 +198,15 @@ LEMMAS: tuple[Lemma, ...] = (
         "The dichotomy (4.6) holds for the virtual levels of bounded relative periods.",
     ),
     Lemma(
-        "virtualGrowth",
-        f"{GEOMETRY}.VirtualGrowth",
-        "Lemma VG2 · virtual growth",
+        "virtualJumpCap",
+        f"{GEOMETRY}.VirtualJumpCap",
+        "Lemma VG2 · virtual jump cap",
         "virtual near-neutral",
         "problem44",
         "§4.5 with §4.4; proposed reading",
-        "The degeneration of the virtual levels of the near-neutral subcase grows by at "
-        "most a fixed factor from a level to the next.",
+        "At the virtual levels of the near-neutral subcase, a jump of the degeneration by a "
+        "fixed factor at a level of large relative period lands below a fixed ceiling: the "
+        "virtual version of Lemma G.",
     ),
     Lemma(
         "virtualLinearDichotomy",
@@ -182,14 +235,16 @@ LEMMAS: tuple[Lemma, ...] = (
 CLASSES: tuple[tuple[str, str, tuple[str, ...]], ...] = (
     ("finite", "Not infinitely renormalizable", ("yoccoz",)),
     ("neutral", "Neutral", ("neutral",)),
-    ("boundedType", "Bounded type", ("boundedType", "transfer")),
+    ("boundedType", "Bounded type", ("teichmuller", "boundedType", "transfer")),
     ("antiMolecule", "Anti-Molecule", ("antiMolecule", "transfer")),
+    ("quadraticGrowth", "Quadratic growth (Cheraghi–Shishikura)", ("quadraticGrowth",)),
     ("unboundedSatellite", "Unbounded satellite (Problem 4.3)",
-     ("unboundedGrowth", "unboundedDichotomy", "transfer")),
+     ("unboundedTeichmuller", "unboundedJumpCap", "unboundedDichotomy", "transfer")),
     ("virtualBounded", "Virtual bounded type (Problem 4.4)",
      ("virtualJulia", "virtualTeichmuller", "virtualDichotomy", "virtualTransfer")),
     ("virtualNearNeutral", "Virtual near-neutral (Problem 4.4)",
-     ("virtualJulia", "virtualGrowth", "virtualLinearDichotomy", "virtualTransfer")),
+     ("virtualJulia", "virtualTeichmuller", "virtualJumpCap", "virtualLinearDichotomy",
+      "virtualTransfer")),
 )
 
 LEMMA = {lemma.key: lemma for lemma in LEMMAS}
@@ -202,8 +257,8 @@ PSEUDO_SIEGEL = (
         "satellite levels of large period",
         "Nested pseudo-Siegel disks Z^[m], almost invariant up to q^[m+1] iterations, with "
         "Z^(-1), Z^0 uniformly quasiconformal, exist at the satellite levels of large "
-        "relative period (the satellite analogue of (4.7); Theorem 4.2 is the neutral case). "
-        "Proposed; not formalized.",
+        "relative period (the satellite analogue of (4.7); Theorem 4.2 is the neutral case, "
+        "the model situation). Proposed; not formalized.",
     ),
     (
         "ps2",
@@ -224,9 +279,12 @@ PSEUDO_SIEGEL = (
         "ps4",
         "PS4 · invariant degeneration",
         "W(G \\ G′) ≥ C_δ W(G)",
-        "The degeneration along combinatorially invariant rectangles is absorbed by the "
-        "pseudo-Siegel disks (Figure 13 and (4.6)); together with the Wave Lemma it gives "
-        "Lemmas G and D. Proposed; not formalized.",
+        "The degeneration along combinatorially invariant rectangles, which alternative (ii) "
+        "amplifies at deeper levels (Figure 13 and (4.6)), is absorbed by the pseudo-Siegel "
+        "disks: in a jump the deeper degeneration is bounded by their uniform "
+        "quasiconformal geometry. This gives Lemma G, and with the Wave Lemma Lemma D. "
+        "The estimate W(G \\ G′) ≥ δ⁻¹ W(G) itself, from the series law, is proved in Lean "
+        "(extWidth_ge_of_series). The rest is proposed; not formalized.",
     ),
 )
 
