@@ -1,0 +1,40 @@
+name: Grid tiles
+description: >-
+  Put the build outputs of the grid tiles (`Mlc/GridTiles`) into `.lake/build` from the Actions
+  cache or, when the cache has no entry, from the seed archive in the `refs/ci-cache/` git ref.
+  Lake then confirms that every tile is up to date, so that no job runs the kernel on them.
+
+inputs:
+  key:
+    description: Key of the grid (`python3 scripts/ci_grid.py plan`).
+    required: true
+
+outputs:
+  cache-hit:
+    description: Whether the Actions cache had the archive.
+    value: ${{ steps.cache.outputs.cache-hit }}
+
+runs:
+  using: composite
+  steps:
+    - name: Restore the tile cache
+      id: cache
+      uses: actions/cache/restore@v4
+      with:
+        path: .ci/tiles-all.tar.zst
+        key: tiles-${{ inputs.key }}
+
+    - name: Download the seed archive
+      if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+      shell: bash
+      run: python3 scripts/ci_grid.py seed-fetch --out .ci/tiles-all.tar.zst
+
+    - name: Unpack the tiles
+      shell: bash
+      run: python3 scripts/ci_grid.py unpack .ci/tiles-all.tar.zst
+
+    - name: Check that every tile is up to date
+      shell: bash
+      run: |
+        export PATH="$HOME/.elan/bin:$PATH"
+        python3 scripts/ci_grid.py check

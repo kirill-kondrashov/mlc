@@ -21,15 +21,20 @@ priori bounds, `sup_k W_k < ∞`, from two inputs:
 Both inputs are named hypotheses here (`Dichotomy`, `Teichmuller`); the theorems below prove
 that they imply the a priori bounds. For relative periods that are not bounded, the factor
 `Δ` and the additive error `O_p(1)` are not uniform: this is exactly where the survey's
-proof stops. Problem 4.3 asks for the uniform versions: a growth bound (`GrowthBound`) and
-an additive error that grows at most linearly with the period (`LinearDichotomy`: each of
-the `p` small Julia sets contributes a bounded error), which the pseudo-Siegel disks are meant
-to supply. Linear growth is the threshold of the recursion, and both uniformities are
-necessary: `aPrioriBounds_of_uniform` proves the bounds from them, `exists_unbounded_of_superlinear`
-shows that an error `p · h(p)` with `h` unbounded does not suffice, even with a uniform growth
-bound, and `exists_unbounded_of_teichmuller_linearDichotomy` shows that a growth bound that
-depends on the relative period does not suffice, even with a linear error
-(`uniformities_necessary`).
+proof stops. Alternative (ii) is excluded by the Teichmüller contraction only while its factor
+stays below `C_δ`. What the argument needs for unbounded periods is that a jump does not
+produce a large degeneration (`JumpCap`: a jump by `C₀` lands below a ceiling `B₀`) and that
+the additive error is at most linear in the period (`LinearDichotomy`: each of the `p` small
+Julia sets contributes a bounded error). The pseudo-Siegel disks are meant to supply both:
+they consume the invariant degeneration that alternative (ii) amplifies, which caps the
+jumps. A uniform growth bound (`GrowthBound`) is a stronger way to cap them, and a priori
+bounds imply the cap (`aPrioriBounds_iff_jumpCap`), so the cap is the weakest hypothesis of
+its kind. `aPrioriBounds_of_jumpCap` proves the bounds from a cap and a linear dichotomy;
+`aPrioriBounds_of_tails` localizes the cap to the levels of large relative period, where the
+Teichmüller contraction no longer helps. Both ingredients are necessary:
+`exists_unbounded_of_superlinear` shows that an error `p · h(p)` with `h` unbounded does not
+suffice, even with a uniform growth bound, and `factTower_not_jumpCap` shows that uncapped
+jumps do not suffice, even with a linear error (`uniformities_necessary`).
 
 The widths are abstract real numbers. Nothing here defines a conformal modulus.
 -/
@@ -91,6 +96,19 @@ def Jumps (C : ℝ) (m : ℕ) : Prop := C * T.width m ≤ T.width (m + 1)
 /-- The degeneration grows by at most the factor `Δ` from a level to the next one. -/
 def GrowthBound (Δ : ℝ) : Prop := ∀ k, T.width (k + 1) ≤ Δ * T.width k
 
+/-- The jumps of the degeneration are capped: a jump by the factor `C₀` or more lands below the
+ceiling `B₀`. This is what remains of alternative (ii) of §4.3 once the pseudo-Siegel disks
+have consumed the invariant degeneration: the invariant part of the degeneration, which is
+the part that alternative (ii) amplifies, is bounded by the uniform quasiconformal geometry of
+the disks. A uniform growth bound implies a cap (`jumpCap_of_growth`), and a priori bounds
+imply a cap (`aPrioriBounds_iff_jumpCap`), so the cap is the weaker hypothesis. -/
+def JumpCap (C₀ B₀ : ℝ) : Prop := ∀ m, T.Jumps C₀ m → T.width (m + 1) ≤ B₀
+
+/-- The cap at the levels of relative period above `P₀`; the levels of smaller relative
+period are covered by the Teichmüller contraction (`jumpCap_of_teichmuller`). -/
+def LargePeriodJumpCap (P₀ : ℕ) (C₀ B₀ : ℝ) : Prop :=
+  ∀ m, P₀ < T.rel m → T.Jumps C₀ m → T.width (m + 1) ≤ B₀
+
 /-- Teichmüller contraction: for relative periods bounded by `P` the degeneration grows by at
 most a factor `Δ_P` (the survey: `W(f_m) = O(Δ^{p_m})`). The factor depends on `P`. -/
 def Teichmuller : Prop :=
@@ -139,23 +157,22 @@ theorem bounded_of_two_mul_le (w : ℕ → ℝ) (n₀ : ℕ) (E : ℝ)
         have h4 : E ≤ max E (∑ j ∈ range n₀, |w j|) := le_max_left _ _
         linarith
 
-/-- **A priori bounds from linear amplification.** Amplification at a fixed distance `n₀`
-between levels, with `c · 2^{n₀} ≥ 2` and an additive error at most linear in the period,
-bounds the degeneration of all levels. -/
-theorem aPrioriBounds_of_linear_amplification {c A : ℝ} {n₀ : ℕ} (hc : 2 ≤ c * 2 ^ n₀)
-    (h : ∀ k, T.Amplifies c (fun p => A * p) k n₀) : T.APrioriBounds := by
+/-- The amplification at the distance `n₀`, with `c · 2^{n₀} ≥ 2` and an additive error linear
+in the period, halves the degeneration up to a constant: `2 W_{k+n₀} ≤ W_k + 2A/c`. -/
+theorem two_mul_le_of_amplifies {c A : ℝ} {n₀ k : ℕ} (hc : 2 ≤ c * 2 ^ n₀)
+    (h : T.Amplifies c (fun p => A * p) k n₀) :
+    2 * T.width (k + n₀) ≤ T.width k + 2 * A / c := by
   have hcpos : 0 < c := by
     by_contra hneg
     have : c * 2 ^ n₀ ≤ 0 := mul_nonpos_of_nonpos_of_nonneg (not_lt.mp hneg) (by positivity)
     linarith
-  refine bounded_of_two_mul_le T.width n₀ (2 * A / c) fun k => ?_
   have hp : (2 : ℝ) ^ n₀ ≤ (T.period k n₀ : ℝ) := by exact_mod_cast T.two_pow_le_period k n₀
   have hp0 : 0 < (T.period k n₀ : ℝ) := lt_of_lt_of_le (by positivity) hp
   have hw : 0 < T.width (k + n₀) := T.width_pos _
   have hwk : 0 < T.width k := T.width_pos k
   have h1 : 2 ≤ c * (T.period k n₀ : ℝ) :=
     hc.trans (mul_le_mul_of_nonneg_left hp hcpos.le)
-  have h2 := h k
+  have h2 := h
   unfold Amplifies at h2
   -- `p (c w' - A) ≤ w k` and `c p ≥ 2` give `c w' ≤ A + c w k / 2`.
   have h3 : c * T.width (k + n₀) - A ≤ c / 2 * T.width k := by
@@ -221,18 +238,78 @@ theorem exists_two_le_mul_two_pow {c : ℝ} (hc : 0 < c) : ∃ n : ℕ, 0 < n �
       apply mul_le_mul_of_nonneg_left _ hc.le
       exact pow_le_pow_right₀ (by norm_num) (Nat.le_succ n)
 
+theorem jumpCap_of_growth {Δ : ℝ} (hG : T.GrowthBound Δ) (B₀ : ℝ) : T.JumpCap (Δ + 1) B₀ :=
+  fun m hj => absurd hj (T.not_jumps_of_growth hG m)
+
+/-- The Teichmüller contraction at the levels of small relative period and a jump cap at the
+levels of large relative period cap the jumps at all levels. -/
+theorem jumpCap_of_teichmuller {P₀ : ℕ} {C₀ B₀ : ℝ} (hC : 0 < C₀) (hT : T.Teichmuller)
+    (hL : T.LargePeriodJumpCap P₀ C₀ B₀) : ∃ C₁ : ℝ, 0 < C₁ ∧ T.JumpCap C₁ B₀ := by
+  obtain ⟨Δ, hΔ⟩ := hT P₀
+  refine ⟨max C₀ (Δ + 1), lt_of_lt_of_le hC (le_max_left _ _), fun m hj => ?_⟩
+  have hw := T.width_pos m
+  unfold Jumps at hj
+  by_cases hm : T.rel m ≤ P₀
+  · exfalso
+    have h1 := hΔ m hm
+    have h2 : (Δ + 1) * T.width m ≤ T.width (m + 1) :=
+      le_trans (mul_le_mul_of_nonneg_right (le_max_right _ _) hw.le) hj
+    nlinarith
+  · push_neg at hm
+    refine hL m hm ?_
+    unfold Jumps
+    exact le_trans (mul_le_mul_of_nonneg_right (le_max_left _ _) hw.le) hj
+
+/-- **A priori bounds from a jump cap.** The dichotomy with an additive error at most linear in
+the period, and a cap on the jumps of the degeneration, give a priori bounds for every tower,
+whatever its relative periods are. In alternative (ii) the deeper degeneration is below the
+ceiling, so `W_{k+n₀}` is bounded by `B₀ / C₀`; in alternative (i) the amplification halves the
+degeneration at the distance `n₀`. -/
+theorem aPrioriBounds_of_jumpCap {C₀ B₀ : ℝ} (hC : 0 < C₀) (hJ : T.JumpCap C₀ B₀)
+    (hD : T.LinearDichotomy) : T.APrioriBounds := by
+  obtain ⟨c, hc, A, -, hE⟩ := hD C₀ hC
+  obtain ⟨n₀, -, hn₀⟩ := exists_two_le_mul_two_pow hc
+  refine bounded_of_two_mul_le T.width n₀ (max (2 * A / c) (2 * B₀ / C₀)) fun k => ?_
+  have hwk := T.width_pos k
+  rcases hE k n₀ with h | h
+  · have h1 := T.two_mul_le_of_amplifies hn₀ h
+    have h2 : 2 * A / c ≤ max (2 * A / c) (2 * B₀ / C₀) := le_max_left _ _
+    linarith
+  · have h1 : T.width (k + n₀ + 1) ≤ B₀ := hJ (k + n₀) h
+    unfold Jumps at h
+    have h2 : C₀ * T.width (k + n₀) ≤ B₀ := le_trans h h1
+    have h3 : T.width (k + n₀) ≤ B₀ / C₀ := by
+      rw [le_div_iff₀ hC, mul_comm]
+      exact h2
+    have h4 : 2 * B₀ / C₀ ≤ max (2 * A / c) (2 * B₀ / C₀) := le_max_right _ _
+    have h5 : 2 * B₀ / C₀ = 2 * (B₀ / C₀) := by ring
+    linarith
+
+/-- **A priori bounds from the tails.** The Teichmüller contraction (small relative periods), a
+cap on the jumps at the levels of large relative period, and the dichotomy with a linear error
+give a priori bounds. -/
+theorem aPrioriBounds_of_tails {P₀ : ℕ} {C₀ B₀ : ℝ} (hC : 0 < C₀) (hT : T.Teichmuller)
+    (hL : T.LargePeriodJumpCap P₀ C₀ B₀) (hD : T.LinearDichotomy) : T.APrioriBounds := by
+  obtain ⟨C₁, hC₁, hJ⟩ := T.jumpCap_of_teichmuller hC hT hL
+  exact T.aPrioriBounds_of_jumpCap hC₁ hJ hD
+
+/-- **The jump cap is the missing piece.** Given the dichotomy with a linear error, a tower has
+a priori bounds if and only if its jumps are capped. -/
+theorem aPrioriBounds_iff_jumpCap (hD : T.LinearDichotomy) :
+    T.APrioriBounds ↔ ∃ C₀ B₀ : ℝ, 0 < C₀ ∧ T.JumpCap C₀ B₀ := by
+  constructor
+  · rintro ⟨B, hB⟩
+    exact ⟨1, B, one_pos, fun m _ => hB (m + 1)⟩
+  · rintro ⟨C₀, B₀, hC, hJ⟩
+    exact T.aPrioriBounds_of_jumpCap hC hJ hD
+
 /-- **A priori bounds from uniform control.** A uniform growth bound across all levels and the
 dichotomy with an additive error at most linear in the period give a priori bounds for every
 tower, whatever its relative periods are. -/
 theorem aPrioriBounds_of_uniform {Δ : ℝ} (hG : T.GrowthBound Δ) (hD : T.LinearDichotomy) :
     T.APrioriBounds := by
   have hΔ := T.growth_pos hG
-  obtain ⟨c, hc, A, -, hE⟩ := hD (Δ + 1) (by linarith)
-  obtain ⟨n₀, -, hn₀⟩ := exists_two_le_mul_two_pow hc
-  refine T.aPrioriBounds_of_linear_amplification hn₀ (A := A) fun k => ?_
-  rcases hE k n₀ with h | h
-  · exact h
-  · exact absurd h (T.not_jumps_of_growth hG _)
+  exact T.aPrioriBounds_of_jumpCap (by linarith) (T.jumpCap_of_growth hG 0) hD
 
 /-- **A priori bounds for bounded type** (the argument behind Theorem 4.1): for relative
 periods bounded by `P`, the Teichmüller contraction and the dichotomy with a period-dependent
@@ -257,22 +334,24 @@ theorem aPrioriBounds_of_bounded {P : ℕ} (hP : ∀ k, T.rel k ≤ P) (hT : T.T
     linarith
   · exact absurd h (T.not_jumps_of_growth hG _)
 
-/-! ### Both uniformities are necessary
+/-! ### Both ingredients are necessary
 
-`aPrioriBounds_of_uniform` needs a uniform growth bound and a dichotomy with an error at most
-linear in the period. Neither can be dropped.
+`aPrioriBounds_of_jumpCap` needs a cap on the jumps of the degeneration and a dichotomy with
+an error at most linear in the period. Neither can be dropped, and the cap is also a
+consequence of the conclusion (`aPrioriBounds_iff_jumpCap`), so it is the weakest hypothesis
+of its kind.
 
 * An error of order `p · h(p)` with `h` unbounded gives no a priori bounds, even with a uniform
-  growth bound: the tower with relative periods `k + 2` and widths `h(k + 1)` satisfies the
-  Teichmüller contraction, a uniform growth bound when `h` grows by a bounded factor, and the
-  amplification with the error `p · h(p)`, and its degeneration is unbounded. With `h`
-  constant the error `A · p` of `LinearDichotomy` suffices, so linear is the threshold of the
-  recursion.
-* A growth bound that depends on the relative period gives no a priori bounds, even with a
-  linear error: in the tower with relative periods `k + 2` and widths `(k + 1)!` the
-  degeneration jumps by the factor `k + 2` at every level, which the Teichmüller contraction
-  allows, and the dichotomy holds because the jump alternative covers every level above a
-  threshold that depends on `C`.
+  growth bound (which caps the jumps): the tower with relative periods `k + 2` and widths
+  `h(k + 1)` satisfies the Teichmüller contraction, a uniform growth bound when `h` grows by a
+  bounded factor, and the amplification with the error `p · h(p)`, and its degeneration is
+  unbounded. With `h` constant the error `A · p` of `LinearDichotomy` suffices, so linear is
+  the threshold of the recursion.
+* Uncapped jumps give no a priori bounds, even with a linear error: in the tower with relative
+  periods `k + 2` and widths `(k + 1)!` the degeneration jumps by the factor `k + 2` at every
+  level, which the Teichmüller contraction allows, and the dichotomy holds because the jump
+  alternative covers every level above a threshold that depends on `C`
+  (`factTower_not_jumpCap`).
 
 The inputs of Theorem 4.1 with period-dependent constants leave a gap exactly at unbounded
 relative periods: Problem 4.3 needs new input, and the input has two parts. -/
@@ -428,23 +507,35 @@ theorem factTower_not_bounded : ¬ factTower.APrioriBounds := by
   have h3 := Nat.le_ceil B
   linarith
 
-/-- **A uniform growth bound is needed even with a linear error.** There is a tower that
+/-- The tower of widths `(k + 1)!` has no jump cap, although it satisfies the Teichmüller
+contraction and the dichotomy with a linear error: its jumps are the uncapped factors `k + 2`. -/
+theorem factTower_not_jumpCap : ¬ ∃ C₀ B₀ : ℝ, 0 < C₀ ∧ factTower.JumpCap C₀ B₀ :=
+  fun h => factTower_not_bounded
+    ((factTower.aPrioriBounds_iff_jumpCap factTower_linearDichotomy).mpr h)
+
+/-- **Uncapped jumps give no a priori bounds even with a linear error.** There is a tower that
 satisfies the Teichmüller contraction and the dichotomy with a linear error, with finitely
 many pairs of levels where the amplification is used for each threshold, and has unbounded
-degeneration: the jump alternative cannot be excluded without a growth bound that is uniform
-in the relative period. -/
+degeneration and no cap on its jumps: the jump alternative cannot be excluded without a cap. -/
 theorem exists_unbounded_of_teichmuller_linearDichotomy :
-    ∃ T : WidthTower, T.Teichmuller ∧ T.LinearDichotomy ∧ ¬ T.APrioriBounds :=
-  ⟨factTower, factTower_teichmuller, factTower_linearDichotomy, factTower_not_bounded⟩
+    ∃ T : WidthTower, T.Teichmuller ∧ T.LinearDichotomy ∧ ¬ T.APrioriBounds ∧
+      ¬ ∃ C₀ B₀ : ℝ, 0 < C₀ ∧ T.JumpCap C₀ B₀ :=
+  ⟨factTower, factTower_teichmuller, factTower_linearDichotomy, factTower_not_bounded,
+    factTower_not_jumpCap⟩
 
-/-- **Both uniformities of Problem 4.3 are necessary in the recursion.** A uniform growth bound
-with a dichotomy whose error is not linear in the period gives no a priori bounds, and neither
-does the Teichmüller contraction, with a growth bound that depends on the relative period,
-with a linear error: `aPrioriBounds_of_uniform` needs both. -/
+/-- **The recursion is sharp: both ingredients of Problem 4.3 are necessary.** A uniform growth
+bound (which caps the jumps) with the dichotomy with a linear error gives a priori bounds
+(`aPrioriBounds_of_uniform`, a case of `aPrioriBounds_of_jumpCap`). The linear error cannot be
+relaxed: a uniform growth bound with a dichotomy whose error is quadratic in the period gives no
+a priori bounds. The cap cannot be dropped: the Teichmüller contraction with a linear error but
+uncapped jumps gives none either. -/
 theorem uniformities_necessary :
-    (∃ T : WidthTower, T.GrowthBound 2 ∧ T.Dichotomy ∧ ¬ T.APrioriBounds) ∧
-      (∃ T : WidthTower, T.Teichmuller ∧ T.LinearDichotomy ∧ ¬ T.APrioriBounds) :=
-  ⟨exists_unbounded_of_growth_dichotomy, exists_unbounded_of_teichmuller_linearDichotomy⟩
+    (∀ (T : WidthTower) (Δ : ℝ), T.GrowthBound Δ → T.LinearDichotomy → T.APrioriBounds) ∧
+      (∃ T : WidthTower, T.GrowthBound 2 ∧ T.Dichotomy ∧ ¬ T.APrioriBounds) ∧
+      (∃ T : WidthTower, T.Teichmuller ∧ T.LinearDichotomy ∧ ¬ T.APrioriBounds ∧
+        ¬ ∃ C₀ B₀ : ℝ, 0 < C₀ ∧ T.JumpCap C₀ B₀) :=
+  ⟨fun T _ hG hD => T.aPrioriBounds_of_uniform hG hD, exists_unbounded_of_growth_dichotomy,
+    exists_unbounded_of_teichmuller_linearDichotomy⟩
 
 end WidthTower
 

@@ -1,45 +1,223 @@
 name: Lean Action CI
 
+# The grid of `Mlc/GridTiles` costs tens of CPU hours in the kernel, more than one runner can
+# do within the six-hour limit of a job. The build outputs of the tiles are therefore kept
+# (Actions cache, or the seed in refs/ci-cache) and moved between jobs, and Lake confirms
+# that they are up to date. Only a change of the tiles, of `Mlc.GridDefs`, of the toolchain or
+# of the dependencies starts the sharded build. See docs/ci.md.
+
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main", "ci/**"]
+  pull_request:
   workflow_dispatch:
+    inputs:
+      use_seed:
+        description: Take the tiles from the seed in refs/ci-cache when it exists
+        type: boolean
+        default: true
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # A newer push replaces a running check of a branch, but never a build of main.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+env:
+  SHARDS: 20
 
 jobs:
-  build:
+  scripts:
+    name: Scripts
     runs-on: ubuntu-latest
-
+    timeout-minutes: 20
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install Elan
-      run: |
-        curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
-        echo "$HOME/.elan/bin" >> $GITHUB_PATH
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-    - name: Cache .lake
-      uses: actions/cache@v4
-      with:
-        path: .lake
-        key: ${{ runner.os }}-lake-${{ hashFiles('lake-manifest.json') }}
-        restore-keys: |
-          ${{ runner.os }}-lake-
+      - name: Install Python packages
+        run: python -m pip install -r scripts/requirements.txt
 
-    - name: Get mathlib cache
-      run: make cache
+      - name: Test the scripts
+        run: |
+          make test-scripts
+          python scripts/test_ci_grid.py
 
-    - name: Build Mlc
-      run: make build
+      # The last update of docs/progress/ledger.json must describe the tree (the commit hook
+      # records it; see scripts/README.md).
+      - name: Check the progress ledger
+        run: python scripts/check_progress.py --ledger
 
-    - name: Check axioms
-      run:
-        make check
+  plan:
+    name: Plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      key: ${{ steps.plan.outputs.key }}
+      shards: ${{ steps.plan.outputs.shards }}
+      warm: ${{ steps.warm.outputs.warm }}
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Check the list of axioms in the README.md
-      run: |
-        chmod +x scripts/verify_output.sh
-        ./scripts/verify_output.sh
+      - name: Key of the grid
+        id: plan
+        run: python3 scripts/ci_grid.py plan --shards "$SHARDS"
+
+      - name: Look for the tile cache
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .ci/tiles-all.tar.zst
+          key: tiles-${{ steps.plan.outputs.key }}
+          lookup-only: true
+
+      - name: Look for the seed
+        id: seed
+        if: ${{ steps.cache.outputs.cache-hit != 'true' && (github.event_name != 'workflow_dispatch' || inputs.use_seed) }}
+        run: |
+          if python3 scripts/ci_grid.py seed-probe --key "${{ steps.plan.outputs.key }}"; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Decide
+        id: warm
+        run: |
+          if [ "${{ steps.cache.outputs.cache-hit }}" = "true" ] || [ "${{ steps.seed.outputs.present }}" = "true" ]; then
+            echo "warm=true" >> "$GITHUB_OUTPUT"
+            echo "The tiles are available: no tile is built."
+          else
+            echo "warm=false" >> "$GITHUB_OUTPUT"
+            echo "No cache and no seed: the tiles are built in ${SHARDS} shards."
+          fi
+
+  defs:
+    name: Mlc.GridDefs
+    needs: plan
+    if: ${{ needs.plan.outputs.warm != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/mlc-env
+
+      # Every shard and the final job use these exact outputs, so that the traces of the tiles agree.
+      - name: Build Mlc.GridDefs
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake build +Mlc.GridDefs
+          python3 scripts/ci_grid.py pack --defs-only --out .ci/tiles-defs.tar.zst
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tiles-defs
+          path: .ci/tiles-defs.tar.zst
+          retention-days: 1
+          compression-level: 0
+
+  tiles:
+    name: Tiles ${{ matrix.shard }}
+    needs: [plan, defs]
+    if: ${{ needs.plan.outputs.warm != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        shard: ${{ fromJSON(needs.plan.outputs.shards) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/mlc-env
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: tiles-defs
+          path: .ci/defs
+
+      - name: Unpack Mlc.GridDefs
+        run: python3 scripts/ci_grid.py unpack .ci/defs/tiles-defs.tar.zst
+
+      # A finished shard stays in the cache, so that a re-run resumes where the last one stopped.
+      - name: Restore the shard
+        id: shard
+        uses: actions/cache@v4
+        with:
+          path: .ci/shard-${{ matrix.shard }}.tar.zst
+          key: tiles-shard-${{ matrix.shard }}-${{ needs.plan.outputs.key }}
+
+      - name: Build the shard
+        if: ${{ steps.shard.outputs.cache-hit != 'true' }}
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          python3 scripts/ci_grid.py build-shard --shard "${{ matrix.shard }}" --shards "$SHARDS"
+          python3 scripts/ci_grid.py pack --shard "${{ matrix.shard }}" --shards "$SHARDS" --out ".ci/shard-${{ matrix.shard }}.tar.zst"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tiles-shard-${{ matrix.shard }}
+          path: .ci/shard-${{ matrix.shard }}.tar.zst
+          retention-days: 1
+          compression-level: 0
+
+  build:
+    name: Build and check
+    needs: [plan, defs, tiles]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/mlc-env
+        with:
+          free-disk: "true"
+
+      - name: Tiles from the cache or the seed
+        id: warm
+        if: ${{ needs.plan.outputs.warm == 'true' }}
+        uses: ./.github/actions/mlc-tiles
+        with:
+          key: ${{ needs.plan.outputs.key }}
+
+      - name: Download the archives of the shards
+        if: ${{ needs.plan.outputs.warm != 'true' }}
+        uses: actions/download-artifact@v4
+        with:
+          pattern: tiles-*
+          path: .ci/parts
+          merge-multiple: true
+
+      - name: Unpack and check the shards
+        if: ${{ needs.plan.outputs.warm != 'true' }}
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          python3 scripts/ci_grid.py unpack .ci/parts/*.tar.zst
+          python3 scripts/ci_grid.py check
+
+      - name: Build Mlc
+        run: make build
+
+      # Runs `make check` and compares its summary with the block in README.md.
+      - name: Check axioms
+        run: |
+          chmod +x scripts/verify_output.sh
+          ./scripts/verify_output.sh
+
+      # The next run, and the Pages workflow, find the tiles in the cache.
+      - name: Archive the tiles
+        if: ${{ needs.plan.outputs.warm != 'true' }}
+        run: python3 scripts/ci_grid.py pack --with-defs --out .ci/tiles-all.tar.zst
+
+      - name: Save the tile cache
+        if: ${{ steps.warm.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v4
+        with:
+          path: .ci/tiles-all.tar.zst
+          key: tiles-${{ needs.plan.outputs.key }}

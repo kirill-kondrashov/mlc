@@ -1,0 +1,1295 @@
+[
+  {
+    "id": "2026-11-25-reduce-mlc-root-to-dudko-problems-4-3-and-4-4",
+    "timestamp": "2026-11-25T15:22:42+01:00",
+    "subject": "Reduce MLC root to Dudko problems 4.3 and 4.4",
+    "area_note": "",
+    "baseline": true,
+    "grid": null,
+    "area_exact": "4\\pi",
+    "debt_percent": 33.333333333333336,
+    "area_upper_percent": 100.0,
+    "area_symbols": [],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 5,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Filled-Julia topology"
+    ],
+    "source": "c390fc40"
+  },
+  {
+    "id": "2026-11-25-prune-repository-to-active-lean-proof",
+    "timestamp": "2026-11-25T15:47:28+01:00",
+    "subject": "Prune repository to active Lean proof",
+    "area_note": "",
+    "baseline": false,
+    "grid": null,
+    "area_exact": "4\\pi",
+    "debt_percent": 50.0,
+    "area_upper_percent": 100.0,
+    "area_symbols": [],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 3,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest"
+    ],
+    "source": "de8b11c1"
+  },
+  {
+    "id": "2026-11-25-formalize-virtual-molecule-programme",
+    "timestamp": "2026-11-25T16:42:49+01:00",
+    "subject": "Formalize virtual-Molecule programme",
+    "area_note": "",
+    "baseline": false,
+    "grid": null,
+    "area_exact": "4\\pi",
+    "debt_percent": 33.333333333333336,
+    "area_upper_percent": 100.0,
+    "area_symbols": [],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 5,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge"
+    ],
+    "source": "e10d7483"
+  },
+  {
+    "id": "2026-11-25-publish-graph-site-atomically",
+    "timestamp": "2026-11-25T16:46:17+01:00",
+    "subject": "Publish graph site atomically",
+    "area_note": "",
+    "baseline": false,
+    "grid": null,
+    "area_exact": "4\\pi",
+    "debt_percent": 33.333333333333336,
+    "area_upper_percent": 100.0,
+    "area_symbols": [],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 5,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge"
+    ],
+    "source": "e09c844f"
+  },
+  {
+    "id": "2026-11-25-construct-connected-hull-foundation-for-mlc",
+    "timestamp": "2026-11-25T18:02:55+01:00",
+    "subject": "Construct connected hull foundation for MLC",
+    "area_note": "",
+    "baseline": false,
+    "grid": null,
+    "area_exact": "4\\pi",
+    "debt_percent": 20.0,
+    "area_upper_percent": 100.0,
+    "area_symbols": [],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 9,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull"
+    ],
+    "source": "a9ac04ba"
+  },
+  {
+    "id": "2026-11-25-add-mlc-progress-dashboard-and-roadmap",
+    "timestamp": "2026-11-25T21:44:15+01:00",
+    "subject": "Add MLC progress dashboard and roadmap",
+    "area_note": "",
+    "baseline": false,
+    "grid": null,
+    "area_exact": "4\\pi",
+    "debt_percent": 16.666666666666668,
+    "area_upper_percent": 100.0,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 11,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope"
+    ],
+    "source": "a0c5e0ca"
+  },
+  {
+    "id": "2026-11-25-track-certified-residual-area-in-progress-chart",
+    "timestamp": "2026-11-25T22:34:27+01:00",
+    "subject": "Track certified residual area in progress chart",
+    "area_note": "",
+    "baseline": false,
+    "grid": null,
+    "area_exact": "63\\pi/16",
+    "debt_percent": 15.384615384615385,
+    "area_upper_percent": 98.4375,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 12,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball"
+    ],
+    "source": "ef33650b"
+  },
+  {
+    "id": "2026-11-26-add-a-kernel-checked-grid-bound-on-the",
+    "timestamp": "2026-11-26T00:29:05+01:00",
+    "subject": "Add a kernel-checked grid bound on the unresolved area",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "classifier",
+      "cells": 14333,
+      "depth": 7,
+      "weight": 14333,
+      "scale": 7,
+      "fuel": 4,
+      "pmax": 4,
+      "J": 16,
+      "area": 1.7496337890625,
+      "percent": 13.92314330649497,
+      "exact": "2\\cdot 14333/4^{7}"
+    },
+    "area_exact": "2\\cdot 14333/4^{7}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 13.92314330649497,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#38bdf8",
+      "masks": {
+        "interior": "2026-11-26-add-a-kernel-checked-grid-bound-on-the.png"
+      }
+    },
+    "source": "d988fc4b"
+  },
+  {
+    "id": "2026-11-26-refine-the-kernel-checked-grid-to-depth-8",
+    "timestamp": "2026-11-26T00:55:10+01:00",
+    "subject": "Refine the kernel-checked grid to depth 8",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "classifier",
+      "cells": 46605,
+      "depth": 8,
+      "weight": 46605,
+      "scale": 8,
+      "fuel": 5,
+      "pmax": 4,
+      "J": 20,
+      "area": 1.422271728515625,
+      "percent": 11.318078800655796,
+      "exact": "2\\cdot 46605/4^{8}"
+    },
+    "area_exact": "2\\cdot 46605/4^{8}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 11.318078800655796,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#a78bfa",
+      "masks": {
+        "interior": "2026-11-26-refine-the-kernel-checked-grid-to-depth-8.png"
+      }
+    },
+    "source": "0368df8d"
+  },
+  {
+    "id": "2026-11-26-split-the-grid-computation-into-light-modules",
+    "timestamp": "2026-11-26T01:16:35+01:00",
+    "subject": "Split the grid computation into light modules and scan periods up to 6",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "classifier",
+      "cells": 46011,
+      "depth": 8,
+      "weight": 46011,
+      "scale": 8,
+      "fuel": 5,
+      "pmax": 6,
+      "J": 20,
+      "area": 1.404144287109375,
+      "percent": 11.173825205385127,
+      "exact": "2\\cdot 46011/4^{8}"
+    },
+    "area_exact": "2\\cdot 46011/4^{8}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 11.173825205385127,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#f472b6",
+      "masks": {
+        "interior": "2026-11-26-split-the-grid-computation-into-light-modules.png"
+      }
+    },
+    "source": "6854f409"
+  },
+  {
+    "id": "2026-11-26-certify-the-grid-with-first-order-taylor-models",
+    "timestamp": "2026-11-26T08:51:28+01:00",
+    "subject": "Certify the grid with first-order Taylor models: 95.9% resolved",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "hints",
+      "cells": 67609,
+      "depth": 9,
+      "weight": 67609,
+      "scale": 9,
+      "fuel": 6,
+      "pmax": null,
+      "J": null,
+      "area": 0.5158157348632812,
+      "percent": 4.104731196403486,
+      "exact": "2\\cdot 67609/4^{9}"
+    },
+    "area_exact": "2\\cdot 67609/4^{9}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 4.104731196403486,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#2dd4bf",
+      "masks": {
+        "interior": "2026-11-26-certify-the-grid-with-first-order-taylor-models.png"
+      }
+    },
+    "source": "8a3781f5"
+  },
+  {
+    "id": "2026-11-26-refine-the-kernel-checked-grid-to-depth-10-96-6",
+    "timestamp": "2026-11-26T09:55:41+01:00",
+    "subject": "Refine the kernel-checked grid to depth 10: 96.6% resolved",
+    "area_note": "Depth 10. The 67609 unresolved cells of depth 9 are subdivided once more, and Taylor-model certificates remove 46247 of their 270436 children (inside certificates use at most 160 steps); the other 224189 cells stay unresolved.",
+    "baseline": false,
+    "grid": {
+      "format": "hints",
+      "cells": 224189,
+      "depth": 10,
+      "weight": 224189,
+      "scale": 10,
+      "fuel": 7,
+      "pmax": null,
+      "J": null,
+      "area": 0.42760658264160156,
+      "percent": 3.402785066302197,
+      "exact": "2\\cdot 224189/4^{10}"
+    },
+    "area_exact": "2\\cdot 224189/4^{10}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 3.402785066302197,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#e879f9",
+      "masks": {
+        "interior": "2026-11-26-refine-the-kernel-checked-grid-to-depth-10-96-6.png"
+      }
+    },
+    "source": "adc34747"
+  },
+  {
+    "id": "2026-11-26-refine-the-kernel-checked-grid-to-depth-11-97-1",
+    "timestamp": "2026-11-26T11:54:17+01:00",
+    "subject": "Refine the kernel-checked grid to depth 11: 97.1% resolved",
+    "area_note": "Depth 11. The 224189 unresolved cells of depth 10 are subdivided once more, and Taylor-model certificates remove 135648 of their 896756 children (133275 outside $M$ within at most 55 steps of the model, 2373 inside $M$ within at most 169 steps); the other 761108 cells stay unresolved.",
+    "baseline": false,
+    "grid": {
+      "format": "hints",
+      "cells": 761108,
+      "depth": 11,
+      "weight": 761108,
+      "scale": 11,
+      "fuel": 8,
+      "pmax": null,
+      "J": null,
+      "area": 0.36292457580566406,
+      "percent": 2.888062010450036,
+      "exact": "2\\cdot 761108/4^{11}"
+    },
+    "area_exact": "2\\cdot 761108/4^{11}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 2.888062010450036,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#a3e635",
+      "masks": {
+        "interior": "2026-11-26-refine-the-kernel-checked-grid-to-depth-11-97-1.png"
+      }
+    },
+    "source": "aec14b1e"
+  },
+  {
+    "id": "2026-11-26-refine-the-grid-to-depth-12-for-re-c-3-4-97-2",
+    "timestamp": "2026-11-26T13:12:41+01:00",
+    "subject": "Refine the grid to depth 12 for Re c < -3/4: 97.2% resolved",
+    "area_note": "Depth 12 for $\\operatorname{Re}c<-3/4$. The 193936 unresolved cells of depth 11 there are subdivided once more, and Taylor-model certificates remove 127885 of their 775744 children (127838 outside $M$ within at most 78 steps of the model, 47 inside $M$ within at most 57 steps); the other cells stay unresolved.",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 2916547,
+      "depth": 12,
+      "weight": 746636032,
+      "scale": 16,
+      "finest": 12,
+      "coarsest": 11,
+      "area": 0.3476794958114624,
+      "percent": 2.7667455185046084,
+      "exact": "2\\cdot 2916547/4^{12}"
+    },
+    "area_exact": "2\\cdot 2916547/4^{12}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 2.7667455185046084,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#f87171",
+      "masks": {
+        "interior": "2026-11-26-refine-the-grid-to-depth-12-for-re-c-3-4-97-2.png"
+      }
+    },
+    "source": "68c8e12f"
+  },
+  {
+    "id": "2026-11-26-refine-the-grid-to-depth-12-for-re-c-0-97-4",
+    "timestamp": "2026-11-26T13:41:53+01:00",
+    "subject": "Refine the grid to depth 12 for Re c < 0: 97.4% resolved",
+    "area_note": "Depth 12 for $-3/4\\le\\operatorname{Re}c<0$. The 359606 unresolved cells of depth 11 there are subdivided once more, and Taylor-model certificates remove 170516 of their 1438424 children (170443 outside $M$ within at most 61 steps of the model, 73 inside $M$ within at most 56 steps); the other cells stay unresolved.",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 2746031,
+      "depth": 12,
+      "weight": 702983936,
+      "scale": 16,
+      "finest": 12,
+      "coarsest": 11,
+      "area": 0.3273524045944214,
+      "percent": 2.6049876662110116,
+      "exact": "2\\cdot 2746031/4^{12}"
+    },
+    "area_exact": "2\\cdot 2746031/4^{12}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 2.6049876662110116,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#6366f1",
+      "masks": {
+        "interior": "2026-11-26-refine-the-grid-to-depth-12-for-re-c-0-97-4.png"
+      }
+    },
+    "source": "20bbc15d"
+  },
+  {
+    "id": "2026-11-26-refine-the-grid-to-depth-12-for-re-c-0-97-5",
+    "timestamp": "2026-11-26T13:59:15+01:00",
+    "subject": "Refine the grid to depth 12 for Re c >= 0: 97.5% resolved",
+    "area_note": "Depth 12 for $\\operatorname{Re}c\\ge 0$. The 207566 unresolved cells of depth 11 there are subdivided once more, and Taylor-model certificates remove 103618 of their 830264 children (103550 outside $M$ within at most 48 steps of the model, 68 inside $M$ within at most 57 steps); the other cells stay unresolved, and the grid now has depth 12 everywhere.",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 2642413,
+      "depth": 12,
+      "weight": 676457728,
+      "scale": 16,
+      "finest": 12,
+      "coarsest": 12,
+      "area": 0.31500017642974854,
+      "percent": 2.506691757680681,
+      "exact": "2\\cdot 2642413/4^{12}"
+    },
+    "area_exact": "2\\cdot 2642413/4^{12}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 2.506691757680681,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#38bdf8",
+      "masks": {
+        "interior": "2026-11-26-refine-the-grid-to-depth-12-for-re-c-0-97-5.png"
+      }
+    },
+    "source": "d7ade12c"
+  },
+  {
+    "id": "2026-11-26-name-the-region-of-each-grid-stage-in-the-map",
+    "timestamp": "2026-11-26T14:04:28+01:00",
+    "subject": "Name the region of each grid stage in the map legend; check progress for Lean changes only",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 2642413,
+      "depth": 12,
+      "weight": 676457728,
+      "scale": 16,
+      "finest": 12,
+      "coarsest": 12,
+      "area": 0.31500017642974854,
+      "percent": 2.506691757680681,
+      "exact": "2\\cdot 2642413/4^{12}"
+    },
+    "area_exact": "2\\cdot 2642413/4^{12}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 2.506691757680681,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "source": "ce0ff3bf"
+  },
+  {
+    "id": "2026-11-26-draw-the-dependency-graph-as-one-2d-figure-the",
+    "timestamp": "2026-11-26T15:05:11+01:00",
+    "subject": "Draw the dependency graph as one 2D figure, the proof spine",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 2642413,
+      "depth": 12,
+      "weight": 676457728,
+      "scale": 16,
+      "finest": 12,
+      "coarsest": 12,
+      "area": 0.31500017642974854,
+      "percent": 2.506691757680681,
+      "exact": "2\\cdot 2642413/4^{12}"
+    },
+    "area_exact": "2\\cdot 2642413/4^{12}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 2.506691757680681,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "source": "5b3459e7"
+  },
+  {
+    "id": "2026-11-26-show-the-scale-of-the-formalization-on-the-spine",
+    "timestamp": "2026-11-26T15:28:06+01:00",
+    "subject": "Show the scale of the formalization on the spine; hide the figure controls in Progress",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 2642413,
+      "depth": 12,
+      "weight": 676457728,
+      "scale": 16,
+      "finest": 12,
+      "coarsest": 12,
+      "area": 0.31500017642974854,
+      "percent": 2.506691757680681,
+      "exact": "2\\cdot 2642413/4^{12}"
+    },
+    "area_exact": "2\\cdot 2642413/4^{12}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 2.506691757680681,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "source": "a33d2a12"
+  },
+  {
+    "id": "2026-11-27-coarsen-the-interior-shells-of-the-grid-97-7",
+    "timestamp": "2026-11-27T11:08:24+01:00",
+    "subject": "Coarsen the interior shells of the grid: 97.7% resolved; measure step of route Z",
+    "area_note": "Coarsened shells. The 150133 squares of level 10 and the 585353 squares of level 11 that hold only unresolved cells are searched for an inside certificate with up to 960 and 240 steps of the model; 13834 and 651 of them are certified and each replaces the subdivision below it. The unresolved cells fall from 2642413 to 2421967 (counted at depth 12).",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 2421967,
+      "depth": 12,
+      "weight": 620023552,
+      "scale": 16,
+      "finest": 12,
+      "coarsest": 12,
+      "area": 0.288720965385437,
+      "percent": 2.2975684407678156,
+      "exact": "2\\cdot 2421967/4^{12}"
+    },
+    "area_exact": "2\\cdot 2421967/4^{12}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 2.2975684407678156,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#a78bfa",
+      "masks": {
+        "interior": "2026-11-27-coarsen-the-interior-shells-of-the-grid-97-7.png"
+      }
+    },
+    "source": "5614082d"
+  },
+  {
+    "id": "2026-11-27-count-the-conditional-root-milestone-by-its",
+    "timestamp": "2026-11-27T11:14:23+01:00",
+    "subject": "Count the conditional root milestone by its declaration",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 2421967,
+      "depth": 12,
+      "weight": 620023552,
+      "scale": 16,
+      "finest": 12,
+      "coarsest": 12,
+      "area": 0.288720965385437,
+      "percent": 2.2975684407678156,
+      "exact": "2\\cdot 2421967/4^{12}"
+    },
+    "area_exact": "2\\cdot 2421967/4^{12}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 2.2975684407678156,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "source": "fa32e35e"
+  },
+  {
+    "id": "2026-11-27-refine-the-grid-to-depth-13-for-re-c-3-4-97-8",
+    "timestamp": "2026-11-27T12:51:41+01:00",
+    "subject": "Refine the grid to depth 13 for Re c < -3/4: 97.8% resolved",
+    "area_note": "Depth 13 for $\\operatorname{Re}c<-3/4$ (with the cells $-3/4\\le\\operatorname{Re}c<-5/8$, $0\\le\\operatorname{Im}c<1/2$). The 887218 unresolved cells of depth 12 there are subdivided once more, and Taylor-model certificates remove 371365 of their 3548872 children (371360 outside $M$ within at most 32 steps of the model, 5 inside $M$ within at most 9 steps); the other cells stay unresolved.",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 9316503,
+      "depth": 13,
+      "weight": 596256192,
+      "scale": 16,
+      "finest": 13,
+      "coarsest": 12,
+      "area": 0.27765342593193054,
+      "percent": 2.209495760173309,
+      "exact": "2\\cdot 9316503/4^{13}"
+    },
+    "area_exact": "2\\cdot 9316503/4^{13}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 2.209495760173309,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#f472b6",
+      "masks": {
+        "interior": "2026-11-27-refine-the-grid-to-depth-13-for-re-c-3-4-97-8.png"
+      }
+    },
+    "source": "a93e98d7"
+  },
+  {
+    "id": "2026-11-27-refine-the-grid-to-depth-13-for-re-c-1-8-97-9",
+    "timestamp": "2026-11-27T14:10:37+01:00",
+    "subject": "Refine the grid to depth 13 for Re c < -1/8: 97.9% resolved",
+    "area_note": "Depth 13 for $-3/4\\le\\operatorname{Re}c<-1/8$ and $-1/8\\le\\operatorname{Re}c<0$, $\\operatorname{Im}c<1$ (the cells $-3/4\\le\\operatorname{Re}c<-5/8$, $\\operatorname{Im}c<1/2$ were refined by the previous commit). The 866995 unresolved cells of depth 12 there are subdivided once more, and Taylor-model certificates remove 337867 of their 3467980 children (337849 outside $M$ within at most 32 steps of the model, 18 inside $M$ within at most 9 steps); the other cells stay unresolved.",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 8978636,
+      "depth": 13,
+      "weight": 574632704,
+      "scale": 16,
+      "finest": 13,
+      "coarsest": 12,
+      "area": 0.2675842046737671,
+      "percent": 2.129367443357174,
+      "exact": "2\\cdot 8978636/4^{13}"
+    },
+    "area_exact": "2\\cdot 8978636/4^{13}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 2.129367443357174,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#2dd4bf",
+      "masks": {
+        "interior": "2026-11-27-refine-the-grid-to-depth-13-for-re-c-1-8-97-9.png"
+      }
+    },
+    "source": "e8076866"
+  },
+  {
+    "id": "2026-11-27-refine-the-grid-to-depth-13-for-re-c-0-97-9",
+    "timestamp": "2026-11-27T14:55:59+01:00",
+    "subject": "Refine the grid to depth 13 for Re c >= 0: 97.9% resolved",
+    "area_note": "Depth 13 for the remaining blocks, $\\operatorname{Re}c\\ge0$ (and $-1/8\\le\\operatorname{Re}c<0$ with $\\operatorname{Im}c\\ge1$). The 667754 unresolved cells of depth 12 there are subdivided once more, and Taylor-model certificates remove 284378 of their 2671016 children (284355 outside $M$ within at most 32 steps of the model, 23 inside $M$ within at most 9 steps); the other cells stay unresolved. The whole grid has now side $2^{-13}$.",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 8694258,
+      "depth": 13,
+      "weight": 556432512,
+      "scale": 16,
+      "finest": 13,
+      "coarsest": 13,
+      "area": 0.2591090798377991,
+      "percent": 2.0619245428089137,
+      "exact": "2\\cdot 8694258/4^{13}"
+    },
+    "area_exact": "2\\cdot 8694258/4^{13}",
+    "debt_percent": 13.333333333333334,
+    "area_upper_percent": 2.0619245428089137,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 0,
+    "classes_share": 0.0,
+    "milestone_weight": 14,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound"
+    ],
+    "layer": {
+      "color": "#e879f9",
+      "masks": {
+        "unresolved": "2026-11-27-refine-the-grid-to-depth-13-for-re-c-0-97-9.open.png",
+        "interior": "2026-11-27-refine-the-grid-to-depth-13-for-re-c-0-97-9.png"
+      }
+    },
+    "source": "0ab09674"
+  },
+  {
+    "id": "2026-11-27-decompose-problems-4-3-and-4-4-into-thirteen",
+    "timestamp": "2026-11-27T15:30:23+01:00",
+    "subject": "Decompose Problems 4.3 and 4.4 into thirteen lemmas; check the degeneration recursion",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 8694258,
+      "depth": 13,
+      "weight": 556432512,
+      "scale": 16,
+      "finest": 13,
+      "coarsest": 13,
+      "area": 0.2591090798377991,
+      "percent": 2.0619245428089137,
+      "exact": "2\\cdot 8694258/4^{13}"
+    },
+    "area_exact": "2\\cdot 8694258/4^{13}",
+    "debt_percent": 11.764705882352942,
+    "area_upper_percent": 2.0619245428089137,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 10,
+    "classes_share": 0.0,
+    "milestone_weight": 16,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound",
+      "A priori bounds from uniform control",
+      "MLC from the lemmas of the programme"
+    ],
+    "source": "1c4a48fd"
+  },
+  {
+    "id": "2026-11-27-draw-the-certified-region-as-a-png-and-put-it",
+    "timestamp": "2026-11-27T16:20:56+01:00",
+    "subject": "Draw the certified region as a PNG and put it beside the commit list",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 8694258,
+      "depth": 13,
+      "weight": 556432512,
+      "scale": 16,
+      "finest": 13,
+      "coarsest": 13,
+      "area": 0.2591090798377991,
+      "percent": 2.0619245428089137,
+      "exact": "2\\cdot 8694258/4^{13}"
+    },
+    "area_exact": "2\\cdot 8694258/4^{13}",
+    "debt_percent": 11.764705882352942,
+    "area_upper_percent": 2.0619245428089137,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 10,
+    "classes_share": 0.0,
+    "milestone_weight": 16,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound",
+      "A priori bounds from uniform control",
+      "MLC from the lemmas of the programme"
+    ],
+    "source": "59a8092b"
+  },
+  {
+    "id": "2026-11-27-refine-lemma-d-to-a-linear-dichotomy-prove-that",
+    "timestamp": "2026-11-27T16:21:09+01:00",
+    "subject": "Refine Lemma D to a linear dichotomy; prove that both uniformities are necessary",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 8694258,
+      "depth": 13,
+      "weight": 556432512,
+      "scale": 16,
+      "finest": 13,
+      "coarsest": 13,
+      "area": 0.2591090798377991,
+      "percent": 2.0619245428089137,
+      "exact": "2\\cdot 8694258/4^{13}"
+    },
+    "area_exact": "2\\cdot 8694258/4^{13}",
+    "debt_percent": 11.11111111111111,
+    "area_upper_percent": 2.0619245428089137,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 11,
+    "classes_share": 0.0,
+    "milestone_weight": 17,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound",
+      "A priori bounds from uniform control",
+      "Both uniformities are necessary",
+      "MLC from the lemmas of the programme"
+    ],
+    "source": "ff457f6a"
+  },
+  {
+    "id": "2026-11-27-keep-the-progress-history-across-squash-merges",
+    "timestamp": "2026-11-27T17:01:58+01:00",
+    "subject": "Keep the Progress history across squash merges",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 8694258,
+      "depth": 13,
+      "weight": 556432512,
+      "scale": 16,
+      "finest": 13,
+      "coarsest": 13,
+      "area": 0.2591090798377991,
+      "percent": 2.0619245428089137,
+      "exact": "2\\cdot 8694258/4^{13}"
+    },
+    "area_exact": "2\\cdot 8694258/4^{13}",
+    "debt_percent": 11.11111111111111,
+    "area_upper_percent": 2.0619245428089137,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 11,
+    "classes_share": 0.0,
+    "milestone_weight": 17,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound",
+      "A priori bounds from uniform control",
+      "Both uniformities are necessary",
+      "MLC from the lemmas of the programme"
+    ],
+    "source": "7f6cd38c"
+  },
+  {
+    "id": "2026-11-27-refine-problem-4-3-after-a-literature-pass-prove",
+    "timestamp": "2026-11-27T18:10:13+01:00",
+    "subject": "Refine Problem 4.3 after a literature pass, prove the extremal-length laws",
+    "area_note": "",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 8694258,
+      "depth": 13,
+      "weight": 556432512,
+      "scale": 16,
+      "finest": 13,
+      "coarsest": 13,
+      "area": 0.2591090798377991,
+      "percent": 2.0619245428089137,
+      "exact": "2\\cdot 8694258/4^{13}"
+    },
+    "area_exact": "2\\cdot 8694258/4^{13}",
+    "debt_percent": 10.0,
+    "area_upper_percent": 2.0619245428089137,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 16,
+    "classes_share": 0.0,
+    "milestone_weight": 19,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound",
+      "A priori bounds from uniform control",
+      "Both uniformities are necessary",
+      "A priori bounds are equivalent to a jump cap",
+      "Extremal length: series and parallel laws",
+      "MLC from the lemmas of the programme"
+    ],
+    "source": "a98510e1"
+  },
+  {
+    "id": "2026-11-27-prove-the-tail-invariance-of-the-problem-4-3",
+    "timestamp": "2026-11-27T21:52:41+01:00",
+    "subject": "Prove the tail invariance of the Problem 4.3 statements",
+    "area_note": "The three statements hold for a tower exactly when they hold for its tail, which is the exact self-similarity under tuning; the metric comparison of the tuned copies stays open.",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 8694258,
+      "depth": 13,
+      "weight": 556432512,
+      "scale": 16,
+      "finest": 13,
+      "coarsest": 13,
+      "area": 0.2591090798377991,
+      "percent": 2.0619245428089137,
+      "exact": "2\\cdot 8694258/4^{13}"
+    },
+    "area_exact": "2\\cdot 8694258/4^{13}",
+    "debt_percent": 9.523809523809524,
+    "area_upper_percent": 2.0619245428089137,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 16,
+    "classes_share": 0.0,
+    "milestone_weight": 20,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound",
+      "A priori bounds from uniform control",
+      "Both uniformities are necessary",
+      "A priori bounds are equivalent to a jump cap",
+      "Extremal length: series and parallel laws",
+      "Tail invariance of the Problem 4.3 statements",
+      "MLC from the lemmas of the programme"
+    ]
+  }
+]

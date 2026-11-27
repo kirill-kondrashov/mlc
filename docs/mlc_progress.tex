@@ -75,29 +75,48 @@ statements:
         separation budget.
 \end{enumerate}
 
-Both are decomposed into lemmas in \texttt{Mlc/ProgrammeRoot.lean}: the
-structure \texttt{ProgrammeInput} has one field per lemma, thirteen in all (a
-transfer lemma, four published cases, two lemmas of Problem~4.3 and six of
-Problem~4.4), and \texttt{mlc\_of\_programme} proves in Lean that they give the
-root input. The skeleton of the argument of \S4.1--\S4.3 is checked: a uniform
-growth bound for the degeneration of the renormalization levels and a dichotomy
-with an error at most linear in the period give a priori bounds for every tower
-(\texttt{aPrioriBounds\_of\_uniform}). Both uniformities are necessary
+Both are decomposed into statements in \texttt{Mlc/ProgrammeRoot.lean}: the
+structure \texttt{ProgrammeInput} has one field per open statement of the programme,
+sixteen in all (a transfer statement, six published cases, three statements of
+Problem~4.3 and six of Problem~4.4), and \texttt{mlc\_of\_programme} proves in Lean
+that they give the root input. The skeleton of the argument of \S4.1--\S4.3 is checked: a cap on the
+jumps of the degeneration of the renormalization levels (a jump by a fixed factor
+lands below a fixed ceiling) and a dichotomy with an error at most linear in the
+period give a priori bounds for every tower
+(\texttt{aPrioriBounds\_of\_jumpCap}). Given the dichotomy, the cap is also
+necessary for the a priori bounds (\texttt{aPrioriBounds\_iff\_jumpCap}), so it is
+the weakest hypothesis of its shape, and the Teichm\"uller contraction caps the
+jumps at the levels of small relative period, so that the open content is the
+tail at large relative period. Both ingredients are necessary
 (\texttt{uniformities\_necessary}): for every unbounded \(h\), a tower with
 unbounded relative periods satisfies the Teichm\"uller contraction, a uniform
 growth bound and the dichotomy with the error \(p\,h(p)\) and has unbounded
 degeneration, so a linear error is the threshold; and the tower of widths
 \((k+1)!\) satisfies the Teichm\"uller contraction and the dichotomy with a
-linear error but has unbounded degeneration, so the growth bound must be
-uniform in the relative period. The lemmas
+linear error but has uncapped jumps and unbounded degeneration. The widths of the
+class of Problem~4.3 are the pseudo-Siegel degenerations: the quadratic-like
+degeneration is unbounded in some classes of unbounded satellite type
+(S{\o}rensen; Cheraghi--Shishikura), whose class of quadratic growth is a published
+case. The conformal estimates behind the Gr\"otzsch step (4.6) and the Teichm\"uller
+contraction are proved in \texttt{Mlc/Research/ExtremalLength.lean}: the series law,
+the parallel law, \(W(G\setminus G')\ge\delta^{-1}W(G)\) and the pullback law
+\(W(\Gamma_X)\le d\,W(\Gamma_Y)\). The three statements of Problem~4.3 and the a priori
+bounds are invariant under the removal of a finite prefix of levels, which is the
+untuning of a tuned parameter (\texttt{lemmas\_shift\_iff} in
+\texttt{Mlc/Research/TailInvariance.lean}): they hold for a tower exactly when they hold
+for the tower without its first \(n\) levels. This is the exact, combinatorial
+self-similarity of \(M\); the uniform metric comparison of the tuned copies stays open.
+The statements of the programme
 are hypotheses; the roadmap lists their sources and an attack plan for each.
 
 \section{Progress dashboard}
 
-The baseline is the state of the literature: the first commit whose formal
-root consists exactly of Dudko's Problems 4.3 and 4.4. At this commit MLC
-follows from the two problems, which remain open, and the only known bound on
-the unresolved set is the disk \(|c|\le 2\) of area \(4\pi\). The first row of
+The baseline (update~0) is the state of the literature: MLC follows from Dudko's
+Problems 4.3 and 4.4, which stay open. The area \(4\pi\) of the disk \(|c|\le 2\)
+only normalizes the scale of the share below. The area of the parameters that the
+published theorems leave open is unknown (expected to be small, without a
+certificate), so the baseline row claims no unresolved area and the report states no
+reduction factor relative to the literature. The first row of
 Table~\ref{tab:commits} therefore shows the open problems instead of a
 percentage.
 
@@ -106,28 +125,36 @@ The headline number is the certified resolved share
   1-A_t=1-\frac{\mu^*(R_t)}{4\pi},
 \]
 where \(R_t\subseteq M\) is the unresolved set: the parameters without a
-proved local-connectivity certificate at commit \(t\). A parameter is resolved
+proved local-connectivity certificate at update \(t\). A parameter is resolved
 when it lies outside \(M\) or in \(\operatorname{int}M\), where local
 connectivity is automatic. The value \(100\%\) means \(\mu^*(R_t)=0\).
-Table~\ref{tab:commits} lists every commit after the baseline, together with
+The share is a by-product of the kernel-checked grid: the cells that no
+certificate removes form a neighbourhood of \(\partial M\) at the resolution of the
+grid, which shrinks with the depth of the grid and does not measure progress on
+Problems 4.3 and 4.4.
+Table~\ref{tab:commits} lists every update after the baseline, together with
 the resolved share and the result that raised it. Figure~\ref{fig:map} marks
-on \(M\) the parameters that each commit certified.
+on \(M\) the parameters that each update certified.
+
+The updates are stored in the repository tree (\texttt{docs/progress}), numbered from
+the baseline, and dated by the decision that made them; the table needs no Git history.
 
 \begingroup\footnotesize
-\begin{xltabular}{\linewidth}{@{}>{\raggedright\arraybackslash}p{19mm}l%
+\begin{xltabular}{\linewidth}{@{}ll%
   >{\hsize=.8\hsize\raggedright\arraybackslash}X%
   >{\raggedleft\arraybackslash}p{23mm}%
   >{\hsize=1.2\hsize\raggedright\arraybackslash}X@{}}
-  \caption{Commits after the literature baseline. The date is printed only
-  when it changes; a dash marks a commit that resolves nothing beyond the
-  literature. The resolved share is \(1-A_t\), where \(A_t\) is the certified
-  upper bound on \(\mu^*(R_t)/(4\pi)\).}\label{tab:commits}\\
+  \caption{Updates after the literature baseline. The number counts the updates
+  from the baseline (0), and the date is that of the decision. A coloured square
+  marks an update with a layer on the map; a dash marks an update that resolves
+  nothing beyond the literature. The resolved share is \(1-A_t\), where \(A_t\) is the
+  certified upper bound on \(\mu^*(R_t)/(4\pi)\).}\label{tab:commits}\\
   \toprule
-  When & Commit & Description & Resolved share & What it resolved \\
+  \# & Date & Description & Resolved share & What it resolved \\
   \midrule
   \endfirsthead
   \toprule
-  When & Commit & Description & Resolved share & What it resolved \\
+  \# & Date & Description & Resolved share & What it resolved \\
   \midrule
   \endhead
   \bottomrule
@@ -143,9 +170,9 @@ on \(M\) the parameters that each commit certified.
   \includegraphics[width=0.74\linewidth]{docs/mlc_progress_map.pdf}
   \caption{Parameter plane \(c=x+iy\). White outline: numerical rendering of
   the border of \(M\) (an illustration that the Lean proof does not use). A
-  colour marks the parameters certified by the commit with the same colour in
+  colour marks the parameters certified by the update with the same colour in
   Table~\ref{tab:commits}. The layers are stacked from the newest, largest
-  region at the bottom to the oldest on top, so that every commit stays
+  region at the bottom to the oldest on top, so that every update stays
   visible; the dashed circle is the envelope \(|c|=2\).}
   \label{fig:map}
 \end{figure}
@@ -169,7 +196,7 @@ The formalization-debt proxy is
 It is an audit gate rather than a measure of the Mandelbrot residual set.
 The commit hook rejects a proof-progress commit unless it improves the certified
 resolved share, the share of classes with a Lean certificate, or this value, and
-worsens none of them.
+worsens none of them; it then records the update in the progress ledger.
 
 \begin{table}[ht]
   \centering\footnotesize
@@ -189,15 +216,17 @@ The checked bound is
 \[
   A_t\leq\frac{2\cdot 556432512}{4^{16}}\cdot\frac{1}{4\pi}\approx 0.0206.
 \]
-The actual value remains unknown. The twentyfold gate \(A_t\leq 0.05\) is
-reached. The next verified numerical gate is a hundredfold improvement from the
-original disk envelope:
+The actual value remains unknown. The first gate \(A_t\leq 0.05\) (a resolved
+share of \(95\%\)) is reached. The next gate is \(A_t\leq 0.01\) (\(99\%\)):
 \[
   \mu^*(R_t)\leq \frac{4\pi}{100}=\frac{\pi}{25},
   \qquad
   A_t\leq 0.01.
 \]
-This requires a certified class partition or covering estimate.
+The gates are milestones of the grid computation. The cells that no certificate removes
+form a neighbourhood of \(\partial M\), whose area shrinks with the depth and says nothing
+about the classes that the published theorems leave open; passing the next gate
+requires a finer grid or a certified covering estimate of that neighbourhood.
 
 Area alone cannot measure all progress. The report therefore uses the
 \emph{Coverage-Uncertainty Profile}
@@ -217,9 +246,9 @@ where:
 
 Each component is nonincreasing when a class certificate is retained. For a
 catalogued class \(C_i\), completion strictly decreases the class component
-by at least its assigned weight. The catalogue has seven classes of equal
-weight, each with the lemmas of its chain; the proof of one lemma lowers the
-class component by the lemma's share of every class that needs it. The profile
+by at least its assigned weight. The catalogue has eight classes of equal
+weight, each with the statements of its chain; the proof of one statement lowers the
+class component by the statement's share of every class that needs it. The profile
 is a dashboard invariant; its components record how much of the parameter space
 remains uncertain.
 
@@ -233,7 +262,7 @@ multi-year effort:
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{p{0.44\linewidth}cc}
 \toprule
-Route & Expected residual reduction & Success prior \\
+Route & Planned residual reduction & Success prior \\
 \midrule
 Problem 4.3: remaining unbounded satellite pseudo-Siegel bounds &
 \(10\)--\(30\%\) & \(12\%\) \\
@@ -248,8 +277,11 @@ Unified phase-parameter transfer conditional on genuine geometry &
 \end{center}
 
 These ranges are planning estimates. Their purpose is
-to prioritize theorem acquisition and estimate which route can produce the
-largest measurable reduction. They must be revised after every proved class.
+to prioritize theorem acquisition and estimate which route can settle the largest
+part of the residual set, the parameters that the published theorems leave open.
+The planned residual reduction is a relative research-management prior for that set
+and is unrelated to the area of the grid. The ranges must be revised after every proved
+class.
 
 \section{Mathematical frontier}
 

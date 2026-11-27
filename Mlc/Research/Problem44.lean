@@ -24,13 +24,15 @@ appropriate number of first returns (`VirtualJuliaNest` in `Mlc/Research/Virtual
 The decomposition proposed here follows the three parts of `VirtualMoleculeAPrioriControl`:
 
 * **Lemma VJ** the virtual Julia nest with its hull inside `J_c` and partial invariance;
-* **Lemmas VT1, VD1** (first subcase): the Teichmüller contraction and the dichotomy (4.6) for
-  the virtual levels of bounded relative periods, so that `WidthTower.aPrioriBounds_of_bounded`
-  gives a priori bounds for the virtual degeneration;
-* **Lemmas VG2, VD2** (second subcase): the uniform growth bound and the dichotomy with an
-  error at most linear in the period for the virtual near-neutral step, which need the
-  pseudo-Siegel regularization of Problem 4.3, so that `WidthTower.aPrioriBounds_of_uniform`
-  applies;
+* **Lemma VT1** (both subcases): the Teichmüller contraction for the virtual levels, which
+  caps the jumps of the degeneration at the virtual levels of small relative period;
+* **Lemma VD1** (first subcase): the dichotomy (4.6) for the virtual levels of bounded
+  relative periods, so that `WidthTower.aPrioriBounds_of_bounded` gives a priori bounds for
+  the virtual degeneration;
+* **Lemmas VG2, VD2** (second subcase): the cap on the jumps of the degeneration at the
+  virtual levels of large relative period and the dichotomy with an error at most linear in
+  the period for the virtual near-neutral step, which need the pseudo-Siegel regularization
+  of Problem 4.3, so that `WidthTower.aPrioriBounds_of_tails` applies;
 * **Lemma VT** the virtual phase–parameter transfer: a degeneration bound on the virtual levels
   gives a connected parameter nest, a phase–parameter chart into the virtual hulls and the
   dynamical separation estimate of the canonical budget.
@@ -63,11 +65,11 @@ def VirtualJulia : Prop :=
   ∀ c ∈ MLC.Quadratic.MandelbrotSet, c ∉ interior MLC.Quadratic.MandelbrotSet → G.IsVirtual c →
     ∃ V : VirtualJuliaNest c, V.HullWithinJulia ∧ V.PartialInvariance
 
-/-- **Lemma VT1 (Problem 4.4, virtual bounded type).** The Teichmüller contraction holds for
-the virtual levels. -/
+/-- **Lemma VT1 (Problem 4.4, both subcases).** The Teichmüller contraction holds for the
+virtual levels. -/
 def VirtualTeichmuller : Prop :=
   ∀ c ∈ MLC.Quadratic.MandelbrotSet, c ∉ interior MLC.Quadratic.MandelbrotSet →
-    G.cls c = .virtualBounded → ∃ T, G.vtower c = some T ∧ T.Teichmuller
+    G.IsVirtual c → ∃ T, G.vtower c = some T ∧ T.Teichmuller
 
 /-- **Lemma VD1 (Problem 4.4, virtual bounded type).** The dichotomy (4.6) holds for the
 virtual levels. -/
@@ -75,11 +77,13 @@ def VirtualDichotomy : Prop :=
   ∀ c ∈ MLC.Quadratic.MandelbrotSet, c ∉ interior MLC.Quadratic.MandelbrotSet →
     G.cls c = .virtualBounded → ∃ T, G.vtower c = some T ∧ T.Dichotomy
 
-/-- **Lemma VG2 (Problem 4.4, virtual near-neutral).** The degeneration of the virtual levels
-grows by at most a fixed factor from a level to the next. -/
-def VirtualGrowth : Prop :=
+/-- **Lemma VG2 (Problem 4.4, virtual near-neutral).** A jump of the degeneration of the
+virtual levels by a fixed factor `C₀` at a level of large relative period lands below a fixed
+ceiling `B₀`: the virtual version of Lemma G. -/
+def VirtualJumpCap : Prop :=
   ∀ c ∈ MLC.Quadratic.MandelbrotSet, c ∉ interior MLC.Quadratic.MandelbrotSet →
-    G.cls c = .virtualNearNeutral → ∃ T Δ, G.vtower c = some T ∧ T.GrowthBound Δ
+    G.cls c = .virtualNearNeutral → ∃ T, G.vtower c = some T ∧
+      ∃ (P₀ : ℕ) (C₀ B₀ : ℝ), 0 < C₀ ∧ T.LargePeriodJumpCap P₀ C₀ B₀
 
 /-- **Lemma VD2 (Problem 4.4, virtual near-neutral).** The dichotomy (4.6) holds for the
 virtual levels with an additive error at most linear in the period. -/
@@ -99,13 +103,13 @@ def VirtualTransfer : Prop :=
 
 /-- The lemmas VT1, VD1, VG2 and VD2 give a priori bounds for the virtual degeneration. -/
 theorem virtual_hasBound (hT1 : G.VirtualTeichmuller) (hD1 : G.VirtualDichotomy)
-    (hG2 : G.VirtualGrowth) (hD2 : G.VirtualLinearDichotomy) {c : ℂ}
+    (hG2 : G.VirtualJumpCap) (hD2 : G.VirtualLinearDichotomy) {c : ℂ}
     (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hi : c ∉ interior MLC.Quadratic.MandelbrotSet)
     (hv : G.IsVirtual c) :
     ∃ (B : ℝ), 0 < B ∧ ∃ T, G.vtower c = some T ∧ ∀ k, T.width k ≤ B := by
   rcases hv with h1 | h2
   · obtain ⟨T, hT, P, hP⟩ := G.virtualBounded_spec c h1
-    obtain ⟨T1, hT1', hTeich⟩ := hT1 c hc hi h1
+    obtain ⟨T1, hT1', hTeich⟩ := hT1 c hc hi (Or.inl h1)
     obtain ⟨T2, hT2', hDich⟩ := hD1 c hc hi h1
     have e1 : T1 = T := Option.some.inj (hT1'.symm.trans hT)
     have e2 : T2 = T := Option.some.inj (hT2'.symm.trans hT)
@@ -113,17 +117,20 @@ theorem virtual_hasBound (hT1 : G.VirtualTeichmuller) (hD1 : G.VirtualDichotomy)
     rw [e2] at hDich
     obtain ⟨B, hBd⟩ := T.aPrioriBounds_of_bounded hP hTeich hDich
     exact ⟨B, lt_of_lt_of_le (T.width_pos 0) (hBd 0), T, hT, hBd⟩
-  · obtain ⟨T, Δ, hT, hΔ⟩ := hG2 c hc hi h2
-    obtain ⟨T', hT', hDich⟩ := hD2 c hc hi h2
-    have e : T' = T := Option.some.inj (hT'.symm.trans hT)
-    rw [e] at hDich
-    obtain ⟨B, hBd⟩ := T.aPrioriBounds_of_uniform hΔ hDich
+  · obtain ⟨T, hT, P₀, C₀, B₀, hC, hL⟩ := hG2 c hc hi h2
+    obtain ⟨T1, hT1', hTeich⟩ := hT1 c hc hi (Or.inr h2)
+    obtain ⟨T2, hT2', hDich⟩ := hD2 c hc hi h2
+    have e1 : T1 = T := Option.some.inj (hT1'.symm.trans hT)
+    have e2 : T2 = T := Option.some.inj (hT2'.symm.trans hT)
+    rw [e1] at hTeich
+    rw [e2] at hDich
+    obtain ⟨B, hBd⟩ := T.aPrioriBounds_of_tails hC hTeich hL hDich
     exact ⟨B, lt_of_lt_of_le (T.width_pos 0) (hBd 0), T, hT, hBd⟩
 
 /-- **Virtual a priori control.** The lemmas of Problem 4.4 give the a priori-control package of
 the virtual Molecule at every parameter of the two virtual subcases. -/
 theorem virtualControl (hJ : G.VirtualJulia) (hT1 : G.VirtualTeichmuller)
-    (hD1 : G.VirtualDichotomy) (hG2 : G.VirtualGrowth) (hD2 : G.VirtualLinearDichotomy)
+    (hD1 : G.VirtualDichotomy) (hG2 : G.VirtualJumpCap) (hD2 : G.VirtualLinearDichotomy)
     (hVT : G.VirtualTransfer) {c : ℂ} (hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (hi : c ∉ interior MLC.Quadratic.MandelbrotSet) (hv : G.IsVirtual c) :
     Nonempty (VirtualMoleculeAPrioriControl c) := by

@@ -9,33 +9,34 @@ measure-zero R may be nonempty, so the share is always read together with the
 number of open root obligations. The commit gate works on the equivalent upper
 bound mu*(R)/(4 pi).
 
-The baseline is the state of the literature: the first commit of the history
-whose formal root (``RootInput``) is exactly Dudko's Problems 4.3 and 4.4. Its
-row lists the two open problems; later rows show what each commit resolved.
+The baseline is the state of the literature: MLC follows from Dudko's Problems 4.3
+and 4.4, which stay open. The area 4 pi only normalizes the scale of the share; the
+area of the parameters that the published theorems leave open is unknown (expected to
+be small, without a certificate). The baseline row therefore claims no unresolved area,
+and no factor of reduction relative to the literature is shown. The resolved share is a
+by-product of the kernel-checked grid and measures no progress on Problems 4.3 and 4.4.
 
-Lean sources are read from Git history. The module renders
+The updates (the table rows) are read from the progress ledger of the repository tree,
+``docs/progress/ledger.json`` with the masks of ``docs/progress/layers`` (see
+``progress_ledger.py``), so that the report needs no Git history. The module renders
 
-* the commit table after the literature baseline,
+* the table of the updates after the literature baseline,
 * the route-planning table,
-* a vector map of M showing the parameters certified by each commit,
+* a map of M showing the parameters certified by each update,
 * LaTeX fragments used by the status report.
 """
 
 from __future__ import annotations
 
-from datetime import datetime
 from pathlib import Path
 import argparse
-import functools
-import hashlib
 import html
 import math
 import re
 import subprocess
 import sys
-import time
 
-from programme import classes_share, open_lemmas
+from programme import CLASSES, LEMMAS, classes_share, open_lemmas
 
 # The root theorem is declared as `theorem mlc_conjecture` inside `namespace MLC`,
 # so its qualified name never occurs in the concatenated sources.
@@ -45,6 +46,9 @@ ROOT_THEOREM = re.compile(r"^theorem\s+mlc_conjecture\b", re.MULTILINE)
 # `Mlc/Research/Degeneration.lean` and `Mlc/ProgrammeRoot.lean`.
 SKELETON_THEOREM = re.compile(r"^\s*theorem\s+aPrioriBounds_of_uniform\b", re.MULTILINE)
 SHARPNESS_THEOREM = re.compile(r"^\s*theorem\s+uniformities_necessary\b", re.MULTILINE)
+JUMPCAP_THEOREM = re.compile(r"^\s*theorem\s+aPrioriBounds_iff_jumpCap\b", re.MULTILINE)
+GROTZSCH_THEOREM = re.compile(r"^\s*theorem\s+extWidth_ge_of_series\b", re.MULTILINE)
+TAIL_THEOREM = re.compile(r"^\s*theorem\s+lemmas_shift_iff\b", re.MULTILINE)
 PROGRAMME_THEOREM = re.compile(r"^\s*theorem\s+mlc_of_programme\b", re.MULTILINE)
 
 PROGRESS_MILESTONES = (
@@ -60,12 +64,15 @@ PROGRESS_MILESTONES = (
     ("Kernel-checked grid bound", "unresolved_volume_le_grid", 2),
     ("A priori bounds from uniform control", SKELETON_THEOREM, 1),
     ("Both uniformities are necessary", SHARPNESS_THEOREM, 1),
+    ("A priori bounds are equivalent to a jump cap", JUMPCAP_THEOREM, 1),
+    ("Extremal length: series and parallel laws", GROTZSCH_THEOREM, 1),
+    ("Tail invariance of the Problem 4.3 statements", TAIL_THEOREM, 1),
     ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )
 
 # Each step lowers the certified bound on mu*(R) / (4 pi). A step is achieved
-# when its Lean symbol occurs in the commit's sources. The regions describe
+# when its Lean symbol occurs in the Lean sources of an update. The regions describe
 # the parameters that the step certifies and are drawn on the map of M:
 #   interior: points of int M (local connectivity is automatic there),
 #   exterior: points outside M (removed from the envelope),
@@ -163,7 +170,7 @@ OPEN_ROOT_SYMBOLS = (
     "Problem43PseudoSiegelAPrioriBoundsData",
     "Problem44VirtualMoleculeData",
 )
-# Colours of the successive grid commits; the first is the colour of the
+# Colours of the successive grid updates; the first is the colour of the
 # "Kernel-checked grid" step. Orange is reserved for the unresolved cells.
 GRID_PALETTE = (
     "#38bdf8",
@@ -175,13 +182,16 @@ GRID_PALETTE = (
     "#f87171",
     "#6366f1",
 )
-TARGET_PERCENT = 1.0  # second gate: a hundredfold reduction of the unresolved area
-MIN_TARGET_PERCENT = 5.0  # first gate: a twentyfold reduction, i.e. a 95% resolved share
+TARGET_PERCENT = 1.0  # second gate: a resolved share of 99%
+MIN_TARGET_PERCENT = 5.0  # first gate: a resolved share of 95%
 MAP_WINDOW = (-2.15, 0.45, -1.25, 1.25)
 MAP_GRID = (520, 500)
 MAP_SCALE = 4  # pixels of the raster of the certified regions per unit of MAP_GRID
 MAP_ITERATIONS = 120
 EPS = 1e-12
+# The progress ledger (see progress_ledger.py), relative to the repository root.
+LEDGER_FILE = Path("docs") / "progress" / "ledger.json"
+LAYER_DIR = Path("docs") / "progress" / "layers"
 
 
 GRID_SYMBOL = "unresolved_volume_le_grid"
@@ -327,141 +337,34 @@ def staged_progress_metrics(repo_root: Path) -> dict[str, object]:
     return progress_metrics_from_ref(repo_root, proc.stdout.strip())
 
 
-def _git(repo_root: Path, *args: str) -> str:
-    return subprocess.run(
-        ["git", *args],
-        cwd=repo_root,
-        check=True,
-        text=True,
-        capture_output=True,
-    ).stdout.strip()
-
-
-def has_literature_root(repo_root: Path, ref: str) -> bool:
-    """The formal root of ``ref`` has exactly Dudko's two open problems as fields."""
-    proc = subprocess.run(
-        ["git", "grep", "-h", "-A4", "-E", r"^structure RootInput\b", ref, "--", "Mlc"],
-        cwd=repo_root,
-        check=False,
-        text=True,
-        capture_output=True,
-    )
-    if proc.returncode != 0:
-        return False
-    fields: list[str] = []
-    inside = False
-    for line in proc.stdout.splitlines():
-        if line.startswith("structure RootInput"):
-            inside = True
-            continue
-        field = re.match(r"[ \t]+\w+\s*:\s*(\w+)", line)
-        if inside and field:
-            fields.append(field.group(1))
-        elif inside:
-            break
-    return fields == list(OPEN_ROOT_SYMBOLS)
-
-
-def literature_baseline(repo_root: Path) -> str:
-    """The first commit of the history whose formal root is exactly Dudko's
-    Problems 4.3 and 4.4: the state of the literature (MLC follows from them).
-
-    The test is monotone along the first-parent history, so a binary search
-    finds the commit.
-    """
-    history = _git(repo_root, "rev-list", "--reverse", "--first-parent", "HEAD").splitlines()
-    if not history or not has_literature_root(repo_root, history[-1]):
-        raise RuntimeError("The root of HEAD is not Dudko's Problems 4.3 and 4.4")
-    low, high = 0, len(history) - 1
-    while low < high:
-        mid = (low + high) // 2
-        if has_literature_root(repo_root, history[mid]):
-            high = mid
-        else:
-            low = mid + 1
-    return history[low]
-
-
 def _step_by_symbol(symbol: str) -> dict[str, object]:
     return next(step for step in AREA_STEPS if step["symbol"] == symbol)
 
 
-LITERATURE_NAME = "the literature baseline"
+def grid_depth(grid: dict[str, object]) -> int:
+    """The depth that names a grid: the finest level of a grid of blocks."""
+    return int(grid["finest"]) if grid.get("format") == "blocks" else int(grid["depth"])
 
 
-def commit_progress_history(repo_root: Path) -> list[dict[str, object]]:
-    try:
-        base = literature_baseline(repo_root)
-        base_name = LITERATURE_NAME
-        chain = _git(
-            repo_root, "rev-list", "--reverse", "--first-parent", f"{base}..HEAD"
-        ).splitlines()
-        refs = [base] + [line for line in chain if line]
-    except (RuntimeError, subprocess.CalledProcessError):
-        refs = _git(
-            repo_root, "rev-list", "--reverse", "--first-parent", "-12", "HEAD"
-        ).splitlines()
-        base_name = "HEAD~12"
-    rows: list[dict[str, object]] = []
-    for index, ref in enumerate(refs):
-        short, stamp, subject = _git(
-            repo_root, "show", "-s", "--format=%h%x09%ct%x09%s", ref
-        ).split("\t", 2)
-        message = _git(repo_root, "show", "-s", "--format=%B", ref)
-        noted = re.search(r"(?m)^Area-note:\s*(.+)$", message)
-        rows.append(
-            {
-                "sha": short,
-                "timestamp": int(stamp),
-                "subject": subject,
-                "area_note": noted.group(1).strip() if noted else "",
-                "baseline": index == 0,
-                "baseline_name": base_name,
-                **progress_metrics_from_ref(repo_root, ref),
-            }
-        )
-    head = rows[-1]
-    working = progress_metrics_from_worktree(repo_root)
-    if (
-        abs(float(working["debt_percent"]) - float(head["debt_percent"])) > EPS
-        or abs(
-            float(working["area_upper_percent"])
-            - float(head["area_upper_percent"])
-        )
-        > EPS
-    ):
-        rows.append(
-            {
-                "sha": "worktree",
-                "timestamp": int(time.time()),
-                "subject": "Uncommitted working tree",
-                "baseline": False,
-                "baseline_name": base_name,
-                **working,
-            }
-        )
-    annotate_rows(rows)
-    return rows
+BASELINE_NOTE = (
+    "State of the literature: MLC follows from Dudko's Problems 4.3 and 4.4, which stay "
+    r"open. The area $4\pi$ of the disk $|c|\le 2$ only normalizes the scale of the "
+    "share; the area of the parameters that the published theorems leave open is unknown "
+    "(expected to be small, without a certificate)."
+)
 
 
 def annotate_rows(rows: list[dict[str, object]]) -> None:
+    """Number the rows (the baseline is 0), give them their date, and derive from every row
+    and its predecessor the change of the share, the new area steps and the note."""
     previous: dict[str, object] | None = None
-    previous_date = None
-    grid_commits = 0
-    for row in rows:
-        moment = datetime.fromtimestamp(int(row["timestamp"]))
-        date = moment.strftime("%Y-%m-%d")
-        row["date"] = date if date != previous_date else ""
-        row["time"] = moment.strftime("%H:%M")
-        previous_date = date
+    for number, row in enumerate(rows):
+        row["number"] = number
+        row["date"] = str(row["timestamp"])[:10]
         if previous is None:
             row["delta"] = None
             row["steps"] = []
-            row["note"] = (
-                "State of the literature: MLC follows from Dudko's Problems 4.3 "
-                "and 4.4, which remain open. The unresolved set $R$ is only "
-                r"known to lie in the disk $|c|\le 2$ of area $4\pi$."
-            )
+            row["note"] = BASELINE_NOTE
         else:
             new_symbols = [
                 symbol
@@ -477,12 +380,6 @@ def annotate_rows(rows: list[dict[str, object]]) -> None:
             reasons = " ".join(str(step["reason"]) for step in steps)
             grid = row.get("grid")
             if grid is not None and delta < -EPS:
-                row["layer"] = {
-                    "color": GRID_PALETTE[grid_commits % len(GRID_PALETTE)],
-                    "grid": grid,
-                    "sha": row["sha"],
-                }
-                grid_commits += 1
                 before = previous.get("grid")
                 modern = ("hints", "blocks")
                 if grid.get("format") in modern and (
@@ -522,7 +419,7 @@ def annotate_rows(rows: list[dict[str, object]]) -> None:
             elif steps:
                 row["note"] = f"No numeric change. {reasons}"
             else:
-                row["note"] = "No change in the resolved share."
+                row["note"] = row.get("area_note") or "No change in the resolved share."
         previous = row
 
 
@@ -534,13 +431,6 @@ def format_percent(value: float) -> str:
 
 def resolved_percent(area_percent: float) -> float:
     return 100.0 - area_percent
-
-
-def format_factor(value: float) -> str:
-    if value <= 0:
-        return "∞"
-    factor = 100.0 / value
-    return f"×{factor:.3f}" if factor < 10 else f"×{factor:.1f}"
 
 
 def area_value(percent: float) -> float:
@@ -740,6 +630,8 @@ def tex_rich(text: object) -> str:
 
 
 def swatch_color(row: dict[str, object]) -> str | None:
+    """The colour of the dot of an update: its grid layer or its first area step with a
+    region on the map."""
     layer = row.get("layer")
     if layer is not None:
         return str(layer["color"])
@@ -752,18 +644,25 @@ def swatch_color(row: dict[str, object]) -> str | None:
 def row_kind(row: dict[str, object]) -> str:
     if row["baseline"]:
         return "baseline"
-    if row["sha"] == "worktree":
-        return "worktree"
     if row["delta"] is not None and row["delta"] < -EPS:
         return "drop"
     return "step" if row["steps"] else "idle"
 
 
+def shown_note(row: dict[str, object]) -> str | None:
+    """The text of the column "What it resolved"; None for an update that changes nothing
+    and carries no note."""
+    if row_kind(row) == "idle" and not row.get("area_note"):
+        return None
+    return str(row["note"])
+
+
 def share_label(row: dict[str, object]) -> tuple[str, str]:
     """Headline and detail (rich text) of the resolved-share cell.
 
-    The baseline is the literature state, where Dudko's two problems are open;
-    a commit that resolves nothing beyond it shows a dash instead of 0%.
+    The baseline is the literature state, where Dudko's two problems are open and the
+    unresolved area is unknown; it shows no share. An update that resolves nothing beyond
+    the baseline shows a dash instead of 0%.
     """
     if row["baseline"]:
         return "Open", "Dudko 4.3 and 4.4"
@@ -775,27 +674,26 @@ def share_label(row: dict[str, object]) -> tuple[str, str]:
     return format_percent(resolved), detail
 
 
+def dot_html(row: dict[str, object]) -> str:
+    """The coloured dot of an update with a layer on the map; an invisible dot of the same
+    width keeps the numbers of the other updates aligned."""
+    color = swatch_color(row)
+    if color is None:
+        return '<span class="swatch off"></span>'
+    return f'<span class="swatch" style="background:{esc(color)}"></span>'
+
+
 def commit_table_html(rows: list[dict[str, object]]) -> str:
     out = [
         '<table class="ctable">',
         "<thead><tr>"
-        '<th class="c-time">Time</th><th class="c-sha">Commit</th>'
+        '<th class="c-no">№</th><th class="c-date">Date</th>'
         "<th>Description</th>"
         '<th class="c-area">Resolved share</th>'
         "<th>What it resolved</th></tr></thead><tbody>",
     ]
     for row in rows:
-        if row["date"]:
-            out.append(
-                f'<tr class="date-row"><th colspan="5">{esc(row["date"])}</th></tr>'
-            )
         kind = row_kind(row)
-        color = swatch_color(row)
-        dot = (
-            f'<span class="swatch" style="background:{esc(color)}"></span>'
-            if color
-            else ""
-        )
         tag = ' <span class="chip">baseline</span>' if kind == "baseline" else ""
         headline, detail = share_label(row)
         delta = format_delta(row["delta"])
@@ -805,12 +703,13 @@ def commit_table_html(rows: list[dict[str, object]]) -> str:
             else ""
         )
         sub = f'<span class="sub">{html_rich(detail)}</span>' if detail else ""
-        note = "—" if kind == "idle" else html_rich(row["note"])
+        text = shown_note(row)
+        note = "—" if text is None else html_rich(text)
         out.append(
             f'<tr class="{kind}">'
-            f'<td class="c-time">{esc(row["time"])}</td>'
-            f'<td class="c-sha">{dot}<code>{esc(row["sha"])}</code>{tag}</td>'
-            f'<td class="c-desc">{esc(row["subject"])}</td>'
+            f'<td class="c-no">{dot_html(row)}<b>{row["number"]}</b></td>'
+            f'<td class="c-date"><time datetime="{esc(row["timestamp"])}">{esc(row["date"])}</time></td>'
+            f'<td class="c-desc">{esc(row["subject"])}{tag}</td>'
             f'<td class="c-area"><b>{esc(headline)}</b>{sub}{chip}</td>'
             f'<td class="c-note">{note}</td></tr>'
         )
@@ -827,7 +726,7 @@ def routes_html() -> str:
             f'<div class="route-name"><span class="route-id">{esc(route["id"])}'
             f"</span>{html_rich(route['name'])}</div>"
             '<dl class="route-facts">'
-            f"<div><dt>Planned reduction</dt><dd>{low * 100:.0f}–{high * 100:.0f}%</dd></div>"
+            f"<div><dt>Planned residual reduction</dt><dd>{low * 100:.0f}–{high * 100:.0f}%</dd></div>"
             f"<div><dt>Planning prior</dt><dd>{route['probability'] * 100:.0f}%</dd></div>"
             "</dl>"
             f'<p class="route-next"><span>Next theorem</span>{html_rich(route["next"])}</p>'
@@ -952,223 +851,6 @@ def mandelbrot_border(repo_root: Path) -> str:
     return data
 
 
-def merge_rects(
-    rects: list[tuple[float, float, float, float]]
-) -> list[tuple[float, float, float, float]]:
-    """Merge horizontally adjacent rectangles with the same vertical extent."""
-    rows: dict[tuple[float, float], list[tuple[float, float]]] = {}
-    for x0, y0, x1, y1 in rects:
-        rows.setdefault((y0, y1), []).append((x0, x1))
-    merged = []
-    for (y0, y1), spans in rows.items():
-        spans.sort()
-        start, end = spans[0]
-        for x0, x1 in spans[1:]:
-            if abs(x0 - end) < 1e-12:
-                end = x1
-            else:
-                merged.append((start, y0, end, y1))
-                start, end = x0, x1
-        merged.append((start, y0, end, y1))
-    return merged
-
-
-@functools.lru_cache(maxsize=None)
-def _grid_regions(
-    repo_root: Path, pmax: int, steps: int, fuel: int, cells: int
-) -> tuple[dict[str, object], ...]:
-    sources = [repo_root / "export_grid_regions.lean"]
-    if not all(path.exists() for path in sources):
-        return ()
-    params = [str(pmax), str(steps), str(fuel)]
-    digest = hashlib.sha256(
-        b"".join(path.read_bytes() for path in sources) + "/".join(params).encode()
-    ).hexdigest()[:16]
-    cache_dir = repo_root / ".lake" / "progress-cache"
-    cache = cache_dir / f"grid_regions_{digest}.txt"
-    if cache.exists():
-        text = cache.read_text(encoding="utf-8")
-    else:
-        proc = subprocess.run(
-            ["lake", "env", "lean", "--run", "export_grid_regions.lean", *params],
-            cwd=repo_root,
-            check=False,
-            text=True,
-            capture_output=True,
-        )
-        if proc.returncode != 0:
-            return ()
-        text = proc.stdout
-        cache_dir.mkdir(parents=True, exist_ok=True)
-        cache.write_text(text, encoding="utf-8")
-    inner: list[tuple[float, float, float, float]] = []
-    unresolved: list[tuple[float, float, float, float]] = []
-    for line in text.splitlines():
-        tag, x, y, k = line.split()
-        scale = 2.0 ** int(k)
-        rect = (
-            int(x) / scale,
-            int(y) / scale,
-            (int(x) + 1) / scale,
-            (int(y) + 1) / scale,
-        )
-        target = inner if tag == "I" else unresolved
-        target.append(rect)
-        target.append((rect[0], -rect[3], rect[2], -rect[1]))
-    count = len(unresolved) // 2
-    if count != cells:
-        print(
-            f"warning: the grid with parameters {params} leaves {count} unresolved "
-            f"cells; its commit proved {cells}, so its regions are omitted",
-            file=sys.stderr,
-        )
-        return ()
-    return (
-        {"kind": "rects", "role": "interior", "rects": merge_rects(inner)},
-        {"kind": "rects", "role": "unresolved", "rects": merge_rects(unresolved)},
-    )
-
-
-TILE_ENTRY = re.compile(r"\(⟨(-?\d+), (-?\d+), (\d+)⟩,\s*\[([^\]]*)\]\)")
-MODULE_DEPTH = re.compile(r"cellsH \((\d+) - p\.1\.k\)")
-
-
-def _module_order(name: str) -> tuple[int, ...]:
-    """Order of the tile modules: ``G<block>_<part>`` by block and part, the earlier
-    ``Part<index>`` by index."""
-    stem = Path(name).stem
-    return tuple(int(v) for v in re.findall(r"\d+", stem))
-
-
-def tile_texts(repo_root: Path, sha: str) -> list[str]:
-    """The tile modules of a commit (or of the working tree), in order."""
-    if sha == "worktree":
-        paths = sorted(
-            (repo_root / "Mlc" / "GridTiles").glob("*.lean"),
-            key=lambda path: _module_order(path.name),
-        )
-        return [path.read_text(encoding="utf-8") for path in paths]
-    names = sorted(
-        _git(
-            repo_root, "ls-tree", "-r", "--name-only", sha, "--", "Mlc/GridTiles"
-        ).splitlines(),
-        key=_module_order,
-    )
-    return [
-        subprocess.run(
-            ["git", "show", f"{sha}:{name}"],
-            cwd=repo_root,
-            check=True,
-            text=True,
-            capture_output=True,
-        ).stdout
-        for name in names
-    ]
-
-
-def hint_squares(
-    texts: list[str], depth: int, scale: int | None = None
-) -> tuple[list[tuple[int, int, int]], list[tuple[int, int, int]], int]:
-    """Replay the hint streams of the tile modules (``verifyTree``): the squares
-    certified inside M, the unresolved squares and the number of unresolved
-    finest cells, weighed to cells of side ``2^-scale`` (a module states its own
-    depth; ``depth`` is used for modules that do not)."""
-    scale = depth if scale is None else scale
-    inside: list[tuple[int, int, int]] = []
-    unresolved: list[tuple[int, int, int]] = []
-    cells = 0
-    for text in texts:
-        stated = MODULE_DEPTH.search(text)
-        module_depth = int(stated.group(1)) if stated else depth
-        for entry in TILE_ENTRY.finditer(text):
-            x, y, k = int(entry[1]), int(entry[2]), int(entry[3])
-            hints = [int(v) for v in entry[4].split(",") if v.strip()]
-            position = [0]
-
-            def walk(x: int, y: int, k: int) -> None:
-                nonlocal cells
-                fuel = module_depth - k
-                index = position[0]
-                position[0] += 1
-                hint = hints[index] if index < len(hints) else 0
-                if hint == 0 or (hint == 1 and fuel == 0):
-                    unresolved.append((x, y, k))
-                    cells += 4**fuel * 4 ** (scale - module_depth)
-                elif hint == 1:
-                    for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1)):
-                        walk(2 * x + dx, 2 * y + dy, k + 1)
-                elif hint % 2 == 1:
-                    inside.append((x, y, k))
-
-            walk(x, y, k)
-    return inside, unresolved, cells
-
-
-def squares_to_regions(
-    inside: list[tuple[int, int, int]], unresolved: list[tuple[int, int, int]]
-) -> tuple[dict[str, object], ...]:
-    """Map regions (upper half and its mirror image) of lists of squares."""
-    inner: list[tuple[float, float, float, float]] = []
-    outer: list[tuple[float, float, float, float]] = []
-    for squares, target in ((inside, inner), (unresolved, outer)):
-        for x, y, k in squares:
-            scale = 2.0**k
-            rect = (x / scale, y / scale, (x + 1) / scale, (y + 1) / scale)
-            target.append(rect)
-            target.append((rect[0], -rect[3], rect[2], -rect[1]))
-    return (
-        {"kind": "rects", "role": "interior", "rects": merge_rects(inner)},
-        {"kind": "rects", "role": "unresolved", "rects": merge_rects(outer)},
-    )
-
-
-@functools.lru_cache(maxsize=None)
-def _hint_regions(
-    repo_root: Path, sha: str, depth: int, weight: int, scale: int
-) -> tuple[dict[str, object], ...]:
-    inside, unresolved, found = hint_squares(tile_texts(repo_root, sha), depth, scale)
-    if found != weight:
-        print(
-            f"warning: the tiles of {sha} leave {found} unresolved cells; the commit "
-            f"proved {weight}, so its regions are omitted",
-            file=sys.stderr,
-        )
-        return ()
-    return squares_to_regions(inside, unresolved)
-
-
-def grid_regions(
-    repo_root: Path, grid: dict[str, object], sha: str
-) -> list[dict[str, object]]:
-    """Squares of the grid of one commit.
-
-    A grid of hints is replayed from the tile modules of the commit. An older
-    grid, found by the classifier of the first commits, is reproduced by the
-    Lean exporter (a copy of that classifier) with the parameters of the commit.
-    In both cases the number of unresolved cells must equal the count that the
-    commit proved; otherwise no regions are returned.
-    """
-    if grid.get("format") in ("hints", "blocks"):
-        return list(
-            _hint_regions(
-                repo_root,
-                sha,
-                int(grid["depth"]),
-                int(grid["weight"]),
-                int(grid["scale"]),
-            )
-        )
-    return list(
-        _grid_regions(
-            repo_root,
-            int(grid["pmax"]),
-            int(grid["J"]),
-            int(grid["fuel"]),
-            int(grid["cells"]),
-        )
-    )
-
-
 def grid_point(x: float, y: float) -> tuple[float, float]:
     x0, x1, y0, y1 = MAP_WINDOW
     nx, ny = MAP_GRID
@@ -1200,13 +882,6 @@ def region_svg(region: dict[str, object], color: str) -> str:
             f'<circle cx="{cx:.2f}" cy="{cy:.2f}" '
             f'r="{float(region["r"]) * scale:.2f}" {style}/>'
         )
-    if region["kind"] == "rects":
-        path = []
-        for rx0, ry0, rx1, ry1 in region["rects"]:
-            ax, ay = grid_point(rx0, ry1)
-            bx, by = grid_point(rx1, ry0)
-            path.append(f"M{ax:.1f} {ay:.1f}H{bx:.1f}V{by:.1f}H{ax:.1f}z")
-        return f'<path d="{"".join(path)}" {style}/>'
     raise ValueError(f"Unknown region kind {region['kind']}")
 
 
@@ -1217,14 +892,12 @@ MAP_MEANING = {
 }
 
 
-def map_layers(
-    repo_root: Path, rows: list[dict[str, object]]
-) -> list[dict[str, object]]:
-    """One layer per commit that certifies a region, oldest first.
+def map_layers(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    """One layer per update that certifies a region, oldest first.
 
-    A commit contributes the regions of its step or, for a grid commit, the
-    interior squares of its own grid, each in the colour of its table row. The
-    unresolved cells of the latest grid join that layer.
+    An update contributes the regions of its area step (vector disks) or, for a grid
+    update, the mask of the cells certified inside M by its grid, each in the colour of
+    its table row. The mask of the unresolved cells of the latest grid joins that layer.
     """
     layers: list[dict[str, object]] = []
     for row in rows:
@@ -1234,7 +907,7 @@ def map_layers(
                 meaning = ", ".join(MAP_MEANING[role] for role in roles)
                 layers.append(
                     {
-                        "sha": row["sha"],
+                        "number": row["number"],
                         "color": str(step["color"]),
                         "title": f"{step['title']} · {meaning}",
                         "regions": list(step["regions"]),
@@ -1242,45 +915,37 @@ def map_layers(
                 )
         layer = row.get("layer")
         if layer is not None:
-            grid = layer["grid"]
-            regions = grid_regions(repo_root, grid, str(layer["sha"]))
-            if regions:
-                how = (
-                    "Taylor-model certificates"
-                    if grid.get("format") in ("hints", "blocks")
-                    else f"periods up to {grid['pmax']}, {grid['J']} orbit steps"
-                )
-                depth_text = (
-                    f"{grid['finest']}" if grid.get("format") == "blocks" else f"{grid['depth']}"
-                )
-                staged = re.match(r"Depth \d+ for (.+?)\.(?:\s|$)", str(row.get("area_note", "")))
-                region_text = f" for {staged.group(1)}" if staged else ""
-                layers.append(
-                    {
-                        "sha": row["sha"],
-                        "color": str(layer["color"]),
-                        "title": (
-                            f"Kernel-checked grid of depth {depth_text}{region_text}: {how} · "
-                            + MAP_MEANING["interior"]
-                        ),
-                        "regions": regions[:1],
-                        "unresolved": regions[1],
-                    }
-                )
-    grid_layers = [layer for layer in layers if "unresolved" in layer]
-    for layer in grid_layers[:-1]:
-        del layer["unresolved"]
-    if grid_layers:
-        latest = grid_layers[-1]
-        latest["regions"] = [latest.pop("unresolved"), *latest["regions"]]
-        latest["has_unresolved"] = True
+            grid = row["grid"]
+            how = (
+                "Taylor-model certificates"
+                if grid.get("format") in ("hints", "blocks")
+                else f"periods up to {grid['pmax']}, {grid['J']} orbit steps"
+            )
+            staged = re.match(r"Depth \d+ for (.+?)\.(?:\s|$)", str(row.get("area_note", "")))
+            region_text = f" for {staged.group(1)}" if staged else ""
+            masks = layer["masks"]
+            regions = [{"kind": "mask", "role": "interior", "file": masks["interior"]}]
+            if "unresolved" in masks:
+                regions.insert(0, {"kind": "mask", "role": "unresolved", "file": masks["unresolved"]})
+            layers.append(
+                {
+                    "number": row["number"],
+                    "color": str(layer["color"]),
+                    "title": (
+                        f"Kernel-checked grid of depth {grid_depth(grid)}{region_text}: {how} · "
+                        + MAP_MEANING["interior"]
+                    ),
+                    "regions": regions,
+                    "has_unresolved": "unresolved" in masks,
+                }
+            )
     return layers
 
 
 def map_painting(repo_root: Path, rows: list[dict[str, object]]) -> list[str]:
     """SVG elements of the certified regions, in paint order.
 
-    The filled rectangles of consecutive regions are composited into one PNG: the 600 000
+    The coverage masks of consecutive regions are composited into one PNG: the 600 000
     rectangles of the grid layers would weigh 18 MB as vector paths. Disks and the dashed
     envelope stay vector shapes, between the images, so that the stacking is kept.
     """
@@ -1288,30 +953,35 @@ def map_painting(repo_root: Path, rows: list[dict[str, object]]) -> list[str]:
 
     nx, ny = MAP_GRID
     elements: list[str] = []
-    batch: list[tuple[object, tuple[float, float, float], float]] = []
+    canvas = None
 
     def flush() -> None:
-        if not batch:
+        nonlocal canvas
+        if canvas is None:
             return
-        canvas = map_raster.composite(batch, nx * MAP_SCALE, ny * MAP_SCALE)
         uri = map_raster.png_data_uri(map_raster.encode_png(canvas))
         elements.append(
             f'<image x="0" y="0" width="{nx}" height="{ny}" preserveAspectRatio="none" '
             f'xlink:href="{uri}"/>'
         )
-        batch.clear()
+        canvas = None
 
-    # A newer commit certifies a larger area, so its layer is painted first;
+    # A newer update certifies a larger area, so its layer is painted first;
     # every older, smaller layer is painted over it and stays visible.
-    for layer in reversed(map_layers(repo_root, rows)):
+    for layer in reversed(map_layers(rows)):
         color = str(layer["color"])
         for region in layer["regions"]:
-            if region["kind"] == "rects" and region["role"] != "envelope":
+            if region["kind"] == "mask":
                 fill, opacity = region_paint(region, color)
-                pixels = map_raster.rect_pixels(
-                    region["rects"], MAP_WINDOW, MAP_GRID, MAP_SCALE
+                mask = map_raster.decode_png_gray(
+                    (repo_root / LAYER_DIR / str(region["file"])).read_bytes()
                 )
-                batch.append((pixels, map_raster.hex_rgb(fill), opacity))
+                canvas = map_raster.composite_masks(
+                    [(mask, map_raster.hex_rgb(fill), opacity)],
+                    nx * MAP_SCALE,
+                    ny * MAP_SCALE,
+                    canvas,
+                )
             else:
                 flush()
                 elements.append(region_svg(region, color))
@@ -1320,7 +990,7 @@ def map_painting(repo_root: Path, rows: list[dict[str, object]]) -> list[str]:
 
 
 def parameter_map_svg(repo_root: Path, rows: list[dict[str, object]]) -> str:
-    """Map of M; every colour marks the parameters certified by one commit."""
+    """Map of M; every colour marks the parameters certified by one update."""
     nx, ny = MAP_GRID
     x0, x1, y0, y1 = MAP_WINDOW
     margin_left, margin_bottom, margin_top, margin_right = 46, 44, 10, 10
@@ -1371,68 +1041,79 @@ def parameter_map_svg(repo_root: Path, rows: list[dict[str, object]]) -> str:
     )
 
 
-def map_legend_html(repo_root: Path, rows: list[dict[str, object]]) -> str:
+def map_legend_html(rows: list[dict[str, object]]) -> str:
     items = []
-    layers = map_layers(repo_root, rows)
+    layers = map_layers(rows)
     for layer in layers:
         items.append(
             f'<li><span class="swatch" style="background:{esc(layer["color"])}">'
-            f'</span><code>{esc(layer["sha"])}</code>'
+            f'</span><b class="no">{layer["number"]}</b>'
             f'<span>{html_rich(layer["title"])}</span></li>'
         )
     if any(layer.get("has_unresolved") for layer in layers):
         items.append(
-            '<li><span class="swatch" style="background:#f59e0b"></span>'
+            '<li><span class="swatch" style="background:#f59e0b"></span><b class="no"></b>'
             "<span>unresolved cells of the current grid</span></li>"
         )
     items.append(
-        '<li><span class="swatch outline"></span>'
+        '<li><span class="swatch outline"></span><b class="no"></b>'
         f'<span>{html_rich("numerical outline of the border of $M$ (illustration)")}'
         "</span></li>"
     )
     return f'<ul class="map-legend">{"".join(items)}</ul>'
 
 
+def format_count(value: float) -> str:
+    """``2``, ``1.5`` or ``0.25``: a count with at most two decimals."""
+    return f"{value:.2f}".rstrip("0").rstrip(".")
+
+
 def stats_html(rows: list[dict[str, object]]) -> str:
     current = rows[-1]
-    base = rows[0]
     area = float(current["area_upper_percent"])
+    resolved = resolved_percent(area)
     open_roots = int(current["open_frontier"])
-    gates = tuple(
-        (100.0 - percent, 100.0 / percent)
-        for percent in (MIN_TARGET_PERCENT, TARGET_PERCENT)
-    )
-    reached = [gate for gate in gates if resolved_percent(area) >= gate[0]]
-    ahead = [gate for gate in gates if resolved_percent(area) < gate[0]]
+    gates = [100.0 - percent for percent in (MIN_TARGET_PERCENT, TARGET_PERCENT)]
+    reached = [share for share in gates if resolved >= share]
+    ahead = [share for share in gates if resolved < share]
     gate_text = ", ".join(
-        [f"{share:.0f}% (×{factor:.0f}) reached" for share, factor in reached]
-        + [f"{share:.0f}% (×{factor:.0f}) next" for share, factor in ahead[:1]]
+        [f"{share:.0f}% reached" for share in reached]
+        + [f"{share:.0f}% next" for share in ahead[:1]]
     )
+    certified = float(current.get("classes_share", 0.0)) * len(CLASSES)
     tiles = (
         (
             "primary",
             r"Certified resolved share of the $4\pi$ envelope",
-            format_percent(resolved_percent(area)),
-            rf"unresolved area $\le$ {format_percent(area)} of $4\pi$ "
-            rf"(${exact_area_text(current)}\approx {area_value(area):.3f}$)",
-        ),
-        (
-            "",
-            "Unresolved-area reduction",
-            format_factor(area),
-            f"baseline {base['sha']}: Dudko's Problems 4.3 and 4.4 open",
-        ),
-        (
-            "",
-            "Target",
-            "100%",
-            f"unresolved area $0$. Gates: {gate_text}",
+            format_percent(resolved),
+            r"a by-product of the kernel-checked grid: unresolved area $\le$ "
+            rf"{format_percent(area)} of $4\pi$ "
+            rf"(${exact_area_text(current)}\approx {area_value(area):.3f}$). "
+            "It does not measure progress on Problems 4.3 and 4.4",
         ),
         (
             "",
             "Open root problems",
             str(open_roots),
             "Problems 4.3 and 4.4" if open_roots else "none",
+        ),
+        (
+            "",
+            "Open programme statements",
+            f"{int(current.get('open_lemmas', 0))} of {len(LEMMAS)}",
+            "hypotheses of ProgrammeInput; each proof turns one into a theorem",
+        ),
+        (
+            "",
+            "Classes with a Lean certificate",
+            f"{format_count(certified)} of {len(CLASSES)}",
+            "with partial credit for the proved statements of a class",
+        ),
+        (
+            "",
+            "Target",
+            "100%",
+            f"unresolved area $0$. Gates: {gate_text}",
         ),
     )
     cells = "".join(
@@ -1454,7 +1135,7 @@ def profile_html(rows: list[dict[str, object]]) -> str:
             "Classes",
             classes,
             "weight of parameter classes with a Lean certificate, with partial credit "
-            "for the proved lemmas of a class",
+            "for the proved statements of a class",
         ),
         ("Complexity", 0.0, "return depth and relative period retired"),
         ("Budgets", 0.0, "quantitative separation budgets secured"),
@@ -1471,17 +1152,17 @@ def profile_html(rows: list[dict[str, object]]) -> str:
         f"{esc(format_percent(100.0 * overall))}</div>"
         '<div class="k">Overall</div></div>'
     )
-    open_lemmas_now = int(rows[-1].get("open_lemmas", 0))
+    open_now = int(rows[-1].get("open_lemmas", 0))
     return (
         '<section class="p-card"><h2>Coverage-Uncertainty Profile · certified '
         f'shares</h2><div class="profile-grid">{cells}</div>'
         '<p class="p-foot">Each share is 100% minus the corresponding component. '
-        "The classes of the programme are seven, with equal weights; each needs the "
-        f"lemmas of its chain, and {open_lemmas_now} lemmas of the programme are still "
-        "open. The proof of one lemma lowers the uncertainty of every class that needs "
-        "it by the lemma's share of the class. The complexity and budget components stay "
-        "at the conservative value 0% until a class certificate exists. Overall is the "
-        "mean of the four shares.</p></section>"
+        f"The programme has {len(CLASSES)} classes of equal weight; each needs the "
+        f"statements of its chain, and {open_now} of the {len(LEMMAS)} statements of "
+        "the programme are still open. The proof of one statement lowers the uncertainty "
+        "of every class that needs it by the statement's share of the class. The "
+        "complexity and budget components stay at the conservative value 0% until a "
+        "class certificate exists. Overall is the mean of the four shares.</p></section>"
     )
 
 
@@ -1493,8 +1174,11 @@ def callout_html() -> str:
         r"$R=\varnothing$, which gives $100\%$. The converse fails: a nonempty "
         r"$R$ of measure zero also gives $100\%$, and the area of $\partial M$ "
         r"is itself unknown. Read the share together with the open problems. "
-        r"The baseline is the state of the literature, where Dudko's Problems "
-        r"4.3 and 4.4 are open."
+        r"The share is a by-product of the kernel-checked grid and does not measure "
+        r"progress on Problems 4.3 and 4.4: the area of the parameters that the "
+        r"published theorems leave open is unknown (expected to be small, without a "
+        r"certificate). The baseline is the state of the literature, where Dudko's "
+        r"Problems 4.3 and 4.4 are open."
     )
     return f'<aside class="callout"><b>How to read the number.</b> {html_rich(text)}</aside>'
 
@@ -1504,13 +1188,12 @@ def progress_fragment_html(
 ) -> str:
     if svg is None:
         svg = parameter_map_svg(repo_root, rows)
-    baseline = esc(rows[0]["sha"])
     caption = html_rich(
         "Parameter plane $c=x+iy$. White outline: numerical rendering of the "
         "border of $M$ (an illustration that the Lean proof does not use). A "
-        "colour marks the parameters certified by the commit with the same "
-        "colour in the list and in the table below. The layers are stacked from the "
-        "newest, largest region at the bottom to the oldest on top."
+        "colour marks the parameters certified by the update with the same "
+        "colour and number in the list and in the table below. The layers are stacked "
+        "from the newest, largest region at the bottom to the oldest on top."
     )
     return f"""<div class="progress-section">
 <div class="p-info">
@@ -1526,14 +1209,14 @@ def progress_fragment_html(
 <p class="p-open"><a href="progress_map.svg" target="_blank" rel="noopener">Open the map in its own tab</a></p>
 </div>
 <div class="p-map-list">
-<h3>Commits that certified the regions</h3>
-{map_legend_html(repo_root, rows)}
+<h3>Updates that certified the regions</h3>
+{map_legend_html(rows)}
 </div>
 </div>
 <figcaption>{caption}</figcaption>
 </figure>
 <section class="p-card">
-<h2>Commits after the literature baseline <code>{baseline}</code></h2>
+<h2>Updates after the literature baseline</h2>
 <div class="table-wrap">
 {commit_table_html(rows)}
 </div>
@@ -1541,6 +1224,9 @@ def progress_fragment_html(
 <section class="p-card">
 <h2>Next routes <span class="chip">planning priors</span></h2>
 {routes_html()}
+<p class="p-foot">The planned residual reduction is a relative planning prior for the set
+that the published theorems leave open; it orders the routes and is unrelated to the
+area of the grid.</p>
 <p class="p-foot">The commit hook requires a Lean commit to improve the resolved share, the
 share of classes with a Lean certificate, or the formalization-debt proxy
 ({float(rows[-1]['debt_percent']):.3f}% now), and to worsen none of them.</p>
@@ -1574,11 +1260,11 @@ PROGRESS_CSS = """
 .p-card > h2 code { text-transform: none; letter-spacing: 0; }
 .p-info { display: grid; gap: 14px; }
 .p-info .callout { margin-top: 0; }
-.stats { display: grid; gap: 14px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.stats { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 700px) { .stats { grid-template-columns: 1fr; } }
 .stat.primary { grid-column: 1 / -1; border-color: var(--p-accent); }
 @media (min-width: 1100px) {
-  .stats { grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr)); }
+  .stats { grid-template-columns: minmax(0, 2fr) repeat(4, minmax(0, 1fr)); }
   .stat.primary { grid-column: auto; }
 }
 .stat-label {
@@ -1616,14 +1302,10 @@ PROGRESS_CSS = """
   border-bottom: 1px solid var(--border); white-space: nowrap;
 }
 .ctable td { padding: 10px 12px; vertical-align: top; border-bottom: 1px solid var(--border); }
-.ctable tr.date-row th {
-  padding: 16px 12px 6px; border-bottom: 0; letter-spacing: 0.02em;
-  text-transform: none; font-size: 12.5px; color: var(--p-accent);
-}
-.ctable tr.date-row:first-child th, .ctable thead + tbody tr.date-row:first-child th { padding-top: 8px; }
 .ctable th.c-area, .ctable td.c-area { text-align: right; }
-.ctable td.c-time { color: var(--muted); white-space: nowrap; width: 64px; font-variant-numeric: tabular-nums; }
-.ctable td.c-sha { white-space: nowrap; width: 150px; }
+.ctable td.c-no { white-space: nowrap; width: 64px; font-variant-numeric: tabular-nums; }
+.ctable td.c-no b { font-weight: 600; }
+.ctable td.c-date { color: var(--muted); white-space: nowrap; width: 96px; font-variant-numeric: tabular-nums; }
 .ctable td.c-desc { min-width: 220px; }
 .ctable td.c-area { white-space: nowrap; width: 150px; font-variant-numeric: tabular-nums; }
 .ctable td.c-note { min-width: 260px; }
@@ -1635,11 +1317,11 @@ PROGRESS_CSS = """
 .ctable tr.drop td:first-child { box-shadow: inset 3px 0 0 var(--p-good); }
 .ctable tr.drop td.c-area b { color: var(--p-good); }
 .ctable tr.baseline td { background: var(--p-soft); }
-.ctable tr.worktree td { font-style: italic; }
 .swatch {
   display: inline-block; width: 11px; height: 11px; margin-right: 7px;
   border-radius: 3px; vertical-align: -1px;
 }
+.swatch.off { visibility: hidden; }
 .swatch.outline { background: #07111f; box-shadow: inset 0 0 0 2px #f8fafc; }
 math.tex {
   white-space: nowrap; text-transform: none; letter-spacing: normal;
@@ -1663,6 +1345,10 @@ math.tex {
 .map-legend li { display: flex; align-items: baseline; gap: 6px; margin: 4px 0; }
 .map-legend li span:last-child { color: var(--text); }
 .map-legend .swatch { flex: none; }
+.map-legend .no {
+  flex: none; min-width: 1.6em; text-align: right; font-weight: 600;
+  color: var(--muted); font-variant-numeric: tabular-nums;
+}
 .routes { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 .route {
   border: 1px solid var(--border); border-top: 3px solid var(--route);
@@ -1748,13 +1434,10 @@ def tex_swatch(color: str | None) -> str:
 
 
 def commits_tex(rows: list[dict[str, object]]) -> str:
-    """Rows of the commits table. The environment (``xltabular``, which breaks
-    across pages) with its header and footer is in ``docs/mlc_progress.tex``."""
+    """Rows of the table of updates. The environment (``xltabular``, which breaks across
+    pages) with its header and footer is in ``docs/mlc_progress.tex``."""
     lines = []
     for row in rows:
-        when = tex_escape(row["time"])
-        if row["date"]:
-            when = tex_escape(row["date"]) + r"\newline " + when
         headline, _ = share_label(row)
         delta = format_delta(row["delta"])
         share_cell = tex_escape(headline)
@@ -1762,15 +1445,14 @@ def commits_tex(rows: list[dict[str, object]]) -> str:
             share_cell += r"\newline{\scriptsize Dudko 4.3, 4.4}"
         elif delta:
             share_cell += r"\newline{\scriptsize " + tex_escape(delta) + "}"
-        note = "---" if row_kind(row) == "idle" else tex_rich(row["note"])
+        text = shown_note(row)
+        note = "---" if text is None else tex_rich(text)
+        dot = tex_swatch(swatch_color(row)) or r"\hphantom{\rule{1.1ex}{1.1ex}\,}"
         lines.append(
             " & ".join(
                 [
-                    when,
-                    tex_swatch(swatch_color(row))
-                    + r"\texttt{"
-                    + tex_escape(row["sha"])
-                    + "}",
+                    dot + str(row["number"]),
+                    tex_escape(row["date"]),
                     tex_escape(row["subject"]),
                     share_cell,
                     note,
@@ -1786,7 +1468,7 @@ def routes_tex() -> str:
         r"\begin{tabularx}{\linewidth}"
         r"{@{}c>{\raggedright\arraybackslash}Xcc>{\raggedright\arraybackslash}X@{}}",
         r"\toprule",
-        r"\# & Route & Planned reduction & Prior & Next theorem \\",
+        r"\# & Route & Planned residual reduction & Prior & Next theorem \\",
         r"\midrule",
     ]
     for route in PROGRESS_ROUTES:
@@ -1808,8 +1490,12 @@ def routes_tex() -> str:
 
 
 def write_progress_assets(repo_root: Path, output_dir: Path) -> None:
+    from progress_ledger import check_problems, ledger_rows  # the ledger imports this module
+
     output_dir.mkdir(parents=True, exist_ok=True)
-    rows = commit_progress_history(repo_root)
+    rows = ledger_rows(repo_root)
+    for problem in check_problems(repo_root):
+        print(f"warning: {problem}", file=sys.stderr)
     svg = parameter_map_svg(repo_root, rows)
     fragment = progress_fragment_html(repo_root, rows, svg)
     (output_dir / "progress_fragment.html").write_text(fragment, encoding="utf-8")

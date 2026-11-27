@@ -28,10 +28,14 @@ from pathlib import Path
 from progress_report import PROGRESS_CSS, PROGRESS_ROUTES
 from programme import (
     CLASSES,
+    GROTZSCH_ROOT,
     LEMMAS,
+    PARALLEL_ROOT,
     PROGRAMME_ROOT,
     PSEUDO_SIEGEL,
+    PULLBACK_ROOT,
     SHARPNESS_ROOT,
+    TAIL_ROOTS,
     check_catalogue,
     class_shares,
     open_lemmas,
@@ -52,10 +56,11 @@ MIN_BUD = 3  # smaller groups of declarations are listed in the vertebra panel o
 TILE_NAME = re.compile(
     r"^MLC\.Certified\.(?:(?:tiles|part|w)_\d+_\d+|(?:gridPart|gridSum)_\d+)$"
 )
-# Declaration kinds of the Lean source, grouped for the counts of the figure.
+# Declaration kinds of the Lean source, grouped for the counts of the figure. In Lean
+# `lemma` and `theorem` declare the same thing, so both count as theorems.
 KIND_GROUP = {
     "theorem": "thm",
-    "lemma": "lem",
+    "lemma": "thm",
     "def": "def",
     "abbrev": "def",
     "instance": "def",
@@ -64,10 +69,9 @@ KIND_GROUP = {
     "class": "str",
     "axiom": "ax",
 }
-STAT_KEYS = ("thm", "lem", "def", "str", "ax")
+STAT_KEYS = ("thm", "def", "str", "ax")
 KIND_WORDS = {
     "thm": ("theorem", "theorems"),
-    "lem": ("lemma", "lemmas"),
     "def": ("definition", "definitions"),
     "str": ("structure", "structures"),
     "ax": ("axiom", "axioms"),
@@ -157,7 +161,15 @@ SPINE = (
 HEAD_LEAN = "MLC.mlc_conjecture"
 # Results that no vertebra needs: checked in Lean, but not part of the proof of MLC. They
 # hang on the programme's open targets and must be connected to the graph like the rest.
-SIDE_ROOTS = ("MLC.Research.unresolved_volume_eq_zero_of_porous", PROGRAMME_ROOT, SHARPNESS_ROOT)
+SIDE_ROOTS = (
+    "MLC.Research.unresolved_volume_eq_zero_of_porous",
+    PROGRAMME_ROOT,
+    SHARPNESS_ROOT,
+    GROTZSCH_ROOT,
+    PARALLEL_ROOT,
+    PULLBACK_ROOT,
+    *TAIL_ROOTS,
+)
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
 BUD_TITLES = {
@@ -271,11 +283,11 @@ def add_stats(total: dict[str, int], names, fq_index) -> dict[str, int]:
     return total
 
 
-STAT_WORDS = {"thm": "thm", "lem": "lem", "def": "def", "str": "struct"}
+STAT_WORDS = {"thm": "thm", "def": "def", "str": "struct"}
 
 
 def stat_line(stats: dict[str, int]) -> str:
-    """``17 thm · 4 lem · 2 def``: the non-zero counts by kind."""
+    """``17 thm · 2 def``: the non-zero counts by kind."""
     parts = [f"{stats[key]:,} {word}" for key, word in STAT_WORDS.items() if stats[key]]
     return " · ".join(parts)
 
@@ -373,7 +385,8 @@ def short(name: str) -> str:
 
 
 def member_row(decl) -> dict[str, object]:
-    return {"n": short(decl.fq_name), "k": decl.kind, "f": decl.file, "l": decl.line}
+    kind = "theorem" if decl.kind == "lemma" else decl.kind
+    return {"n": short(decl.fq_name), "k": kind, "f": decl.file, "l": decl.line}
 
 
 def check_spine(fq_index, edges, reachable: set[str]) -> list[set[str]]:
@@ -744,7 +757,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         add_child(area, measure, below=True)
         extras.append(measure)
 
-    # The programme: the lemmas of Problems 4.3 and 4.4 as nodes, then the checked assembly.
+    # The programme: the statements of Problems 4.3 and 4.4 as nodes, then the checked assembly.
     root_text = ""
     root_file = repo_root / "Mlc" / "ProgrammeRoot.lean"
     if root_file.is_file():
@@ -785,47 +798,130 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
     def add_lemma(parent: Node, key: str, below: bool = False) -> Node:
         return add_child(parent, lemma_nodes[key], below=below)
 
-    add_lemma(p43, "unboundedGrowth")
+    add_lemma(p43, "unboundedTeichmuller")
+    add_lemma(p43, "unboundedJumpCap")
+    ps_nodes: dict[str, Node] = {}
     for sid, title, sub, text in PSEUDO_SIEGEL:
-        add_child(
-            lemma_nodes["unboundedGrowth"],
+        ps_nodes[sid] = add_child(
+            lemma_nodes["unboundedJumpCap"],
             Node(id=f"paper:{sid}", kind="tip", cat="informal", title=title, sub=sub, text=text),
             below=True,
         )
     add_lemma(p43, "unboundedDichotomy")
-    sharp_names = side_names[SHARPNESS_ROOT]
-    if sharp_names:
-        sharp_decl = fq_index[SHARPNESS_ROOT]
-        sharpness = make(
+
+    def side_bud(
+        root: str | tuple[str, ...],
+        node_id: str,
+        title: str,
+        sub: str,
+        text: str,
+        parent: Node,
+    ) -> None:
+        """A checked branch: the declarations that only these side results need."""
+        roots = (root,) if isinstance(root, str) else root
+        names = set().union(*(side_names[r] for r in roots))
+        if not names:
+            return
+        decl = fq_index[roots[0]]
+        bud = make(
             Node(
-                id="prog:sharpness",
+                id=node_id,
                 kind="bud",
                 cat="checked",
-                title="Why both G and D are needed",
-                sub="two towers with unbounded degeneration",
-                text=(
-                    "Checked in Lean (WidthTower.uniformities_necessary). Neither lemma can "
-                    "be dropped from the recursion. (1) A tower of unbounded relative periods "
-                    "with a uniform growth bound and the dichotomy (4.6) with the error "
-                    "p·h(p), h unbounded (a quadratic error, for instance), has unbounded "
-                    "degeneration: a linear error is the threshold (Lemma D). (2) The tower "
-                    "of widths (k+1)! satisfies the Teichmüller contraction and the dichotomy "
-                    "with a linear error and has unbounded degeneration: the growth bound "
-                    "must be uniform in the relative period (Lemma G). With "
-                    "aPrioriBounds_of_uniform: the uniform versions of G and D suffice, and "
-                    "the period-dependent versions of the survey do not."
-                ),
-                lean=SHARPNESS_ROOT,
-                file=sharp_decl.file,
-                line=sharp_decl.line,
-                count=len(sharp_names),
+                title=title,
+                sub=sub,
+                text=text,
+                lean=roots[0],
+                file=decl.file,
+                line=decl.line,
+                count=len(names),
             )
         )
-        register(sorted(sharp_names), sharpness)
-        sharpness.stat = stat_line(sharpness.stats)
-        sharpness.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
-        add_child(lemma_nodes["unboundedDichotomy"], sharpness, below=True)
-        extras.append(sharpness)
+        register(sorted(names), bud)
+        bud.stat = stat_line(bud.stats)
+        bud.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
+        add_child(parent, bud, below=True)
+        extras.append(bud)
+
+    side_bud(
+        SHARPNESS_ROOT,
+        "prog:sharpness",
+        "Why both G and D are needed",
+        "cap ⇔ a priori bounds; two counterexamples",
+        "Checked in Lean (WidthTower.uniformities_necessary, "
+        "WidthTower.aPrioriBounds_iff_jumpCap). Given the linear dichotomy, a "
+        "tower has a priori bounds if and only if its jumps are capped, so the "
+        "cap of Lemma G is the weakest hypothesis of its kind. Neither lemma "
+        "can be dropped. (1) A tower of unbounded relative periods with a "
+        "uniform growth bound (which caps the jumps) and the dichotomy (4.6) with "
+        "the error p·h(p), h unbounded (a quadratic error, for instance), has "
+        "unbounded degeneration: a linear error is the threshold (Lemma D). "
+        "(2) The tower of widths (k+1)! satisfies the Teichmüller contraction and "
+        "the dichotomy with a linear error, has uncapped jumps and unbounded "
+        "degeneration (Lemma G).",
+        lemma_nodes["unboundedDichotomy"],
+    )
+    side_bud(
+        PARALLEL_ROOT,
+        "prog:parallel",
+        "Parallel law (4.1)",
+        "p families in disjoint regions ⇒ widths add",
+        "Checked in Lean (extWidth_parallel_finset, extWidth_parallel). The extremal "
+        "width of a family of curves is defined for length measures with an area "
+        "measure. The widths of families that live in pairwise disjoint regions add up: "
+        "with p small Julia sets of equal degeneration W(f₁) in disjoint neighbourhoods, "
+        "the total degeneration around them is at least p·W(f₁), the main term of (4.1) "
+        "and the source of the factor p in the amplification (4.3). The thin–thick "
+        "decomposition (the additive error) and the vertical proportion of Kahn stay open.",
+        lemma_nodes["unboundedDichotomy"],
+    )
+    side_bud(
+        GROTZSCH_ROOT,
+        "prog:grotzsch",
+        "Grötzsch step (4.6)",
+        "series law ⇒ W(G ∖ G′) ≥ δ⁻¹ W(G)",
+        "Checked in Lean (extWidth_ge_of_series, extLength_series, extLength_mono, "
+        "extWidth_ge_of_complement). Curves that cross two disjoint regions in succession "
+        "have extremal length at least the sum of the extremal lengths of the two pieces "
+        "(the Grötzsch inequality). If the lift G′ carries the fraction 1 − δ of the "
+        "extremal length of the rectangle G, the subcurves G ∖ G′ through the "
+        "preperiodic Julia sets have width at least δ⁻¹ W(G): the estimate (4.6) with "
+        "C_δ = δ⁻¹ → ∞. This is the conformal-geometry foundation of PS4; the dynamical "
+        "input, the families G ∖ G′ and G′ for the pseudo-Siegel disks, stays open.",
+        ps_nodes["ps4"],
+    )
+    side_bud(
+        PULLBACK_ROOT,
+        "prog:pullback",
+        "Pullback law (contraction)",
+        "W(ΓX) ≤ d · W(ΓY) for a map of degree d",
+        "Checked in Lean (extWidth_pullback_le, extLength_pullback_le). If a map φ carries "
+        "the curves of a family ΓX to curves of ΓY and its area multiplicity is at most d "
+        "(the area formula for a holomorphic map of degree d), then W(ΓX) ≤ d · W(ΓY). "
+        "This is the mechanism of the Teichmüller contraction: p iterations of a "
+        "quadratic-like map have multiplicity at most 2^p, so the width of a pulled-back "
+        "family grows by at most 2^p; for d = 1 it is conformal invariance. The "
+        "tower-level statement, W(f_{m+1}) ≤ Δ_P W(f_m), needs the families of the "
+        "renormalization levels and stays open.",
+        lemma_nodes["unboundedTeichmuller"],
+    )
+    side_bud(
+        TAIL_ROOTS,
+        "prog:tail",
+        "Tail invariance (tuning)",
+        "the statements pass to tails",
+        "Checked in Lean (WidthTower.lemmas_shift_iff, aPrioriBounds_shift_iff, "
+        "aPrioriBounds_of_shift_tails, shift_shift). Tuning with an n-step prefix maps M "
+        "onto a little copy of itself, and the tower of the tuned parameter is the prefix "
+        "followed by the tower of the original, so untuning is the shift T.shift n of the "
+        "tower. The Teichmüller contraction, the cap on the jumps and the dichotomy with a "
+        "linear error hold for a tower exactly when they hold for the shifted tower, and the "
+        "three of them for the tail give a priori bounds for the tower. This is the exact, "
+        "combinatorial self-similarity of M under tuning; the constants depend on the "
+        "prefix. The uniform metric comparison of a parameter with its tuned copies, the "
+        "content of the open statements, stays open.",
+        lemma_nodes["unboundedTeichmuller"],
+    )
     satellite = add_child(
         p44,
         Node(
@@ -841,7 +937,6 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             ),
         ),
     )
-    add_lemma(satellite, "virtualTeichmuller", below=True)
     add_lemma(satellite, "virtualDichotomy", below=True)
     neutral = add_child(
         p44,
@@ -857,8 +952,9 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             ),
         ),
     )
-    add_lemma(neutral, "virtualGrowth", below=True)
+    add_lemma(neutral, "virtualJumpCap", below=True)
     add_lemma(neutral, "virtualLinearDichotomy", below=True)
+    add_lemma(p44, "virtualTeichmuller")
     add_lemma(p44, "virtualJulia")
     add_lemma(p44, "virtualTransfer")
 
@@ -870,10 +966,12 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             title="Published cases",
             sub="§4.1–§4.4 · literature",
             text=(
-                "The classes of boundary parameters that the survey treats by published "
-                "theorems: the parameters that are not infinitely renormalizable (Yoccoz, "
-                "Hubbard), bounded type (Theorem 4.1), the anti-Molecule condition "
-                "(Kahn–Lyubich) and neutral parameters (Theorem 4.2). Each is one lemma "
+                "The classes of boundary parameters and the estimates that the literature "
+                "treats by published theorems: the parameters that are not infinitely "
+                "renormalizable (Yoccoz, Hubbard), the Teichmüller contraction for bounded "
+                "type (§4.3), bounded type (Theorem 4.1), the anti-Molecule condition "
+                "(Kahn–Lyubich), neutral parameters (Theorem 4.2) and the satellite types of "
+                "quadratic growth (Cheraghi–Shishikura, Theorem D). Each is one statement "
                 "about the geometric dictionary, a field of ProgrammeInput; none is "
                 "formalized."
             ),
@@ -881,7 +979,14 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         )
     )
     attach(dudko, published, -1)
-    for key in ("yoccoz", "boundedType", "antiMolecule", "neutral"):
+    for key in (
+        "yoccoz",
+        "teichmuller",
+        "boundedType",
+        "antiMolecule",
+        "neutral",
+        "quadraticGrowth",
+    ):
         add_lemma(published, key, below=True)
 
     programme_names = side_names[PROGRAMME_ROOT] - {lemma.lean for lemma in LEMMAS}
@@ -894,19 +999,20 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
                 kind="bud",
                 cat="checked",
                 title="Programme assembly",
-                sub=f"{len(LEMMAS)} lemmas ⇒ Problems 4.3, 4.4",
+                sub=f"{len(LEMMAS)} statements ⇒ Problems 4.3, 4.4",
                 text=(
                     "Checked in Lean (MLC.mlc_of_programme): for every geometric dictionary, "
-                    f"the {len(LEMMAS)} lemmas of ProgrammeInput give RootInput, that is the "
-                    "candidate system with its realization (Problem 4.3) and the "
+                    f"the {len(LEMMAS)} statements of ProgrammeInput give RootInput, that is "
+                    "the candidate system with its realization (Problem 4.3) and the "
                     "virtual-Molecule completion (Problem 4.4), hence MLC. The degeneration "
-                    "recursion of §4.1–§4.3 is proved: uniform growth and a dichotomy with an "
-                    "error at most linear in the period give a priori bounds for every tower "
-                    "(WidthTower.aPrioriBounds_of_uniform), and bounded type needs the "
-                    "Teichmüller contraction and the dichotomy "
-                    "(WidthTower.aPrioriBounds_of_bounded). Seven classes of parameters, "
+                    "recursion of §4.1–§4.3 is proved: a cap on the jumps of the degeneration "
+                    "and a dichotomy with an error at most linear in the period give a priori "
+                    "bounds for every tower (WidthTower.aPrioriBounds_of_jumpCap), and bounded "
+                    "type needs the Teichmüller contraction and the dichotomy "
+                    "(WidthTower.aPrioriBounds_of_bounded). "
+                    f"{len(CLASSES)} classes of parameters, "
                     f"{sum(shares.values()):.2f} of them certified, with {len(open_keys)} "
-                    "open lemmas."
+                    "open statements of the programme."
                 ),
                 lean=PROGRAMME_ROOT,
                 file=root_decl.file,
@@ -937,6 +1043,30 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
     )
     attach(phase, unified, 1)
     add_lemma(unified, "transfer", below=True)
+    add_child(
+        unified,
+        Node(
+            id="paper:rays",
+            kind="tip",
+            cat="informal",
+            title="Rays and the lamination",
+            sub="the form in which MLC is read",
+            text=(
+                "Carathéodory, Douady–Hubbard, Thurston, Schleicher: M is locally connected "
+                "exactly when every parameter ray lands and the landing map is continuous, "
+                "exactly when M is the quotient of the closed disk by the quadratic minor "
+                "lamination, exactly when every fiber of M is a point. The fibers of the "
+                "parameters that are not infinitely renormalizable are points (Yoccoz, "
+                "Hubbard), and the statements of the published classes give the same for "
+                "those classes, so the rays land at points where local connectivity is "
+                "known, except possibly at the infinitely renormalizable parameters of "
+                "Problems 4.3 and 4.4. The formalization uses connected parameter nests "
+                "that shrink to the point and needs no ray. Not formalized; see ROADMAP.md, "
+                "“Rays, the lamination and tuning”."
+            ),
+        ),
+        below=True,
+    )
     # Ground: the kernel axioms below the first vertebra.
     ground = [
         make(
@@ -1298,10 +1428,10 @@ def render_svg(model: dict[str, object], width: float, height: float) -> str:
 
 LEGEND = (
     ("open", "Open problem", "open"),
-    ("lemma", "Open lemma", "lemma"),
+    ("lemma", "Open statement of the programme", "lemma"),
     ("published", "Published, not formalized", "published"),
     ("informal", "Not formalized", "informal"),
-    ("checked", "Checked lemmas", "checked"),
+    ("checked", "Checked in Lean", "checked"),
     ("num", "Certified computation", "num"),
     ("axiom", "Kernel axiom", "axiom"),
 )
@@ -1533,7 +1663,7 @@ SCRIPT = r"""
   };
   const CAT_NAME = {
     checked: "Checked in Lean", num: "Kernel-checked computation", open: "Open problem (explicit hypothesis)",
-    lemma: "Open lemma (statement in Lean, proof open)", published: "Published theorem, not formalized",
+    lemma: "Open statement of the programme (stated in Lean, proof open)", published: "Published theorem, not formalized",
     informal: "Not formalized", axiom: "Kernel axiom", spine: "Checked in Lean", head: "Conditional on RootInput",
   };
   let selected = null;
@@ -1627,7 +1757,7 @@ SCRIPT = r"""
   // Counts of declarations, by kind and by source, for the overview and for a node.
   function factsList(s) {
     const rows = [
-      ["Theorems", s.thm], ["Lemmas", s.lem], ["Definitions", s.def], ["Structures", s.str], ["Axioms", s.ax],
+      ["Theorems", s.thm], ["Definitions", s.def], ["Structures", s.str], ["Axioms", s.ax],
     ].filter((r) => r[1]).map((r) => `<li><span>${r[0]}</span><b>${fmt(r[1])}</b></li>`);
     if (s.lines) rows.push(`<li><span>Lines of Lean (hand-written)</span><b>${fmt(s.lines)}</b></li>`);
     if (s.gen) rows.push(`<li><span>Generated by a script</span><b>${fmt(s.gen)}</b></li>`);
@@ -1639,23 +1769,23 @@ SCRIPT = r"""
     const hand = t.n - t.gen;
     const rows = data.levels.map((lv) => {
       const s = lv.stats;
-      return { id: lv.id, title: lv.title, hand: s.n - s.gen, thm: s.thm - s.gen_thm, lem: s.lem, lines: s.lines, gen: s.gen };
+      return { id: lv.id, title: lv.title, hand: s.n - s.gen, thm: s.thm - s.gen_thm, lines: s.lines, gen: s.gen };
     });
     const peak = Math.max(1, ...rows.map((r) => r.hand));
     const body = rows.map((r) => `<tr data-go="${esc(r.id)}"><td>${esc(r.title)}
       <div class="bar"><i style="width:${(100 * r.hand / peak).toFixed(1)}%"></i></div></td>
-      <td>${fmt(r.hand)}</td><td>${fmt(r.thm)}</td><td>${fmt(r.lem)}</td><td>${fmt(r.lines)}</td></tr>`).join("");
+      <td>${fmt(r.hand)}</td><td>${fmt(r.thm)}</td><td>${fmt(r.lines)}</td></tr>`).join("");
     return `
       <h3>Scale of the formalization</h3>
-      <p><b>${fmt(t.n)}</b> declarations: ${fmt(t.thm)} theorems, ${fmt(t.lem)} lemmas,
+      <p><b>${fmt(t.n)}</b> declarations: ${fmt(t.thm)} theorems,
       ${fmt(t.def + t.str + t.ax)} definitions, structures and axioms.</p>
-      <p><b>${fmt(hand)}</b> are written by hand (${fmt(t.thm - t.gen_thm)} theorems, ${fmt(t.lem)} lemmas,
+      <p><b>${fmt(hand)}</b> are written by hand (${fmt(t.thm - t.gen_thm)} theorems,
       ${fmt(t.lines)} lines of Lean). The other <b>${fmt(t.gen)}</b> are generated: ${fmt(data.modules)} modules
       (${data.generated_mb} MB) with the certificates of the kernel-checked grid, ${fmt(t.gen_thm)} theorems and
       ${fmt(t.gen_def)} definitions that the kernel evaluates.</p>
       <p class="hint">The bubble on a node counts the declarations that hang on it; its size grows
       with the logarithm of the count. A level is a vertebra with everything that first hangs on it.</p>
-      <table class="scale"><thead><tr><th>Level (top to bottom)</th><th>By hand</th><th>Thm</th><th>Lem</th><th>Lines</th></tr></thead>
+      <table class="scale"><thead><tr><th>Level (top to bottom)</th><th>By hand</th><th>Thm</th><th>Lines</th></tr></thead>
       <tbody>${body}</tbody></table>
       <p class="hint">The grid adds ${fmt(t.gen)} generated declarations to the level “Completion ⇔ coverage”.</p>`;
   }
@@ -1671,9 +1801,9 @@ SCRIPT = r"""
       <h2>How to read the figure</h2>
       <p>The spine climbs from the three kernel axioms at the bottom to the statement of MLC at the top.
       Each vertebra is a theorem of the Lean library, and each one builds on the vertebrae below it.</p>
-      <p>Branches carry what a vertebra needs: checked lemmas, the kernel-checked grid, and at the tips
+      <p>Branches carry what a vertebra needs: checked theorems, the kernel-checked grid, and at the tips
       the <b style="color:var(--open)">open problems</b> of the root, the
-      <b style="color:var(--lemma)">open lemmas</b> into which they are decomposed, the
+      <b style="color:var(--lemma)">open statements of the programme</b> into which they are decomposed, the
       <b style="color:var(--published)">published cases</b> and the
       <b style="color:var(--informal)">targets of Dudko's programme</b> that are not formalized.</p>
       <p class="hint">Hover a node to light its way to the head. Click it for the statement, the Lean name
@@ -1858,8 +1988,8 @@ def spine_page_html(title: str, model: dict[str, object], metrics: dict[str, obj
     other = totals["def"] + totals["str"] + totals["ax"]
     summary = (
         f"Resolved share {percent:.3f}% · {int(metrics.get('open_frontier', 0))} open problems · "
-        f"{int(metrics.get('open_lemmas', 0))} open lemmas · "
-        f"{totals['n']:,} declarations: {totals['thm']:,} theorems, {totals['lem']:,} lemmas, "
+        f"{int(metrics.get('open_lemmas', 0))} open statements of the programme · "
+        f"{totals['n']:,} declarations: {totals['thm']:,} theorems, "
         f"{other:,} definitions, structures and axioms · {by_hand:,} written by hand, "
         f"{totals['gen']:,} generated (the certificates of the grid)"
     )

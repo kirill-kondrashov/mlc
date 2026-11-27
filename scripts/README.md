@@ -16,53 +16,109 @@ Generation checks reachability, acyclicity and the axiom frontier, checks that
 the milestones of the spine form a consistent order in the graph, then writes
 `site/` with one HTML page (an inline SVG of about 200 elements, laid out by the
 generator) and the progress files. The page has hover tracing, a side panel, a
-search over the declarations, zoom, category filters, the counts of theorems,
-lemmas and declarations by level of the spine, and the **Progress** tab (the
-controls of the figure disappear there).
+search over the declarations, zoom, category filters, the counts of theorems and
+declarations by level of the spine (in Lean `lemma` and `theorem` declare the same
+thing, so both count as theorems), and the **Progress** tab (the controls of the
+figure disappear there).
 
 `programme.py` is the catalogue of the programme for Problems 4.3 and 4.4: the
-seven classes of boundary parameters, the thirteen lemmas (the fields of
-`MLC.Research.ProgrammeInput` in `Mlc/ProgrammeRoot.lean`), their sources, and
-the status of each, open while it is a field and proved once its theorem exists.
-The generator fails if the catalogue and the Lean structure disagree; the graph
-draws the lemmas as nodes, and the progress report derives the classes component of
-the Coverage-Uncertainty Profile from the catalogue.
+eight classes of boundary parameters, the sixteen statements of the programme (the
+fields of `MLC.Research.ProgrammeInput` in `Mlc/ProgrammeRoot.lean`, named
+"Lemma T", "Lemma G", and so on as nodes of the graph), their sources, and the
+status of each, open while it is a field (a hypothesis) and proved once its theorem
+exists. The generator fails if the catalogue and the Lean structure disagree; the
+graph draws the statements as nodes, and the progress report derives the classes
+component of the Coverage-Uncertainty Profile and the tiles "Open programme
+statements" and "Classes with a Lean certificate" from the catalogue.
 
-`progress_report.py` computes the progress numbers from Git history. The
-**Progress** tab shows the certified resolved share `100% − μ*(R) / 4π` of the
-unresolved set `R` as a number, then the map of `M` with the list of the commits
-that certified its regions (the map on the left, the list on the right), then a
-table of the commits after the literature baseline (date, commit, description,
-share, and what it resolved). The map marks the parameters certified by each
-commit: `map_raster.py` composites the 600 000 certified rectangles of the grids,
-with the exact coverage of every pixel, into one PNG (about 2500 × 2200 pixels)
-that the SVG embeds, since the same rectangles as vector paths weigh 18 MB and
-some browsers draw nothing for them; the axes, the disks and the numerical outline
-of `∂M` stay vector. The literature
-baseline is the first commit of the history whose `RootInput` has exactly the
-fields `Problem43PseudoSiegelAPrioriBoundsData` and
-`Problem44VirtualMoleculeData`, found by a binary search over the first-parent
-history; its row lists the two open problems. Every grid commit gets its own
-colour: `export_grid_regions.lean pmax J fuel` reproduces the squares of its
-grid, and the report uses them only when the number of unresolved cells equals
-the count that the commit proved. Texts with formulas are written with
-`$...$` TeX math and rendered as TeX for the report and as HTML for the page.
-The same data feeds `docs/mlc_progress.tex` through `progress_commits.tex`,
-`progress_routes.tex`, and `progress_map.svg`. Route probabilities are planning
-priors. The share `100%` corresponds to `R = ∅` (MLC), but a nonempty `R` of
-measure zero would also give it, so the share is read with the count of open
-root obligations.
+`progress_report.py` renders the **Progress** tab and the LaTeX report from the
+progress ledger (below); it reads no Git history. The tab shows the certified resolved
+share `100% − μ*(R) / 4π` of the unresolved set `R` as a number, with the tiles that
+measure the proof structure (open root problems, open statements of the programme,
+classes with a Lean certificate), then the map of `M` with the list of the updates that
+certified its regions (the map on the left, the list on the right), then the table of the
+updates after the literature baseline (number, date, description, share, and what it
+resolved; an update with a layer on the map also has a dot of the colour of its layer, in
+the table and in the list). The share is a by-product of the kernel-checked grid: the
+cells that no certificate removes form a neighbourhood of `∂M` at the resolution of the
+grid, which shrinks with the depth and measures no progress on Problems 4.3 and 4.4. The
+literature baseline (update 0) is the state of the literature: MLC follows from Dudko's
+Problems 4.3 and 4.4, which stay open. The area `4π` only normalizes the scale of the
+share, the area of the parameters that the published theorems leave open is unknown
+(expected to be small, without a certificate), and the baseline row claims no unresolved
+area; no reduction factor relative to the literature is shown anywhere. The map marks the
+parameters certified by each update: `map_raster.py` composites the coverage masks of the
+grids (2080 × 2000 pixels, from `docs/progress/layers`) into one PNG that the SVG
+embeds, since the 600 000 certified rectangles of the grids as vector paths weigh 18 MB and
+some browsers draw nothing for them; the axes, the disks and the numerical outline of `∂M`
+stay vector. Texts with formulas are written with `$...$` TeX math and rendered as TeX for
+the report and as HTML for the page. The same data feeds `docs/mlc_progress.tex` through
+`progress_commits.tex`, `progress_routes.tex`, and `progress_map.svg`. The "Planned
+residual reduction" of the routes is a relative planning prior for the set that the
+published theorems leave open and has no relation to the area of the grid. The share
+`100%` corresponds to `R = ∅` (MLC), but a nonempty `R` of measure zero would also give
+it, so the share is read with the count of open root obligations.
 
-The map is drawn by `map_raster.py`; `python3 scripts/test_map_raster.py` checks its pixel
-coverage against a direct computation (`make test-scripts`).
+**The progress ledger.** The table and the map are stored in the repository tree, so that
+they survive squash merges, rebases and deleted branches, and the report needs no Git
+history or tags:
+
+```text
+docs/progress/ledger.json        an array of updates, oldest first
+docs/progress/layers/<id>*.png   8-bit grayscale coverage masks (2080 × 2000 pixels)
+```
+
+An entry has a stable `id`, the `timestamp` of the decision, the `subject` (the title),
+an `area_note` (a sentence for the column "What it resolved"), the metrics of the tree
+(`grid`, `area_exact`, `debt_percent`, `area_upper_percent`, `area_symbols`,
+`open_frontier`, `open_lemmas`, `classes_share`, `milestone_weight`, `milestones`) and,
+for an update that certifies grid cells, a `layer`: the colour of its dot and its masks.
+The number of an update is its position (the baseline is 0), computed when the page is
+rendered. The mask `<id>.png` marks the cells that the update certified inside `M`; the
+latest grid update also keeps `<id>.open.png`, the cells that its grid leaves open. A
+sample `v` of a mask is the coverage `v / 255` of the pixel. The three grids of the first
+classifier (updates 7–9, before the Taylor models) exist only as their stored masks.
+`progress_ledger.py` holds the library and the command line:
+
+```sh
+python3 scripts/progress_ledger.py add --title "Refine the grid to depth 14" --note "Depth 14 for Re c < 0."
+python3 scripts/progress_ledger.py add --title "..." --staged      # metrics of the staged tree
+python3 scripts/progress_ledger.py add --title "..." --date 2026-12-01   # an earlier decision date
+python3 scripts/progress_ledger.py check                           # the ledger lags the tree?
+python3 scripts/progress_ledger.py list
+```
+
+`add` computes the metrics of the working tree (or of the staged tree), appends an update
+with the next colour of the palette when the update lowers the unresolved area of a grid,
+writes the masks of that grid from the hint streams of its tiles (`Mlc/GridTiles`), and
+removes the mask of the unresolved cells of the previous grid update; it needs `numpy` only
+for a grid update. `check` exits with status 1 when the ledger is malformed (a missing mask,
+a repeated id) or when its last update differs from the tree in the resolved share, the
+milestones, the classes, the open statements or the grid; a change of `PROGRESS_MILESTONES`
+or of the catalogue in `programme.py` changes the metrics of the same Lean tree and needs
+an update too. The repository hook
+(`check_progress.py`, see below) appends the update of a staged Lean commit by itself:
+its title is `$PROGRESS_TITLE` or, without it, derived from the new milestones or the depth
+of the grid; its note is `$PROGRESS_NOTE`; its date is now; the hook stages `docs/progress`.
+A commit that stages only documents and scripts passes unchecked and imports no `numpy`.
+`python3 scripts/check_progress.py --ledger` is the consistency check for CI. A squash
+merge brings the entries and the masks of the branch with it. When two branches both
+append updates, resolve the conflict of `ledger.json` by keeping both sides in the order
+of their dates.
+
+The map is drawn by `map_raster.py`; `make test-scripts` runs `scripts/test_map_raster.py`
+(the pixel coverage against a direct computation, the PNG codec) and
+`scripts/test_progress_ledger.py` (recording, the lag check, a squash merge, the masks, the
+numbering and the hook, on temporary repositories).
 
 The repository hook runs `scripts/check_progress.py`. A commit that stages Lean
 sources (`Mlc.lean`, `Mlc/**/*.lean`) must improve at least one of the certified
 resolved share, the share of parameter classes with a Lean certificate and the
 dependency-graph milestone debt (which falls when a milestone theorem is added),
-and must worsen none of them, before Git accepts it; commits that stage only
-documents and scripts pass unchecked. The classes and the lemmas of the programme
-for Problems 4.3 and 4.4 are catalogued in `scripts/programme.py`.
+and must worsen none of them, before Git accepts it; the hook then records the update
+in the ledger. Commits that stage only documents and scripts pass unchecked. The classes
+and the statements of the programme for Problems 4.3 and 4.4 are catalogued in
+`scripts/programme.py`.
 
 `grid_hints.lean` is the search program of the certified grid, compiled natively
 by `lake build gridhints`. It subdivides squares that it cannot certify and
@@ -81,10 +137,36 @@ each module states its own depth, so the modules of blocks that were not refined
 byte-identical and Lake does not rebuild them; each running module needs a few GB of
 memory). It also writes `Mlc/GridCertified.lean`, which sums the weighted counts of the
 modules and proves the area bound. The kernel checks every certificate, so the search
-needs no proof. The progress tooling reads `gridCells` and `gridDepth` from these files
-and replays the hint streams of every commit to draw the certified region on the map
-in the Progress tab. The note of a grid commit in the table is the line `Area-note:`
-of its commit message.
-`export_grid_regions.lean` (repository root) holds a copy of the first
-classifier, imports nothing from `Mlc`, and reproduces the regions of the
-earlier grids.
+needs no proof. The progress tooling reads `gridCells` and `gridDepth` from these files,
+and `progress_ledger.py add` replays the hint streams of the current tiles to write the
+masks of the layer of a grid update. The note of a grid update in the table is the `--note`
+of the update.
+
+## The kernel-checked grid
+
+`Mlc/GridDefs.lean` defines fixed-point first-order models of the critical orbit: for every
+parameter `c` of a square, the `n`-th iterate lies within `e` of `m + d (c - c₀)`, where `d` is
+the derivative at the center `c₀`. The model follows the phases of the derivative and stays
+sharp where a disk enclosure grows by large factors. A square lies outside `M` if the model
+leaves the disk of radius 2 after `n` steps, and inside `M` if a moving disk centered at the
+model returns into itself after `p` steps, so that every parameter of the square has a bounded
+critical orbit. The kernel verifies every hint (`Sq.certify`) and counts the unresolved finest
+cells (`verifyTree`); `Mlc/GridTMCertificate.lean` proves that the verified squares lie outside
+`M` or inside `M`, so the unresolved cells cover `M ∖ int M` and the same count bounds the area
+of every residual set (`unresolved_volume_le_grid`). The upper half-plane is covered by tiles and
+the lower half follows by conjugation symmetry. The count is checked by kernel reduction
+(`decide +kernel`; the library never uses `native_decide`) in the generated modules `Mlc/GridTiles/G*.lean`,
+which import only `Mlc.GridDefs`.
+
+`coarsen_grid.py` replaces the subdivision of a region by one coarser square with a long inside
+certificate: near the border of a hyperbolic component a coarse square costs the kernel the same
+per unit of area as a fine one. Coarsening the shells changes the modules of most blocks, so its
+check is a full rebuild.
+
+The depth-13 grid has 14,420 modules (18.5 MB of source) and about 48 CPU hours of kernel work,
+about 13 seconds and 1.4–2.4 GB of memory per module; Lake runs as many modules at once as the
+machine has cores, so a machine with little memory needs fewer parallel jobs. The aggregator
+`Mlc/GridCertified.lean` needs a thread stack larger than the default of 8 MB (`weakLeanArgs` in
+`lakefile.lean`, which stay out of the build trace). The build outputs of the modules are 8 GB
+(`.olean` and `.c` files); [continuous integration](../docs/ci.md) keeps them between runs, and
+`make seed` publishes the local outputs for the first run after a change of the grid.

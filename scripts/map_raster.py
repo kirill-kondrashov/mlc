@@ -4,6 +4,11 @@ The map of M paints about 600 000 axis-parallel rectangles in a dozen translucen
 As vector paths they weigh 18 MB, and the browsers that rasterize such a path on the GPU
 can draw nothing at all. The layers are composited here, with the exact area coverage of
 every pixel, into one PNG that the map embeds as an image.
+
+The progress ledger stores every layer as a coverage mask: an 8-bit grayscale PNG whose
+sample `v` stands for the coverage `v / 255`. `mask_from_rects` makes a mask from rectangles,
+`encode_png_gray` and `decode_png_gray` write and read it, and `composite_masks` paints the
+masks like `composite` paints rectangles.
 """
 
 from __future__ import annotations
@@ -91,6 +96,17 @@ def coverage(rects: np.ndarray, width: int, height: int) -> np.ndarray:
     )
 
 
+def paint(
+    canvas: np.ndarray, cover: np.ndarray, rgb: tuple[float, float, float], opacity: float
+) -> None:
+    """Paint one translucent layer, with the pixel coverage `cover` in [0, 1], on a
+    premultiplied RGBA float canvas."""
+    alpha = (opacity * cover).astype(np.float32)[..., None]
+    canvas *= 1.0 - alpha
+    canvas[..., :3] += alpha * np.asarray(rgb, dtype=np.float32)
+    canvas[..., 3:] += alpha
+
+
 def composite(
     layers: list[tuple[np.ndarray, tuple[float, float, float], float]],
     width: int,
@@ -104,11 +120,50 @@ def composite(
     if canvas is None:
         canvas = np.zeros((height, width, 4), dtype=np.float32)
     for rects, rgb, opacity in layers:
-        alpha = (opacity * coverage(rects, width, height)).astype(np.float32)[..., None]
-        canvas *= 1.0 - alpha
-        canvas[..., :3] += alpha * np.asarray(rgb, dtype=np.float32)
-        canvas[..., 3:] += alpha
+        paint(canvas, coverage(rects, width, height), rgb, opacity)
     return canvas
+
+
+def mask_from_rects(rects: np.ndarray, width: int, height: int) -> np.ndarray:
+    """The 8-bit coverage mask of disjoint rectangles: `round(255 * coverage)`."""
+    return np.rint(coverage(rects, width, height) * 255.0).astype(np.uint8)
+
+
+def composite_masks(
+    layers: list[tuple[np.ndarray, tuple[float, float, float], float]],
+    width: int,
+    height: int,
+    canvas: np.ndarray | None = None,
+) -> np.ndarray:
+    """Like `composite`, for layers `(mask, rgb, opacity)` given by 8-bit coverage masks."""
+    if canvas is None:
+        canvas = np.zeros((height, width, 4), dtype=np.float32)
+    for mask, rgb, opacity in layers:
+        paint(canvas, mask / 255.0, rgb, opacity)
+    return canvas
+
+
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+
+
+def _chunk(kind: bytes, data: bytes) -> bytes:
+    body = kind + data
+    return struct.pack(">I", len(data)) + body + struct.pack(">I", zlib.crc32(body))
+
+
+def _png(width: int, height: int, color_type: int, rows: np.ndarray) -> bytes:
+    """A PNG (8 bit) whose scanlines are the rows of `rows`, one byte per sample."""
+    # Filter type 2 (Up): every row is stored as its difference from the row above.
+    filtered = np.empty((height, rows.shape[1] + 1), dtype=np.uint8)
+    filtered[:, 0] = 2
+    filtered[0, 1:] = rows[0]
+    filtered[1:, 1:] = rows[1:] - rows[:-1]
+    return (
+        PNG_SIGNATURE
+        + _chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, color_type, 0, 0, 0))
+        + _chunk(b"IDAT", zlib.compress(filtered.tobytes(), 9))
+        + _chunk(b"IEND", b"")
+    )
 
 
 def encode_png(canvas: np.ndarray) -> bytes:
@@ -119,23 +174,74 @@ def encode_png(canvas: np.ndarray) -> bytes:
     raw = np.empty((height, width, 4), dtype=np.uint8)
     raw[..., :3] = np.rint(np.clip(straight, 0.0, 1.0) * 255.0)
     raw[..., 3] = np.rint(np.clip(alpha[..., 0], 0.0, 1.0) * 255.0)
-    rows = raw.reshape(height, width * 4)
-    # Filter type 2 (Up): every row is stored as its difference from the row above.
-    filtered = np.empty((height, width * 4 + 1), dtype=np.uint8)
-    filtered[:, 0] = 2
-    filtered[0, 1:] = rows[0]
-    filtered[1:, 1:] = rows[1:] - rows[:-1]
+    return _png(width, height, 6, raw.reshape(height, width * 4))
 
-    def chunk(kind: bytes, data: bytes) -> bytes:
-        body = kind + data
-        return struct.pack(">I", len(data)) + body + struct.pack(">I", zlib.crc32(body))
 
-    return (
-        b"\x89PNG\r\n\x1a\n"
-        + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0))
-        + chunk(b"IDAT", zlib.compress(filtered.tobytes(), 9))
-        + chunk(b"IEND", b"")
-    )
+def encode_png_gray(mask: np.ndarray) -> bytes:
+    """A PNG (grayscale, 8 bit) of a `height x width` array of `uint8`."""
+    height, width = mask.shape
+    return _png(width, height, 0, np.ascontiguousarray(mask, dtype=np.uint8))
+
+
+def _unfilter(kind: int, line: np.ndarray, above: np.ndarray) -> np.ndarray:
+    """One scanline of 8-bit samples before its PNG filter of type `kind`."""
+    if kind == 0:
+        return line.copy()
+    if kind == 1:
+        return np.cumsum(line, dtype=np.uint8)
+    if kind == 2:
+        return line + above
+    if kind not in (3, 4):
+        raise ValueError(f"unknown PNG filter type {kind}")
+    # Average and Paeth read the pixel to the left, which has to be decoded first.
+    out = np.empty_like(line)
+    left = upper_left = 0
+    for x in range(len(line)):
+        up = int(above[x])
+        if kind == 3:
+            predicted = (left + up) >> 1
+        else:
+            slope = left + up - upper_left
+            da, db, dc = abs(slope - left), abs(slope - up), abs(slope - upper_left)
+            predicted = left if da <= db and da <= dc else up if db <= dc else upper_left
+        left = (int(line[x]) + predicted) & 255
+        out[x] = left
+        upper_left = up
+    return out
+
+
+def decode_png_gray(data: bytes) -> np.ndarray:
+    """The samples (`height x width`, `uint8`) of a non-interlaced 8-bit grayscale PNG."""
+    if data[:8] != PNG_SIGNATURE:
+        raise ValueError("the data lacks the PNG signature")
+    position, header, parts = 8, None, []
+    while position + 8 <= len(data):
+        length, kind = struct.unpack(">I4s", data[position : position + 8])
+        body = data[position + 8 : position + 8 + length]
+        position += 12 + length
+        if kind == b"IHDR":
+            header = struct.unpack(">IIBBBBB", body)
+        elif kind == b"IDAT":
+            parts.append(body)
+        elif kind == b"IEND":
+            break
+    if header is None or not parts:
+        raise ValueError("incomplete PNG file")
+    width, height, depth, color_type, _, _, interlace = header
+    if (depth, color_type, interlace) != (8, 0, 0):
+        raise ValueError("expected a non-interlaced 8-bit grayscale PNG")
+    stream = np.frombuffer(zlib.decompress(b"".join(parts)), dtype=np.uint8)
+    if stream.size != height * (width + 1):
+        raise ValueError("the PNG data has the wrong size")
+    lines = stream.reshape(height, width + 1)
+    kinds = lines[:, 0]
+    if np.all(kinds == 2):
+        return np.cumsum(lines[:, 1:], axis=0, dtype=np.uint8)
+    out = np.zeros((height, width), dtype=np.uint8)
+    zero = np.zeros(width, dtype=np.uint8)
+    for y in range(height):
+        out[y] = _unfilter(int(kinds[y]), lines[y, 1:], out[y - 1] if y else zero)
+    return out
 
 
 def png_data_uri(png: bytes) -> str:
