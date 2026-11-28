@@ -28,6 +28,7 @@ from pathlib import Path
 from progress_report import PROGRESS_CSS, PROGRESS_ROUTES
 from programme import (
     ANNULUS_ROOTS,
+    MULTIPLICITY_ROOTS,
     NEST_ROOTS,
     RECTANGLE_ROOTS,
     CLASSES,
@@ -175,6 +176,7 @@ SIDE_ROOTS = (
     *ANNULUS_ROOTS,
     *RECTANGLE_ROOTS,
     *NEST_ROOTS,
+    *MULTIPLICITY_ROOTS,
 )
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
@@ -909,6 +911,26 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "family grows by at most 2^p; for d = 1 it is conformal invariance. The "
         "tower-level statement, W(f_{m+1}) ≤ Δ_P W(f_m), needs the families of the "
         "renormalization levels and stays open.",
+        lemma_nodes["unboundedTeichmuller"],
+    )
+    side_bud(
+        MULTIPLICITY_ROOTS,
+        "prog:multiplicity",
+        "Area multiplicity of f_c^p",
+        "W(ΓX) ≤ 2^p · W(ΓY) for the iterates of z² + c",
+        "Checked in Lean (extWidth_le_pow_two_mul_fc_iterate, areaMultiplicity_fc_iterate, "
+        "areaMultiplicity_fc, loopMeasure_comp). The hypothesis of the pullback law, the area "
+        "formula with multiplicity at most d, is proved for the quadratic polynomials: z ↦ z² + c "
+        "is injective on each of the two half planes that z ↦ −z swaps, so by the area formula "
+        "of Mathlib (with the determinant |w|² of the multiplication by w) it has area "
+        "multiplicity 2; the multiplicity is additive over a partition of the domain and "
+        "multiplicative under composition, so f_c^p has multiplicity 2^p with the stretching "
+        "|(f_c^p)′|. Hence, if f_c^p maps the curves of a family ΓX to curves of ΓY, then "
+        "W(ΓX) ≤ 2^p · W(ΓY): the width of a pulled-back family grows by at most 2^p, the "
+        "estimate behind the Teichmüller contraction. For a C¹ loop the image curve has the "
+        "length measure of the pushed-forward loop (loopMeasure_comp). The families of the "
+        "renormalization levels to which the estimate applies, and the quadratic-like "
+        "restrictions, stay open.",
         lemma_nodes["unboundedTeichmuller"],
     )
     side_bud(

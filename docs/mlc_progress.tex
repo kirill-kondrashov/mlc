@@ -100,7 +100,10 @@ degeneration is unbounded in some classes of unbounded satellite type
 case. The conformal estimates behind the Gr\"otzsch step (4.6) and the Teichm\"uller
 contraction are proved in \texttt{Mlc/Research/ExtremalLength.lean}: the series law,
 the parallel law, \(W(G\setminus G')\ge\delta^{-1}W(G)\) and the pullback law
-\(W(\Gamma_X)\le d\,W(\Gamma_Y)\). The abstract extremal length agrees with the classical
+\(W(\Gamma_X)\le d\,W(\Gamma_Y)\). Its hypothesis, the area formula with multiplicity at most
+\(d\), is proved for the iterates of \(f_c(z)=z^2+c\) with \(d=2^p\)
+(\texttt{extWidth\_le\_pow\_two\_mul\_fc\_iterate} in \texttt{Mlc/Research/AreaMultiplicity.lean}):
+the width of a family pulled back by \(f_c^p\) grows by at most \(2^p\). The abstract extremal length agrees with the classical
 modulus on the model case: in the plane with Lebesgue measure, the radial segments of the
 annulus \(\{r<|z|<R\}\) have extremal length \(\log(R/r)/2\pi\) and its separating circles
 \(2\pi/\log(R/r)\) (\texttt{extLength\_radialFamily}, \texttt{extLength\_circleFamily} in

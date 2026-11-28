@@ -45,6 +45,10 @@ NEST_ROOTS = (
     "MLC.Research.Geometry.transfer_iff_phaseParameter",
     "MLC.Research.nonempty_parameterRealization_concentric",
 )
+# The results of Mlc/Research/AreaMultiplicity.lean that no other result uses.
+MULTIPLICITY_ROOTS = (
+    "MLC.Research.extWidth_le_pow_two_mul_fc_iterate_of_loops",
+)
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 

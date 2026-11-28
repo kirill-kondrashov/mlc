@@ -53,6 +53,9 @@ ANNULUS_THEOREM = re.compile(r"^\s*theorem\s+extLength_radialFamily\b", re.MULTI
 RECTANGLE_THEOREM = re.compile(r"^\s*theorem\s+extLength_horizFamily\b", re.MULTILINE)
 NEST_THEOREM = re.compile(r"^\s*theorem\s+sum_extWidth_loops_le\b", re.MULTILINE)
 EQUIVALENCE_THEOREM = re.compile(r"^\s*theorem\s+transfer_iff_phaseParameter\b", re.MULTILINE)
+MULTIPLICITY_THEOREM = re.compile(
+    r"^\s*theorem\s+extWidth_le_pow_two_mul_fc_iterate\b", re.MULTILINE
+)
 PROGRAMME_THEOREM = re.compile(r"^\s*theorem\s+mlc_of_programme\b", re.MULTILINE)
 
 PROGRESS_MILESTONES = (
@@ -76,6 +79,7 @@ PROGRESS_MILESTONES = (
     ("Moduli of nested annuli force shrinking (Lemma T from the phase–parameter relation)",
      NEST_THEOREM, 1),
     ("Lemma T is equivalent to its moduli form", EQUIVALENCE_THEOREM, 1),
+    ("Pullback law for the iterates of f_c with area multiplicity 2^p", MULTIPLICITY_THEOREM, 1),
     ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )

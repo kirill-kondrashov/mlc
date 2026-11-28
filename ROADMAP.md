@@ -301,6 +301,19 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   has a subnest with `DivergentModuli` (`ConnectedNest.exists_divergentSubnest`): each piece
   contains a disk around `c` and a later piece lies in the half of it, so the annulus between them
   contains round annuli of modulus at least `log(3/2)/2π`.
+* `Mlc/Research/AreaMultiplicity.lean`: the hypothesis of the pullback law, proved for the quadratic
+  polynomials. `AreaMultiplicity mX mY φ J d` says that the area `J² mX`, pushed forward by `φ`, is
+  at most `d mY`; it is additive over a measurable partition of the domain and multiplicative under
+  composition. An injective map that is differentiable on a measurable set has multiplicity `1`
+  there with `J = |φ′|` (the area formula of Mathlib, with the determinant `|w|²` of the
+  multiplication by `w`), and `z ↦ z² + c` is injective on each of the two half planes that
+  `z ↦ −z` swaps, so `f_c` has multiplicity `2` and `f_c^p` has `2ᵖ`
+  (`areaMultiplicity_fc_iterate`). So, if `f_c^p` carries the curves of `ΓX` to curves of `ΓY`,
+  then `W(ΓX) ≤ 2ᵖ W(ΓY)` (`extWidth_le_pow_two_mul_fc_iterate`, and for loops
+  `extWidth_le_pow_two_mul_fc_iterate_of_loops` with `loopMeasure_comp`): the width of a
+  pulled-back family grows by at most `2ᵖ`, the estimate behind the Teichmüller contraction. The
+  families of the renormalization levels to which it applies, and the quadratic-like restrictions
+  of `f_c^p` to domains, are open.
 
 The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
 `mlc_of_programme`) uses only the three kernel axioms.
@@ -393,8 +406,9 @@ roadmap, not claims of the survey.
   rotation number 0, §4.4), so TC′ is TC applied level by level; the new content is the
   compatibility of the regularization of a level with the preceding level (PS1). The
   pullback estimate for extremal widths is proved (`extWidth_pullback_le`: `W(ΓX) ≤ d W(ΓY)`
-  for a map of area multiplicity at most `d`); the next step (proposal) is its application
-  to the families of the renormalization levels, with `d = 2^p`.
+  for a map of area multiplicity at most `d`), and its hypothesis is proved for the iterates of
+  `f_c` (`extWidth_le_pow_two_mul_fc_iterate`: multiplicity `2ᵖ`); the next step (proposal) is its
+  application to the families of the renormalization levels, with `d = 2^p`.
 * **G (jump cap).** In alternative (ii) of §4.3 the degeneration of the deeper level jumps by
   `C_δ`. The Teichmüller contraction excludes the jump while its factor `Δ^p` stays below
   `C_δ`, which fails for unbounded `p`. The recursion needs only that a jump lands below a
