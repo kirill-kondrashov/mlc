@@ -7,6 +7,14 @@ Problem 4.3 supplies the admissible return system and its analytic realization.
 Problem 4.4 is the virtual-Molecule interpolation assertion that every
 uncovered boundary parameter admits a virtual-Julia a priori control. No
 project axiom is introduced.
+
+These are operational forms. The survey states only that Problems 4.3 and 4.4, together with the
+arguments of §4.1–§4.4, should imply MLC, and it does not state them in this form; that a solution
+of the problems provides these inputs is the reading proposed here, not a theorem. The first input
+alone is inhabited by the empty system (no parameter is admissible, so the realization is
+vacuous): the content of the pair is the completion of the second input relative to the chosen
+system, and the tree of `Mlc/ProgrammeRoot.lean` makes the split non-trivial by taking the system
+of the towers with a priori bounds.
 -/
 
 namespace MLC

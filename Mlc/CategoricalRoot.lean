@@ -10,8 +10,9 @@ noncomputable section
 abbrev mandelbrotSet : Set ℂ :=
   MLC.Quadratic.MandelbrotSet
 
-/-- The active root exposes exactly the two open problems identified by Dudko:
-    pseudo-Siegel a priori bounds and virtual-Molecule a priori completion. -/
+/-- The active root has two inputs, the operational forms of the two open problems that Dudko
+    identifies (Problems 4.3 and 4.4): pseudo-Siegel a priori bounds and virtual-Molecule a priori
+    completion. `Mlc/Dudko.lean` says what operational means here. -/
 structure RootInput where
   problem43 : Problem43PseudoSiegelAPrioriBoundsData
   problem44 : Problem44VirtualMoleculeData problem43

@@ -11,7 +11,9 @@ LocallyConnectedSpace MLC.mandelbrotSet
 with an axiom frontier limited to Lean's standard foundations. The active proof
 must retain the invariant that every declaration is connected to
 `MLC.mlc_conjecture`. The graph currently exposes two open mathematical
-inputs: Problem 4.3 and Problem 4.4, and the sixteen lemmas into which
+inputs, the operational forms of Problem 4.3 and Problem 4.4 (the survey states that the problems,
+together with the arguments of its §4.1–§4.4, should imply MLC, and does not state them in this
+form; `Mlc/Dudko.lean`), and the sixteen lemmas into which
 `Mlc/ProgrammeRoot.lean` decomposes them (see the programme tree below).
 
 Problem 4.3 requires pseudo-Siegel a priori bounds and a realization for all
@@ -245,8 +247,9 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   lift `G′` carries the fraction `1 − δ` of the extremal length of `G`, the subcurves
   `G ∖ G′` have width at least `δ⁻¹ W(G)`, so `C_δ = δ⁻¹ → ∞`); and the pullback law
   (`extWidth_pullback_le`: if `φ` carries the curves of `ΓX` to curves of `ΓY` with area
-  multiplicity at most `d`, then `W(ΓX) ≤ d W(ΓY)`, the mechanism of the Teichmüller
-  contraction, and conformal invariance for `d = 1`). This is the conformal
+  multiplicity at most `d`, then `W(ΓX) ≤ d W(ΓY)`, the shape of the growth bound of the
+  Teichmüller contraction, and the monotonicity of the width under a conformal map for `d = 1`).
+  This is the conformal
   foundation of PS4, of the amplification (4.3) and of TC; the dynamical families remain
   open, and the widths of the towers are not yet extremal widths of such families.
 * `Mlc/Research/AnnulusModulus.lean`: the model case of the theory, the round annulus
@@ -329,13 +332,15 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   derives that shrinking from `VirtualTransfer`. So the dynamical content of VT is that the diameters
   of the virtual hulls tend to zero, the analogue of the shrinking of the parameter pieces for T; the
   nest and the phase–parameter chart of VT are the rest.
-* `Mlc/Research/QuasiInvariance.lean`: the invariance of the extremal width under a change of chart.
+* `Mlc/Research/QuasiInvariance.lean`: the quasi-monotonicity of the extremal width under a change
+  of chart.
   `QcEmbedding Ω φ K` is a `C¹` embedding of an open set with invertible derivative and dilatation
   `‖Dφ‖² ≤ K |det Dφ|` at most `K`; an injective holomorphic map with non-vanishing derivative has
   `K = 1` (`QcEmbedding.of_holomorphic`). The area formula of Mathlib gives the hypothesis of the
   pullback law with multiplicity `K` and stretching `‖Dφ‖` (`QcEmbedding.areaMultiplicity`), so
   `extWidth_le_of_qcEmbedding`: if `φ` carries every curve of `ΓX` to a curve that dominates a curve
-  of `ΓY`, then `W(ΓX) ≤ K W(ΓY)` (conformal invariance for `K = 1`). `Separates.image`: a map that
+  of `ΓY`, then `W(ΓX) ≤ K W(ΓY)` (monotonicity of the width under a conformal embedding for
+  `K = 1`; invariance for a biholomorphism, by applying it to the inverse). `Separates.image`: a map that
   is continuous and injective on the compact closure of `O`, with `φ '' O` open, carries a loop
   that separates `K` from the complement of `O` to a loop that separates `φ '' K` from the
   complement of `φ '' O` (the first exit time of a path from `φ '' O`). The modulus of an annular
@@ -350,8 +355,10 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   phase nest and a parameter nest nor the phase nest is constructed.
 * `Mlc/Research/Collar.lean`: a quasi-round annulus has a definite modulus. For a level
   `f : U → V` of a renormalization tower with filled Julia set `E = K_f`, the modulus of `V ∖ E`,
-  the extremal width of the separating loops, is `mod⁺(f)`, the reciprocal of the degeneration
-  `W(f)` of the survey (4.1); for the annuli of a nest it is `D.loops j`. `IsCollar E V Kd r R`: a
+  the extremal width of the separating `C¹` loops, is the `C¹` version of `mod⁺(f)`, the reciprocal
+  of the degeneration `W(f)` of the survey (4.1): at most the classical modulus and equal to it for
+  round annuli, the identification in general belonging to the dictionary; for the annuli of a nest
+  it is `D.loops j`. `IsCollar E V Kd r R`: a
   `C¹` embedding `ψ` of dilatation at most `Kd` of a neighbourhood of the closed disk of radius `R`
   such that `E` lies in `ψ(B̄(w₀, r))` and `ψ(B̄(w₀, R))` lies in `V`. The circles of the round
   annulus bound its modulus below by `log (R/r) / 2π` (`extWidth_loopFamily_ge_radii`), the loops
@@ -372,7 +379,8 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   the annulus of a round level of a `LevelTower`, whose degeneration is therefore
   `2π / log (R/r)` (`LevelTower.width_eq_of_round`). So the `C¹` modulus agrees with the classical
   one on the round annuli, the model that the collars compare with.
-* `Mlc/Research/NestRate.lean`: the rate of the shrinking. Teichmüller's inequality in the form
+* `Mlc/Research/NestRate.lean`: the rate of the shrinking. A Teichmüller-type estimate, with the
+  non-optimal constants of the metric `1/|z − c|`, in the form
   of a theorem about nests (`ConnectedNest.closure_piece_subset_closedBall_of_sum`): if the
   closure of the first piece lies in `B̄(c, R)` and the first `n` annuli have total modulus at
   least `s`, with `κ s ≥ log 8` and `κ = (log 2)² / 2π`, then the closure of the piece `n` lies in
@@ -384,7 +392,13 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   geometry, and the geometric bound is what the construction of the nest has to supply.
 * `Mlc/Research/LevelTower.lean`: the degeneration as the reciprocal modulus of an annulus, and what
   follows. `LevelTower` extends `WidthTower` by the filled Julia sets `K_k` and the range domains
-  `V_k` of the levels, with `W_k = 1 / mod(V_k ∖ K_k)` (the survey (3.2), (4.1)). A collar of the
+  `V_k` of the levels, with `W_k = 1 / mod(V_k ∖ K_k)` (the survey (3.2), (4.1)), the modulus being
+  the extremal width of the `C¹` loops that separate `K_k` from the complement of `V_k`: at most the
+  classical modulus, and equal to it for round annuli. The sets are data of the dictionary: nothing
+  ties them to the dynamics of `f_c`, and every width tower is realized by round levels
+  (`WidthTower.exists_levelTower` in `RoundTower.lean`), so the structure has no dynamical content by
+  itself and the hypotheses below are meaningful for the filled Julia sets and range domains of
+  quadratic-like restrictions. A collar of the
   annulus of a level bounds its degeneration by `2π Kd / log (R/r)` (`LevelTower.width_le_of_collar`),
   so Lemma G follows from collars at the jump levels: if at every level that follows a jump by the
   factor `C₀` the annulus has a collar of dilatation at most `K₀` and modulus at least `μ₀/2π`, the
@@ -400,38 +414,59 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   follows (`Geometry.transfer_of_comparison`): the moduli of the levels are at least `1/B`, so the
   moduli of the nest are at least `1/(B Kd)`, they add up to infinity and the pieces shrink. A
   quasi-conformal chart between the annuli gives the comparison (for a `C¹` chart this is
-  `extWidth_loopFamily_le_map`); the realization, the nest and the chart are what is open.
+  `extWidth_loopFamily_le_map`); the realization, the nest and the chart are what is open. The
+  comparison is a statement about the dictionary: it is vacuous for a dictionary without towers.
+* `Mlc/Research/CollarCriterion.lean`: the chain from the annuli of a nest to the local connectivity
+  at its center, closed at a point. A set is locally connected at the center of a connected nest
+  whose moduli add up to infinity (`ConnectedNest.locallyConnectedAt_of_divergent`, the Yoccoz
+  criterion). With a uniform lower bound `w` for the moduli and the first piece in the disk of
+  radius `R` around `c`, for every `ε > 0` some piece of depth at most
+  `max (log 8, log (8R/ε)) / (κ w) + 1`, `κ = (log 2)² / 2π`, is a connected neighbourhood of `c`
+  inside the disk of radius `ε` (`exists_relativePiece_of_uniform`): a logarithmic modulus of local
+  connectivity. Uniform collars give `w = μ₀ / (2π K₀)` (`locallyConnectedAt_of_collars`,
+  `exists_relativePiece_of_collars`); the phase–parameter comparison with a degeneration bound `B`
+  gives `w = 1 / (B Kd)` (`Geometry.locallyConnectedAt_of_comparison`,
+  `Geometry.exists_relativePiece_of_comparison`). The whole chain is
+  `Geometry.locallyConnectedAt_of_collars_and_comparison`: collars of dilatation at most `K₀` and
+  modulus at least `μ₀/2π` at the jumps of a level tower of `c`, the linear dichotomy for it, and the
+  comparison give the local connectivity of `M` at `c`. The collars, Lemma D and the comparison are
+  the explicit geometric statements that are open; the concentric nest has uniform collars
+  (`concentricNest_collars`), so the hypotheses of the criterion are satisfiable.
 * `Mlc/Research/Dimension.lean`: the dimension of the fractal against the smooth curves of the
   moduli. The image of a `C¹` loop has Hausdorff dimension at most `1` (`IsLoop.dimH_range_le`), so
   countably many loops cover no set of larger dimension. A `C¹` embedding with invertible
   derivative is locally bi-Lipschitz, so it preserves the dimension of every subset of its domain
-  (`QcEmbedding.dimH_image`), whatever its dilatation: the charts of `QuasiInvariance.lean` and
-  `Collar.lean` compare moduli and never dimensions. A correspondence between sets of different
-  dimension, a smooth curve and a fractal, or a Julia set of dimension below `2` and the boundary
-  of `M`, is therefore not `C¹`; it is quasi-conformal, and the distortion of the dimension is
-  bounded by the dilatation `K` (Astala, 1994: dimension `d` goes to at most `2Kd/(2 + (K−1)d)`;
-  not formalized), which is why `Geometry.PhaseParameterComparison` is stated for moduli. An
+  (`QcEmbedding.dimH_image`), whatever its dilatation, and no `C¹` chart carries a smooth curve onto
+  a fractal. A `K`-quasi-conformal map distorts the dimension within the bound of Astala (1994:
+  dimension `d` goes to at most `2Kd/(2 + (K−1)d)`; not formalized), which is below `2` for `d < 2`,
+  so a quasi-conformal map of finite dilatation never carries a set of dimension below `2` onto a
+  set of dimension `2`. The charts of `QuasiInvariance.lean` and `Collar.lean` compare the moduli of
+  annuli, which are open sets, and say nothing about the dimension of the sets that the annuli go
+  around. An
   `α`-Hölder parametrization of a set of dimension `d` by an interval has `α d ≤ 1`
   (`holder_mul_le_one`). `ShishikuraDimension` states Shishikura's theorem (the boundary of `M` has
   Hausdorff dimension `2`; published, a hypothesis here), and gives that the boundary is not covered
   by countably many `C¹` loops, is not the `C¹` image of a set of dimension below `2`, and has no
   parametrization by an interval that is `α`-Hölder with `α > 1/2`
-  (`ShishikuraDimension.holder_exponent_le_half`). For the fiber of a nest, its kernel: divergent
+  (`ShishikuraDimension.holder_exponent_le_half`). For the kernel of a nest: divergent
   moduli leave a point, of dimension `0` (`ConnectedNest.dimH_kernel_eq_zero_of_divergent`), and a
-  fiber of positive dimension has a finite total modulus
-  (`ConnectedNest.sum_extWidth_loops_bounded_of_dimH_kernel_pos`).
+  kernel of positive dimension contains a point other than the center, so the moduli add up to a
+  finite bound (`ConnectedNest.sum_extWidth_loops_bounded_of_dimH_kernel_pos`); the kernel of a
+  given nest need not be the fiber of the parameter (Schleicher), which the dynamics defines.
 * `Mlc/Research/PeanoObject.lean`: the same in the category of compact Hausdorff spaces, next to
   the categorical root. `IsPeanoObject X`: `X` is an epimorphic image of the interval (the
   epimorphisms of `CompHaus` are the surjections), and, the epimorphisms being effective, a regular
   quotient: the coequalizer of its kernel pair, a closed equivalence relation on the interval
-  (`IsPeanoObject.exists_regularEpi`), which for `M` is the landing relation of the rays, the
-  lamination. A Peano object is locally connected
+  (`IsPeanoObject.exists_regularEpi`; for `M` it is the kernel pair of the chosen parametrization,
+  and the landing relation of the rays, which lives on the circle of angles and gives the
+  pinched-disk model, is a different statement that is not formalized). A Peano object is locally
+  connected
   (`IsPeanoObject.locallyConnectedSpace`: a surjection of a compact space onto a Hausdorff space is a
   quotient map, and quotients of locally connected spaces are locally connected). Given the
   Hahn–Mazurkiewicz theorem (`HahnMazurkiewicz`, the converse for metrizable continua; published,
   not formalized) and the connectedness of `M` (Douady–Hubbard), `Categorical.MLCConjecture` holds
   exactly when `mandelbrotCompHaus` is a Peano object, exactly when it is a regular quotient of the
-  interval (`mlc_iff_peano`, `mlc_iff_lamination`). Given Shishikura's
+  interval (`mlc_iff_peano`, `mlc_iff_regularEpi`). Given Shishikura's
   theorem, no epimorphism from the interval onto `boundaryCompHaus` is `α`-Hölder with `α > 1/2`
   (`ShishikuraDimension.holder_exponent_le_half_of_epi`): the parametrization of the boundary that
   MLC provides is wild.
@@ -511,22 +546,27 @@ roadmap, not claims of the survey.
   is checked for general open pieces, with the area inequality in dimension one for the
   argument and the logarithm of `γ − c`, with no Teichmüller bound for a general annulus and no
   conformal invariance needed. Third step (done, `QuasiInvariance.lean`): the extremal width, and
-  the moduli of a nest, are quasi-invariant under `C¹` embeddings of dilatation at most `K`
-  (conformally invariant for `K = 1`), with divergent moduli transported
+  the moduli of a nest, are quasi-monotone under `C¹` embeddings of dilatation at most `K` (the
+  width of a family is at most `K` times that of a family containing the images of its curves;
+  `K = 1` for a holomorphic embedding), with divergent moduli transported
   (`ConnectedNest.DivergentModuli.map`). Fourth step (done, `Collar.lean`): a level whose annulus
   has a collar, a quasi-round annular chart of dilatation `Kd` and modulus `log (R/r) / 2π`, has
   modulus at least `log (R/r) / (2π Kd)` (`IsCollar.ofReal_le_extWidth`), and a nest with uniform
   collars has divergent moduli (`ConnectedNest.divergentModuli_of_collars`), with the modulus of
   the round annulus exactly `log (R/r) / 2π` (`RoundAnnulus.lean`) and the pieces shrinking at the
-  geometric rate `exp(−κ μ₀ n / (2π K₀))` (`NestRate.lean`, Teichmüller's inequality). Fifth step (done,
+  geometric rate `exp(−κ μ₀ n / (2π K₀))` (`NestRate.lean`, a Teichmüller-type estimate). Fifth step (done,
   `LevelTower.lean`): the degeneration of a level is the reciprocal modulus of its annulus, collars
   at the jump levels cap the jumps (Lemma G in the reading of PS4), and the phase–parameter
   comparison of the moduli of the levels with the moduli of a parameter nest gives Lemma T
   (`Geometry.transfer_of_comparison`). Sixth step (done, `Dimension.lean`): the dimension of the
-  fractal against the smooth curves: `C¹` charts preserve the Hausdorff dimension, which is why the
-  phase–parameter correspondence, which relates sets of different dimension, is quasi-conformal and
-  not `C¹`, and the boundary of `M` has no parametrization by an interval better than
-  `1/2`-Hölder (given Shishikura's theorem). Next: `PhaseParameter` itself (the phase–parameter
+  fractal against the smooth curves: `C¹` charts preserve the Hausdorff dimension, quasi-conformal
+  maps of finite dilatation distort it within Astala's bound and never carry a set of dimension
+  below `2` onto a set of dimension `2`, and the boundary of `M` has no parametrization by an
+  interval better than `1/2`-Hölder (given Shishikura's theorem). Seventh step (done,
+  `CollarCriterion.lean`): the chain closes at a point, collars at the jumps, the linear dichotomy
+  and the comparison give the local connectivity of `M` at `c` with a logarithmic scale
+  (`Geometry.locallyConnectedAt_of_collars_and_comparison`). Next: `PhaseParameter` itself (the
+  phase–parameter
   relation of Lyubich (§3.9) with the quasi-additivity law), which compares the moduli of the
   dynamical annuli of the tower with the parameter annuli; that correspondence is
   quasi-conformal and comes with no `C¹` chart, so the construction of the nest from the bound
@@ -612,8 +652,9 @@ precise description of the points that stay open.
 3. *Fibers.* The fiber of `c` is the set of the points that no pair of rational rays landing
    together separates from `c`. `M` is locally connected exactly when every fiber is a point
    (Schleicher, *On fibers and local connectivity of Mandelbrot and Multibrot sets*).
-4. *Peano parametrization.* `M` is a continuous image of the interval (Hahn–Mazurkiewicz), the
-   landing map of the rays being the parametrization of the boundary. In `CompHaus` this is an
+4. *Peano parametrization.* `M` is locally connected exactly when it is a continuous image of the
+   interval (Hahn–Mazurkiewicz, given that `M` is a continuum); the landing map of the rays then
+   parametrizes the boundary. In `CompHaus` this is an
    epimorphism from the interval onto `M` (`Mlc/Research/PeanoObject.lean`, `mlc_iff_peano`, given
    Hahn–Mazurkiewicz and the connectedness of `M`).
 
@@ -624,12 +665,14 @@ hypothesis: the boundary is not a countable union of smooth arcs, and a parametr
 the interval, such as the landing map of the rays, is at best `1/2`-Hölder, so any Hölder control
 of the landing map has an exponent at most `1/2` (`ShishikuraDimension.holder_exponent_le_half`,
 and `holder_exponent_le_half_of_epi` for the epimorphisms of `CompHaus`). The moduli of the
-development are measured with `C¹` loops, which see a fractal fiber only as a set that is not a
-point: divergent moduli leave a point of dimension `0`, and a fiber of positive dimension has a
-finite total modulus. `C¹` charts preserve the Hausdorff dimension (`QcEmbedding.dimH_image`), so
-the correspondences between the dynamical and the parameter plane that relate sets of different
-dimension are quasi-conformal and not `C¹`, with a distortion of the dimension bounded by the
-dilatation (Astala, 1994; not formalized). Dimension `2` is compatible with area `0` and with
+development are measured with `C¹` loops, which see a fractal kernel only as a set that is not a
+point: divergent moduli leave a point of dimension `0`, and a kernel of positive dimension forces a
+finite total modulus. `C¹` charts preserve the Hausdorff dimension (`QcEmbedding.dimH_image`), and
+quasi-conformal maps of finite dilatation distort it within Astala's bound (1994; not formalized),
+which is below `2` for a set of dimension below `2`: no such map carries a smooth curve, or any set
+of dimension below `2`, onto a fractal of dimension `2`. The comparisons of the programme relate
+annuli, which are open sets, and say nothing about the dimension of the sets that the annuli go
+around. Dimension `2` is compatible with area `0` and with
 positive area, so the dimension decides neither the area of the boundary nor the shrinking of the
 nests, which is the content of Problems 4.3 and 4.4.
 

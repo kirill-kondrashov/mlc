@@ -26,8 +26,10 @@ The file proves the conformal-geometry foundation used by the survey of Dudko
   at most the fraction `δ`, so its width is at least `δ⁻¹` times the total width;
 * the pullback law (`extLength_pullback_le`, `extWidth_pullback_le`): if a map `φ` carries the
   curves of `ΓX` to curves of `ΓY`, and the area elements satisfy `φ_*(J² mX) ≤ d · mY`,
-  then `W(ΓX) ≤ d · W(ΓY)`. For a holomorphic map of degree `d` this is the estimate behind
-  the Teichmüller contraction, and for `d = 1` it is conformal invariance.
+  then `W(ΓX) ≤ d · W(ΓY)`. For a holomorphic map of degree `d` it bounds the growth of the width of
+  a pulled-back family by the degree, the shape of the growth bound of the Teichmüller contraction
+  (the application to the families of the renormalization levels is not formalized), and for
+  `d = 1` it is the monotonicity of the width under a conformal map.
 
 All quantities take values in `ℝ≥0∞`, so the statements carry no finiteness or positivity
 hypotheses on the families or on the metrics.
@@ -437,9 +439,10 @@ theorem extLength_pullback_le {mX : Measure α} {mY : Measure β} {ΓX : Set (Me
     _ ≤ d * (ℓ' ^ 2 / A') := by gcongr
     _ ≤ d * extLength mX ΓX := by gcongr
 
-/-- Pullback in widths: `W(ΓX) ≤ d · W(ΓY)`. For `φ` a map of degree `d` this is the estimate
-behind the Teichmüller contraction: the width of a pulled-back family exceeds the width of the
-family by at most the degree, and for `d = 1` it is conformal invariance. -/
+/-- Pullback in widths: `W(ΓX) ≤ d · W(ΓY)`. For `φ` a map of degree `d` the width of a pulled-back
+family exceeds the width of the family by at most the degree, the shape of the growth bound of the
+Teichmüller contraction, and for `d = 1` this is the monotonicity of the width under a conformal
+map. -/
 theorem extWidth_pullback_le {mX : Measure α} {mY : Measure β} {ΓX : Set (Measure α)}
     {ΓY : Set (Measure β)} {φ : α → β} {J : α → ℝ≥0∞} {d : ℝ≥0∞} (hφ : Measurable φ)
     (hJ : Measurable J) (hd0 : d ≠ 0) (hdtop : d ≠ ⊤)

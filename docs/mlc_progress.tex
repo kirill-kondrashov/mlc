@@ -39,7 +39,9 @@ The repository contains a checked conditional reduction
 \]
 The checked proof uses only \texttt{propext}, \texttt{Quot.sound}, and
 \texttt{Classical.choice}. It contains no project \texttt{axiom},
-\texttt{sorry}, or \texttt{admit}.
+\texttt{sorry}, or \texttt{admit}. The two inputs are operational forms of Dudko's Problems~4.3
+and~4.4: the survey states that the problems, together with the arguments of its \S4.1--\S4.4,
+should imply MLC, and does not state them in this form (see \texttt{Mlc/Dudko.lean}).
 
 The currently proved foundation includes:
 
@@ -122,10 +124,11 @@ the moduli of the annuli \(P_j\setminus\overline{P_{j+1}}\), \(n\le j<m\)
 (\texttt{ConnectedNest.sum\_extWidth\_loops\_le\_coarse}, Gr\"otzsch's inequality). Conversely, a shrinking nest has a
 subnest whose annuli contain round annuli of modulus \(\log(3/2)/2\pi\), so Lemma~T is equivalent
 to the phase--parameter relation in moduli form (\texttt{Geometry.transfer\_iff\_phaseParameter}),
-which the concentric disks satisfy. A \(C^1\) embedding of dilatation at most \(K\) multiplies the
-extremal width by at most \(K\), and carries a nest to a nest whose annuli have at least \(1/K\)
-times the moduli, so divergent moduli are transported by such a chart; \(K=1\) for an injective
-holomorphic map with non-vanishing derivative
+and the concentric disks give an example of a nest with divergent moduli. The extremal width of a
+family of curves is at most \(K\) times that of any family that contains the images of its curves
+under a \(C^1\) embedding of dilatation at most \(K\); such an embedding carries a nest to a nest
+whose annuli have at least \(1/K\) times the moduli, so divergent moduli are transported by such a
+chart, and \(K=1\) for an injective holomorphic map with non-vanishing derivative
 (\texttt{ConnectedNest.DivergentModuli.map} in \texttt{Mlc/Research/QuasiInvariance.lean}). The
 same holds for the modulus of any annular region, and it gives the collar estimate: if the
 annulus \(V\setminus E\) of a level contains the image of a round annulus \(r<|w|\le R\) under
@@ -138,7 +141,7 @@ a round level is \(2\pi/\log(R/r)\), \texttt{LevelTower.width\_eq\_of\_round}),
 and the size of a piece of a nest is controlled by the total modulus before it: if the first piece
 lies in \(B(c,R)\) and the first \(n\) annuli have total modulus at least \(s\) with
 \(\kappa s\ge\log 8\), \(\kappa=(\log 2)^2/2\pi\), then the piece \(n\) lies in
-\(B(c,8Re^{-\kappa s})\) (Teichm\"uller's inequality,
+\(B(c,8Re^{-\kappa s})\) (a Teichm\"uller-type estimate with non-optimal constants,
 \texttt{ConnectedNest.closure\_piece\_subset\_closedBall\_of\_sum} in
 \texttt{Mlc/Research/NestRate.lean}), so uniform collars give pieces that shrink geometrically.
 A level whose annulus has a collar has degeneration at most
@@ -146,16 +149,33 @@ A level whose annulus has a collar has degeneration at most
 follow a jump cap the jumps (Lemma~G in the reading of PS4), and a comparison of the moduli of
 the levels with the moduli of a parameter nest gives Lemma~T
 (\texttt{LevelTower.jumpCap\_of\_collars}, \texttt{Geometry.transfer\_of\_comparison} in
-\texttt{Mlc/Research/LevelTower.lean}). The loops with which the moduli are measured are curves of
+\texttt{Mlc/Research/LevelTower.lean}). The modulus is taken as the extremal width of the \(C^1\)
+loops of the annulus, which is at most the classical modulus and equals it for round annuli, and
+the sets of the levels are data of the dictionary: every width tower is realized by round levels
+(\texttt{WidthTower.exists\_levelTower} in \texttt{Mlc/Research/RoundTower.lean}), so the
+hypotheses are meaningful for the filled Julia sets and range domains of quadratic-like
+restrictions. The chain closes at a point: a set is locally connected at
+the center of a nest whose moduli add up to infinity (the Yoccoz criterion), and for a uniform
+lower bound \(w\) of the moduli the connected neighbourhoods of the center are reached at depth
+\(O(\log(1/\varepsilon))\) for the radius \(\varepsilon\); collars at the jumps of a level tower,
+the linear dichotomy and the phase--parameter comparison give the local connectivity of \(M\) at the
+parameter (\texttt{Geometry.locallyConnectedAt\_of\_collars\_and\_comparison} in
+\texttt{Mlc/Research/CollarCriterion.lean}), and these three hypotheses are open. The loops with
+which the moduli are measured are curves of
 Hausdorff dimension at most~1, while the boundary of the Mandelbrot set is a fractal of Hausdorff
-dimension~2 (Shishikura); a \(C^1\) chart preserves the Hausdorff dimension, so a correspondence
-between sets of different dimension is not \(C^1\), and given Shishikura's theorem a
-parametrization of the boundary by an interval, such as the landing map of the external rays, is
+dimension~2 (Shishikura); a \(C^1\) chart preserves the Hausdorff dimension, a quasi-conformal map
+of finite dilatation never carries a set of dimension below~2 onto a set of dimension~2 (Astala),
+and given Shishikura's theorem a
+parametrization of the boundary by an interval, such as the landing map of the external rays that
+exists when \(M\) is locally connected, is
 at best \(\tfrac12\)-H\"older (\texttt{ShishikuraDimension.holder\_exponent\_le\_half} in
 \texttt{Mlc/Research/Dimension.lean}, and in the category of compact Hausdorff spaces
-\texttt{mlc\_iff\_peano} in \texttt{Mlc/Research/PeanoObject.lean}). What
+\texttt{ShishikuraDimension.holder\_exponent\_le\_half\_of\_epi} in
+\texttt{Mlc/Research/PeanoObject.lean}, where \texttt{mlc\_iff\_peano} states MLC as a
+parametrization of \(M\) by the interval). What
 is open is the construction of the nest from an a priori bound, since the correspondence between
-the dynamical and the parameter annuli is quasi-conformal and comes with no \(C^1\) chart. For the
+the dynamical and the parameter annuli in the phase--parameter relation is quasi-conformal and no
+\(C^1\) chart is available. For the
 virtual hulls of Problem~4.4, the dynamical separation estimate of Lemma~VT is
 equivalent to the shrinking of the hulls to their origins, for the canonical cost of a degeneration
 bound (\texttt{VirtualJuliaNest.separationEstimate\_iff} in

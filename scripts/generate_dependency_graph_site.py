@@ -6,7 +6,7 @@ from the constants in elaborated Lean types and proof terms; generated
 projection and constructor paths are collapsed to source declarations. The
 graph is validated (rooted at `mlc_conjecture` and at the side results of the
 programme such as the measure step of Route Z, acyclic, exactly the ground
-axioms, exactly the two open problems of Dudko) and drawn as one 2D figure, the
+axioms, exactly the operational forms of the two open problems of Dudko) and drawn as one 2D figure, the
 spine of the proof (see `spine_graph.py`).
 
 Output layout:

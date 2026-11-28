@@ -10,8 +10,10 @@ import Mlc.Research.PhaseParameter
 import Mlc.Research.AreaMultiplicity
 import Mlc.Research.QuasiInvariance
 import Mlc.Research.Collar
+import Mlc.Research.CollarCriterion
 import Mlc.Research.NestRate
 import Mlc.Research.RoundAnnulus
+import Mlc.Research.RoundTower
 import Mlc.Research.LevelTower
 import Mlc.Research.Dimension
 import Mlc.Research.PeanoObject

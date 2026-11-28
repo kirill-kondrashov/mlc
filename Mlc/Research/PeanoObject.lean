@@ -7,24 +7,27 @@ import Mathlib.Geometry.Manifold.Instances.Real
 /-!
 # Peano objects: the local connectivity of a continuum as a morphism from the interval
 
-The theorem of Carathéodory and the Hahn–Mazurkiewicz theorem say that a continuum is locally
-connected exactly when it is a continuous image of the interval: for the Mandelbrot set, the
-exterior Riemann map extends to the circle, and its boundary values, the landing map of the external
-rays, parametrize the boundary. This module states that in the category of compact Hausdorff
-spaces, next to the categorical root `Mlc/CategoricalRoot.lean`, and brings in the dimension of
-`Mlc/Research/Dimension.lean`.
+The Hahn–Mazurkiewicz theorem says that a continuum (compact, connected, metrizable) is locally
+connected exactly when it is a continuous image of the interval, and Carathéodory's theorem says
+that for a full continuum this holds exactly when the Riemann map of its complement extends
+continuously to the circle. For the Mandelbrot set, if MLC holds, the boundary values of the
+exterior Riemann map, the landing map of the external rays, parametrize the boundary. This module
+states the first form in the category of compact Hausdorff spaces, next to the categorical root
+`Mlc/CategoricalRoot.lean`, and brings in the dimension of `Mlc/Research/Dimension.lean`.
 
 * **Definition `IsPeanoObject X`**: the object `X` of `CompHaus` is an epimorphic image of the
   interval (`intervalObject`). In `CompHaus` the epimorphisms are the surjections.
 * **Theorem `IsPeanoObject.locallyConnectedSpace`**: a Peano object is locally connected, because a
   surjection of a compact space onto a Hausdorff space is a quotient map, and a quotient of a
   locally connected space is locally connected (`locallyConnectedSpace_of_isQuotientMap`).
-* **Theorem `IsPeanoObject.exists_regularEpi`** (the lamination form): in `CompHaus` the
+* **Theorem `IsPeanoObject.exists_regularEpi`** (the quotient form): in `CompHaus` the
   epimorphisms are the effective ones, so the parametrization of a Peano object is a regular
   epimorphism, the coequalizer of its kernel pair: the object is the quotient of the interval by a
-  closed equivalence relation. For the Mandelbrot set the relation is the landing relation of the
-  external rays, the lamination of Thurston and Douady–Hubbard.
-* **Theorems `mlc_iff_peano` and `mlc_iff_lamination`**: given the Hahn–Mazurkiewicz theorem
+  closed equivalence relation. For the Mandelbrot set this is some closed equivalence relation on
+  the interval, the kernel pair of the chosen parametrization. The landing relation of the external
+  rays lives on the circle of angles and gives the pinched-disk model of Thurston and
+  Douady–Hubbard, a different statement that is not formalized.
+* **Theorems `mlc_iff_peano` and `mlc_iff_regularEpi`**: given the Hahn–Mazurkiewicz theorem
   (`HahnMazurkiewicz`, published, not formalized, the converse for metrizable continua) and the
   connectedness of the Mandelbrot set (Douady–Hubbard), the categorical statement
   `Categorical.MLCConjecture` holds exactly when the Mandelbrot object `mandelbrotCompHaus` is a
@@ -100,11 +103,12 @@ def HahnMazurkiewicz : Prop :=
   ∀ (X : CompHaus.{0}) [ConnectedSpace X] [TopologicalSpace.MetrizableSpace X],
     LocallyConnectedSpace X → IsPeanoObject X
 
-/-- **The lamination form.** In `CompHaus` the epimorphisms are the effective ones, so the
+/-- **The quotient form.** In `CompHaus` the epimorphisms are the effective ones, so the
 parametrization of a Peano object is a regular epimorphism: the object is the coequalizer of the
 kernel pair of the parametrization, the quotient of the interval by a closed equivalence relation.
-For the Mandelbrot set the relation is the landing relation of the external rays, the lamination of
-Thurston and Douady–Hubbard. -/
+For the Mandelbrot set this is some closed equivalence relation on the interval; the landing
+relation of the external rays lives on the circle of angles and belongs to the pinched-disk model of
+Thurston and Douady–Hubbard, which is not formalized. -/
 theorem IsPeanoObject.exists_regularEpi {X : CompHaus.{0}} (h : IsPeanoObject X) :
     ∃ f : intervalObject ⟶ X, Nonempty (RegularEpi f) := by
   obtain ⟨f, hf⟩ := h
@@ -132,11 +136,12 @@ theorem mlc_iff_peano (hHM : HahnMazurkiewicz) [ConnectedSpace MLC.mandelbrotSet
     Categorical.MLCConjecture ↔ IsPeanoObject mandelbrotCompHaus :=
   ⟨fun h => hHM mandelbrotCompHaus h, categorical_mlc_of_peano⟩
 
-/-- **MLC as a lamination of the interval.** Given the connectedness of the Mandelbrot set and the
+/-- **MLC as a quotient of the interval.** Given the connectedness of the Mandelbrot set and the
 Hahn–Mazurkiewicz theorem, MLC holds exactly when the Mandelbrot object is a regular quotient of
-the interval in `CompHaus`: the coequalizer of a closed equivalence relation on `[0, 1]`, the
-landing relation of the external rays. This is the pinched-disk model, in categorical terms. -/
-theorem mlc_iff_lamination (hHM : HahnMazurkiewicz) [ConnectedSpace MLC.mandelbrotSet] :
+the interval in `CompHaus`: the coequalizer of a closed equivalence relation on `[0, 1]`. This is
+the categorical form of the Hahn–Mazurkiewicz parametrization; the pinched-disk model of the
+external rays, a quotient of the closed disk by a lamination, is a different statement. -/
+theorem mlc_iff_regularEpi (hHM : HahnMazurkiewicz) [ConnectedSpace MLC.mandelbrotSet] :
     Categorical.MLCConjecture ↔
       ∃ f : intervalObject ⟶ mandelbrotCompHaus, Nonempty (RegularEpi f) := by
   rw [mlc_iff_peano hHM]

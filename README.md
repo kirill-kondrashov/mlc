@@ -1,7 +1,8 @@
 # Mandelbrot Local Connectivity in Lean 4
 
-A Lean 4 reduction of the local connectivity of the Mandelbrot set (MLC) to the two open problems
-that Dudko states at the end of [arXiv:2512.24171](https://arxiv.org/abs/2512.24171) (§4):
+A Lean 4 reduction of the local connectivity of the Mandelbrot set (MLC) to operational forms of the
+two open problems that Dudko states at the end of [arXiv:2512.24171](https://arxiv.org/abs/2512.24171)
+(§4):
 
 ```lean
 MLC.Problem43PseudoSiegelAPrioriBoundsData →
@@ -9,8 +10,11 @@ MLC.Problem44VirtualMoleculeData p43 →
 LocallyConnectedSpace MLC.mandelbrotSet
 ```
 
-Problems 4.3 and 4.4 are the only open inputs, and the proof uses only the axioms listed below.
-[`Mlc/ProgrammeRoot.lean`](Mlc/ProgrammeRoot.lean) splits them into a tree of statements
+These two inputs are the only open ones, and the proof uses only the axioms listed below. The
+survey states that Problems 4.3 and 4.4, together with the arguments of §4.1–§4.4, should imply MLC,
+and it does not state the problems in this form; that a solution of the problems provides the two
+inputs is the reading proposed here (see [`Mlc/Dudko.lean`](Mlc/Dudko.lean)).
+[`Mlc/ProgrammeRoot.lean`](Mlc/ProgrammeRoot.lean) splits the inputs into a tree of statements
 (hypotheses, each with its source and an attack plan in the roadmap).
 
 - [Progress report (PDF)](docs/mlc_progress.pdf): what is proved, the numbered and dated updates,

@@ -69,8 +69,11 @@ The sub-steps through which the lemmas are expected to be proved (proposed, not 
   alternative (ii) the deeper degeneration is bounded by the uniform quasiconformal geometry
   of the disks (PS1–PS4 give `UnboundedJumpCap`), and the same estimate with the Wave Lemma
   gives the amplification with an error linear in the period (`UnboundedDichotomy`). The
-  estimate `W(G ∖ G') ≥ δ⁻¹ W(G)` itself, from the series law, is proved in
-  `Mlc/Research/ExtremalLength.lean` (`extWidth_ge_of_series`).
+  arithmetic of the estimate `W(G ∖ G') ≥ δ⁻¹ W(G)` is proved as an implication in
+  `Mlc/Research/ExtremalLength.lean` (`extWidth_ge_of_series`: if the curves of a family cross two
+  disjoint regions in succession and the second piece carries the fraction `1 − δ` of the
+  extremal length, the first has width at least `δ⁻¹` times that of the whole); that the
+  families of Figure 13 satisfy these hypotheses is the dynamical content and is not formalized.
 
 `UnboundedTeichmuller` is proposed to follow from the published contraction: at the levels
 whose rotation number is away from `0` there is no regularization (`Ẑ^0 = Ẑ^{-1}`, §4.4), so

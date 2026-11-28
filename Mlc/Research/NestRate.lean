@@ -5,15 +5,17 @@ import Mlc.Research.Collar
 
 `NestModulus.lean` shows that a nest whose moduli add up to infinity shrinks to its point, and
 `Collar.lean` that a nest with uniform collars is such a nest. This module makes the shrinking
-quantitative, in the form of Teichmüller's inequality: the size of a piece of a nest is controlled by
-the total modulus of the annuli that precede it.
+quantitative, in the form of a Teichmüller-type estimate: the size of a piece of a nest is controlled
+by the total modulus of the annuli that precede it. The constants are those of the metric
+`1 / |z − c|` of `NestModulus.lean` and are far from the optimal ones of Teichmüller's modulus
+theorem.
 
 * **Theorem `ConnectedNest.closure_piece_subset_closedBall_of_sum`**: if the first piece lies in the
   disk of radius `R` around `c` and the first `n` annuli have total modulus at least `s`, with
   `κ s ≥ log 8` and `κ = (log 2)² / 2π`, the closure of the piece `n` lies in the disk of radius
   `8 R e^{−κ s}`.
 * `ConnectedNest.closure_piece_subset_closedBall_of_uniform`: moduli bounded below by `w` give the
-  exponential decay `8 R e^{−κ w n}`.
+  exponential decay `8 R e^{−κ w n}` for every `n` with `κ n w ≥ log 8`.
 * **Theorem `ConnectedNest.closure_piece_subset_closedBall_of_collars`**: a nest whose annuli all
   have collars of dilatation at most `K₀` and modulus at least `μ₀ / 2π` shrinks at the rate
   `exp (−κ μ₀ n / (2π K₀))`: bounded geometry gives the geometric decay of the diameters.
@@ -34,7 +36,8 @@ namespace ConnectedNest
 
 variable {S : Set ℂ} {c : ℂ} (D : ConnectedNest S c)
 
-/-- **Teichmüller's inequality for a nest: the size of a piece is controlled by the total modulus.**
+/-- **A Teichmüller-type estimate for a nest: the size of a piece is controlled by the total
+modulus.**
 If the first piece lies in the disk of radius `R` around `c` and the first `n` annuli have total
 modulus at least `s`, with `κ s ≥ log 8` for `κ = (log 2)² / 2π`, the closure of the piece `n` lies
 in the disk of radius `8 R e^{−κ s}`. -/
@@ -119,14 +122,8 @@ theorem closure_piece_subset_closedBall_of_collars {R K₀ μ₀ : ℝ} (hR : 0 
     (hn : Real.log 8 ≤ (Real.log 2) ^ 2 / (2 * π) * (n * (μ₀ / (2 * π) / K₀))) :
     closure (D.piece n) ⊆ closedBall c
       (8 * R * Real.exp (-((Real.log 2) ^ 2 / (2 * π) * (n * (μ₀ / (2 * π) / K₀))))) := by
-  refine D.closure_piece_subset_closedBall_of_uniform hR hR' (w := μ₀ / (2 * π) / K₀)
-    (fun j => ?_) hn
-  obtain ⟨Kd, r, R', hKd, hμ, hcol⟩ := h j
-  refine le_trans (ENNReal.ofReal_le_ofReal ?_) hcol.ofReal_le_extWidth
-  have hKd0 : 0 < Kd := hcol.1
-  have hlog : 0 ≤ Real.log (R' / r) / (2 * π) := div_nonneg (hμ₀.le.trans hμ) (by positivity)
-  calc μ₀ / (2 * π) / K₀ ≤ Real.log (R' / r) / (2 * π) / K₀ := by gcongr
-    _ ≤ Real.log (R' / r) / (2 * π) / Kd := by gcongr
+  exact D.closure_piece_subset_closedBall_of_uniform hR hR' (w := μ₀ / (2 * π) / K₀)
+    (D.ofReal_le_extWidth_loops_of_collars hK₀ hμ₀ h) hn
 
 end ConnectedNest
 

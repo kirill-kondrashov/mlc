@@ -8,8 +8,11 @@ import Mathlib.Analysis.Calculus.ContDiff.RCLike
 The moduli of a nest of parameter pieces live in the parameter plane, while the annuli that an a
 priori bound controls live in the dynamical plane; the phase–parameter relation (Lyubich,
 Kahn–Lyubich; Dudko §3.9, §4.1–§4.3) carries the moduli from one plane to the other through a
-correspondence that is conformal or quasi-conformal. This module proves the invariance of the
-extremal width of `ExtremalLength.lean` that such a transport needs, for a `C¹` correspondence:
+correspondence that is conformal or quasi-conformal. This module proves the quasi-monotonicity of
+the extremal width of `ExtremalLength.lean` that such a transport needs, for a `C¹` correspondence.
+The statements are one-sided (the width of a family is at most `K` times the width of a family that
+contains the images of its curves); the width of corresponding families is invariant, up to `K`,
+when the embedding is applied in both directions.
 
 * **Structure `QcEmbedding Ω φ K`**: `φ` is a `C¹` embedding of the open set `Ω` with invertible
   derivative whose dilatation is at most `K`, that is, `‖Dφ‖² ≤ K |det Dφ|` (the ratio of the
@@ -17,8 +20,8 @@ extremal width of `ExtremalLength.lean` that such a transport needs, for a `C¹`
   derivative is one with `K = 1` (`QcEmbedding.of_holomorphic`).
 * **Lemma `QcEmbedding.areaMultiplicity`**: the area formula of Mathlib gives the hypothesis of the
   pullback law with multiplicity `K` and stretching `‖Dφ‖`.
-* **Theorem `extWidth_le_of_qcEmbedding`** (quasi-invariance, and conformal invariance for
-  `K = 1`): if `φ` carries every curve of `ΓX`, which lies in `Ω`, to a curve that dominates a
+* **Theorem `extWidth_le_of_qcEmbedding`** (quasi-monotonicity, with `K = 1` for a holomorphic
+  embedding): if `φ` carries every curve of `ΓX`, which lies in `Ω`, to a curve that dominates a
   curve of `ΓY`, then `W(ΓX) ≤ K W(ΓY)`.
 * **Lemma `Separates.image`**: a map that is continuous and injective on the compact closure of
   `O`, with `φ '' O` open, carries a loop that separates `K` from the complement of `O` to a loop
@@ -191,10 +194,12 @@ lemma extLength_restrict_le {α : Type*} [MeasurableSpace α] {m : Measure α} {
   rw [hlen]
   exact ratio_le_extLength hρ' hA
 
-/-- **The pullback law for a `C¹` embedding with dilatation at most `K`** (quasi-invariance of the
+/-- **The pullback law for a `C¹` embedding with dilatation at most `K`** (quasi-monotonicity of the
 extremal width): if `φ` carries every curve of `ΓX`, which lies in `Ω`, to a curve that
 dominates a curve of `ΓY`, then `W(ΓX) ≤ K W(ΓY)`. For `K = 1` and a holomorphic `φ` this is the
-conformal invariance of the extremal width. -/
+monotonicity of the extremal width under a conformal embedding; applied to a biholomorphism and to
+its inverse it gives the conformal invariance of the width of two families that correspond to each
+other. -/
 theorem extWidth_le_of_qcEmbedding {Ω : Set ℂ} {φ : ℂ → ℂ} {K : ℝ} (h : QcEmbedding Ω φ K)
     (hK : 0 < K) (hφm : Measurable φ) {ΓX ΓY : Set (Measure ℂ)} (hX : ∀ μ ∈ ΓX, μ Ωᶜ = 0)
     (hcurve : ∀ μ ∈ ΓX, ∃ ν ∈ ΓY,

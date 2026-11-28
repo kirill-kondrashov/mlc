@@ -4,11 +4,14 @@ import Mlc.Research.DivergentNest
 /-!
 # Collars: a quasi-round annulus bounds the modulus from below
 
-The modulus of the annulus `V ∖ E` is the extremal width of the `C¹` loops in it that separate `E`
-from the complement of `V` (`loopFamily`); for a nest this is the modulus of each of its annuli
-(`ConnectedNest.loops`), and for a level `f : U → V` of a renormalization tower with filled Julia
-set `E = K_f` it is `mod⁺(f)`, the reciprocal of the degeneration `W(f)` of the survey (3.2), (4.1).
-`Mlc/Research/QuasiInvariance.lean` proves that this modulus is quasi-invariant under `C¹` embeddings
+The modulus of the annulus `V ∖ E` is taken here as the extremal width of the `C¹` loops in it that
+separate `E` from the complement of `V` (`loopFamily`); for a nest this is the modulus of each of
+its annuli (`ConnectedNest.loops`). For a level `f : U → V` of a renormalization tower with filled
+Julia set `E = K_f` it is the `C¹`-loop version of `mod⁺(f)`, the reciprocal of the degeneration
+`W(f)` of the survey (3.2), (4.1): it is at most the classical modulus and equals it for round
+annuli (`RoundAnnulus.lean`), and its equality with the classical modulus in general belongs to the
+dictionary and is not proved.
+`Mlc/Research/QuasiInvariance.lean` proves that this modulus is quasi-monotone under `C¹` embeddings
 of bounded dilatation. This module uses it for the basic estimate of the theory of the degeneration:
 an annulus that contains a quasi-round collar has a definite modulus.
 
@@ -24,9 +27,12 @@ an annulus that contains a quasi-round collar has a definite modulus.
   dilatation at most `K₀` and modulus at least `μ₀ / 2π` has divergent moduli, so it shrinks to its
   point (`DivergentModuli.shrinking`).
 
-A collar is a quasi-conformal chart, in the `C¹` sense, between a round annulus and a part of the
-annulus: for a degenerating annulus no such chart exists with a definite modulus, so a collar is
-the geometric content of a bound on the degeneration.
+A collar is a quasi-conformal chart, in the `C¹` sense, between a round disk with its collar and a
+neighbourhood of `E` in `V`: the set `E` lies in a quasi-round disk with an annulus of definite
+modulus around it. It is a sufficient geometric hypothesis for a bound on the degeneration (the
+theorem above), and the converse is not proved. Quasi-conformal charts that are not `C¹` (a
+quasi-conformal homeomorphism is in general only absolutely continuous on lines) are not covered;
+for them the statements stay hypotheses on moduli (`PhaseParameterComparison` in `LevelTower.lean`).
 -/
 
 namespace MLC.Research
@@ -38,7 +44,10 @@ noncomputable section
 /-- **A collar of the annulus `V ∖ E`.** There is a `C¹` embedding `ψ` of an open set `Ω ⊇ B̄(w₀, R)`
 with dilatation at most `Kd` such that `E ⊆ ψ(B̄(w₀, r))` and `ψ(B̄(w₀, R)) ⊆ V`: the annulus
 `V ∖ E` contains the image of the round annulus `r < |w − w₀| ≤ R`, which has modulus
-`log (R/r) / 2π`, and the image goes around `E`. -/
+`log (R/r) / 2π`, and the image goes around `E`. The set `E` may be empty, and then the width of
+`V ∖ E` is `⊤` (a loop that goes around nothing, a constant loop included, belongs to the family),
+so the estimate holds trivially; in the applications `E` contains the center of a nest or is a
+filled Julia set. -/
 def IsCollar (E V : Set ℂ) (Kd r R : ℝ) : Prop :=
   0 < Kd ∧ 0 < r ∧ r < R ∧ ∃ (Ω : Set ℂ) (ψ : ℂ → ℂ) (w₀ : ℂ), QcEmbedding Ω ψ Kd ∧
     Measurable ψ ∧ closedBall w₀ R ⊆ Ω ∧ E ⊆ ψ '' closedBall w₀ r ∧ ψ '' closedBall w₀ R ⊆ V
@@ -76,6 +85,21 @@ theorem IsCollar.ofReal_le_extWidth {E V : Set ℂ} {Kd r R : ℝ} (h : IsCollar
   rw [ENNReal.ofReal_div_of_pos hKd]
   exact ENNReal.div_le_of_le_mul' (hmodel.trans hqc)
 
+/-- **Uniform collars bound every modulus of a nest from below.** If every annulus `Pⱼ ∖ cl P_{j+1}`
+of the nest has a collar of dilatation at most `K₀` and modulus at least `μ₀ / 2π`, its modulus is
+at least `μ₀ / (2π K₀)`. -/
+theorem ConnectedNest.ofReal_le_extWidth_loops_of_collars {S : Set ℂ} {c : ℂ}
+    (D : ConnectedNest S c) {K₀ μ₀ : ℝ} (hK₀ : 0 < K₀) (hμ₀ : 0 < μ₀)
+    (h : ∀ j, ∃ Kd r R : ℝ, Kd ≤ K₀ ∧ μ₀ ≤ Real.log (R / r) ∧
+      IsCollar (closure (D.piece (j + 1))) (D.piece j) Kd r R) (j : ℕ) :
+    ENNReal.ofReal (μ₀ / (2 * π) / K₀) ≤ extWidth volume (D.loops j) := by
+  obtain ⟨Kd, r, R, hKd, hμ, hcol⟩ := h j
+  refine le_trans (ENNReal.ofReal_le_ofReal ?_) hcol.ofReal_le_extWidth
+  have hKd0 : 0 < Kd := hcol.1
+  have hlog : 0 ≤ Real.log (R / r) / (2 * π) := div_nonneg (hμ₀.le.trans hμ) (by positivity)
+  calc μ₀ / (2 * π) / K₀ ≤ Real.log (R / r) / (2 * π) / K₀ := by gcongr
+    _ ≤ Real.log (R / r) / (2 * π) / Kd := by gcongr
+
 /-- **Nests with uniform collars have divergent moduli.** If every annulus `Pⱼ ∖ cl P_{j+1}` of
 the nest has a collar of dilatation at most `K₀` and modulus at least `μ₀ / 2π`, the moduli of the
 annuli are bounded below by `μ₀ / (2π K₀)`, so they add up to infinity and the pieces shrink to
@@ -84,13 +108,6 @@ theorem ConnectedNest.divergentModuli_of_collars {S : Set ℂ} {c : ℂ} (D : Co
     {K₀ μ₀ : ℝ} (hK₀ : 0 < K₀) (hμ₀ : 0 < μ₀)
     (h : ∀ j, ∃ Kd r R : ℝ, Kd ≤ K₀ ∧ μ₀ ≤ Real.log (R / r) ∧
       IsCollar (closure (D.piece (j + 1))) (D.piece j) Kd r R) :
-    D.DivergentModuli := by
-  refine D.divergentModuli_of_uniform
-    (w := ENNReal.ofReal (μ₀ / (2 * π) / K₀))
-    (ENNReal.ofReal_pos.2 (by positivity)).ne' fun j => ?_
-  obtain ⟨Kd, r, R, hKd, hμ, hcol⟩ := h j
-  refine le_trans (ENNReal.ofReal_le_ofReal ?_) hcol.ofReal_le_extWidth
-  have hKd0 : 0 < Kd := hcol.1
-  have hlog : 0 ≤ Real.log (R / r) / (2 * π) := div_nonneg (hμ₀.le.trans hμ) (by positivity)
-  calc μ₀ / (2 * π) / K₀ ≤ Real.log (R / r) / (2 * π) / K₀ := by gcongr
-    _ ≤ Real.log (R / r) / (2 * π) / Kd := by gcongr
+    D.DivergentModuli :=
+  D.divergentModuli_of_uniform (w := ENNReal.ofReal (μ₀ / (2 * π) / K₀))
+    (ENNReal.ofReal_pos.2 (by positivity)).ne' (D.ofReal_le_extWidth_loops_of_collars hK₀ hμ₀ h)

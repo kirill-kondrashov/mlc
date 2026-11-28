@@ -8,13 +8,20 @@ import Mlc.Research.RoundAnnulus
 The abstract degeneration `W_k` of a `WidthTower` (`Mlc/Research/Degeneration.lean`) is, in the
 survey (3.2), (4.1), the reciprocal `W(f) = 1 / mod⁺(f)` of the modulus `mod⁺(f) = mod(V ∖ K_f)` of
 the annulus between the filled Julia set and the range domain of a quadratic-like level
-`f : U → V`. This module records that dictionary in the language of extremal widths, and proves what
-follows from the quasi-invariance of the modulus (`Mlc/Research/Collar.lean`).
+`f : U → V`. This module records that dictionary in the language of extremal widths, with the
+modulus of an annulus taken as the extremal width of the `C¹` loops in it that separate the inner
+set from the complement of the outer one. That width is at most the classical modulus and equals it
+for round annuli (`RoundAnnulus.lean`); its equality with the classical modulus in general belongs to
+the dictionary and is not proved. The module proves what follows from the quasi-monotonicity of the
+modulus (`Mlc/Research/Collar.lean`).
 
 * **Structure `LevelTower`**: a `WidthTower` with sets `filled k` (the filled Julia set of the level
   `k`) and `target k` (its range domain `V_k`) such that `W_k = 1 / mod(V_k ∖ K_k)`, where the
   modulus of an annulus is the extremal width of the `C¹` loops in it that separate the inner set
-  from the complement of the outer one. The circles of a round annulus lie in that family, so its
+  from the complement of the outer one. The sets are data of the dictionary: nothing in the
+  structure ties them to the dynamics of `f_c`, and every width tower is realized by round levels
+  (`RoundTower.lean`), so the structure has no dynamical content by itself. The circles of a round
+  annulus lie in that family, so its
   modulus is at least `log (R/r) / 2π` (`extWidth_loopFamily_ge_radii`), and it is at most the
   classical modulus in general, since the family consists of separating curves. For a round level
   `filled = B̄(c, r)`, `target = B(c, R)` it is exactly `log (R/r) / 2π`
@@ -42,7 +49,10 @@ follows from the quasi-invariance of the modulus (`Mlc/Research/Collar.lean`).
 
 Nothing here constructs the levels of a tower from a parameter, the collars, or the nest and the
 chart of the comparison; these are the open parts, and `Geometry.PhaseParameterComparison` is not a
-field of the root input (the root keeps `Geometry.Transfer`).
+field of the root input (the root keeps `Geometry.Transfer`). The comparison is a statement about
+the dictionary: it is vacuous for a dictionary whose towers are all absent, and, for a dictionary
+whose level sets are not the dynamical ones, it is a numerical comparison of widths with no
+dynamical meaning.
 -/
 
 namespace MLC.Research
@@ -133,6 +143,33 @@ theorem aPrioriBounds_of_collars {C₀ K₀ μ₀ : ℝ} (hC₀ : 0 < C₀) (hK�
     (hD : T.LinearDichotomy) : T.APrioriBounds :=
   T.aPrioriBounds_of_jumpCap hC₀ (T.jumpCap_of_collars hK₀ hμ₀ h) hD
 
+/-- **Lemma G at the levels of large relative period from collars.** If at every level `m + 1` that
+follows a jump by the factor `C₀` at a level `m` of relative period above `P₀` the annulus has a
+collar of dilatation at most `K₀` and modulus at least `μ₀ / 2π`, the jumps at the levels of large
+relative period are capped by the ceiling `2π K₀ / μ₀`. -/
+theorem largePeriodJumpCap_of_collars {P₀ : ℕ} {C₀ K₀ μ₀ : ℝ} (hK₀ : 0 < K₀) (hμ₀ : 0 < μ₀)
+    (h : ∀ m, P₀ < T.rel m → T.Jumps C₀ m → ∃ Kd r R : ℝ, Kd ≤ K₀ ∧
+      μ₀ ≤ Real.log (R / r) ∧ IsCollar (T.filled (m + 1)) (T.target (m + 1)) Kd r R) :
+    T.LargePeriodJumpCap P₀ C₀ (2 * π * K₀ / μ₀) := by
+  intro m hm hj
+  obtain ⟨Kd, r, R, hKd, hμ, hcol⟩ := h m hm hj
+  refine (T.width_le_of_collar hcol).trans ?_
+  have hKd0 : 0 < Kd := hcol.1
+  have hlog : 0 < Real.log (R / r) := hμ₀.trans_le hμ
+  calc 2 * π * Kd / Real.log (R / r) ≤ 2 * π * K₀ / Real.log (R / r) := by gcongr
+    _ ≤ 2 * π * K₀ / μ₀ := by gcongr
+
+/-- **A priori bounds from the three lemmas of Problem 4.3, with Lemma G as collars.** The
+Teichmüller contraction (Lemma TC′), collars of bounded dilatation and definite modulus at the
+jumps at the levels of large relative period (Lemma G, in the reading of PS4), and the dichotomy
+with an additive error at most linear in the period (Lemma D) give a priori bounds. -/
+theorem aPrioriBounds_of_tails_collars {P₀ : ℕ} {C₀ K₀ μ₀ : ℝ} (hC₀ : 0 < C₀) (hK₀ : 0 < K₀)
+    (hμ₀ : 0 < μ₀) (hT : T.Teichmuller)
+    (h : ∀ m, P₀ < T.rel m → T.Jumps C₀ m → ∃ Kd r R : ℝ, Kd ≤ K₀ ∧
+      μ₀ ≤ Real.log (R / r) ∧ IsCollar (T.filled (m + 1)) (T.target (m + 1)) Kd r R)
+    (hD : T.LinearDichotomy) : T.APrioriBounds :=
+  T.aPrioriBounds_of_tails hC₀ hT (T.largePeriodJumpCap_of_collars hK₀ hμ₀ h) hD
+
 end LevelTower
 
 /-! ### The phase–parameter comparison -/
@@ -154,24 +191,35 @@ def PhaseParameterComparison : Prop :=
       G.tower c = some L.toWidthTower ∧
       ∀ k, L.modulus k ≤ ENNReal.ofReal Kd * extWidth volume (D.loops k)
 
-/-- **Lemma T from the phase–parameter comparison.** The levels of a tower with a degeneration
-bound `B` have moduli at least `1/B`, the comparison gives moduli of the annuli of the nest at
-least `1 / (B Kd)`, so they add up to infinity and the pieces shrink to `c`
-(`ConnectedNest.nonempty_parameterRealization`). -/
-theorem transfer_of_comparison (h : G.PhaseParameterComparison) : G.Transfer := by
-  intro c hc B hB hbound
+/-- **The comparison gives a nest whose annuli have a definite modulus.** The levels of a tower with
+a degeneration bound `B` have moduli at least `1/B`, and the comparison gives a connected nest in
+`M` around `c` whose annuli have moduli at least `1 / (B Kd)`, for the constant `Kd` of the
+comparison. -/
+theorem uniformNest_of_comparison (h : G.PhaseParameterComparison) {c : ℂ}
+    (hc : c ∈ MLC.Quadratic.MandelbrotSet) {B : ℝ} (hB : 0 < B) (hbound : G.HasBound c B) :
+    ∃ (D : ConnectedNest MLC.Quadratic.MandelbrotSet c) (Kd : ℝ), 0 < Kd ∧
+      ∀ k, ENNReal.ofReal (B⁻¹ / Kd) ≤ extWidth volume (D.loops k) := by
   obtain ⟨L, D, Kd, hKd, hL, hcmp⟩ := h c hc B hB hbound
   obtain ⟨-, T, hT, hle⟩ := hbound
   have hTL : T = L.toWidthTower := Option.some.inj (hT.symm.trans hL)
   subst hTL
-  refine D.nonempty_parameterRealization (D.divergentModuli_of_uniform
-    (w := ENNReal.ofReal (B⁻¹ / Kd)) (ENNReal.ofReal_pos.2 (by positivity)).ne' fun k => ?_) _
+  refine ⟨D, Kd, hKd, fun k => ?_⟩
   have h1 : ENNReal.ofReal B⁻¹ ≤ L.modulus k := by
     rw [L.modulus_eq k]
     calc ENNReal.ofReal B⁻¹ = (ENNReal.ofReal B)⁻¹ := ENNReal.ofReal_inv_of_pos hB
       _ ≤ (ENNReal.ofReal (L.width k))⁻¹ := ENNReal.inv_le_inv.2 (ENNReal.ofReal_le_ofReal (hle k))
   rw [ENNReal.ofReal_div_of_pos hKd]
   exact ENNReal.div_le_of_le_mul' (h1.trans (hcmp k))
+
+/-- **Lemma T from the phase–parameter comparison.** The levels of a tower with a degeneration
+bound `B` have moduli at least `1/B`, the comparison gives moduli of the annuli of the nest at
+least `1 / (B Kd)`, so they add up to infinity and the pieces shrink to `c`
+(`ConnectedNest.nonempty_parameterRealization`). -/
+theorem transfer_of_comparison (h : G.PhaseParameterComparison) : G.Transfer := by
+  intro c hc B hB hbound
+  obtain ⟨D, Kd, hKd, hmod⟩ := G.uniformNest_of_comparison h hc hB hbound
+  exact D.nonempty_parameterRealization (D.divergentModuli_of_uniform
+    (w := ENNReal.ofReal (B⁻¹ / Kd)) (ENNReal.ofReal_pos.2 (by positivity)).ne' hmod) _
 
 end Geometry
 

@@ -16,28 +16,30 @@ objects of the programme.
   `C¹` loop has dimension at most `1`, so countably many loops cover no set of a larger dimension.
 * **`C¹` charts preserve the dimension** (`QcEmbedding.dimH_image`): a `C¹` embedding with
   invertible derivative is locally bi-Lipschitz, so whatever its dilatation it does not change the
-  Hausdorff dimension of any subset of its domain. The charts of `QuasiInvariance.lean` and
-  `Collar.lean` compare moduli and never dimensions; a correspondence between sets of different
-  dimension, such as a smooth curve and a fractal, or a Julia set of dimension below `2` and the
-  boundary of the Mandelbrot set, is not `C¹`. It is quasi-conformal, and the distortion of the
-  dimension is then bounded by the dilatation `K` (Astala, Acta Math. 173, 1994; not formalized): a
-  set of dimension `d` goes to a set of dimension at most `2Kd / (2 + (K − 1) d)`, and `K = 1`
-  gives `d`.
+  Hausdorff dimension of any subset of its domain, and no `C¹` chart carries a smooth curve onto a
+  fractal. A `K`-quasi-conformal map distorts the dimension within the bound of Astala (Acta Math.
+  173, 1994; not formalized): a set of dimension `d` goes to a set of dimension at most
+  `2Kd / (2 + (K − 1) d)`, and `K = 1` gives `d`. For `d < 2` this is below `2`, so a
+  quasi-conformal map of finite dilatation never carries a set of dimension below `2` onto a set of
+  dimension `2`. The charts of `QuasiInvariance.lean` and `Collar.lean` compare the moduli of
+  annuli, which are open sets, and say nothing about the dimension of the sets that the annuli go
+  around.
 * **Parametrizations by an interval** (`dimH_le_inv_of_holderOnWith`, `holder_mul_le_one`): an
   `α`-Hölder parametrization of a set of dimension `d` has `α d ≤ 1`. Given Shishikura's theorem
   (`ShishikuraDimension`, a published statement that is a hypothesis here), the boundary of the
   Mandelbrot set is not covered by countably many `C¹` loops
   (`ShishikuraDimension.not_subset_iUnion_range`), is not the `C¹` image of any set of dimension
   below `2` (`ShishikuraDimension.two_le_dimH_of_image`), and a parametrization of it by an interval,
-  such as the landing map of the external rays that exists exactly when `M` is locally connected
+  such as the landing map of the external rays that exists when `M` is locally connected
   (Carathéodory), has Hölder exponent at most `1/2` (`ShishikuraDimension.holder_exponent_le_half`).
   `Mlc/Research/PeanoObject.lean` states this in the category of compact Hausdorff spaces.
-* **The fiber of a nest** (`ConnectedNest.dimH_kernel_eq_zero_of_divergent`,
-  `ConnectedNest.sum_extWidth_loops_bounded_of_dimH_kernel_pos`): the fiber of the parameter `c`, the
-  kernel of its nest, is a point exactly when the local connectivity holds at `c`. If the moduli of
-  the annuli add up to infinity, the fiber is the point `c` and has dimension `0`; if it has positive
-  dimension, the moduli add up to a finite bound. The loops see a fractal fiber only as a set that
-  is not a point.
+* **The kernel of a nest** (`ConnectedNest.dimH_kernel_eq_zero_of_divergent`,
+  `ConnectedNest.sum_extWidth_loops_bounded_of_dimH_kernel_pos`): if the moduli of the annuli add up
+  to infinity, the kernel is the point `c` and has dimension `0`, and the set is locally connected
+  at `c`; if the kernel has positive dimension, the moduli add up to a finite bound. The kernel of a
+  given nest may be larger than `{c}` where the set is locally connected, so it is the fiber of the
+  parameter (Schleicher), which the dynamics defines, only for a nest adapted to it. The loops see a
+  fractal kernel only as a set that is not a point.
 -/
 
 namespace MLC.Research
@@ -106,8 +108,7 @@ lemma QcEmbedding.le_dimH_image {Ω : Set ℂ} {φ : ℂ → ℂ} {K : ℝ} (h :
 /-- **A `C¹` embedding preserves the Hausdorff dimension.** A `C¹` embedding with invertible
 derivative is locally bi-Lipschitz, so it does not change the dimension of any subset of its
 domain. In particular no `C¹` chart, whatever its dilatation, carries a set of dimension `d` to a
-set of another dimension: the charts of `QuasiInvariance.lean` and `Collar.lean` cannot create or
-destroy a fractal, which is why they compare moduli and not dimensions. -/
+set of another dimension: it can neither create nor destroy a fractal. -/
 theorem QcEmbedding.dimH_image {Ω : Set ℂ} {φ : ℂ → ℂ} {K : ℝ} (h : QcEmbedding Ω φ K)
     {S : Set ℂ} (hS : S ⊆ Ω) : dimH (φ '' S) = dimH S :=
   le_antisymm (h.dimH_image_le hS) (h.le_dimH_image hS)
@@ -180,14 +181,14 @@ theorem two_le_dimH_of_image {Ω : Set ℂ} {φ : ℂ → ℂ} {K : ℝ} (hφ : 
 
 end ShishikuraDimension
 
-/-! ### The fiber of a nest -/
+/-! ### The kernel of a nest -/
 
 namespace ConnectedNest
 
 variable {S : Set ℂ} {c : ℂ}
 
 /-- **Divergent moduli leave a point.** If the moduli of the annuli of a nest add up to infinity,
-its kernel is the point `c`: the fiber has dimension `0`. -/
+its kernel is the point `c`, which has dimension `0`. -/
 theorem kernel_eq_singleton_of_divergent {D : ConnectedNest S c} (h : D.DivergentModuli) :
     D.kernel = {c} := by
   refine Subset.antisymm (fun z hz => ?_) (singleton_subset_iff.2 D.mem_kernel)
@@ -195,15 +196,16 @@ theorem kernel_eq_singleton_of_divergent {D : ConnectedNest S c} (h : D.Divergen
   obtain ⟨N, hN⟩ := h.shrinking (dist_pos.2 hzc)
   exact lt_irrefl _ (mem_ball.1 (hN N le_rfl (D.kernel_subset_closure N hz)))
 
-/-- The fiber of a nest whose moduli add up to infinity has Hausdorff dimension `0`. -/
+/-- The kernel of a nest whose moduli add up to infinity has Hausdorff dimension `0`. -/
 theorem dimH_kernel_eq_zero_of_divergent {D : ConnectedNest S c} (h : D.DivergentModuli) :
     dimH D.kernel = 0 := by
   rw [kernel_eq_singleton_of_divergent h]
   exact dimH_singleton c
 
-/-- **A fractal fiber has a finite total modulus.** If the kernel of a nest has positive Hausdorff
-dimension, the moduli of its annuli add up to a finite bound: the loops, which have dimension `1`,
-go around a set that is not a point only a bounded number of times, in the sense of moduli. -/
+/-- **A kernel of positive dimension forces a finite total modulus.** A set of positive Hausdorff
+dimension has more than one point, so the kernel of the nest contains a point other than `c`, and
+the Grötzsch–Teichmüller estimate `sum_extWidth_loops_le` bounds the moduli of the annuli of the
+nest. The dimension enters only through the existence of that second point. -/
 theorem sum_extWidth_loops_bounded_of_dimH_kernel_pos (D : ConnectedNest S c)
     (hpos : 0 < dimH D.kernel) :
     ∃ B : ℝ≥0∞, B ≠ ⊤ ∧ ∀ n, ∑ j ∈ Finset.range n, extWidth volume (D.loops j) ≤ B := by

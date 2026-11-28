@@ -68,10 +68,21 @@ COLLAR_ROOTS = (
 # The results of Mlc/Research/LevelTower.lean that no other result uses.
 LEVEL_JUMP_ROOTS = (
     "MLC.Research.LevelTower.aPrioriBounds_of_collars",
+    "MLC.Research.LevelTower.aPrioriBounds_of_tails_collars",
     "MLC.Research.LevelTower.width_eq_of_round",
+    "MLC.Research.WidthTower.exists_levelTower",
 )
 LEVEL_TRANSFER_ROOTS = (
     "MLC.Research.Geometry.transfer_of_comparison",
+)
+# The results of Mlc/Research/CollarCriterion.lean that no other result uses.
+CRITERION_ROOTS = (
+    "MLC.Research.ConnectedNest.locallyConnectedAt_of_collars",
+    "MLC.Research.ConnectedNest.exists_relativePiece_of_collars",
+    "MLC.Research.Geometry.exists_relativePiece_of_comparison",
+    "MLC.Research.Geometry.locallyConnectedAt_of_collars_and_comparison",
+    "MLC.Research.Geometry.locallyConnectedAt_of_tails_collars_and_comparison",
+    "MLC.Research.concentricNest_collars",
 )
 # The results of Mlc/Research/Dimension.lean that no other result uses.
 DIMENSION_ROOTS = (
@@ -83,7 +94,7 @@ DIMENSION_ROOTS = (
 )
 # The results of Mlc/Research/PeanoObject.lean that no other result uses.
 PEANO_ROOTS = (
-    "MLC.Research.mlc_iff_lamination",
+    "MLC.Research.mlc_iff_regularEpi",
     "MLC.Research.ShishikuraDimension.holder_exponent_le_half_of_epi",
 )
 STRUCTURE = "structure Research.ProgrammeInput"
@@ -346,9 +357,14 @@ PSEUDO_SIEGEL = (
         "amplifies at deeper levels (Figure 13 and (4.6)), is absorbed by the pseudo-Siegel "
         "disks: in a jump the deeper degeneration is bounded by their uniform "
         "quasiconformal geometry. This gives Lemma G, and with the Wave Lemma Lemma D. "
-        "The estimate W(G \\ G′) ≥ δ⁻¹ W(G) itself, from the series law, is proved in Lean "
-        "(extWidth_ge_of_series), and so is the passage from the quasiconformal geometry to "
-        "the cap: collars of bounded dilatation and definite modulus at the levels that "
+        "The arithmetic of the estimate W(G \\ G′) ≥ δ⁻¹ W(G) is proved in Lean as an "
+        "implication (extWidth_ge_of_series): if the curves of a family cross two disjoint "
+        "regions in succession and the second piece carries the fraction 1 − δ of the "
+        "extremal length, the first piece has width at least δ⁻¹ times that of the whole; "
+        "that the families of Figure 13 satisfy these hypotheses is the dynamical content "
+        "and is not formalized. The passage from the quasiconformal geometry to "
+        "the cap is proved too: collars of bounded dilatation and definite modulus at the "
+        "levels that "
         "follow a jump cap the jumps (LevelTower.jumpCap_of_collars). That the pseudo-Siegel "
         "disks give such collars is the proposed content; not formalized.",
     ),
