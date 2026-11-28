@@ -183,6 +183,10 @@ which the moduli are measured are curves of
 Hausdorff dimension at most~1, while the boundary of the Mandelbrot set is a fractal of Hausdorff
 dimension~2 (Shishikura); a \(C^1\) chart preserves the Hausdorff dimension, a quasi-conformal map
 of finite dilatation never carries a set of dimension below~2 onto a set of dimension~2 (Astala),
+the part of the boundary outside any countable family of such loops, for example the boundaries of
+the hyperbolic components, keeps the whole dimension~2 (the wild part, with
+\texttt{ShishikuraDimension.dimH\_wildPart\_eq\_two} in \texttt{Mlc/Research/BoundarySplit.lean};
+it lies in the unresolved set of the grid, which is the same set for every depth),
 and given Shishikura's theorem a
 parametrization of the boundary by an interval, such as the landing map of the external rays that
 exists when \(M\) is locally connected, is
@@ -301,6 +305,44 @@ worsens none of them; it then records the update in the progress ledger.
   \input{docs/mlc_progress_routes.tex}
   \caption{Route-planning priors. Ranges and priors are planning estimates.}
   \label{tab:routes}
+\end{table}
+
+\paragraph{Types of parameters and the status of their statements.}
+After the table of the updates the Progress page lists the types out of which \(M\) and its
+boundary are assembled. The interior of \(M\) contains the hyperbolic components; that they exhaust
+it is the hyperbolicity conjecture, a consequence of MLC that is open. The boundary splits by
+dimension into a skeleton, the boundaries of the components (countably many analytic curves, of
+dimension at most \(1\)), and a wild part of dimension \(2\) (relative to the skeleton; the
+theorems \texttt{dimH\_wildPart\_eq\_two} and \texttt{dimH\_noIndifferentCycle\_eq\_two} of the
+namespace \texttt{ShishikuraDimension} in
+\texttt{Mlc/Research/BoundarySplit.lean}, from Shishikura's theorem and, for the second, the
+hypothesis (a fact of the literature that is not formalized) that the parameters with an
+indifferent cycle lie on the skeleton); it also splits by the renormalization of
+the parameter into the eight classes of the programme, and the two splittings cross. The wild part
+depends on the family of curves and differs from the set of Problems~4.3 and~4.4: it contains
+parameters for which MLC is known, such as the Misiurewicz parameter \(c=i\) (an end point of a
+filament of \(M\)). The boundary is the unresolved set of the grid certificate, the same
+set for every depth of the grid, which lowers only the certified bound on its area.
+Table~\ref{tab:types} gives, for every class, the chain of statements that it needs with the
+status of each. The dictionary (which parameter has which class and tower) is a parameter of every
+statement, so a literature-motivated statement is a hypothesis about the dictionary, and the bridge
+from the published theorem to it is not formalized. The page also shows the characteristic
+fragments of
+\(M\) (the valleys, the rabbit, the airplane, \dots) placed in this hierarchy and in the three
+regimes of the survey, the objects that the formalization adds (a model of the tower of copies,
+level sets, nests, collars, stacked annuli, \dots) with the update at which each was first
+mastered and the classes whose statements depend on it (computed from the dependency graph of the
+declarations), and the dimension ladder.
+
+\begin{table}[ht]
+  \centering\footnotesize
+  \input{docs/mlc_progress_types.tex}
+  \caption{The classes of boundary parameters, the statements that each class needs, and their
+  status. P: proved in Lean. R: derived in Lean from a geometric statement about the level sets,
+  which is itself open. L: motivated by the literature and taken as a hypothesis (the bridge from
+  the published theorem is not formalized). O: open. The last four columns count the statements of
+  the chain by status.}
+  \label{tab:types}
 \end{table}
 
 \section{Coverage-Uncertainty Profile}

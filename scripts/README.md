@@ -25,11 +25,40 @@ figure disappear there).
 eight classes of boundary parameters, the sixteen statements of the programme (the
 fields of `MLC.Research.ProgrammeInput` in `Mlc/ProgrammeRoot.lean`, named
 "Lemma T", "Lemma G", and so on as nodes of the graph), their sources, and the
-status of each, open while it is a field (a hypothesis) and proved once its theorem
-exists. The generator fails if the catalogue and the Lean structure disagree; the
+status of each: open while it is a field (a hypothesis) of a proposed reading,
+literature-motivated (`kind` published) while the literature suggests it and the
+development takes it as a hypothesis (the dictionary is a parameter, so it is a hypothesis about
+the dictionary, and the bridge from the published theorem is not formalized), reduced when a Lean
+theorem of `LevelGeometry.lean` derives it from a geometric statement about the level sets of
+the dictionary (the statement is itself open, and the lemma stays a field; the generator checks
+that the conclusion of the theorem, the type after the colon of its signature, is the definition
+of the lemma and that the theorem depends on it, so a theorem that mentions the lemma among its
+hypotheses only does not count),
+and proved once its theorem exists. The generator fails if the catalogue and the Lean
+structure disagree; the
 graph draws the statements as nodes, and the progress report derives the classes
 component of the Coverage-Uncertainty Profile and the tiles "Open programme
 statements" and "Classes with a Lean certificate" from the catalogue.
+
+`typology.py` renders the cards that follow the table of the updates on the **Progress**
+tab (and `progress_types.tex` for the report): the hierarchy of the types out of which `M`
+and its boundary are assembled (the interior with its hyperbolic components; the boundary as a
+skeleton of dimension at most 1 and a wild part of dimension 2, and as the classes of the
+programme) with the status of the statements of every class; the characteristic fragments of
+`M` (valleys, rabbit, airplane, ...) as numerical thumbnails placed in the hierarchy and in the
+three regimes of the survey; the objects that the formalization adds, with the classes whose
+statements depend on them and a timeline of their milestones; and the dimension ladder. The
+statuses are computed from the Lean sources, the dependency of a class on an object from the
+dependency graph of the declarations (`object_usage`, passed in by
+`generate_dependency_graph_site.py`, which warns on stderr when the certified grid enters the
+cone of a statement, the case in which the grounds for keeping the depth would lapse; an object
+in no cone is labelled as such; a standalone run of `progress_report.py` has no graph and
+marks no class), the thumbnails by an escape-time rendering with a distance estimate (an
+illustration that the Lean proof does not use), and the census of the components by the
+necklace formula. `scripts/test_typology.py` checks the hierarchy, the objects, the usage
+computation on a small graph, that every pointer to a Lean declaration exists, that every
+milestone of the ledger has an object, the census against the roots of the Gleason polynomials
+and the rendering.
 
 `progress_report.py` renders the **Progress** tab and the LaTeX report from the
 progress ledger (below); it reads no Git history. The tab shows the certified resolved
@@ -53,7 +82,7 @@ embeds, since the 600 000 certified rectangles of the grids as vector paths weig
 some browsers draw nothing for them; the axes, the disks and the numerical outline of `∂M`
 stay vector. Texts with formulas are written with `$...$` TeX math and rendered as TeX for
 the report and as HTML for the page. The same data feeds `docs/mlc_progress.tex` through
-`progress_commits.tex`, `progress_routes.tex`, and `progress_map.svg`. The "Planned
+`progress_commits.tex`, `progress_routes.tex`, `progress_types.tex`, and `progress_map.svg`. The "Planned
 residual reduction" of the routes is a relative planning prior for the set that the
 published theorems leave open and has no relation to the area of the grid. The share
 `100%` corresponds to `R = ∅` (MLC), but a nonempty `R` of measure zero would also give
@@ -111,9 +140,9 @@ append updates, resolve the conflict of `ledger.json` by keeping both sides in t
 of their dates.
 
 The map is drawn by `map_raster.py`; `make test-scripts` runs `scripts/test_map_raster.py`
-(the pixel coverage against a direct computation, the PNG codec) and
+(the pixel coverage against a direct computation, the PNG codec),
 `scripts/test_progress_ledger.py` (recording, the lag check, a squash merge, the masks, the
-numbering and the hook, on temporary repositories).
+numbering and the hook, on temporary repositories) and `scripts/test_typology.py`.
 
 The repository hook runs `scripts/check_progress.py`. A commit that stages Lean
 sources (`Mlc.lean`, `Mlc/**/*.lean`) must improve at least one of the certified

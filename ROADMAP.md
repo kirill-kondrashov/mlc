@@ -79,6 +79,42 @@ relative period, renormalization phase, or geometric control. A class may not
 be defined by the local-connectivity conclusion itself. The classes of the
 table are refined, with their lemmas, in the programme tree below.
 
+The Progress page draws this hierarchy after the table of the updates (`scripts/typology.py`),
+next to the typing of the characteristic fragments of `M` (the valleys, the rabbit, the airplane,
+a Misiurewicz parameter, the Feigenbaum point), the objects that the formalization adds, and the
+dimension ladder. The hierarchy is the geometric role of a parameter: the interior of `M` contains
+the hyperbolic components (that they exhaust it is the hyperbolicity conjecture, a consequence of
+MLC that is open); the boundary splits by dimension into a skeleton (the boundaries of the
+components, countably many analytic curves, of dimension at most `1`) and a wild part (relative to
+the skeleton, of dimension `2`, `BoundarySplit.lean`), and, crossing it, by the renormalization of
+the parameter into the eight classes above; the parabolic parameters belong to the class of the
+finitely renormalizable parameters and the irrationally indifferent parameters form the class
+`neutral`. The wild part depends on the family of curves and differs from the set of Problems 4.3
+and 4.4: it contains parameters for which MLC is known, such as the Misiurewicz parameter `c = i`
+(an end point of a filament of `M`). The status of every statement of a class
+is computed from the Lean sources: proved (a Lean theorem proves it), reduced (a Lean theorem of
+`LevelGeometry.lean`, whose statement is the lemma, derives it from a geometric statement about
+the level sets, which is itself open), literature-motivated (a theorem of the literature suggests
+it and the development takes it as a hypothesis; the dictionary is a parameter of every statement,
+so it is a hypothesis about the dictionary, and the bridge from the published theorem is not
+formalized) or open (a proposed reading). At
+present none is proved, five are reduced (`T`, `G`, `D`, `VG2`, `VD2`), six are
+literature-motivated and five are open (`TC′`, `VJ`, `VT1`, `VD1`, `VT`). The fragments are placed
+in the three regimes
+that the survey describes after Question 3.1 (the Tan Lei regime, where every hyperbolic component
+is small against the scale; the near-neutral regime, where a component of size `≫ δ` reaches the
+scale; the quadratic-like regime, where the components of size comparable to `δ` dominate); the
+matching of a named fragment with a regime and a class is a reading of the survey.
+Each object (tower, level set, nest, collar, stacked annuli, Yoccoz criterion, virtual hull,
+dimension, Peano parametrization, ...) is the family of Lean definitions behind one kind of
+milestone of the ledger; the timeline of the page is the first update at which each reached each
+milestone, and the dots of the table mark the objects on which a statement of the class, or the
+Lean theorem that reduces it, depends (computed from the dependency graph of the declarations; the
+certified grid, the Yoccoz criterion, the dimension objects and the Peano parametrization lie in
+no cone, and the page says so). The tower is an abstract model of the nest of
+copies: a sequence of relative periods, kinds and degenerations that the dictionary may assign to
+a parameter (an optional tower), and the copies themselves are not constructed.
+
 ## Workstreams
 
 ### 1. Combinatorial renormalization
@@ -496,6 +532,32 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   kernel of positive dimension contains a point other than the center, so the moduli add up to a
   finite bound (`ConnectedNest.sum_extWidth_loops_bounded_of_dimH_kernel_pos`); the kernel of a
   given nest need not be the fiber of the parameter (Schleicher), which the dynamics defines.
+* `Mlc/Research/BoundarySplit.lean`: the boundary of `M` against families of smooth curves.
+  `wildPart E γ` is `E ∖ ⋃ i, range (γ i)`, the part that the loops of a family miss (all of `E`
+  for the empty family). `dimH_wildPart_eq`: a set of dimension `d > 1` keeps the dimension `d`
+  outside every countable family of loops (countable stability of `dimH`, with the dimension `≤ 1`
+  of the loops). `ShishikuraDimension.dimH_wildPart_eq_two`, `wildPart_nonempty` and
+  `not_countable_wildPart`: the wild part of the boundary has dimension exactly `2` for every
+  countable family, so it is nonempty and uncountable. The skeleton: the boundary of a hyperbolic
+  component is a Jordan curve, real-analytic away from its root, and a parameter with an
+  indifferent cycle lies on the boundary of a hyperbolic component, so the parameters with an
+  indifferent cycle (`HasIndifferentCycle`: the parabolic, Siegel and Cremer parameters) lie on
+  countably many analytic images of the circle; this fact of the literature is not formalized and
+  enters as the hypothesis `hskel`. `ShishikuraDimension.dimH_noIndifferentCycle_eq_two`: with
+  `hskel`, the boundary parameters with no indifferent cycle (a set that does not depend on the
+  family) have dimension `2`. The wild part depends on the family (a larger family has a smaller
+  wild part) and differs from the set of Problems 4.3 and 4.4: it contains parameters for which
+  MLC is known, such as the Misiurewicz parameter `c = i` (an end point of a filament of `M`).
+  `frontier_mandelbrot_eq_unresolved`: the
+  boundary is the unresolved set `R` of the grid certificate, the same set for every depth of the
+  grid, which lowers only the certified bound on its area; `wildPart_subset_unresolved`.
+  `ShishikuraDimension.exists_class_dimH_eq_two`: for every dictionary the classes of boundary
+  parameters partition the boundary into finitely many sets, so some class has dimension `2` (the
+  dimension of a finite union is the largest of the dimensions of its parts). This
+  is a statement about the finite partition and holds for every dictionary, for example one that
+  labels the whole boundary `neutral`; for the intended dictionary the class `neutral` lies in the
+  skeleton, of dimension at most `1`, so other classes carry the dimension, and which ones is not
+  determined here.
 * `Mlc/Research/PeanoObject.lean`: the same in the category of compact Hausdorff spaces, next to
   the categorical root. `IsPeanoObject X`: `X` is an epimorphic image of the interval (the
   epimorphisms of `CompHaus` are the surjections), and, the epimorphisms being effective, a regular
@@ -780,9 +842,10 @@ copies of `M` along the dendritic filaments can be covered in groups. The data o
 how the cost grows. The unresolved cells counted at depth 9, 10, 11, 12 and 13 are 67 609,
 224 189, 761 108, 2.42·10⁶ and 8.69·10⁶, a factor 3.2–3.6 per level (the count grows like
 `h^{-1.77}` for cells of side `h`), while the certified bound of the unresolved area is 0.516,
-0.428, 0.363, 0.289 and 0.259, a decrease of 12–17% per level. Every level costs a factor 3.4 in
+0.428, 0.363, 0.289 and 0.259, a decrease of 10–20% per level. Every level costs a factor 3.4 in
 kernel work and lowers the bound a little, and the exponent tends to 2 (the boundary of `M` has
-Hausdorff dimension 2, Shishikura), so a hundredfold reduction by subdivision does not exist.
+Hausdorff dimension 2, Shishikura), so a hundredfold reduction by subdivision is out of reach (see
+the next subsection).
 The unresolved layer is the neighbourhood of the part of `∂M` made of copies and their
 filaments; each piece of `M` of the size of a cell must be surrounded by certified cells, and no
 covering by squares is much cheaper.
@@ -798,6 +861,47 @@ reduce the kernel work, which is the sum over the certificates, and the memory o
 merged much; the build outputs shrink with `noncomputable` data (measured on a small tile: the
 `.c` drops by 90% and the `.olean` by 42%, the fixed part of an `.olean` being 25 KB), which is a
 matter of storage. The area is a by-product of the grid, and the grid stays at depth 13.
+
+#### Would a finer grid simplify Problems 4.3 and 4.4?
+
+The grid does not enter the programme, and the grid stays at depth 13. Four observations, the
+first heuristic and the others checked.
+
+1. *Heuristic: the statements concern the tail of a tower.* The three statements of Problem 4.3
+   and the a priori bounds hold for a tower exactly when they hold for the tower without its first
+   `n` levels (`WidthTower.lemmas_shift_iff`). A certificate of the grid is information at finitely
+   many scales about where `M` lies. Tail invariance does not exclude that such information could
+   help; it shows that the statements are not about the first levels, which are the scales that a
+   grid of fixed depth sees.
+2. *The set that the grid bounds is the boundary itself.* The unresolved set is
+   `R = M ∖ int M = ∂M` (`frontier_mandelbrot_eq_unresolved`), the same set for every depth. The
+   parameters of the open classes are boundary points, and a deeper grid changes only the
+   certified bound on the area of `R`; it contains no statement about local connectivity at a
+   point of `R`.
+3. *No statement and no reduction of the programme uses the grid.* The declaration-level cones of
+   the sixteen statements of `ProgrammeInput` and of the five reductions of `LevelGeometry.lean`
+   contain no declaration of the grid (checked on the exported dependency graph; the Progress page
+   computes which objects each cone reaches). The theorems `MLC.mlc_conjecture`,
+   `MLC.mlc_of_programme` and `MLC.mlc_of_levelGeometry` do reach the grid, through the three
+   redundant fields `residual_area_bound`, `coarse_area_bound` and `grid_area_bound` of
+   `CandidateSystem.VirtualMoleculeCompletion`, which have default proofs and which no theorem
+   consumes.
+4. *The return is small.* Every level costs a factor 3.4 in kernel work for a decrease of 10–20% of
+   the bound (the ratios of consecutive depths are 0.83, 0.85, 0.80 and 0.90); depth 14 would take
+   about six hours on 20 cores for 0.15% of the share. At the ratios 0.80 to 0.90 a hundredfold
+   reduction of the bound takes 21 to 44 further levels, between `10¹¹` and `10²³` times the
+   present work (an extrapolation of the measured data). The bound is the area of the unresolved
+   cells, an upper bound for the area of `R`. Its limit need not be the area of `∂M`: the
+   certificates of the grid test the periods up to 8 (`periodLen` in `GridDefs.lean`), so the
+   interior of the components of a larger period stays in unresolved cells. Since `∂M` has
+   Hausdorff dimension 2 (Shishikura), hence box dimension 2, the area of the `ε`-neighbourhood of
+   `∂M` is `ε^{o(1)}` (`log(area) / log ε → 0`), which decreases more slowly than every positive
+   power of `ε`; this standard consequence is not formalized.
+
+What a deeper grid gives is a smaller number on the first tile of the Progress page. What would
+help Problems 4.3 and 4.4 is a statement about the tail of the towers, which the geometric form of
+the programme (`LevelGeometry`) states as collars, stacked annuli and the phase–parameter
+comparison.
 
 ### Caveats
 
@@ -970,8 +1074,8 @@ from the open root obligations and the existence of
 ### The area of `∂M`: route Z
 
 The grid cannot reach `100%` without an input about `∂M`: the unresolved
-cells at depth `d` cover a neighbourhood of `∂M` whose area decreases to
-`area(∂M)`, and the measured ratio of one level to the next is `0.83–0.87`, so
+cells at depth `d` cover `∂M`, so their area is at least `area(∂M)`, which is
+unknown, and the measured ratios of one level to the next are `0.80–0.90`, so
 every further level costs about three times more for a smaller gain. At depth 14
 the search resolves 7% of the children of the unresolved cells of depth 13
 (outside certificates of at most 32 steps), at about `3·10⁻¹⁰` of area per step

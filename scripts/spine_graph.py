@@ -25,9 +25,10 @@ import textwrap
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from progress_report import PROGRESS_CSS, PROGRESS_ROUTES
+from progress_report import PROGRESS_CSS, PROGRESS_ROUTES, lean_research_text
 from programme import (
     ANNULUS_ROOTS,
+    BOUNDARY_SPLIT_ROOTS,
     COLLAR_ROOTS,
     CRITERION_ROOTS,
     DIMENSION_ROOTS,
@@ -54,6 +55,7 @@ from programme import (
     class_shares,
     open_lemmas,
     proved_lemmas,
+    reduces,
 )
 
 # Geometry of the figure, in user units of the SVG.
@@ -194,6 +196,7 @@ SIDE_ROOTS = (
     *LEVEL_TRANSFER_ROOTS,
     *STACKING_ROOTS,
     *DIMENSION_ROOTS,
+    *BOUNDARY_SPLIT_ROOTS,
     *PEANO_ROOTS,
     *CRITERION_ROOTS,
     *LEVEL_GEOMETRY_ROOTS,
@@ -794,12 +797,36 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
     if issues:
         raise RuntimeError("Programme catalogue out of date: " + "; ".join(issues))
     open_keys = set(open_lemmas(root_text))
+    research_text = lean_research_text(repo_root)
     lemma_nodes: dict[str, Node] = {}
     for lemma in LEMMAS:
         if lemma.lean not in fq_index:
             raise RuntimeError(f"Lemma not found in the sources: {lemma.lean}")
         file, line, doc = from_decl(lemma.lean)
         is_open = lemma.key in open_keys
+        reduced = (
+            lemma.kind != "published"
+            and bool(lemma.reduction)
+            and lemma.reduction in fq_index
+            and lemma.lean in edges.get(lemma.reduction, set())
+            and reduces(lemma, research_text)
+        )
+        if not is_open:
+            status_text = "Proved."
+        elif reduced:
+            status_text = (
+                f"Reduced: the theorem {lemma.reduction.rsplit('.', 1)[-1]} derives it in Lean "
+                "from a geometric statement about the level sets of the dictionary, which is "
+                "itself open. A field of ProgrammeInput."
+            )
+        elif lemma.kind == "published":
+            status_text = (
+                "Literature: a hypothesis about the dictionary that the literature motivates "
+                "(a field of ProgrammeInput); the bridge from the published statement to this "
+                "formal one is not formalized."
+            )
+        else:
+            status_text = "Open: a field of ProgrammeInput."
         node = make(
             Node(
                 id=f"lemma:{lemma.key}",
@@ -811,8 +838,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
                 ),
                 title=lemma.title,
                 sub=lemma.sub,
-                text=f"{lemma.text} Source: {lemma.source}. "
-                + ("Open: a field of ProgrammeInput." if is_open else "Proved."),
+                text=f"{lemma.text} Source: {lemma.source}. " + status_text,
                 lean=lemma.lean,
                 file=file,
                 line=line,
@@ -1099,9 +1125,10 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
                 "renormalizable (Yoccoz, Hubbard), the Teichmüller contraction for bounded "
                 "type (§4.3), bounded type (Theorem 4.1), the anti-Molecule condition "
                 "(Kahn–Lyubich), neutral parameters (Theorem 4.2) and the satellite types of "
-                "quadratic growth (Cheraghi–Shishikura, Theorem D). Each is one statement "
-                "about the geometric dictionary, a field of ProgrammeInput; none is "
-                "formalized."
+                "quadratic growth (Cheraghi–Shishikura, Theorem D). Each is one hypothesis "
+                "about the geometric dictionary that the literature motivates, a field of "
+                "ProgrammeInput; neither the published theorem nor the bridge from it to the "
+                "field is formalized."
             ),
             parent=vertebrae[dudko].id,
         )
@@ -1447,6 +1474,37 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "(it contains a point other than c, and the Grötzsch–Teichmüller estimate bounds the "
         "moduli).",
         rays,
+    )
+    side_bud(
+        BOUNDARY_SPLIT_ROOTS,
+        "prog:boundary_split",
+        "Skeleton and wild part",
+        "where the dimension of ∂M lies",
+        "Checked in Lean (wildPart, dimH_wildPart_eq, ShishikuraDimension.dimH_wildPart_eq_two, "
+        "ShishikuraDimension.dimH_noIndifferentCycle_eq_two, "
+        "ShishikuraDimension.not_countable_wildPart, wildPart_subset_unresolved, "
+        "ShishikuraDimension.exists_class_dimH_eq_two). The boundary of a hyperbolic component "
+        "is a Jordan curve, real-analytic away from its root, and a parameter with an indifferent "
+        "cycle lies on the boundary of a hyperbolic component, so the parameters with an "
+        "indifferent cycle (the parabolic, Siegel and Cremer parameters) lie on countably many "
+        "analytic images of the circle: the skeleton of the boundary, a fact of the literature "
+        "that is not formalized and enters as an explicit hypothesis on a family of C¹ loops. "
+        "The part of the boundary that the loops miss, the wild part, keeps the whole "
+        "Hausdorff dimension 2 for every countable family (given Shishikura's theorem, taken "
+        "as a hypothesis here), so it is nonempty and uncountable; when the family covers the "
+        "indifferent boundary parameters, the boundary parameters with no indifferent cycle "
+        "have dimension 2. The wild part depends on the family (a larger family has a smaller "
+        "wild part) and differs from the set of Problems 4.3 and 4.4: it contains parameters "
+        "for which MLC is known, such as the Misiurewicz parameter c = i (an end point of a "
+        "filament of M). The boundary is the unresolved set of the grid "
+        "certificate (frontier_mandelbrot_eq_unresolved): the same set for every depth of the "
+        "grid, which lowers only the certified bound on its area. For every dictionary some "
+        "class of boundary parameters has dimension 2, since the dimension of a finite union "
+        "is the largest of the dimensions of its parts; this is a statement about the finite "
+        "partition and holds even for a dictionary that labels the whole boundary neutral. "
+        "For the intended dictionary the class neutral lies in the skeleton, of dimension at "
+        "most 1, so other classes carry the dimension, and which ones is not determined here.",
+        dimension or rays,
     )
     side_bud(
         PEANO_ROOTS,
@@ -1835,7 +1893,7 @@ def render_svg(model: dict[str, object], width: float, height: float) -> str:
 LEGEND = (
     ("open", "Open problem", "open"),
     ("lemma", "Open statement of the programme", "lemma"),
-    ("published", "Published, not formalized", "published"),
+    ("published", "Literature-motivated hypothesis", "published"),
     ("informal", "Not formalized", "informal"),
     ("checked", "Checked in Lean", "checked"),
     ("num", "Certified computation", "num"),

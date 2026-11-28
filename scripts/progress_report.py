@@ -67,6 +67,9 @@ PEANO_THEOREM = re.compile(
 FIBER_THEOREM = re.compile(
     r"^\s*theorem\s+sum_extWidth_loops_bounded_of_dimH_kernel_pos\b", re.MULTILINE
 )
+BOUNDARY_SPLIT_THEOREM = re.compile(
+    r"^\s*theorem\s+dimH_noIndifferentCycle_eq_two\b", re.MULTILINE
+)
 ROUND_THEOREM = re.compile(r"^\s*theorem\s+extWidth_loopFamily_round\b", re.MULTILINE)
 RATE_THEOREM = re.compile(
     r"^\s*theorem\s+closure_piece_subset_closedBall_of_sum\b", re.MULTILINE
@@ -121,6 +124,9 @@ PROGRESS_MILESTONES = (
     ("C¹ charts preserve the Hausdorff dimension; the boundary of M has no Hölder "
      "parametrization better than 1/2 (Shishikura)", DIMENSION_THEOREM, 1),
     ("A fiber of positive Hausdorff dimension has a finite total modulus", FIBER_THEOREM, 1),
+    ("The boundary parameters with no indifferent cycle have Hausdorff dimension 2: the extra "
+     "dimension of the boundary over the smooth curves lies off the skeleton",
+     BOUNDARY_SPLIT_THEOREM, 1),
     ("Peano objects of CompHaus are locally connected: MLC as a parametrization by the "
      "interval", PEANO_THEOREM, 1),
     ("The modulus of the round annulus is exactly log(R/r)/2π as the extremal width of its "
@@ -1254,11 +1260,38 @@ def callout_html() -> str:
     return f'<aside class="callout"><b>How to read the number.</b> {html_rich(text)}</aside>'
 
 
+def lean_research_text(repo_root: Path) -> str:
+    """The sources of the programme: the statuses of its statements are read from them."""
+    files = sorted((repo_root / "Mlc" / "Research").glob("*.lean"))
+    files.append(repo_root / "Mlc" / "ProgrammeRoot.lean")
+    return "\n".join(path.read_text(encoding="utf-8") for path in files if path.exists())
+
+
+def types_html(
+    repo_root: Path, rows: list[dict[str, object]], usage: dict[str, set[str]] | None = None
+) -> str:
+    from typology import types_cards_html
+
+    resolved = resolved_percent(float(rows[-1]["area_upper_percent"]))
+    return types_cards_html(
+        repo_root,
+        rows,
+        lean_research_text(repo_root),
+        PROGRESS_MILESTONES,
+        format_percent(resolved),
+        usage,
+    )
+
+
 def progress_fragment_html(
-    repo_root: Path, rows: list[dict[str, object]], svg: str | None = None
+    repo_root: Path,
+    rows: list[dict[str, object]],
+    svg: str | None = None,
+    usage: dict[str, set[str]] | None = None,
 ) -> str:
     if svg is None:
         svg = parameter_map_svg(repo_root, rows)
+    types = types_html(repo_root, rows, usage)
     caption = html_rich(
         "Parameter plane $c=x+iy$. White outline: numerical rendering of the "
         "border of $M$ (an illustration that the Lean proof does not use). A "
@@ -1292,6 +1325,7 @@ def progress_fragment_html(
 {commit_table_html(rows)}
 </div>
 </section>
+{types}
 <section class="p-card">
 <h2>Next routes <span class="chip">planning priors</span></h2>
 {routes_html()}
@@ -1439,6 +1473,131 @@ math.tex {
   text-transform: uppercase; margin-bottom: 2px;
 }
 .p-foot { margin: 14px 0 0; font-size: 12.5px; color: var(--muted); }
+.progress-section {
+  --st-proved: #15803d; --st-reduced: #0e7490; --st-published: #64748b; --st-open: #d97706;
+}
+:root[data-theme="dark"] .progress-section {
+  --st-proved: #4ade80; --st-reduced: #22d3ee; --st-published: #94a3b8; --st-open: #fbbf24;
+}
+.ty-lead { margin: 0 0 12px; }
+.ty-overall { margin: 0 0 16px; }
+.ty-overall .ty-legend { margin: 10px 0 0; }
+.ty-bar.big { width: 100%; height: 24px; border-radius: 8px; }
+.ty-bar.big .seg {
+  display: flex; align-items: center; justify-content: center; min-width: 22px;
+  font-size: 12px; font-weight: 600; color: #07111f;
+}
+.ty-bar.big .seg.open, .ty-bar.big .seg.reduced, .ty-bar.big .seg.published, .ty-bar.big .seg.proved { color: #07111f; }
+.ty-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0 0 14px; font-size: 12.5px; color: var(--muted); }
+.ty-legend .lg { display: inline-flex; align-items: center; gap: 6px; }
+.ty-regimes { margin: 0 0 16px; padding-left: 18px; font-size: 12.5px; color: var(--muted); }
+.lm {
+  display: inline-block; min-width: 1.7em; padding: 0 6px; border-radius: 6px; text-align: center;
+  font-family: "IBM Plex Mono", "SFMono-Regular", monospace; font-size: 11.5px; line-height: 1.7;
+  border: 1px solid var(--st-open); color: var(--text); text-decoration: none;
+}
+a.lm:hover { filter: brightness(1.15); }
+.lm.proved { border-color: var(--st-proved); background: var(--st-proved); color: #07111f; }
+.lm.reduced { border-color: var(--st-reduced); background: rgba(14, 116, 144, 0.18); }
+.lm.published { border-color: var(--st-published); background: rgba(100, 116, 139, 0.2); }
+.lm.open { border-color: var(--st-open); border-style: dashed; background: transparent; }
+.ty-tree { margin-top: 4px; }
+.ty-ul { list-style: none; margin: 0; padding: 0 0 0 28px; }
+.ty-tree > .ty-ul { padding-left: 0; }
+.ty-ul .ty-ul { margin-top: 10px; }
+.ty-li { position: relative; margin: 0 0 10px; }
+.ty-ul .ty-ul > .ty-li::before {
+  content: ""; position: absolute; left: -17px; top: 0; bottom: -10px;
+  border-left: 1px solid var(--border);
+}
+.ty-ul .ty-ul > .ty-li:last-child::before { bottom: auto; height: 22px; }
+.ty-ul .ty-ul > .ty-li::after {
+  content: ""; position: absolute; left: -17px; top: 22px; width: 15px;
+  border-top: 1px solid var(--border);
+}
+.ty-node {
+  border: 1px solid var(--border); border-left: 4px solid var(--border); border-radius: 10px;
+  padding: 7px 12px; background: var(--p-soft);
+}
+.ty-node.s-open { border-left-color: var(--st-open); }
+.ty-node.s-reduced { border-left-color: var(--st-reduced); }
+.ty-node.s-published { border-left-color: var(--st-published); }
+.ty-node.s-proved { border-left-color: var(--st-proved); }
+.ty-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.ty-head a { color: var(--text); text-decoration: none; border-bottom: 1px dotted var(--muted); }
+.ty-head a:hover { color: var(--p-accent); border-bottom-color: var(--p-accent); }
+.ty-brief { margin-top: 2px; font-size: 13px; color: var(--muted); }
+.ty-more { margin-top: 6px; }
+.ty-more summary { cursor: pointer; font-size: 12px; color: var(--p-accent); }
+.ty-text { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
+.ty-lean { margin: 6px 0 0; }
+.ty-chain { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-left: auto; }
+.ty-bar {
+  display: flex; width: 84px; height: 8px; overflow: hidden; border-radius: 4px;
+  border: 1px solid var(--border); background: var(--p-soft);
+}
+.ty-bar .seg.proved { background: var(--st-proved); }
+.ty-bar .seg.reduced { background: var(--st-reduced); }
+.ty-bar .seg.published { background: var(--st-published); }
+.ty-bar .seg.open { background: var(--st-open); }
+.ty-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.ty-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; }
+.ty-meta:empty { display: none; }
+.ty-lean code { font-size: 11.5px; color: var(--muted); word-break: break-all; }
+.chip.dim { color: var(--p-accent); border-color: var(--p-accent); }
+.fr-chip { background: var(--p-soft); }
+.ty-census { border-collapse: collapse; margin: 8px 0 0; font-size: 12px; font-variant-numeric: tabular-nums; }
+.ty-census th, .ty-census td { padding: 2px 10px 2px 0; text-align: right; }
+.ty-census th { color: var(--muted); font-weight: 500; }
+.ty-census tbody th { text-align: left; padding-right: 16px; }
+.fr-grid { display: grid; gap: 18px 16px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.fr { margin: 0; display: grid; gap: 8px; align-content: start; }
+.fr-img {
+  position: relative; width: 100%; aspect-ratio: 1; overflow: hidden; border-radius: 10px;
+  border: 1px solid var(--border); background: #0b1626;
+}
+.fr-img img { display: block; width: 100%; height: 100%; }
+.fr-img .mk {
+  position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px;
+  border: 2px solid #f8fafc; border-radius: 50%; box-shadow: 0 0 0 1px #07111f;
+}
+.fr figcaption { display: grid; gap: 4px; font-size: 13px; }
+.fr figcaption .chip { justify-self: start; }
+.fr small { display: block; color: var(--muted); font-size: 12px; }
+.fr-type { font-size: 12px; color: var(--p-accent); }
+.fr-chain { display: flex; flex-wrap: wrap; gap: 4px; }
+.fr-note { color: var(--muted); font-size: 12.5px; }
+.otable td.o-name { min-width: 260px; }
+.otable td.o-size, .otable td.o-first {
+  white-space: nowrap; color: var(--muted); font-variant-numeric: tabular-nums;
+}
+.otable th.o-cls { height: 170px; vertical-align: bottom; padding: 4px 2px; text-align: center; }
+.otable th.o-cls span {
+  display: inline-block; writing-mode: vertical-rl; transform: rotate(180deg);
+  white-space: nowrap; font-size: 11.5px; letter-spacing: 0.02em; text-transform: none;
+}
+.otable td.o-cell { width: 28px; padding: 0; text-align: center; }
+.otable td.o-cell.on::after {
+  content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--p-accent);
+}
+.otable td.o-all { text-align: center; color: var(--muted); font-size: 12px; }
+.tl-wrap { overflow-x: auto; margin-top: 18px; }
+.tl { display: block; width: 100%; min-width: 780px; height: auto; }
+.tl-c { fill: var(--p-soft); stroke: var(--border); stroke-width: 0.6; }
+.tl-c.on { fill: var(--p-accent); stroke: none; }
+.tl-c.step { stroke: var(--text); stroke-width: 1; }
+.tl text { fill: var(--muted); font-size: 10px; }
+.ladder { display: grid; gap: 10px; border-left: 3px solid var(--p-accent); padding-left: 16px; }
+.ladder-axis { font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.rung {
+  display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start;
+  border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; background: var(--p-soft);
+}
+.rung-dim b { font-size: 26px; font-variant-numeric: tabular-nums; color: var(--p-accent); }
+.rung-body { display: grid; gap: 4px; }
+.rung small { display: block; color: var(--muted); font-size: 12px; }
+.rung-other { font-size: 13px; color: var(--muted); }
 """
 
 STANDALONE_CSS = """
@@ -1560,7 +1719,9 @@ def routes_tex() -> str:
     return "\n".join(lines) + "\n"
 
 
-def write_progress_assets(repo_root: Path, output_dir: Path) -> None:
+def write_progress_assets(
+    repo_root: Path, output_dir: Path, usage: dict[str, set[str]] | None = None
+) -> None:
     from progress_ledger import check_problems, ledger_rows  # the ledger imports this module
 
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -1568,7 +1729,7 @@ def write_progress_assets(repo_root: Path, output_dir: Path) -> None:
     for problem in check_problems(repo_root):
         print(f"warning: {problem}", file=sys.stderr)
     svg = parameter_map_svg(repo_root, rows)
-    fragment = progress_fragment_html(repo_root, rows, svg)
+    fragment = progress_fragment_html(repo_root, rows, svg, usage)
     (output_dir / "progress_fragment.html").write_text(fragment, encoding="utf-8")
     (output_dir / "progress.html").write_text(
         standalone_html(fragment), encoding="utf-8"
@@ -1578,6 +1739,11 @@ def write_progress_assets(repo_root: Path, output_dir: Path) -> None:
         commits_tex(rows), encoding="utf-8"
     )
     (output_dir / "progress_routes.tex").write_text(routes_tex(), encoding="utf-8")
+    from typology import types_table_tex
+
+    (output_dir / "progress_types.tex").write_text(
+        types_table_tex(lean_research_text(repo_root)), encoding="utf-8"
+    )
 
 
 def main() -> int:

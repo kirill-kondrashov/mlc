@@ -18,6 +18,7 @@ import Mlc.Research.Stacking
 import Mlc.Research.LevelTower
 import Mlc.Research.LevelGeometry
 import Mlc.Research.Dimension
+import Mlc.Research.BoundarySplit
 import Mlc.Research.PeanoObject
 import Mlc.Research.VirtualShrinking
 import Mlc.Research.TailInvariance

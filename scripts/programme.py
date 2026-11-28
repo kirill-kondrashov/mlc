@@ -5,7 +5,9 @@
 module is the catalogue of the lemmas for the dependency graph and the progress report:
 the parameter classes, the lemmas that each class needs, their sources and their status.
 A lemma is proved when the theorem named in `proof` exists in the Lean sources; until then
-it is open, a field of the structure.
+it is open, a field of the structure. A lemma is reduced when the theorem named in `reduction`
+derives it from a geometric statement about the level sets of the dictionary, which is
+itself open; the lemma stays a field.
 
 The classes and the weights are research-management priors, frozen between progress
 baselines. The weights are equal: no class is claimed to be larger than another. A class
@@ -94,6 +96,15 @@ STACKING_ROOTS = (
 LEVEL_GEOMETRY_ROOTS = (
     "MLC.mlc_of_levelGeometry",
 )
+# The results of Mlc/Research/BoundarySplit.lean that no other result uses.
+BOUNDARY_SPLIT_ROOTS = (
+    "MLC.Research.ShishikuraDimension.dimH_wildPart_eq_two",
+    "MLC.Research.ShishikuraDimension.dimH_noIndifferentCycle_eq_two",
+    "MLC.Research.ShishikuraDimension.wildPart_nonempty",
+    "MLC.Research.ShishikuraDimension.not_countable_wildPart",
+    "MLC.Research.ShishikuraDimension.exists_class_dimH_eq_two",
+    "MLC.Research.wildPart_subset_unresolved",
+)
 # The results of Mlc/Research/Dimension.lean that no other result uses.
 DIMENSION_ROOTS = (
     "MLC.Research.ShishikuraDimension.holder_exponent_le_half",
@@ -121,6 +132,10 @@ class Lemma:
     source: str
     text: str
     proof: str = ""  # the theorem that proves the lemma, once there is one
+    # The theorem that derives the lemma from a geometric statement about the level sets of
+    # the dictionary (`LevelGeometry`): the lemma stays a field of `ProgrammeInput`, and the
+    # geometric statement is open.
+    reduction: str = ""
 
 
 LEMMAS: tuple[Lemma, ...] = (
@@ -135,6 +150,7 @@ LEMMAS: tuple[Lemma, ...] = (
         "parameter nest with the separation estimate of the canonical return budget, so "
         "that the pieces shrink to c. This is the step from a priori bounds to local "
         "connectivity; the classes with a tower share it.",
+        reduction="MLC.Research.LevelGeometry.transfer",
     ),
     Lemma(
         "yoccoz",
@@ -144,7 +160,8 @@ LEMMAS: tuple[Lemma, ...] = (
         "published",
         "Yoccoz; Hubbard; Milnor (reduction (2.1) of §2)",
         "At the parameters that are not infinitely quadratic-like renormalizable, M is "
-        "locally connected. Published; not formalized.",
+        "locally connected. From the literature; a hypothesis about the dictionary, not "
+        "formalized.",
     ),
     Lemma(
         "teichmuller",
@@ -156,8 +173,11 @@ LEMMAS: tuple[Lemma, ...] = (
         "Dudko–Lyubich, arXiv:2309.02107, Proposition 2.7 (W(Y_n ∖ X_n) = O(Δ_P^n))",
         "For the tower of a parameter of bounded type, the degeneration grows from a level to "
         "the next by at most a factor Δ_P that depends on the bound P of the relative period "
-        "of the level. It excludes a jump by C_δ. The sources state it for towers of "
-        "relative periods bounded by P. Published; not formalized.",
+        "of the level. It excludes a jump by C_δ. The sources state an exponential bound "
+        "W(Y_n ∖ X_n) = O(Δ_P^n) for towers of relative periods bounded by P; the field "
+        "states it level by level, which is the form that the recursion uses, and the passage "
+        "from the published form is not formalized. Motivated by the literature; not "
+        "formalized.",
     ),
     Lemma(
         "boundedType",
@@ -169,7 +189,8 @@ LEMMAS: tuple[Lemma, ...] = (
         "levels); (4.1), (4.6)",
         "At a parameter of bounded type the dichotomy (4.6) holds with an error that depends "
         "on the period; with the Teichmüller contraction the a priori bounds follow "
-        "(WidthTower.aPrioriBounds_of_bounded). Published; not formalized.",
+        "(WidthTower.aPrioriBounds_of_bounded). From the literature; a hypothesis about the "
+        "dictionary, not formalized.",
     ),
     Lemma(
         "antiMolecule",
@@ -179,7 +200,8 @@ LEMMAS: tuple[Lemma, ...] = (
         "published",
         "Kahn–Lyubich: Covering Lemma and Quasi-Additivity Law (§4.1–§4.2)",
         "The amplification W(f) ⪰ p W(f_n) − O(1) holds for the tower of a parameter whose "
-        "primitive levels are far from the Molecule. Published; not formalized.",
+        "primitive levels are far from the Molecule. From the literature; a hypothesis about "
+        "the dictionary, not formalized.",
     ),
     Lemma(
         "neutral",
@@ -189,8 +211,8 @@ LEMMAS: tuple[Lemma, ...] = (
         "published",
         "Theorem 4.2 (Dudko–Lyubich, uniform a priori bounds for neutral renormalization) "
         "and the sectorial bounds of §3.4",
-        "At the neutral parameters M is locally connected. Published as pseudo-Siegel a "
-        "priori bounds; not formalized.",
+        "At the neutral parameters M is locally connected. From the literature as "
+        "pseudo-Siegel a priori bounds; a hypothesis about the dictionary, not formalized.",
     ),
     Lemma(
         "quadraticGrowth",
@@ -205,7 +227,8 @@ LEMMAS: tuple[Lemma, ...] = (
         "(b₁,₁ ≥ N, b_{i,j+1} ≥ b_{i,j}², b_{i+1,1} ≥ q_i²; for example p_i = ±1, q_1 ≥ N, "
         "q_{i+1} ≥ q_i²) the pieces M(⟨p_i/q_i⟩_{i ≤ n}) have diameter at most Cλⁿ and M is "
         "locally connected. The proof uses near-parabolic renormalization; these parameters "
-        "lack quadratic-like a priori bounds. Published; not formalized.",
+        "lack quadratic-like a priori bounds. From the literature; a hypothesis about the "
+        "dictionary, not formalized.",
     ),
     Lemma(
         "unboundedTeichmuller",
@@ -237,6 +260,7 @@ LEMMAS: tuple[Lemma, ...] = (
         "dichotomy the cap is equivalent to the a priori bounds "
         "(WidthTower.aPrioriBounds_iff_jumpCap), and it is weaker than a uniform growth "
         "bound.",
+        reduction="MLC.Research.LevelGeometry.unboundedJumpCap",
     ),
     Lemma(
         "unboundedDichotomy",
@@ -251,6 +275,7 @@ LEMMAS: tuple[Lemma, ...] = (
         "the amplification holds, or the degeneration jumps by C_δ. The published constants "
         "depend on the period implicitly, without a rate; a decomposition with a linear "
         "topological error is known, but it is not the dynamical dichotomy.",
+        reduction="MLC.Research.LevelGeometry.unboundedDichotomy",
     ),
     Lemma(
         "virtualJulia",
@@ -291,6 +316,7 @@ LEMMAS: tuple[Lemma, ...] = (
         "At the virtual levels of the near-neutral subcase, a jump of the degeneration by a "
         "fixed factor at a level of large relative period lands below a fixed ceiling: the "
         "virtual version of Lemma G.",
+        reduction="MLC.Research.LevelGeometry.virtualJumpCap",
     ),
     Lemma(
         "virtualLinearDichotomy",
@@ -301,6 +327,7 @@ LEMMAS: tuple[Lemma, ...] = (
         "§4.5 with §4.4; proposed reading",
         "The dichotomy (4.6) holds for the virtual levels of the near-neutral subcase with "
         "an additive error at most linear in the period.",
+        reduction="MLC.Research.LevelGeometry.virtualLinearDichotomy",
     ),
     Lemma(
         "virtualTransfer",
@@ -402,6 +429,65 @@ def proved_lemmas(lean_text: str) -> set[str]:
         if lemma.proof
         and re.search(rf"^\s*theorem\s+{re.escape(lemma.proof)}\b", lean_text, re.MULTILINE)
     }
+
+
+def _conclusion(signature: str) -> str | None:
+    """The type that follows the first colon outside brackets of the signature of a theorem."""
+    depth = 0
+    for index, char in enumerate(signature):
+        if char in "([{⟨⦃":
+            depth += 1
+        elif char in ")]}⟩⦄":
+            depth -= 1
+        elif char == ":" and depth == 0:
+            return signature[index + 1 :].strip()
+    return None
+
+
+def reduces(lemma: Lemma, lean_text: str) -> bool:
+    """A Lean theorem `reduction` whose conclusion is the lemma: the type after the colon of
+    its signature (up to the first `:=`) is the definition of the lemma, applied to a
+    dictionary and nothing else. A theorem of the same name that states something else, or one
+    that merely mentions the lemma among its hypotheses, does not count."""
+    if not lemma.reduction:
+        return False
+    name = lemma.reduction.rsplit(".", 1)[-1]
+    target = lemma.lean.rsplit(".", 1)[-1]
+    pattern = rf"^\s*theorem\s+{re.escape(name)}\b(.*?):="
+    for found in re.finditer(pattern, lean_text, re.MULTILINE | re.DOTALL):
+        conclusion = _conclusion(found.group(1))
+        if conclusion and re.fullmatch(rf"(?:[\w']+\.)*{re.escape(target)}", conclusion):
+            return True
+    return False
+
+
+def reduced_lemmas(lean_text: str) -> set[str]:
+    """The lemmas that a Lean theorem derives from a geometric statement about the level
+    sets (`Mlc/Research/LevelGeometry.lean`). They stay fields of `ProgrammeInput`; the
+    geometric statement is open."""
+    return {lemma.key for lemma in LEMMAS if reduces(lemma, lean_text)}
+
+
+# The status of a lemma: proved (a Lean theorem proves it), reduced (a Lean theorem derives
+# it from a geometric statement that is itself open), published (a theorem of the
+# literature, taken here as a hypothesis) and open (a proposed reading).
+STATUSES = ("proved", "reduced", "published", "open")
+
+
+def lemma_statuses(lean_text: str) -> dict[str, str]:
+    proved = proved_lemmas(lean_text)
+    reduced = reduced_lemmas(lean_text)
+    out = {}
+    for lemma in LEMMAS:
+        if lemma.key in proved:
+            out[lemma.key] = "proved"
+        elif lemma.kind == "published":
+            out[lemma.key] = "published"
+        elif lemma.key in reduced:
+            out[lemma.key] = "reduced"
+        else:
+            out[lemma.key] = "open"
+    return out
 
 
 def class_shares(proved: set[str]) -> dict[str, float]:

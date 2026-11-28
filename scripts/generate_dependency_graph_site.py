@@ -27,12 +27,14 @@ import json
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 from collections import deque
 from graphlib import CycleError, TopologicalSorter
 
 from progress_report import progress_metrics_from_worktree, write_progress_assets
 from spine_graph import SIDE_ROOTS, build_model, spine_page_html
+from typology import object_usage
 
 
 DECL_RE = re.compile(
@@ -425,7 +427,16 @@ def _generate_site(repo_root: Path, output_root: Path) -> None:
         index_html([("The proof spine of MLC.mlc_conjecture", "mlc_conjecture/index.html")]),
         encoding="utf-8",
     )
-    write_progress_assets(repo_root, graph_dir)
+    usage = object_usage(fq_index, edges)
+    grid_users = sorted(key for key, objects in usage.items() if "grid" in objects)
+    if grid_users:
+        print(
+            "warning: the certified grid is in the dependency cone of "
+            + ", ".join(grid_users)
+            + "; the ROADMAP argument for keeping the depth rests on no statement using it",
+            file=sys.stderr,
+        )
+    write_progress_assets(repo_root, graph_dir, usage)
 
 
 def generate_site(repo_root: Path, output_root: Path) -> None:
