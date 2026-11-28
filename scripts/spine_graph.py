@@ -40,6 +40,7 @@ from programme import (
     PULLBACK_ROOT,
     SHARPNESS_ROOT,
     TAIL_ROOTS,
+    VIRTUAL_SHRINKING_ROOTS,
     check_catalogue,
     class_shares,
     open_lemmas,
@@ -177,6 +178,7 @@ SIDE_ROOTS = (
     *RECTANGLE_ROOTS,
     *NEST_ROOTS,
     *MULTIPLICITY_ROOTS,
+    *VIRTUAL_SHRINKING_ROOTS,
 )
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
@@ -926,8 +928,9 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "multiplicity 2; the multiplicity is additive over a partition of the domain and "
         "multiplicative under composition, so f_c^p has multiplicity 2^p with the stretching "
         "|(f_c^p)′|. Hence, if f_c^p maps the curves of a family ΓX to curves of ΓY, then "
-        "W(ΓX) ≤ 2^p · W(ΓY): the width of a pulled-back family grows by at most 2^p, the "
-        "estimate behind the Teichmüller contraction. For a C¹ loop the image curve has the "
+        "W(ΓX) ≤ 2^p · W(ΓY): the width of a pulled-back family grows by at most 2^p, which "
+        "has the shape of the Teichmüller contraction of §4.3 (growth at most exponential in "
+        "the relative period). For a C¹ loop the image curve has the "
         "length measure of the pushed-forward loop (loopMeasure_comp). The families of the "
         "renormalization levels to which the estimate applies, and the quadratic-like "
         "restrictions, stay open.",
@@ -985,6 +988,22 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
     add_lemma(p44, "virtualTeichmuller")
     add_lemma(p44, "virtualJulia")
     add_lemma(p44, "virtualTransfer")
+    side_bud(
+        VIRTUAL_SHRINKING_ROOTS,
+        "prog:virtual_shrinking",
+        "What VT says about the hulls",
+        "separation estimate ⇔ hulls shrink",
+        "Checked in Lean (VirtualJuliaNest.separationEstimate_iff, "
+        "Geometry.virtualTransfer_hulls_shrink). For a cost with non-negative terms and "
+        "divergent partial sums, such as the canonical cost of a degeneration bound, the "
+        "dynamical separation estimate of Lemma VT is equivalent to the shrinking of the "
+        "virtual hulls to their origins: for every ε the closure of the n-th hull lies in the "
+        "ε-ball around its origin for n large. So the dynamical content of Lemma VT is that "
+        "the diameters of the virtual hulls tend to zero, the analogue of the shrinking of "
+        "the parameter pieces for Lemma T. The nest in the parameter plane, the "
+        "phase–parameter chart and the proof that the hulls shrink stay open.",
+        lemma_nodes["virtualTransfer"],
+    )
 
     published = make(
         Node(

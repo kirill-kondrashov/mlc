@@ -21,9 +21,12 @@ proves the hypothesis for the quadratic polynomials.
   so `f_c` has area multiplicity `2` (`areaMultiplicity_fc`), and its `p`-th iterate `2ᵖ`
   (`areaMultiplicity_fc_iterate`), with `J = |(f_c^p)'|`.
 * **`extWidth_le_pow_two_mul_fc_iterate`**: if `f_c^p` carries the curves of `ΓX` to curves of
-  `ΓY`, the extremal width of `ΓX` is at most `2ᵖ` times that of `ΓY`. This is the estimate behind
-  the Teichmüller contraction in the survey: `p` iterations of a quadratic map have area
-  multiplicity at most `2ᵖ`, so the width of a pulled-back family grows by at most `2ᵖ`.
+  `ΓY`, the extremal width of `ΓX` is at most `2ᵖ` times that of `ΓY`. This has the shape of the
+  Teichmüller contraction of the survey (§4.3: for a bounded relative period `p` the degeneration
+  grows at most exponentially, `W = O(Δ^p)`): `p` iterations of a quadratic map have area
+  multiplicity at most `2ᵖ`, so the width of a pulled-back family grows by at most `2ᵖ`. The
+  contraction of the survey concerns the renormalization levels, whose widths are not yet
+  extremal widths of such families.
 * `loopMeasure_comp`: the length measure of the image of a `C¹` loop under a holomorphic map is the
   pushforward of the length measure of the loop with the density `|φ'|`, which is the form of the
   hypothesis on the curves.
@@ -240,9 +243,9 @@ theorem areaMultiplicity_fc_iterate (c : ℂ) (p : ℕ) :
 
 /-- **The pullback law for the iterates of `f_c`.** If `f_c^p` carries the curves of `ΓX` to curves
 of `ΓY`, a curve `μ` going to `(μ.withDensity |(f_c^p)'|).map f_c^p`, then the extremal width of
-`ΓX` is at most `2ᵖ` times that of `ΓY`. This is the estimate behind the Teichmüller
-contraction: `p` iterations of a quadratic map have area multiplicity at most `2ᵖ`, so the width of
-a pulled-back family grows by at most `2ᵖ`. -/
+`ΓX` is at most `2ᵖ` times that of `ΓY`. This has the shape of the Teichmüller contraction of the
+survey (growth at most exponential in the relative period): `p` iterations of a quadratic map have
+area multiplicity at most `2ᵖ`, so the width of a pulled-back family grows by at most `2ᵖ`. -/
 theorem extWidth_le_pow_two_mul_fc_iterate (c : ℂ) (p : ℕ) {ΓX ΓY : Set (Measure ℂ)}
     (hcurve : ∀ μ ∈ ΓX, (μ.withDensity fun z =>
       ENNReal.ofReal ‖deriv ((MLC.Quadratic.fc c)^[p]) z‖).map ((MLC.Quadratic.fc c)^[p]) ∈ ΓY) :

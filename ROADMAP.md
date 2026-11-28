@@ -311,9 +311,17 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   (`areaMultiplicity_fc_iterate`). So, if `f_c^p` carries the curves of `ΓX` to curves of `ΓY`,
   then `W(ΓX) ≤ 2ᵖ W(ΓY)` (`extWidth_le_pow_two_mul_fc_iterate`, and for loops
   `extWidth_le_pow_two_mul_fc_iterate_of_loops` with `loopMeasure_comp`): the width of a
-  pulled-back family grows by at most `2ᵖ`, the estimate behind the Teichmüller contraction. The
+  pulled-back family grows by at most `2ᵖ`, which has the shape of the Teichmüller contraction of
+  the survey (§4.3: growth at most exponential in the relative period). The
   families of the renormalization levels to which it applies, and the quadratic-like restrictions
   of `f_c^p` to domains, are open.
+* `Mlc/Research/VirtualShrinking.lean`: what the dynamical estimate of Lemma VT says. For a cost
+  with non-negative terms and divergent partial sums, such as the canonical cost of a degeneration
+  bound, `VirtualJuliaNest.SeparationEstimate` is equivalent to the shrinking of the virtual hulls to
+  their origins (`VirtualJuliaNest.separationEstimate_iff`), and `Geometry.virtualTransfer_hulls_shrink`
+  derives that shrinking from `VirtualTransfer`. So the dynamical content of VT is that the diameters
+  of the virtual hulls tend to zero, the analogue of the shrinking of the parameter pieces for T; the
+  nest and the phase–parameter chart of VT are the rest.
 
 The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
 `mlc_of_programme`) uses only the three kernel axioms.

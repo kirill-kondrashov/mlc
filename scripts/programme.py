@@ -49,6 +49,10 @@ NEST_ROOTS = (
 MULTIPLICITY_ROOTS = (
     "MLC.Research.extWidth_le_pow_two_mul_fc_iterate_of_loops",
 )
+# The results of Mlc/Research/VirtualShrinking.lean that no other result uses.
+VIRTUAL_SHRINKING_ROOTS = (
+    "MLC.Research.Geometry.virtualTransfer_hulls_shrink",
+)
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 
