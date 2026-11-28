@@ -44,6 +44,7 @@ RECTANGLE_ROOTS = (
 NEST_ROOTS = (
     "MLC.Research.Geometry.transfer_iff_phaseParameter",
     "MLC.Research.nonempty_parameterRealization_concentric",
+    "MLC.Research.ConnectedNest.sum_extWidth_loops_le_coarse",
 )
 # The results of Mlc/Research/AreaMultiplicity.lean that no other result uses.
 MULTIPLICITY_ROOTS = (

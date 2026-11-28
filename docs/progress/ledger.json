@@ -1606,5 +1606,61 @@
       "The virtual separation estimate is the shrinking of the virtual hulls",
       "MLC from the lemmas of the programme"
     ]
+  },
+  {
+    "id": "2026-11-28-make-the-loops-of-a-nest-separating-curves-and",
+    "timestamp": "2026-11-28T12:12:43+01:00",
+    "subject": "Make the loops of a nest separating curves and prove Grötzsch's inequality for a coarsening",
+    "area_note": "The moduli of the annuli of a parameter nest are now the extremal widths of the C¹ loops that separate the next piece from the complement of the piece, so they never exceed the classical moduli; coarsening a nest, for instance by grouping levels into blocks, can only increase them, because the loops of the thin annuli are loops of the thick one and the annuli are disjoint.",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 8694258,
+      "depth": 13,
+      "weight": 556432512,
+      "scale": 16,
+      "finest": 13,
+      "coarsest": 13,
+      "area": 0.2591090798377991,
+      "percent": 2.0619245428089137,
+      "exact": "2\\cdot 8694258/4^{13}"
+    },
+    "area_exact": "2\\cdot 8694258/4^{13}",
+    "debt_percent": 7.142857142857143,
+    "area_upper_percent": 2.0619245428089137,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 16,
+    "classes_share": 0.0,
+    "milestone_weight": 27,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound",
+      "A priori bounds from uniform control",
+      "Both uniformities are necessary",
+      "A priori bounds are equivalent to a jump cap",
+      "Extremal length: series and parallel laws",
+      "Tail invariance of the Problem 4.3 statements",
+      "Modulus of a round annulus as an extremal length",
+      "Modulus of a rectangle as an extremal length",
+      "Moduli of nested annuli force shrinking (Lemma T from the phase–parameter relation)",
+      "Lemma T is equivalent to its moduli form",
+      "Grötzsch's inequality for a coarsening of a nest of moduli",
+      "Pullback law for the iterates of f_c with area multiplicity 2^p",
+      "The virtual separation estimate is the shrinking of the virtual hulls",
+      "MLC from the lemmas of the programme"
+    ]
   }
 ]

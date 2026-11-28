@@ -53,6 +53,7 @@ ANNULUS_THEOREM = re.compile(r"^\s*theorem\s+extLength_radialFamily\b", re.MULTI
 RECTANGLE_THEOREM = re.compile(r"^\s*theorem\s+extLength_horizFamily\b", re.MULTILINE)
 NEST_THEOREM = re.compile(r"^\s*theorem\s+sum_extWidth_loops_le\b", re.MULTILINE)
 EQUIVALENCE_THEOREM = re.compile(r"^\s*theorem\s+transfer_iff_phaseParameter\b", re.MULTILINE)
+COARSE_THEOREM = re.compile(r"^\s*theorem\s+sum_extWidth_loops_le_coarse\b", re.MULTILINE)
 MULTIPLICITY_THEOREM = re.compile(
     r"^\s*theorem\s+extWidth_le_pow_two_mul_fc_iterate\b", re.MULTILINE
 )
@@ -82,6 +83,7 @@ PROGRESS_MILESTONES = (
     ("Moduli of nested annuli force shrinking (Lemma T from the phase–parameter relation)",
      NEST_THEOREM, 1),
     ("Lemma T is equivalent to its moduli form", EQUIVALENCE_THEOREM, 1),
+    ("Grötzsch's inequality for a coarsening of a nest of moduli", COARSE_THEOREM, 1),
     ("Pullback law for the iterates of f_c with area multiplicity 2^p", MULTIPLICITY_THEOREM, 1),
     ("The virtual separation estimate is the shrinking of the virtual hulls",
      VIRTUAL_SHRINKING_THEOREM, 1),

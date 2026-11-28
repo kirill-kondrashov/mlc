@@ -129,6 +129,11 @@ theorem extLength_mono {m : Measure α} {Γ Γ' : Set (Measure α)}
   gcongr
   exact minLength_le_of_dominates ρ h
 
+/-- A subfamily has the smaller extremal width. -/
+theorem extWidth_mono {m : Measure α} {Γ Γ' : Set (Measure α)} (h : Γ ⊆ Γ') :
+    extWidth m Γ ≤ extWidth m Γ' :=
+  ENNReal.inv_le_inv.2 (extLength_mono fun μ hμ => ⟨μ, h hμ, le_rfl⟩)
+
 section Series
 
 /-- The metric that equals `c₁ ρ₁` on `Ω₁` and `c₂ ρ₂` on `Ω₂`, and vanishes elsewhere. -/

@@ -112,43 +112,30 @@ lemma loopMeasure_circleLoop {s : ℝ} (hs : 0 < s) :
   congr 1
   field_simp
 
-/-! ### The rays meet the circle -/
+/-! ### The circle is run through every point of itself -/
 
-/-- A ray that starts inside the circle of radius `s` around `0` meets the circle. -/
-lemma exists_circleLoop_eq {s : ℝ} {z u : ℂ} (hz : ‖z‖ < s) (hu : ‖u‖ = 1) :
-    ∃ t : ℝ, ∃ σ : ℝ, 0 < σ ∧ circleLoop s t = z + (σ : ℂ) * u := by
-  have hs0 : 0 < s := lt_of_le_of_lt (norm_nonneg z) hz
-  set a : ℝ := inner ℝ z u with ha
-  have hD : 0 < a ^ 2 + (s ^ 2 - ‖z‖ ^ 2) := by
-    nlinarith [sq_nonneg a, norm_nonneg z]
-  have hsqrt : Real.sqrt (a ^ 2 + (s ^ 2 - ‖z‖ ^ 2)) ^ 2 = a ^ 2 + (s ^ 2 - ‖z‖ ^ 2) :=
-    Real.sq_sqrt hD.le
-  have habs : |a| < Real.sqrt (a ^ 2 + (s ^ 2 - ‖z‖ ^ 2)) := by
-    rw [← Real.sqrt_sq_eq_abs]
-    exact Real.sqrt_lt_sqrt (sq_nonneg a) (by nlinarith [norm_nonneg z])
-  set σ : ℝ := -a + Real.sqrt (a ^ 2 + (s ^ 2 - ‖z‖ ^ 2)) with hσdef
-  have hσ : 0 < σ := by linarith [le_abs_self a]
-  have hw : ‖z + (σ : ℂ) * u‖ = s := by
-    have h2 : ‖z + (σ : ℂ) * u‖ ^ 2 = s ^ 2 := by
-      rw [← Complex.real_smul, norm_add_sq_real, real_inner_smul_right, norm_smul, hu,
-        Real.norm_of_nonneg hσ.le]
-      rw [← ha]
-      have : σ ^ 2 = -2 * a * σ + (s ^ 2 - ‖z‖ ^ 2) := by
-        have h3 : (σ + a) ^ 2 = a ^ 2 + (s ^ 2 - ‖z‖ ^ 2) := by
-          rw [hσdef]
-          ring_nf
-          rw [hsqrt]
-        nlinarith [h3]
-      nlinarith [this]
-    exact (sq_eq_sq₀ (norm_nonneg _) hs0.le).1 h2
-  refine ⟨(Complex.arg (z + (σ : ℂ) * u) + π) / (2 * π), σ, hσ, ?_⟩
+/-- Every point of the circle of radius `s` around `0` lies on the loop `circleLoop s`. -/
+lemma exists_circleLoop_of_norm {s : ℝ} {w : ℂ} (hw : ‖w‖ = s) :
+    ∃ t : ℝ, circleLoop s t = w := by
+  refine ⟨(Complex.arg w + π) / (2 * π), ?_⟩
   rw [circleLoop_eq]
-  have hang : 2 * π * ((Complex.arg (z + (σ : ℂ) * u) + π) / (2 * π)) - π =
-      Complex.arg (z + (σ : ℂ) * u) := by
+  have hang : 2 * π * ((Complex.arg w + π) / (2 * π)) - π = Complex.arg w := by
     field_simp
     ring
   rw [hang]
-  conv_rhs => rw [← Complex.norm_mul_exp_arg_mul_I (z + (σ : ℂ) * u), hw]
+  conv_rhs => rw [← Complex.norm_mul_exp_arg_mul_I w, hw]
+
+/-- The circle of radius `s` around `c` separates the points at distance at most `s` from `c`
+from the points at distance at least `s`. -/
+lemma separates_circle {c : ℂ} {s : ℝ} {K O : Set ℂ} (hK : ∀ z ∈ K, ‖z - c‖ ≤ s)
+    (hO : ∀ w, w ∉ O → s ≤ ‖w - c‖) : Separates (fun t => c + circleLoop s t) K O := by
+  intro z hz w hw a b p hab hp hpa hpb
+  have hf : ContinuousOn (fun τ => ‖p τ - c‖) (Icc a b) := (hp.sub continuousOn_const).norm
+  have h1 : ‖p a - c‖ ≤ s := by rw [hpa]; exact hK z hz
+  have h2 : s ≤ ‖p b - c‖ := by rw [hpb]; exact hO w hw
+  obtain ⟨τ, hτ, hτs⟩ := intermediate_value_Icc hab hf ⟨h1, h2⟩
+  obtain ⟨t, ht⟩ := exists_circleLoop_of_norm (s := s) (w := p τ - c) hτs
+  exact ⟨τ, hτ, t, show p τ = c + circleLoop s t by rw [ht]; ring⟩
 
 /-! ### The circles around a point bound the modulus from below -/
 
@@ -161,25 +148,25 @@ lemma loopMeasure_const_add {γ : ℝ → ℂ} (hγ : IsLoop γ) (c : ℂ) :
   rfl
 
 /-- **The circles of an annulus bound its modulus from below.** If the circles `|z - c| = s`,
-`r < s ≤ 3r/2`, lie in `A` and the set `K` lies in the closed disk of radius `r` around `c`, the
-loops in `A` that go around `K` have extremal width at least `log (3/2) / 2π`. -/
-lemma extWidth_loopFamily_ge {A K : Set ℂ} {c : ℂ} {r : ℝ} (hr : 0 < r)
-    (hK : ∀ z ∈ K, ‖z - c‖ ≤ r) (hA : ∀ s ∈ Ioc r (3 / 2 * r), ∀ t, c + circleLoop s t ∈ A) :
-    ENNReal.ofReal (Real.log (3 / 2) / (2 * π)) ≤ extWidth volume (loopFamily A K) := by
+`r < s ≤ 3r/2`, lie in `A`, the set `K` lies in the closed disk of radius `r` around `c` and the
+complement of `O` lies outside the open disk of radius `3r/2`, the loops in `A` that separate `K`
+from the complement of `O` have extremal width at least `log (3/2) / 2π`. -/
+lemma extWidth_loopFamily_ge {A K O : Set ℂ} {c : ℂ} {r : ℝ} (hr : 0 < r)
+    (hK : ∀ z ∈ K, ‖z - c‖ ≤ r) (hO : ∀ w, w ∉ O → 3 / 2 * r ≤ ‖w - c‖)
+    (hA : ∀ s ∈ Ioc r (3 / 2 * r), ∀ t, c + circleLoop s t ∈ A) :
+    ENNReal.ofReal (Real.log (3 / 2) / (2 * π)) ≤ extWidth volume (loopFamily A K O) := by
   have hrR : r < 3 / 2 * r := by linarith
   set Γ := circleFamily r (3 / 2 * r) with hΓ
   set Γ' : Set (Measure ℂ) := (fun μ : Measure ℂ => μ.map (fun z => c + z)) '' Γ with hΓ'
-  have hsub : Γ' ⊆ loopFamily A K := by
+  have hsub : Γ' ⊆ loopFamily A K O := by
     rintro _ ⟨_, ⟨s, hs, rfl⟩, rfl⟩
     have hs0 : 0 < s := hr.trans hs.1
     have hloop := isLoop_circleLoop s
     refine ⟨fun t => c + circleLoop s t, ⟨contDiff_const.add hloop.1, fun t => ?_⟩, hA s hs,
-      fun z hz u hu => ?_, ?_⟩
+      separates_circle (fun z hz => (hK z hz).trans hs.1.le)
+        (fun w hw => hs.2.trans (hO w hw)), ?_⟩
     · show c + circleLoop s (t + 1) = c + circleLoop s t
       rw [hloop.2 t]
-    · obtain ⟨t, σ, hσ, h⟩ := exists_circleLoop_eq (z := z - c) (u := u)
-        (lt_of_le_of_lt (hK z hz) hs.1) hu
-      exact ⟨t, σ, hσ, show c + circleLoop s t = z + (σ : ℂ) * u by rw [h]; ring⟩
     · rw [loopMeasure_const_add hloop c, loopMeasure_circleLoop hs0]
   have h1 : extWidth volume Γ ≤ extWidth volume Γ' := by
     have h := extWidth_pullback_le (mX := volume) (mY := volume) (ΓX := Γ) (ΓY := Γ')
@@ -192,9 +179,7 @@ lemma extWidth_loopFamily_ge {A K : Set ℂ} {c : ℂ} {r : ℝ} (hr : 0 < r)
         rw [withDensity_const, one_smul]
         exact ⟨μ, hμ, rfl⟩)
     rwa [one_mul] at h
-  have h2 : extWidth volume Γ' ≤ extWidth volume (loopFamily A K) := by
-    unfold extWidth
-    exact ENNReal.inv_le_inv.2 (extLength_mono fun μ hμ => ⟨μ, hsub hμ, le_rfl⟩)
+  have h2 : extWidth volume Γ' ≤ extWidth volume (loopFamily A K O) := extWidth_mono hsub
   have hlog : 0 < Real.log (3 / 2) := Real.log_pos (by norm_num)
   have h0 : ENNReal.ofReal (Real.log (3 / 2) / (2 * π)) = extWidth volume Γ := by
     unfold extWidth
@@ -227,10 +212,15 @@ lemma ofReal_le_extWidth_concentric_loops (j : ℕ) :
   have hpow : (1 / 2 : ℝ) ^ j = 2 * (1 / 2 : ℝ) ^ (j + 1) := by
     rw [pow_succ]
     ring
-  refine extWidth_loopFamily_ge (c := 0) hr (fun z hz => ?_) (fun s hs t => ?_)
+  refine extWidth_loopFamily_ge (c := 0) hr (fun z hz => ?_) (fun w hw => ?_)
+    (fun s hs t => ?_)
   · have hz' : z ∈ closure (ball (0 : ℂ) ((1 / 2 : ℝ) ^ (j + 1))) := hz
     rw [closure_ball _ hr.ne', mem_closedBall_zero_iff] at hz'
     simpa using hz'
+  · have hw' : w ∉ ball (0 : ℂ) ((1 / 2 : ℝ) ^ j) := hw
+    rw [mem_ball_zero_iff, not_lt] at hw'
+    rw [sub_zero]
+    linarith
   · have hn : ‖circleLoop s t‖ = s := norm_pol (hr.trans hs.1).le _
     refine ⟨?_, ?_⟩
     · show 0 + circleLoop s t ∈ ball (0 : ℂ) ((1 / 2 : ℝ) ^ j)
@@ -283,10 +273,14 @@ theorem ConnectedNest.exists_divergentSubnest {S : Set ℂ} {c : ℂ} (D : Conne
     (ENNReal.ofReal_pos.2 (div_pos (Real.log_pos (by norm_num)) (by positivity))).ne'
     fun k => ?_⟩
   have hr : 0 < ρ (N^[k] 0) / 2 := half_pos (hρpos _)
-  refine extWidth_loopFamily_ge (c := c) hr (fun z hz => ?_) (fun s hs t => ?_)
+  refine extWidth_loopFamily_ge (c := c) hr (fun z hz => ?_) (fun w hw => ?_)
+    (fun s hs t => ?_)
   · have hz' : z ∈ closure (D.piece (N^[k + 1] 0)) := hz
     rw [Function.iterate_succ_apply'] at hz'
     exact (mem_ball_iff_norm.1 (hN _ hz')).le
+  · have hw' : w ∉ ball c (ρ (N^[k] 0)) := fun h => hw (hρsub (N^[k] 0) h)
+    rw [mem_ball_iff_norm, not_lt] at hw'
+    linarith [hρpos (N^[k] 0)]
   · have hn : ‖circleLoop s t‖ = s := norm_pol (hr.trans hs.1).le _
     refine ⟨?_, ?_⟩
     · refine hρsub (N^[k] 0) ?_

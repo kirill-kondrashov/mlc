@@ -13,21 +13,28 @@ step behind that estimate, the Grötzsch–Teichmüller argument, from the abstr
 of `Mlc/Research/ExtremalLength.lean`:
 
 * a *loop* is a closed curve of class `C¹`; its length measure is its arc length
-  (`loopMeasure`), and `loopFamily A K` is the family of the loops in `A` that go around every
-  point of `K` (they meet every ray that starts in `K`);
+  (`loopMeasure`), and `loopFamily A K O` is the family of the loops in `A` that separate `K`
+  from the complement of `O` (every path from a point of `K` to a point outside `O` meets the
+  loop): the separating curves of the annulus `O ∖ K`, whose extremal width is its modulus;
 * for a nest of pieces `P₀ ⊇ P₁ ⊇ …` around `c`, the loops in the annulus `Pⱼ ∖ cl P_{j+1}`
-  around `cl P_{j+1}` form the family `D.loops j`, and the extremal width of this family is the
-  modulus of the annulus (`extWidth`, `Mlc/Research/AnnulusModulus.lean` for the round case);
+  that separate `cl P_{j+1}` from the complement of `Pⱼ` form the family `D.loops j`, and the
+  extremal width of this family is the modulus of the annulus (`extWidth`,
+  `Mlc/Research/AnnulusModulus.lean` for the round case);
 * **Theorem `ConnectedNest.sum_extWidth_loops_le`**: if the piece `P_n` reaches the distance
   `δ` from `c`, the moduli of the first `n` annuli add up to at most
-  `2π log (4 (R + δ) / δ) / (2 log 2)²`, where `R` bounds the first piece. The proof combines
+  `2π log (4 (R + δ) / δ) / (log 2)²`, where `R` bounds the first piece. The proof combines
   the parallel law (the annuli are disjoint), and the metric `1 / |z - c|` truncated to
-  `δ/2 ≤ |z - c| ≤ R + δ`, for which every loop has length at least `2 log 2`
-  (`loop_length_ge`): a loop that stays outside the disk of radius `δ/2` goes around `c`, and a
-  loop that enters it crosses the annulus `δ/2 ≤ |z - c| ≤ δ` twice;
+  `δ/2 ≤ |z - c| ≤ R + δ`, for which every loop has length at least `log 2`
+  (`log_two_le_rhoLength_of_cover`): a loop that stays outside the disk of radius `δ/2` goes
+  around `c` (it meets every ray from `c`, `Separates.exists_ray`), and a loop that enters it
+  crosses the ring `δ/2 ≤ |z - c| ≤ δ`;
+* **Theorem `ConnectedNest.sum_extWidth_loops_le_coarse`** (Grötzsch's inequality for a
+  coarsening): the modulus of the annulus `Pₙ ∖ cl P_m` is at least the sum of the moduli of the
+  annuli `Pⱼ ∖ cl P_{j+1}` with `n ≤ j < m`; so grouping the levels of a nest can only increase
+  the moduli;
 * so the divergence of the sum of the moduli forces the pieces to shrink
-  (`shrinking_of_moduli`) and gives a `ParameterRealization` for every budget
-  (`ConnectedNest.parameterRealization`).
+  (`DivergentModuli.shrinking`) and gives a `ParameterRealization` for every budget
+  (`ConnectedNest.nonempty_parameterRealization`).
 
 The estimates use the area inequality of Mathlib in dimension one
 (`volume_image_le_lintegral_abs_deriv`) for the real functions `log |γ - c|` and `arg (γ - c)`.
@@ -275,12 +282,49 @@ end Length
 
 /-! ### The annuli of a nest -/
 
-/-- The family of the `C¹` loops in `A` that go around every point of `K`: each ray that starts in
-`K` meets the loop. A loop is recorded by its length measure. -/
-def loopFamily (A K : Set ℂ) : Set (Measure ℂ) :=
-  {μ | ∃ γ : ℝ → ℂ, IsLoop γ ∧ (∀ t, γ t ∈ A) ∧
-    (∀ z ∈ K, ∀ u : ℂ, ‖u‖ = 1 → ∃ t : ℝ, ∃ s : ℝ, 0 < s ∧ γ t = z + (s : ℂ) * u) ∧
-    μ = loopMeasure γ}
+/-- The loop `γ` separates `K` from the complement of `O`: every path from a point of `K` to a point
+outside `O` meets `γ`. -/
+def Separates (γ : ℝ → ℂ) (K O : Set ℂ) : Prop :=
+  ∀ z ∈ K, ∀ w, w ∉ O → ∀ (a b : ℝ) (p : ℝ → ℂ), a ≤ b → ContinuousOn p (Icc a b) →
+    p a = z → p b = w → ∃ t ∈ Icc a b, ∃ s : ℝ, p t = γ s
+
+lemma Separates.mono {γ : ℝ → ℂ} {K K' O O' : Set ℂ} (h : Separates γ K O) (hK : K' ⊆ K)
+    (hO : O ⊆ O') : Separates γ K' O' :=
+  fun z hz w hw a b hab p hp hpa hpb => h z (hK hz) w (fun hwO => hw (hO hwO)) a b hab p hp hpa hpb
+
+/-- The family of the `C¹` loops in `A` that separate `K` from the complement of `O`: the
+separating curves of the annulus `O ∖ K`, whose extremal width is its modulus. A loop is recorded
+by its length measure. -/
+def loopFamily (A K O : Set ℂ) : Set (Measure ℂ) :=
+  {μ | ∃ γ : ℝ → ℂ, IsLoop γ ∧ (∀ t, γ t ∈ A) ∧ Separates γ K O ∧ μ = loopMeasure γ}
+
+lemma loopFamily_mono {A A' K K' O O' : Set ℂ} (hA : A ⊆ A') (hK : K' ⊆ K) (hO : O ⊆ O') :
+    loopFamily A K O ⊆ loopFamily A' K' O' := by
+  rintro _ ⟨γ, hγ, hAγ, hsep, rfl⟩
+  exact ⟨γ, hγ, fun t => hA (hAγ t), hsep.mono hK hO, rfl⟩
+
+/-- A loop that separates `K` from the complement of a bounded set `O` and avoids `K` meets every
+ray that starts in `K`. -/
+lemma Separates.exists_ray {γ : ℝ → ℂ} {K O : Set ℂ} (hsep : Separates γ K O)
+    (hO : Bornology.IsBounded O) (hγK : ∀ s, γ s ∉ K) {z : ℂ} (hz : z ∈ K) {u : ℂ}
+    (hu : ‖u‖ = 1) : ∃ t : ℝ, ∃ s : ℝ, 0 < s ∧ γ t = z + (s : ℂ) * u := by
+  obtain ⟨R, hR⟩ := hO.subset_closedBall z
+  have hS : 0 < |R| + 1 := by positivity
+  have hw : z + ((|R| + 1 : ℝ) : ℂ) * u ∉ O := by
+    intro h
+    have h1 := mem_closedBall.1 (hR h)
+    rw [dist_eq_norm, add_sub_cancel_left, norm_mul, hu, mul_one, Complex.norm_real,
+      Real.norm_of_nonneg hS.le] at h1
+    linarith [le_abs_self R]
+  obtain ⟨τ, hτ, s, hs⟩ := hsep z hz _ hw 0 (|R| + 1) (fun τ => z + (τ : ℂ) * u) hS.le
+    (by fun_prop) (by simp) rfl
+  refine ⟨s, τ, ?_, hs.symm⟩
+  rcases hτ.1.eq_or_lt with h0 | h0
+  · exfalso
+    apply hγK s
+    rw [← hs, ← h0]
+    simpa using hz
+  · exact h0
 
 /-- The length measure of a loop in `A` vanishes outside `A`. -/
 lemma loopMeasure_compl_eq_zero {γ : ℝ → ℂ} (hγ : IsLoop γ) {A : Set ℂ} (hA : MeasurableSet A)
@@ -315,9 +359,10 @@ variable {S : Set ℂ} {c : ℂ} (D : ConnectedNest S c)
 /-- The `j`-th annulus of the nest: the piece `j` without the closure of the piece `j + 1`. -/
 def annulus (j : ℕ) : Set ℂ := D.piece j \ closure (D.piece (j + 1))
 
-/-- The loops of the `j`-th annulus that go around the closure of the next piece. Their extremal
-width is the modulus of the annulus. -/
-def loops (j : ℕ) : Set (Measure ℂ) := loopFamily (D.annulus j) (closure (D.piece (j + 1)))
+/-- The loops of the `j`-th annulus: the `C¹` loops in it that separate the closure of the next
+piece from the complement of the piece `j`. Their extremal width is the modulus of the annulus. -/
+def loops (j : ℕ) : Set (Measure ℂ) :=
+  loopFamily (D.annulus j) (closure (D.piece (j + 1))) (D.piece j)
 
 lemma antitone_piece : Antitone D.piece := antitone_nat_of_succ_le D.nested
 
@@ -338,15 +383,41 @@ lemma loops_compl_null {j : ℕ} {μ : Measure ℂ} (hμ : μ ∈ D.loops j) :
   obtain ⟨γ, hγ, hA, -, rfl⟩ := hμ
   exact loopMeasure_compl_eq_zero hγ (D.measurableSet_annulus j) hA
 
+/-- The loops of an annulus of the nest are loops of every coarser annulus `Pₙ ∖ cl P_m` that
+contains it. -/
+lemma loops_subset_coarse {n m j : ℕ} (hn : n ≤ j) (hm : j + 1 ≤ m) :
+    D.loops j ⊆
+      loopFamily (D.piece n \ closure (D.piece m)) (closure (D.piece m)) (D.piece n) :=
+  loopFamily_mono
+    (fun _ hz => ⟨D.antitone_piece hn hz.1, fun h => hz.2 (closure_mono (D.antitone_piece hm) h)⟩)
+    (closure_mono (D.antitone_piece hm)) (D.antitone_piece hn)
+
+/-- **Grötzsch's inequality for a coarsening of a nest.** The modulus of the annulus
+`Pₙ ∖ cl P_m` is at least the sum of the moduli of the annuli `Pⱼ ∖ cl P_{j+1}` with
+`n ≤ j < m`: the loops of the thin annuli are loops of the thick one, and the annuli are disjoint
+(the parallel law). Grouping the levels of a nest can only increase its moduli. -/
+theorem sum_extWidth_loops_le_coarse (n m : ℕ) :
+    ∑ j ∈ Finset.Ico n m, extWidth volume (D.loops j) ≤
+      extWidth volume
+        (loopFamily (D.piece n \ closure (D.piece m)) (closure (D.piece m)) (D.piece n)) := by
+  refine (extWidth_parallel_finset (m := volume) (Finset.Ico n m) (Γ := D.loops)
+    (Ω := D.annulus) (fun j _ => D.measurableSet_annulus j) (D.pairwiseDisjoint_annulus _)
+    (fun j _ μ hμ => D.loops_compl_null hμ)).trans (extWidth_mono ?_)
+  intro μ hμ
+  obtain ⟨j, hj, hμj⟩ := Set.mem_iUnion₂.1 hμ
+  obtain ⟨hnj, hjm⟩ := Finset.mem_Ico.1 hj
+  exact D.loops_subset_coarse hnj hjm hμj
+
 /-- **The moduli of the annuli of a nest add up to a bounded amount while the nest keeps a point
 at distance `δ` from `c`.** The first piece lies in the disk of radius `R` around `c`. The sum of
 the extremal widths of the first `n` annuli is at most
 `2π log (4 (R + δ) / δ) / (log 2)²` if the closure of the piece `n` contains a point at distance at
 least `δ` from `c`.
 
-Each loop of an annulus avoids `c` and goes around `c` and around that point, so it has length at
-least `log 2` for the metric `1 / |z - c|` on the ring `δ/2 ≤ |z - c| ≤ R + δ`, whose area is at
-most `2π log (4 (R + δ) / δ)`; the annuli are disjoint, which gives the parallel law. -/
+Each loop of an annulus avoids `c` and separates `c` and that point from the complement of the
+piece, so it has length at least `log 2` for the metric `1 / |z - c|` on the ring
+`δ/2 ≤ |z - c| ≤ R + δ`, whose area is at most `2π log (4 (R + δ) / δ)`; the annuli are disjoint,
+which gives the parallel law. -/
 theorem sum_extWidth_loops_le {R δ : ℝ} (hδ : 0 < δ) (hR : closure (D.piece 0) ⊆ closedBall c R)
     {n : ℕ} {z : ℂ} (hz : z ∈ closure (D.piece n)) (hzδ : δ ≤ dist z c) :
     ∑ j ∈ Finset.range n, extWidth volume (D.loops j) ≤
@@ -367,7 +438,7 @@ theorem sum_extWidth_loops_le {R δ : ℝ} (hδ : 0 < δ) (hR : closure (D.piece
       minLength (ringMetric c (δ / 2) (R + δ)) (⋃ j ∈ Finset.range n, D.loops j) := by
     refine le_minLength fun μ hμ => ?_
     obtain ⟨j, hj, hμj⟩ := Set.mem_iUnion₂.1 hμ
-    obtain ⟨γ, hγ, hA, hcov, rfl⟩ := hμj
+    obtain ⟨γ, hγ, hA, hsep, rfl⟩ := hμj
     have hjn : j + 1 ≤ n := Finset.mem_range.1 hj
     have hzj : z ∈ closure (D.piece (j + 1)) := closure_mono (D.antitone_piece hjn) hz
     have hcj : c ∈ closure (D.piece (j + 1)) := D.mem_closure (j + 1)
@@ -377,6 +448,11 @@ theorem sum_extWidth_loops_le {R δ : ℝ} (hδ : 0 < δ) (hR : closure (D.piece
         (subset_closure (hA t).1)))
       rw [dist_eq_norm] at h
       linarith
+    have hbdd : Bornology.IsBounded (D.piece j) :=
+      (D.compact_closure j).isBounded.subset subset_closure
+    have hcov : ∀ z ∈ closure (D.piece (j + 1)), ∀ u : ℂ, ‖u‖ = 1 →
+        ∃ t : ℝ, ∃ s : ℝ, 0 < s ∧ γ t = z + (s : ℂ) * u := fun z hz u hu =>
+      hsep.exists_ray hbdd (fun s => (hA s).2) hz hu
     obtain ⟨u, hu, hnorm⟩ := exists_unit_norm_add hzc
     obtain ⟨b, s, hs, hγb⟩ := hcov z hzj u hu
     refine log_two_le_rhoLength_of_cover hγ hr h2r hne hin (hcov c hcj) (b := b) ?_

@@ -113,10 +113,13 @@ segments of \((x_0,x_1]\times(y_0,y_1]\) have extremal length \((x_1-x_0)/(y_1-y
 computes the widths of the rectangles of Figure~13. For the nested pieces of a
 parameter neighbourhood the Gr\"otzsch--Teichm\"uller estimate is proved: if the closure of
 the piece \(n\) of a nest in the disk \(B(c,R)\) has a point at distance \(\delta\) from \(c\),
-the moduli of its first \(n\) annuli (the extremal widths of the \(C^1\) loops around the next
-piece) add up to at most \(2\pi\log(4(R+\delta)/\delta)/(\log 2)^2\)
+the moduli of its first \(n\) annuli (the extremal widths of the \(C^1\) loops that separate the
+next piece from the complement of the piece) add up to at most \(2\pi\log(4(R+\delta)/\delta)/(\log 2)^2\)
 (\texttt{ConnectedNest.sum\_extWidth\_loops\_le} in \texttt{Mlc/Research/NestModulus.lean}),
-so a nest whose moduli add up to infinity shrinks to \(c\). Conversely, a shrinking nest has a
+so a nest whose moduli add up to infinity shrinks to \(c\). Grouping the levels of a nest can
+only increase its moduli: the modulus of \(P_n\setminus\overline{P_m}\) is at least the sum of
+the moduli of the annuli \(P_j\setminus\overline{P_{j+1}}\), \(n\le j<m\)
+(\texttt{ConnectedNest.sum\_extWidth\_loops\_le\_coarse}, Gr\"otzsch's inequality). Conversely, a shrinking nest has a
 subnest whose annuli contain round annuli of modulus \(\log(3/2)/2\pi\), so Lemma~T is equivalent
 to the phase--parameter relation in moduli form (\texttt{Geometry.transfer\_iff\_phaseParameter}),
 which the concentric disks satisfy. What is open is the construction of the nest from an a priori

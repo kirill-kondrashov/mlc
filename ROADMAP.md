@@ -267,24 +267,31 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   function of the rectangle.
 * `Mlc/Research/NestModulus.lean`: the geometric half of Lemma T, the Grötzsch–Teichmüller
   estimate for the annuli of a nest. For a nest of connected parameter pieces `P₀ ⊇ P₁ ⊇ …`
-  around `c`, the loops of the annulus `Pⱼ ∖ cl P_{j+1}` are the `C¹` closed curves in it that go
-  around `cl P_{j+1}` (they meet every ray that starts there), recorded by their arc-length
+  around `c`, the loops of the annulus `Pⱼ ∖ cl P_{j+1}` are the `C¹` closed curves in it that
+  separate `cl P_{j+1}` from the complement of `Pⱼ` (every path from the first to the second
+  meets the loop), recorded by their arc-length
   measures (`ConnectedNest.loops`); their extremal width is the modulus of the annulus.
   `ConnectedNest.sum_extWidth_loops_le`: if `P₀ ⊂ B(c, R)` and the closure of `Pₙ` contains a
   point at distance `δ` from `c`, the moduli of the first `n` annuli add up to at most
   `2π log (4 (R + δ) / δ) / (log 2)²`. The proof is the parallel law for the disjoint annuli and
   the metric `1/|z − c|` on the ring `δ/2 ≤ |z − c| ≤ R + δ`, whose area is at most
-  `2π log (4 (R + δ) / δ)`: a loop that stays outside the disk of radius `δ/2` has length at
-  least `2π` (the argument of `γ − c` sweeps `(−π, π)`), and a loop that enters the disk and
-  reaches distance `δ` crosses the ring and has length at least `log 2` (the function
-  `log |γ − c|` sweeps `[log δ/2, log δ]`); both are the area inequality
+  `2π log (4 (R + δ) / δ)`: a loop that stays outside the disk of radius `δ/2` meets every ray
+  from `c`, so it has length at least `2π` (the argument of `γ − c` sweeps `(−π, π)`), and a loop
+  that enters the disk and reaches distance `δ` crosses the ring and has length at least `log 2`
+  (the function `log |γ − c|` sweeps `[log δ/2, log δ]`); both are the area inequality
   `λ(f(S)) ≤ ∫_S |f′|` of Mathlib in dimension one. So pieces with `DivergentModuli` (moduli that
   add up to infinity) shrink to `c` and have the `SeparationEstimate` of every cost
-  (`ConnectedNest.nonempty_parameterRealization`). *Faithfulness:* the family of `C¹` loops is
-  a subfamily of all curves that go around the next piece, so its extremal width is at most the
-  classical modulus (and expected to equal it for annuli with piecewise smooth boundary, as the
-  parapuzzle pieces have, which is not proved here); a rough annulus can have fewer loops and a
-  smaller width, which only strengthens the hypothesis `DivergentModuli`.
+  (`ConnectedNest.nonempty_parameterRealization`).
+  `ConnectedNest.sum_extWidth_loops_le_coarse` is Grötzsch's inequality for a coarsening: the
+  modulus of `Pₙ ∖ cl P_m` is at least the sum of the moduli of the annuli `Pⱼ ∖ cl P_{j+1}`,
+  `n ≤ j < m`, because their loops are loops of the thick annulus and they are disjoint; so
+  grouping the levels of a nest (for instance in blocks around the micro-copies of `M`) can only
+  increase the moduli. *Faithfulness:* the separating `C¹` loops of an annulus are separating
+  curves, so their extremal width is at most the classical modulus (the extremal width of all
+  separating curves), with equality expected for annuli with piecewise smooth boundary, as the
+  parapuzzle pieces have, which is not proved here. So `DivergentModuli` implies that the classical
+  moduli add up to infinity, and, by `transfer_iff_phaseParameter` below, it is equivalent to
+  Lemma T itself.
 * `Mlc/Research/PhaseParameter.lean`: `Geometry.PhaseParameter`, the phase–parameter relation in
   moduli form (an a priori bound on the tower of `c` gives a nest in `M` around `c` with
   divergent moduli), and `Geometry.transfer_iff_phaseParameter : Transfer ↔ PhaseParameter`. The
