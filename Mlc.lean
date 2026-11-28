@@ -14,6 +14,7 @@ import Mlc.Research.CollarCriterion
 import Mlc.Research.NestRate
 import Mlc.Research.RoundAnnulus
 import Mlc.Research.RoundTower
+import Mlc.Research.Stacking
 import Mlc.Research.LevelTower
 import Mlc.Research.Dimension
 import Mlc.Research.PeanoObject

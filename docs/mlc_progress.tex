@@ -160,7 +160,13 @@ lower bound \(w\) of the moduli the connected neighbourhoods of the center are r
 \(O(\log(1/\varepsilon))\) for the radius \(\varepsilon\); collars at the jumps of a level tower,
 the linear dichotomy and the phase--parameter comparison give the local connectivity of \(M\) at the
 parameter (\texttt{Geometry.locallyConnectedAt\_of\_collars\_and\_comparison} in
-\texttt{Mlc/Research/CollarCriterion.lean}), and these three hypotheses are open. The loops with
+\texttt{Mlc/Research/CollarCriterion.lean}), and these three hypotheses are open. The quasi-additivity
+form of Lemma~D is also checked: if the annulus of the level \(k+n\) contains \(p\) disjoint
+sub-annuli, each of modulus at least \(c'/(W_k+A')\), their moduli add up (Gr\"otzsch's inequality,
+\texttt{sum\_extWidth\_loopFamily\_le}), so \(c'pW_{k+n}\le W_k+A'\) and the linear dichotomy holds
+(\texttt{LevelTower.linearDichotomy\_of\_stacked} in \texttt{Mlc/Research/Stacking.lean}); the
+existence of such sub-annuli, the pullbacks of the shallower annulus along the critical orbit, is
+open. The loops with
 which the moduli are measured are curves of
 Hausdorff dimension at most~1, while the boundary of the Mandelbrot set is a fractal of Hausdorff
 dimension~2 (Shishikura); a \(C^1\) chart preserves the Hausdorff dimension, a quasi-conformal map

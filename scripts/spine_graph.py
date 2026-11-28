@@ -37,6 +37,7 @@ from programme import (
     NEST_ROOTS,
     PEANO_ROOTS,
     RECTANGLE_ROOTS,
+    STACKING_ROOTS,
     CLASSES,
     GROTZSCH_ROOT,
     LEMMAS,
@@ -190,6 +191,7 @@ SIDE_ROOTS = (
     *COLLAR_ROOTS,
     *LEVEL_JUMP_ROOTS,
     *LEVEL_TRANSFER_ROOTS,
+    *STACKING_ROOTS,
     *DIMENSION_ROOTS,
     *PEANO_ROOTS,
     *CRITERION_ROOTS,
@@ -948,6 +950,28 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         ps_nodes["ps4"],
     )
     side_bud(
+        STACKING_ROOTS,
+        "prog:stacking",
+        "Lemma D from stacked annuli",
+        "p disjoint sub-annuli ⇒ linear dichotomy",
+        "Checked in Lean (LevelTower.StackedAnnuli, LevelTower.linearDichotomy_of_stacked, "
+        "sum_extWidth_loopFamily_le). The linear dichotomy asks, for every threshold C, for "
+        "constants c and A such that for every pair of levels k, k+n of relative period p "
+        "either c p W_{k+n} − A p ≤ W_k or the degeneration jumps at the level k+n. The "
+        "quasi-additivity mechanism of the survey (§4.2, (4.5)) gives it geometrically: the "
+        "annulus of the level k+n contains p pairwise disjoint sub-annuli, the pullbacks of "
+        "the annulus of the level k, each of modulus at least c′/(W_k + A′), where A′ is an "
+        "additive loss of the thin–thick decomposition. The moduli of disjoint sub-annuli "
+        "add up (Grötzsch's inequality, the parallel law), so the modulus of the deeper "
+        "annulus is at least p c′/(W_k + A′), that is c′ p W_{k+n} ≤ W_k + A′, and the "
+        "linear dichotomy follows because A′ ≤ A′ p. That the annuli of the levels of the "
+        "pseudo-Siegel towers contain such stacked sub-annuli is the proposed content of "
+        "Lemma D and stays open; in the round model the sub-annuli can be taken concentric, "
+        "so the hypothesis demands there no more than the amplification itself (this "
+        "converse is not formalized).",
+        ps_nodes["ps4"],
+    )
+    side_bud(
         PULLBACK_ROOT,
         "prog:pullback",
         "Pullback law (contraction)",
@@ -1316,7 +1340,9 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "comparison give the local connectivity of M at c; in the form that follows the three "
         "lemmas of Problem 4.3, the Teichmüller contraction (TC′), collars at the jumps at "
         "the levels of large relative period (G), the linear dichotomy (D) and the "
-        "comparison. These hypotheses are "
+        "comparison, and with Lemma D in the form of stacked annuli (see \"Lemma D from "
+        "stacked annuli\") every hypothesis but TC′ is a statement about moduli of annuli. "
+        "These hypotheses are "
         "explicit geometric statements and none is proved; the concentric nest, whose annuli "
         "are their own collars, shows that the hypotheses of the collar criterion are "
         "satisfiable.",

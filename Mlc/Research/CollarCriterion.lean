@@ -2,6 +2,7 @@ import Mlc.Research.Collar
 import Mlc.Research.Dimension
 import Mlc.Research.LevelTower
 import Mlc.Research.NestRate
+import Mlc.Research.Stacking
 
 /-!
 # The Yoccoz criterion in modulus form, with a logarithmic scale
@@ -37,7 +38,9 @@ nest, with a scale that is logarithmic in the size of the neighbourhood.
   connectivity of `M` at `c`; `Geometry.locallyConnectedAt_of_tails_collars_and_comparison` is the
   form that follows the three lemmas of Problem 4.3: the Teichmüller contraction for the tower
   (TC′), collars at the jumps at the levels of large relative period (G), the linear dichotomy
-  (D), and the comparison. These hypotheses are explicit geometric statements: the
+  (D), and the comparison; `Geometry.locallyConnectedAt_of_collars_stacked_and_comparison` replaces
+  the linear dichotomy by stacked annuli (`Stacking.lean`). These hypotheses are explicit geometric
+  statements: the
   collars are the content proposed for the pseudo-Siegel disks (sub-step PS4), the linear
   dichotomy is Lemma D, and the comparison is the phase–parameter relation in moduli form. None of
   them is proved here.
@@ -237,6 +240,23 @@ theorem locallyConnectedAt_of_tails_collars_and_comparison (h : G.PhaseParameter
     LocallyConnectedAtSet MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
   G.locallyConnectedAt_of_aPrioriBounds h hc L hL
     (L.aPrioriBounds_of_tails_collars hC₀ hK₀ hμ₀ hT hcol hD)
+
+/-- **Lemmas G and D as geometric statements, and the comparison, give local connectivity.** The
+Teichmüller contraction for the tower of `c` (Lemma TC′), collars of dilatation at most `K₀` and
+modulus at least `μ₀ / 2π` at the jumps at the levels of large relative period (Lemma G), stacked
+annuli at the pairs of levels for every threshold (Lemma D, `LevelTower.StackedAnnuli`), and the
+phase–parameter comparison of moduli give the local connectivity of `M` at `c`. Of the four
+hypotheses only the first is not a statement about moduli of annuli; none is proved here. -/
+theorem locallyConnectedAt_of_collars_stacked_and_comparison (h : G.PhaseParameterComparison)
+    {c : ℂ} (hc : c ∈ MLC.Quadratic.MandelbrotSet) (L : LevelTower)
+    (hL : G.tower c = some L.toWidthTower) {P₀ : ℕ} {C₀ K₀ μ₀ : ℝ} (hC₀ : 0 < C₀)
+    (hK₀ : 0 < K₀) (hμ₀ : 0 < μ₀) (hT : L.Teichmuller)
+    (hcol : ∀ m, P₀ < L.rel m → L.Jumps C₀ m → ∃ Kd r R : ℝ, Kd ≤ K₀ ∧
+      μ₀ ≤ Real.log (R / r) ∧ IsCollar (L.filled (m + 1)) (L.target (m + 1)) Kd r R)
+    (hst : ∀ C : ℝ, 0 < C → ∃ c' : ℝ, 0 < c' ∧ ∃ A' : ℝ, 0 ≤ A' ∧ L.StackedAnnuli C c' A') :
+    LocallyConnectedAtSet MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
+  G.locallyConnectedAt_of_tails_collars_and_comparison h hc L hL hC₀ hK₀ hμ₀ hT hcol
+    (L.linearDichotomy_of_stacked hst)
 
 end Geometry
 

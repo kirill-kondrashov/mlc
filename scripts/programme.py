@@ -82,7 +82,12 @@ CRITERION_ROOTS = (
     "MLC.Research.Geometry.exists_relativePiece_of_comparison",
     "MLC.Research.Geometry.locallyConnectedAt_of_collars_and_comparison",
     "MLC.Research.Geometry.locallyConnectedAt_of_tails_collars_and_comparison",
+    "MLC.Research.Geometry.locallyConnectedAt_of_collars_stacked_and_comparison",
     "MLC.Research.concentricNest_collars",
+)
+# The results of Mlc/Research/Stacking.lean that no other result uses.
+STACKING_ROOTS = (
+    "MLC.Research.LevelTower.linearDichotomy_of_stacked",
 )
 # The results of Mlc/Research/Dimension.lean that no other result uses.
 DIMENSION_ROOTS = (

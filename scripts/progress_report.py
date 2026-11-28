@@ -74,6 +74,7 @@ RATE_THEOREM = re.compile(
 CRITERION_THEOREM = re.compile(
     r"^\s*theorem\s+locallyConnectedAt_of_collars_and_comparison\b", re.MULTILINE
 )
+STACKING_THEOREM = re.compile(r"^\s*theorem\s+linearDichotomy_of_stacked\b", re.MULTILINE)
 MULTIPLICITY_THEOREM = re.compile(
     r"^\s*theorem\s+extWidth_le_pow_two_mul_fc_iterate\b", re.MULTILINE
 )
@@ -127,6 +128,8 @@ PROGRESS_MILESTONES = (
     ("The Yoccoz criterion in modulus form: collars at the jumps, the linear dichotomy and the "
      "phase–parameter comparison give local connectivity of M at a parameter, with a "
      "logarithmic scale", CRITERION_THEOREM, 1),
+    ("Lemma D from stacked annuli: p disjoint sub-annuli of definite modulus give the linear "
+     "dichotomy (Grötzsch's inequality for sub-annuli)", STACKING_THEOREM, 1),
     ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )

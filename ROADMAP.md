@@ -432,6 +432,23 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   comparison give the local connectivity of `M` at `c`. The collars, Lemma D and the comparison are
   the explicit geometric statements that are open; the concentric nest has uniform collars
   (`concentricNest_collars`), so the hypotheses of the criterion are satisfiable.
+* `Mlc/Research/Stacking.lean`: Lemma D as a geometric statement. Grötzsch's inequality for
+  pairwise disjoint measurable sub-annuli (`sum_extWidth_loopFamily_le`: the moduli of the
+  sub-annuli add up to at most the modulus of the annulus that contains them, for the loops that
+  separate the same `K` from the complement of the same `O`). `LevelTower.StackedAnnuli L C c' A'`:
+  for every pair of levels `k`, `k + n`, either the degeneration jumps by the factor `C` at the level
+  `k + n`, or the annulus of the level `k + n` contains `p = period k n` pairwise disjoint
+  measurable sub-annuli, each of modulus at least `c' / (W_k + A')`. This is the quasi-additivity
+  mechanism of §4.2 (the deeper annulus collects the moduli of the pullbacks of the shallower one,
+  with an additive loss `A'` of the thin–thick decomposition). If it holds for every threshold, the
+  linear dichotomy holds (`LevelTower.linearDichotomy_of_stacked`): the moduli add up,
+  `c' p W_{k+n} ≤ W_k + A'`, and `A' ≤ A' p`. With the collars of Lemma G this gives
+  `Geometry.locallyConnectedAt_of_collars_stacked_and_comparison`: the Teichmüller contraction,
+  collars at the jumps at large relative period, stacked annuli and the comparison give the local
+  connectivity of `M` at `c`. The last three are statements about moduli of annuli; that the levels
+  of the pseudo-Siegel towers satisfy them is open. In the round model the sub-annuli can be taken
+  concentric, so there the hypothesis demands no more than the amplification inequality (this
+  converse is not formalized).
 * `Mlc/Research/Dimension.lean`: the dimension of the fractal against the smooth curves of the
   moduli. The image of a `C¹` loop has Hausdorff dimension at most `1` (`IsLoop.dimH_range_le`), so
   countably many loops cover no set of larger dimension. A `C¹` embedding with invertible
@@ -609,7 +626,11 @@ roadmap, not claims of the survey.
   extremal widths and check that it gives the linear error by the argument of §4.3. The
   main term `p W(f₁)` of the amplification is the parallel law (`extWidth_parallel_finset`);
   what remains is the error, that is the thin–thick decomposition with a linear error in the
-  dynamical setting.
+  dynamical setting. The quasi-additivity form of the main term is checked in `Stacking.lean`:
+  `p` disjoint sub-annuli of the deeper annulus, each of modulus at least `c'/(W_k + A')`, give the
+  linear dichotomy (`LevelTower.linearDichotomy_of_stacked`); the sub-annuli, pullbacks of the
+  shallower annulus along the critical orbit with the additive loss `A'`, are the dynamical
+  statement that is open.
 * **VJ.** The minimal connected hull in `K_c` of the Cantor small Julia set and the critical
   return window exists in Lean (`VirtualJuliaNest.carrier`); the lemma is that it lies inside
   `J_c` and is partially invariant. First step (proposal): the real parameters, where the
