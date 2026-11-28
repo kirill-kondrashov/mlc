@@ -39,7 +39,9 @@ The repository contains a checked conditional reduction
 \]
 The checked proof uses only \texttt{propext}, \texttt{Quot.sound}, and
 \texttt{Classical.choice}. It contains no project \texttt{axiom},
-\texttt{sorry}, or \texttt{admit}.
+\texttt{sorry}, or \texttt{admit}. The two inputs are operational forms of Dudko's Problems~4.3
+and~4.4: the survey states that the problems, together with the arguments of its \S4.1--\S4.4,
+should imply MLC, and does not state them in this form (see \texttt{Mlc/Dudko.lean}).
 
 The currently proved foundation includes:
 
@@ -88,9 +90,10 @@ necessary for the a priori bounds (\texttt{aPrioriBounds\_iff\_jumpCap}), so it 
 the weakest hypothesis of its shape, and the Teichm\"uller contraction caps the
 jumps at the levels of small relative period, so that the open content is the
 tail at large relative period. Both ingredients are necessary
-(\texttt{uniformities\_necessary}): for every unbounded \(h\), a tower with
-unbounded relative periods satisfies the Teichm\"uller contraction, a uniform
-growth bound and the dichotomy with the error \(p\,h(p)\) and has unbounded
+(\texttt{uniformities\_necessary}): for every monotone, positive and unbounded \(h\), a tower with
+unbounded relative periods satisfies the Teichm\"uller contraction and the dichotomy with the error
+\(p\,h(p)\), has a uniform growth bound whenever \(h\) grows by a bounded factor (as for
+\(h(p)=p+1\), the quadratic error), and has unbounded
 degeneration, so a linear error is the threshold; and the tower of widths
 \((k+1)!\) satisfies the Teichm\"uller contraction and the dichotomy with a
 linear error but has uncapped jumps and unbounded degeneration. The widths of the
@@ -100,7 +103,106 @@ degeneration is unbounded in some classes of unbounded satellite type
 case. The conformal estimates behind the Gr\"otzsch step (4.6) and the Teichm\"uller
 contraction are proved in \texttt{Mlc/Research/ExtremalLength.lean}: the series law,
 the parallel law, \(W(G\setminus G')\ge\delta^{-1}W(G)\) and the pullback law
-\(W(\Gamma_X)\le d\,W(\Gamma_Y)\). The three statements of Problem~4.3 and the a priori
+\(W(\Gamma_X)\le d\,W(\Gamma_Y)\). Its hypothesis, the area formula with multiplicity at most
+\(d\), is proved for the iterates of \(f_c(z)=z^2+c\) with \(d=2^p\)
+(\texttt{extWidth\_le\_pow\_two\_mul\_fc\_iterate} in \texttt{Mlc/Research/AreaMultiplicity.lean}):
+the width of a family pulled back by \(f_c^p\) grows by at most \(2^p\). The abstract extremal length agrees with the classical
+modulus on the model case: in the plane with Lebesgue measure, the radial segments of the
+annulus \(\{r<|z|<R\}\) have extremal length \(\log(R/r)/2\pi\) and its separating circles
+\(2\pi/\log(R/r)\) (\texttt{extLength\_radialFamily}, \texttt{extLength\_circleFamily} in
+\texttt{Mlc/Research/AnnulusModulus.lean}). The same holds for a rectangle: the horizontal
+segments of \((x_0,x_1]\times(y_0,y_1]\) have extremal length \((x_1-x_0)/(y_1-y_0)\)
+(\texttt{extLength\_horizFamily} in \texttt{Mlc/Research/RectangleModulus.lean}), which
+computes the widths of the rectangles of Figure~13. For the nested pieces of a
+parameter neighbourhood the Gr\"otzsch--Teichm\"uller estimate is proved: if the closure of
+the piece \(n\) of a nest in the disk \(B(c,R)\) has a point at distance \(\delta\) from \(c\),
+the moduli of its first \(n\) annuli (the extremal widths of the \(C^1\) loops that separate the
+next piece from the complement of the piece) add up to at most \(2\pi\log(4(R+\delta)/\delta)/(\log 2)^2\)
+(\texttt{ConnectedNest.sum\_extWidth\_loops\_le} in \texttt{Mlc/Research/NestModulus.lean}),
+so a nest whose moduli add up to infinity shrinks to \(c\). Grouping the levels of a nest can
+only increase its moduli: the modulus of \(P_n\setminus\overline{P_m}\) is at least the sum of
+the moduli of the annuli \(P_j\setminus\overline{P_{j+1}}\), \(n\le j<m\)
+(\texttt{ConnectedNest.sum\_extWidth\_loops\_le\_coarse}, Gr\"otzsch's inequality). Conversely, a shrinking nest has a
+subnest whose annuli contain round annuli of modulus \(\log(3/2)/2\pi\), so Lemma~T is equivalent
+to the phase--parameter relation in moduli form (\texttt{Geometry.transfer\_iff\_phaseParameter}),
+and the concentric disks give an example of a nest with divergent moduli. The extremal width of a
+family of curves is at most \(K\) times that of any family that contains the images of its curves
+under a \(C^1\) embedding of dilatation at most \(K\); such an embedding carries a nest to a nest
+whose annuli have at least \(1/K\) times the moduli, so divergent moduli are transported by such a
+chart, and \(K=1\) for an injective holomorphic map with non-vanishing derivative
+(\texttt{ConnectedNest.DivergentModuli.map} in \texttt{Mlc/Research/QuasiInvariance.lean}). The
+same holds for the modulus of any annular region, and it gives the collar estimate: if the
+annulus \(V\setminus E\) of a level contains the image of a round annulus \(r<|w|\le R\) under
+such a chart of dilatation \(K_d\), going around \(E\), its modulus is at least
+\(\log(R/r)/(2\pi K_d)\), so a nest whose annuli have uniform collars has divergent moduli
+(\texttt{IsCollar.ofReal\_le\_extWidth}, \texttt{ConnectedNest.divergentModuli\_of\_collars} in
+\texttt{Mlc/Research/Collar.lean}). For the round annulus \(r<|z-c|\le R\) the modulus is exactly
+\(\log(R/r)/2\pi\) (\texttt{extWidth\_loopFamily\_round} in \texttt{Mlc/Research/RoundAnnulus.lean}; the degeneration of
+a round level is \(2\pi/\log(R/r)\), \texttt{LevelTower.width\_eq\_of\_round}),
+and the size of a piece of a nest is controlled by the total modulus before it: if the first piece
+lies in \(B(c,R)\) and the first \(n\) annuli have total modulus at least \(s\) with
+\(\kappa s\ge\log 8\), \(\kappa=(\log 2)^2/2\pi\), then the piece \(n\) lies in
+\(B(c,8Re^{-\kappa s})\) (a Teichm\"uller-type estimate with non-optimal constants,
+\texttt{ConnectedNest.closure\_piece\_subset\_closedBall\_of\_sum} in
+\texttt{Mlc/Research/NestRate.lean}), so uniform collars give pieces that shrink geometrically.
+A level whose annulus has a collar has degeneration at most
+\(2\pi K_d/\log(R/r)\), so collars of bounded dilatation and definite modulus at the levels that
+follow a jump cap the jumps (Lemma~G in the reading of PS4), and a comparison of the moduli of
+the levels with the moduli of a parameter nest gives Lemma~T
+(\texttt{LevelTower.jumpCap\_of\_collars}, \texttt{Geometry.transfer\_of\_comparison} in
+\texttt{Mlc/Research/LevelTower.lean}). The modulus is taken as the extremal width of the \(C^1\)
+loops of the annulus, which is at most the classical modulus and equals it for round annuli, and
+the sets of the levels are data of the dictionary: every width tower is realized by round levels
+(\texttt{WidthTower.exists\_levelTower} in \texttt{Mlc/Research/RoundTower.lean}), so the
+hypotheses are meaningful for the sets that the dictionary provides. The chain closes at a point: a set is locally connected at
+the center of a nest whose moduli add up to infinity (the Yoccoz criterion), and for a uniform
+lower bound \(w\) of the moduli the connected neighbourhoods of the center are reached at depth
+\(O(\log(1/\varepsilon))\) for the radius \(\varepsilon\), a bound on the depth and not on the size of
+the neighbourhood; collars at the jumps of a level tower,
+the linear dichotomy and the phase--parameter comparison give the local connectivity of \(M\) at the
+parameter (\texttt{Geometry.locallyConnectedAt\_of\_collars\_and\_comparison} in
+\texttt{Mlc/Research/CollarCriterion.lean}), and these three hypotheses are open. A proposed
+sufficient geometric form of Lemma~D is also checked: if for every pair of levels and every
+threshold \(C\), with uniform constants \(c'>0\) and \(A'\ge0\), either the degeneration jumps by the
+factor \(C\) at the level \(k+n\) or the annulus of that level contains \(p\) disjoint sub-annuli,
+each of modulus at least \(c'/(W_k+A'p)\) (\(p\) the relative period), their moduli add up
+(Gr\"otzsch's inequality, \texttt{sum\_extWidth\_loopFamily\_le}), so \(c'pW_{k+n}\le W_k+A'p\) and
+the linear dichotomy holds (\texttt{LevelTower.linearDichotomy\_of\_stacked} in
+\texttt{Mlc/Research/Stacking.lean}); in the round model the two are equivalent
+(\texttt{WidthTower.linearDichotomy\_iff\_stacked}), and the existence of such sub-annuli in the
+dynamical levels is open. The sets of the levels are the filled Julia sets and range domains of
+quadratic-like restrictions for the quadratic-like classes and the regularized sets of the
+pseudo-Siegel disks for the class of Problem~4.3, whose widths are the pseudo-Siegel
+degenerations. For a dictionary with the level sets of its towers (\texttt{LevelGeometry} in
+\texttt{Mlc/Research/LevelGeometry.lean}) these statements, collars at the large-period jumps,
+stacked annuli and the phase--parameter comparison, replace five of the abstract lemmas, and
+\texttt{MLC.mlc\_of\_levelGeometry} derives MLC from them together with the published lemmas and
+the lemmas TC$'$, VJ, VD1, VT1 and VT; the statements depend on the dictionary (for a dictionary
+without towers the five are vacuous). The loops with
+which the moduli are measured are curves of
+Hausdorff dimension at most~1, while the boundary of the Mandelbrot set is a fractal of Hausdorff
+dimension~2 (Shishikura); a \(C^1\) chart preserves the Hausdorff dimension, a quasi-conformal map
+of finite dilatation never carries a set of dimension below~2 onto a set of dimension~2 (Astala),
+the part of the boundary outside any countable family of such loops, for example the boundaries of
+the hyperbolic components, keeps the whole dimension~2 (the wild part, with
+\texttt{ShishikuraDimension.dimH\_wildPart\_eq\_two} in \texttt{Mlc/Research/BoundarySplit.lean};
+it lies in the unresolved set of the grid, which is the same set for every depth),
+and given Shishikura's theorem a
+parametrization of the boundary by an interval, such as the landing map of the external rays that
+exists when \(M\) is locally connected, is
+at best \(\tfrac12\)-H\"older (\texttt{ShishikuraDimension.holder\_exponent\_le\_half} in
+\texttt{Mlc/Research/Dimension.lean}, and in the category of compact Hausdorff spaces
+\texttt{ShishikuraDimension.holder\_exponent\_le\_half\_of\_epi} in
+\texttt{Mlc/Research/PeanoObject.lean}, where \texttt{mlc\_iff\_peano} states, given the
+Hahn--Mazurkiewicz theorem and the connectedness of \(M\), that MLC holds exactly when \(M\) is a
+continuous image of the interval). What
+is open is the construction of the nest from an a priori bound, since the correspondence between
+the dynamical and the parameter annuli in the phase--parameter relation is quasi-conformal and no
+\(C^1\) chart is available. For the
+virtual hulls of Problem~4.4, the dynamical separation estimate of Lemma~VT is
+equivalent to the shrinking of the hulls to their origins, for the canonical cost of a degeneration
+bound (\texttt{VirtualJuliaNest.separationEstimate\_iff} in
+\texttt{Mlc/Research/VirtualShrinking.lean}). The three statements of Problem~4.3 and the a priori
 bounds are invariant under the removal of a finite prefix of levels, which is the
 untuning of a tuned parameter (\texttt{lemmas\_shift\_iff} in
 \texttt{Mlc/Research/TailInvariance.lean}): they hold for a tower exactly when they hold
@@ -203,6 +305,44 @@ worsens none of them; it then records the update in the progress ledger.
   \input{docs/mlc_progress_routes.tex}
   \caption{Route-planning priors. Ranges and priors are planning estimates.}
   \label{tab:routes}
+\end{table}
+
+\paragraph{Types of parameters and the status of their statements.}
+After the table of the updates the Progress page lists the types out of which \(M\) and its
+boundary are assembled. The interior of \(M\) contains the hyperbolic components; that they exhaust
+it is the hyperbolicity conjecture, a consequence of MLC that is open. The boundary splits by
+dimension into a skeleton, the boundaries of the components (countably many analytic curves, of
+dimension at most \(1\)), and a wild part of dimension \(2\) (relative to the skeleton; the
+theorems \texttt{dimH\_wildPart\_eq\_two} and \texttt{dimH\_noIndifferentCycle\_eq\_two} of the
+namespace \texttt{ShishikuraDimension} in
+\texttt{Mlc/Research/BoundarySplit.lean}, from Shishikura's theorem and, for the second, the
+hypothesis (a fact of the literature that is not formalized) that the parameters with an
+indifferent cycle lie on the skeleton); it also splits by the renormalization of
+the parameter into the eight classes of the programme, and the two splittings cross. The wild part
+depends on the family of curves and differs from the set of Problems~4.3 and~4.4: it contains
+parameters for which MLC is known, such as the Misiurewicz parameter \(c=i\) (an end point of a
+filament of \(M\)). The boundary is the unresolved set of the grid certificate, the same
+set for every depth of the grid, which lowers only the certified bound on its area.
+Table~\ref{tab:types} gives, for every class, the chain of statements that it needs with the
+status of each. The dictionary (which parameter has which class and tower) is a parameter of every
+statement, so a literature-motivated statement is a hypothesis about the dictionary, and the bridge
+from the published theorem to it is not formalized. The page also shows the characteristic
+fragments of
+\(M\) (the valleys, the rabbit, the airplane, \dots) placed in this hierarchy and in the three
+regimes of the survey, the objects that the formalization adds (a model of the tower of copies,
+level sets, nests, collars, stacked annuli, \dots) with the update at which each was first
+mastered and the classes whose statements depend on it (computed from the dependency graph of the
+declarations), and the dimension ladder.
+
+\begin{table}[ht]
+  \centering\footnotesize
+  \input{docs/mlc_progress_types.tex}
+  \caption{The classes of boundary parameters, the statements that each class needs, and their
+  status. P: proved in Lean. R: derived in Lean from a geometric statement about the level sets,
+  which is itself open. L: motivated by the literature and taken as a hypothesis (the bridge from
+  the published theorem is not formalized). O: open. The last four columns count the statements of
+  the chain by status.}
+  \label{tab:types}
 \end{table}
 
 \section{Coverage-Uncertainty Profile}

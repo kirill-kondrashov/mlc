@@ -25,11 +25,44 @@ figure disappear there).
 eight classes of boundary parameters, the sixteen statements of the programme (the
 fields of `MLC.Research.ProgrammeInput` in `Mlc/ProgrammeRoot.lean`, named
 "Lemma T", "Lemma G", and so on as nodes of the graph), their sources, and the
-status of each, open while it is a field (a hypothesis) and proved once its theorem
-exists. The generator fails if the catalogue and the Lean structure disagree; the
+status of each: open while it is a field (a hypothesis) of a proposed reading,
+literature-motivated (`kind` published) while the literature suggests it and the
+development takes it as a hypothesis (the dictionary is a parameter, so it is a hypothesis about
+the dictionary, and the bridge from the published theorem is not formalized), reduced when a Lean
+theorem of `LevelGeometry.lean` derives it from a geometric statement about the level sets of
+the dictionary (the statement is itself open, and the lemma stays a field; the generator reads
+the sources without their comments and checks that the theorem has a hypothesis, that its
+conclusion, the type after the colon of its signature, is the definition of the lemma at the
+dictionary of a level geometry (`LG.toGeometry.Target`), and that the theorem depends on it in
+the graph, so a theorem that mentions the lemma among its hypotheses only, one without a
+hypothesis and one that a comment holds do not count),
+and proved once its theorem exists. The generator fails if the catalogue and the Lean
+structure disagree; the
 graph draws the statements as nodes, and the progress report derives the classes
 component of the Coverage-Uncertainty Profile and the tiles "Open programme
 statements" and "Classes with a Lean certificate" from the catalogue.
+
+`typology.py` renders the cards that follow the table of the updates on the **Progress**
+tab (and `progress_types.tex` for the report): the hierarchy of the types out of which `M`
+and its boundary are assembled (the interior with its hyperbolic components; the boundary as a
+skeleton of dimension at most 1 and a wild part of dimension 2, and as the classes of the
+programme) with the status of the statements of every class; the characteristic fragments of
+`M` (valleys, rabbit, airplane, ...) as numerical thumbnails placed in the hierarchy and in the
+three regimes of the survey; the objects that the formalization adds, with the classes whose
+statements depend on them and a timeline of their milestones; and the dimension ladder. The
+statuses are computed from the Lean sources, the dependency of a class on an object from the
+dependency graph of the declarations (`object_usage`, passed in by
+`generate_dependency_graph_site.py`, which warns on stderr when the certified grid enters the
+cone of a statement, the case in which the grounds for keeping the depth would lapse; an object
+in no cone is labelled as such; a standalone run of `progress_report.py` has no graph and
+marks no class), the thumbnails by an escape-time rendering with a distance estimate (an
+illustration that the Lean proof does not use), and the census of the components by the
+necklace formula. `scripts/test_typology.py` checks the hierarchy, the objects, the usage
+computation on a small graph, that every pointer to a Lean declaration exists under its full
+name, the form of a reduction (the theorems that must not count among them), the counts of
+declarations of the objects (comments and attributes), that every milestone of the ledger has an
+object, the census against the roots of the Gleason polynomials and the pixels of the
+thumbnails.
 
 `progress_report.py` renders the **Progress** tab and the LaTeX report from the
 progress ledger (below); it reads no Git history. The tab shows the certified resolved
@@ -53,7 +86,7 @@ embeds, since the 600 000 certified rectangles of the grids as vector paths weig
 some browsers draw nothing for them; the axes, the disks and the numerical outline of `∂M`
 stay vector. Texts with formulas are written with `$...$` TeX math and rendered as TeX for
 the report and as HTML for the page. The same data feeds `docs/mlc_progress.tex` through
-`progress_commits.tex`, `progress_routes.tex`, and `progress_map.svg`. The "Planned
+`progress_commits.tex`, `progress_routes.tex`, `progress_types.tex`, and `progress_map.svg`. The "Planned
 residual reduction" of the routes is a relative planning prior for the set that the
 published theorems leave open and has no relation to the area of the grid. The share
 `100%` corresponds to `R = ∅` (MLC), but a nonempty `R` of measure zero would also give
@@ -101,15 +134,19 @@ an update too. The repository hook
 its title is `$PROGRESS_TITLE` or, without it, derived from the new milestones or the depth
 of the grid; its note is `$PROGRESS_NOTE`; its date is now; the hook stages `docs/progress`.
 A commit that stages only documents and scripts passes unchecked and imports no `numpy`.
-`python3 scripts/check_progress.py --ledger` is the consistency check for CI. A squash
+`python3 scripts/check_progress.py --ledger` is the consistency check for CI. The committed
+report `docs/mlc_progress.pdf` lists the updates. To include a new update in it, stage the Lean
+changes, record the update (`progress_ledger.py add --staged ...`), run `make report-pdf`, stage
+the PDF and commit; the hook then finds the ledger up to date. When the hook records the update
+itself, the PDF stays one update behind until the next `make report-pdf`. A squash
 merge brings the entries and the masks of the branch with it. When two branches both
 append updates, resolve the conflict of `ledger.json` by keeping both sides in the order
 of their dates.
 
 The map is drawn by `map_raster.py`; `make test-scripts` runs `scripts/test_map_raster.py`
-(the pixel coverage against a direct computation, the PNG codec) and
+(the pixel coverage against a direct computation, the PNG codec),
 `scripts/test_progress_ledger.py` (recording, the lag check, a squash merge, the masks, the
-numbering and the hook, on temporary repositories).
+numbering and the hook, on temporary repositories) and `scripts/test_typology.py`.
 
 The repository hook runs `scripts/check_progress.py`. A commit that stages Lean
 sources (`Mlc.lean`, `Mlc/**/*.lean`) must improve at least one of the certified

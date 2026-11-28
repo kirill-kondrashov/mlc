@@ -11,7 +11,9 @@ LocallyConnectedSpace MLC.mandelbrotSet
 with an axiom frontier limited to Lean's standard foundations. The active proof
 must retain the invariant that every declaration is connected to
 `MLC.mlc_conjecture`. The graph currently exposes two open mathematical
-inputs: Problem 4.3 and Problem 4.4, and the sixteen lemmas into which
+inputs, the operational forms of Problem 4.3 and Problem 4.4 (the survey states that the problems,
+together with the arguments of its §4.1–§4.4, should imply MLC, and does not state them in this
+form; `Mlc/Dudko.lean`), and the sixteen lemmas into which
 `Mlc/ProgrammeRoot.lean` decomposes them (see the programme tree below).
 
 Problem 4.3 requires pseudo-Siegel a priori bounds and a realization for all
@@ -76,6 +78,42 @@ Every class definition must use dynamical data such as first-return type,
 relative period, renormalization phase, or geometric control. A class may not
 be defined by the local-connectivity conclusion itself. The classes of the
 table are refined, with their lemmas, in the programme tree below.
+
+The Progress page draws this hierarchy after the table of the updates (`scripts/typology.py`),
+next to the typing of the characteristic fragments of `M` (the valleys, the rabbit, the airplane,
+a Misiurewicz parameter, the Feigenbaum point), the objects that the formalization adds, and the
+dimension ladder. The hierarchy is the geometric role of a parameter: the interior of `M` contains
+the hyperbolic components (that they exhaust it is the hyperbolicity conjecture, a consequence of
+MLC that is open); the boundary splits by dimension into a skeleton (the boundaries of the
+components, countably many analytic curves, of dimension at most `1`) and a wild part (relative to
+the skeleton, of dimension `2`, `BoundarySplit.lean`), and, crossing it, by the renormalization of
+the parameter into the eight classes above; the parabolic parameters belong to the class of the
+finitely renormalizable parameters and the irrationally indifferent parameters form the class
+`neutral`. The wild part depends on the family of curves and differs from the set of Problems 4.3
+and 4.4: it contains parameters for which MLC is known, such as the Misiurewicz parameter `c = i`
+(an end point of a filament of `M`). The status of every statement of a class
+is computed from the Lean sources: proved (a Lean theorem proves it), reduced (a Lean theorem of
+`LevelGeometry.lean`, whose statement is the lemma, derives it from a geometric statement about
+the level sets, which is itself open), literature-motivated (a theorem of the literature suggests
+it and the development takes it as a hypothesis; the dictionary is a parameter of every statement,
+so it is a hypothesis about the dictionary, and the bridge from the published theorem is not
+formalized) or open (a proposed reading). At
+present none is proved, five are reduced (`T`, `G`, `D`, `VG2`, `VD2`), six are
+literature-motivated and five are open (`TC′`, `VJ`, `VT1`, `VD1`, `VT`). The fragments are placed
+in the three regimes
+that the survey describes after Question 3.1 (the Tan Lei regime, where every hyperbolic component
+is small against the scale; the near-neutral regime, where a component of size `≫ δ` reaches the
+scale; the quadratic-like regime, where the components of size comparable to `δ` dominate); the
+matching of a named fragment with a regime and a class is a reading of the survey.
+Each object (tower, level set, nest, collar, stacked annuli, Yoccoz criterion, virtual hull,
+dimension, Peano parametrization, ...) is the family of Lean definitions behind one kind of
+milestone of the ledger; the timeline of the page is the first update at which each reached each
+milestone, and the dots of the table mark the objects on which a statement of the class, or the
+Lean theorem that reduces it, depends (computed from the dependency graph of the declarations; the
+certified grid, the Yoccoz criterion, the dimension objects and the Peano parametrization lie in
+no cone, and the page says so). The tower is an abstract model of the nest of
+copies: a sequence of relative periods, kinds and degenerations that the dictionary may assign to
+a parameter (an optional tower), and the copies themselves are not constructed.
 
 ## Workstreams
 
@@ -245,10 +283,298 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   lift `G′` carries the fraction `1 − δ` of the extremal length of `G`, the subcurves
   `G ∖ G′` have width at least `δ⁻¹ W(G)`, so `C_δ = δ⁻¹ → ∞`); and the pullback law
   (`extWidth_pullback_le`: if `φ` carries the curves of `ΓX` to curves of `ΓY` with area
-  multiplicity at most `d`, then `W(ΓX) ≤ d W(ΓY)`, the mechanism of the Teichmüller
-  contraction, and conformal invariance for `d = 1`). This is the conformal
+  multiplicity at most `d`, then `W(ΓX) ≤ d W(ΓY)`, the shape of the growth bound of the
+  Teichmüller contraction, and the monotonicity of the width under a conformal map for `d = 1`).
+  This is the conformal
   foundation of PS4, of the amplification (4.3) and of TC; the dynamical families remain
   open, and the widths of the towers are not yet extremal widths of such families.
+* `Mlc/Research/AnnulusModulus.lean`: the model case of the theory, the round annulus
+  `{r < |z| < R}` of the plane with Lebesgue measure, in polar coordinates. The family of radial
+  segments, which join the boundary circles, has extremal length `log (R / r) / (2π)`
+  (`extLength_radialFamily`); the family of circles, which separate them, has `2π / log (R / r)`
+  (`extLength_circleFamily`); the two are reciprocal (`extLength_radialFamily_mul_circleFamily`).
+  So the abstract definition is the classical modulus, and the series law of
+  `ExtremalLength.lean` gives Grötzsch's inequality for concentric annuli
+  (`extLength_radialFamily_add_le`). The upper bounds are the
+  Cauchy–Schwarz inequality in polar coordinates, the lower bounds the metric `1 / |z|`.
+* `Mlc/Research/RectangleModulus.lean`: the second model domain, the rectangle
+  `(x₀, x₁] × (y₀, y₁]` with Lebesgue measure. The family of horizontal segments, which join the
+  vertical sides, has extremal length `(x₁ − x₀) / (y₁ − y₀)` (`extLength_horizFamily`) and
+  extremal width `(y₁ − y₀) / (x₁ − x₀)` (`extWidth_horizFamily`): the widths of the rectangles
+  `G ⊃ G′` of the survey (Figure 13, the estimate (4.6)) are computed, not assumed. The upper
+  bound is Cauchy–Schwarz along a segment with Fubini, the lower bound the characteristic
+  function of the rectangle.
+* `Mlc/Research/NestModulus.lean`: the geometric half of Lemma T, the Grötzsch–Teichmüller
+  estimate for the annuli of a nest. For a nest of connected parameter pieces `P₀ ⊇ P₁ ⊇ …`
+  around `c`, the loops of the annulus `Pⱼ ∖ cl P_{j+1}` are the `C¹` closed curves in it that
+  separate `cl P_{j+1}` from the complement of `Pⱼ` (every path from the first to the second
+  meets the loop), recorded by their arc-length
+  measures (`ConnectedNest.loops`); their extremal width is the modulus of the annulus.
+  `ConnectedNest.sum_extWidth_loops_le`: if `P₀ ⊂ B(c, R)` and the closure of `Pₙ` contains a
+  point at distance `δ` from `c`, the moduli of the first `n` annuli add up to at most
+  `2π log (4 (R + δ) / δ) / (log 2)²`. The proof is the parallel law for the disjoint annuli and
+  the metric `1/|z − c|` on the ring `δ/2 ≤ |z − c| ≤ R + δ`, whose area is at most
+  `2π log (4 (R + δ) / δ)`: a loop that stays outside the disk of radius `δ/2` meets every ray
+  from `c`, so it has length at least `2π` (the argument of `γ − c` sweeps `(−π, π)`), and a loop
+  that enters the disk and reaches distance `δ` crosses the ring and has length at least `log 2`
+  (the function `log |γ − c|` sweeps `[log δ/2, log δ]`); both are the area inequality
+  `λ(f(S)) ≤ ∫_S |f′|` of Mathlib in dimension one. So pieces with `DivergentModuli` (moduli that
+  add up to infinity) shrink to `c` and have the `SeparationEstimate` of every cost
+  (`ConnectedNest.nonempty_parameterRealization`).
+  `ConnectedNest.sum_extWidth_loops_le_coarse` is Grötzsch's inequality for a coarsening: the
+  modulus of `Pₙ ∖ cl P_m` is at least the sum of the moduli of the annuli `Pⱼ ∖ cl P_{j+1}`,
+  `n ≤ j < m`, because their loops are loops of the thick annulus and they are disjoint; so
+  grouping the levels of a nest (for instance in blocks around the micro-copies of `M`) can only
+  increase the moduli. *Faithfulness:* the separating `C¹` loops of an annulus are separating
+  curves, so their extremal width is at most the classical modulus (the extremal width of all
+  separating curves), with equality expected for annuli with piecewise smooth boundary, as the
+  parapuzzle pieces have, which is not proved here. So `DivergentModuli` implies that the classical
+  moduli add up to infinity, and, by `transfer_iff_phaseParameter` below, it is equivalent to
+  Lemma T itself.
+* `Mlc/Research/PhaseParameter.lean`: `Geometry.PhaseParameter`, the phase–parameter relation in
+  moduli form (an a priori bound on the tower of `c` gives a nest in `M` around `c` with
+  divergent moduli), and `Geometry.transfer_iff_phaseParameter : Transfer ↔ PhaseParameter`. The
+  direction `PhaseParameter → Transfer` is the geometric half above; the converse takes the nest
+  of `Transfer`, which shrinks because its separation estimate has a divergent budget, and passes
+  to a subnest (`DivergentNest.lean`). So the moduli form is a lossless reformulation of Lemma T,
+  and what is open is the construction of the nest from an a priori bound.
+  `ProgrammeInput.transfer` keeps the hypothesis `Transfer`.
+* `Mlc/Research/DivergentNest.lean`: nests with moduli bounded below. The nest of the disks
+  `B(0, 2⁻ʲ)` has annuli of modulus at least `log(3/2)/2π`, because the circles of an annulus are
+  loops of its family (`loopMeasure_circleLoop`, `extWidth_loopFamily_ge`) and the extremal length
+  of the circles is known (`extLength_circleFamily`); so `concentricNest_divergentModuli` shows
+  that the definition of the moduli of a nest is satisfiable. More generally, every shrinking nest
+  has a subnest with `DivergentModuli` (`ConnectedNest.exists_divergentSubnest`): each piece
+  contains a disk around `c` and a later piece lies in the half of it, so the annulus between them
+  contains round annuli of modulus at least `log(3/2)/2π`.
+* `Mlc/Research/AreaMultiplicity.lean`: the hypothesis of the pullback law, proved for the quadratic
+  polynomials. `AreaMultiplicity mX mY φ J d` says that the area `J² mX`, pushed forward by `φ`, is
+  at most `d mY`; it is additive over a measurable partition of the domain and multiplicative under
+  composition. An injective map that is differentiable on a measurable set has multiplicity `1`
+  there with `J = |φ′|` (the area formula of Mathlib, with the determinant `|w|²` of the
+  multiplication by `w`), and `z ↦ z² + c` is injective on each of the two half planes that
+  `z ↦ −z` swaps, so `f_c` has multiplicity `2` and `f_c^p` has `2ᵖ`
+  (`areaMultiplicity_fc_iterate`). So, if `f_c^p` carries the curves of `ΓX` to curves of `ΓY`,
+  then `W(ΓX) ≤ 2ᵖ W(ΓY)` (`extWidth_le_pow_two_mul_fc_iterate`, and for loops
+  `extWidth_le_pow_two_mul_fc_iterate_of_loops` with `loopMeasure_comp`): the width of a
+  pulled-back family grows by at most `2ᵖ`, which has the shape of the Teichmüller contraction of
+  the survey (§4.3: growth at most exponential in the relative period). The
+  families of the renormalization levels to which it applies, and the quadratic-like restrictions
+  of `f_c^p` to domains, are open.
+* `Mlc/Research/VirtualShrinking.lean`: what the dynamical estimate of Lemma VT says. For a cost
+  with non-negative terms and divergent partial sums, such as the canonical cost of a degeneration
+  bound, `VirtualJuliaNest.SeparationEstimate` is equivalent to the shrinking of the virtual hulls to
+  their origins (`VirtualJuliaNest.separationEstimate_iff`), and `Geometry.virtualTransfer_hulls_shrink`
+  derives that shrinking from `VirtualTransfer`. So the dynamical content of VT is that the diameters
+  of the virtual hulls tend to zero, the analogue of the shrinking of the parameter pieces for T; the
+  nest and the phase–parameter chart of VT are the rest.
+* `Mlc/Research/QuasiInvariance.lean`: the quasi-monotonicity of the extremal width under a change
+  of chart.
+  `QcEmbedding Ω φ K` is a `C¹` embedding of an open set with invertible derivative and dilatation
+  `‖Dφ‖² ≤ K |det Dφ|` at most `K`; an injective holomorphic map with non-vanishing derivative has
+  `K = 1` (`QcEmbedding.of_holomorphic`). The area formula of Mathlib gives the hypothesis of the
+  pullback law with multiplicity `K` and stretching `‖Dφ‖` (`QcEmbedding.areaMultiplicity`), so
+  `extWidth_le_of_qcEmbedding`: if `φ` carries every curve of `ΓX` to a curve that dominates a curve
+  of `ΓY`, then `W(ΓX) ≤ K W(ΓY)` (monotonicity of the width under a conformal embedding for
+  `K = 1`; invariance for a biholomorphism, by applying it to the inverse). `Separates.image`: a map that
+  is continuous and injective on the compact closure of `O`, with `φ '' O` open, carries a loop
+  that separates `K` from the complement of `O` to a loop that separates `φ '' K` from the
+  complement of `φ '' O` (the first exit time of a path from `φ '' O`). The modulus of an annular
+  region (the extremal width of the `C¹` loops in it that separate `K` from the complement of `O`)
+  is therefore at most `Kd` times the modulus of every annular region that contains the image
+  (`extWidth_loopFamily_le_map`). So the image of a nest is a
+  nest (`ConnectedNest.map`), the modulus of each annulus of the image is at least `1/K` times that
+  of the original (`extWidth_loops_le_map`), and divergent moduli are transported
+  (`ConnectedNest.DivergentModuli.map`). This is the tool that the transport of the moduli between
+  the dynamical and the parameter plane needs, for a `C¹` correspondence; a quasi-conformal
+  homeomorphism is in general only absolutely continuous on lines, and neither a chart between a
+  phase nest and a parameter nest nor the phase nest is constructed.
+* `Mlc/Research/Collar.lean`: a quasi-round annulus has a definite modulus. For a level
+  `f : U → V` of a renormalization tower with filled Julia set `E = K_f`, the modulus of `V ∖ E`,
+  the extremal width of the separating `C¹` loops, is the `C¹` version of `mod⁺(f)`, the reciprocal
+  of the degeneration `W(f)` of the survey (4.1): at most the classical modulus and equal to it for
+  round annuli, the identification in general belonging to the dictionary; for the annuli of a nest
+  it is `D.loops j`. `IsCollar E V Kd r R`: a
+  `C¹` embedding `ψ` of dilatation at most `Kd` of a neighbourhood of the closed disk of radius `R`
+  such that `E` lies in `ψ(B̄(w₀, r))` and `ψ(B̄(w₀, R))` lies in `V`. The circles of the round
+  annulus bound its modulus below by `log (R/r) / 2π` (`extWidth_loopFamily_ge_radii`), the loops
+  go to loops of `V ∖ E`, and so the modulus of `V ∖ E` is at least `log (R/r) / (2π Kd)`
+  (`IsCollar.ofReal_le_extWidth`): Grötzsch's monotonicity with the quasi-invariance. A nest whose
+  annuli all have collars of dilatation at most `K₀` and modulus at least `μ₀/2π` has moduli
+  bounded below by `μ₀/(2π K₀)`, hence divergent moduli and shrinking pieces
+  (`ConnectedNest.divergentModuli_of_collars`): the form that bounded geometry takes here. The
+  collars of the levels of a tower are not constructed.
+* `Mlc/Research/RoundAnnulus.lean`: the modulus of the round annulus, exactly. For `0 < r < R` the
+  extremal width of the `C¹` loops in `B̄(c, R) ∖ B̄(c, r)` that separate `B̄(c, r)` from the
+  complement of `B(c, R)` is `log (R/r) / 2π` (`extWidth_loopFamily_round`): the circles bound it
+  below (`extWidth_loopFamily_ge_radii`), and the metric `1/|z − c|` on the ring, of area
+  `2π log (R/r)` (`rhoArea_ringMetric_eq`, equal almost everywhere to the metric of the annulus
+  off a null circle), in which every separating loop has length at least `2π`
+  (`ofReal_two_pi_le_minLength_round`), bounds it above. The same holds for the open ring
+  `r < |z − c| < R` (`extWidth_loopFamily_round_open`, a limit of the circles of radius `s < R`),
+  the annulus of a round level of a `LevelTower`, whose degeneration is therefore
+  `2π / log (R/r)` (`LevelTower.width_eq_of_round`). So the `C¹` modulus agrees with the classical
+  one on the round annuli, the model that the collars compare with.
+* `Mlc/Research/NestRate.lean`: the rate of the shrinking. A Teichmüller-type estimate, with the
+  non-optimal constants of the metric `1/|z − c|`, in the form
+  of a theorem about nests (`ConnectedNest.closure_piece_subset_closedBall_of_sum`): if the
+  closure of the first piece lies in `B̄(c, R)` and the first `n` annuli have total modulus at
+  least `s`, with `κ s ≥ log 8` and `κ = (log 2)² / 2π`, then the closure of the piece `n` lies in
+  `B̄(c, 8 R e^(−κ s))`. Hence moduli bounded below by `μ` give the pieces `n ≥ N` radius at most
+  `8 R e^(−κ μ n)` (`closure_piece_subset_closedBall_of_uniform`), and uniform collars give the
+  geometric decay `exp(−κ μ₀ n / (2π K₀))`
+  (`closure_piece_subset_closedBall_of_collars`). The statement that a nest of divergent moduli
+  shrinks (`DivergentModuli.shrinking`) becomes quantitative; the rate is that of bounded
+  geometry, and the geometric bound is what the construction of the nest has to supply.
+* `Mlc/Research/LevelTower.lean`: the degeneration as the reciprocal modulus of an annulus, and what
+  follows. `LevelTower` extends `WidthTower` by the filled Julia sets `K_k` and the range domains
+  `V_k` of the levels, with `W_k = 1 / mod(V_k ∖ K_k)` (the survey (3.2), (4.1)), the modulus being
+  the extremal width of the `C¹` loops that separate `K_k` from the complement of `V_k`: at most the
+  classical modulus, and equal to it for round annuli. The sets are data of the dictionary: nothing
+  ties them to the dynamics of `f_c`, and every width tower is realized by round levels
+  (`WidthTower.exists_levelTower` in `RoundTower.lean`), so the structure has no dynamical content by
+  itself and the hypotheses below are meaningful for the sets that the dictionary provides (the
+  filled Julia sets and range domains of quadratic-like restrictions, or the regularized sets of the
+  pseudo-Siegel levels). A collar of the
+  annulus of a level bounds its degeneration by `2π Kd / log (R/r)` (`LevelTower.width_le_of_collar`),
+  so Lemma G follows from collars at the jump levels: if at every level that follows a jump by the
+  factor `C₀` the annulus has a collar of dilatation at most `K₀` and modulus at least `μ₀/2π`, the
+  jumps are capped by `2π K₀ / μ₀` (`LevelTower.jumpCap_of_collars`), and with a linear dichotomy
+  the tower has a priori bounds (`LevelTower.aPrioriBounds_of_collars`). This is the reading of PS4
+  ("bounded by the uniform quasi-conformal geometry of the pseudo-Siegel disks") as a precise
+  geometric hypothesis with a proved consequence; that the pseudo-Siegel disks give such collars at
+  the jumps is proposed and open, and the same theorem serves the virtual levels of Lemma VG2.
+  `Geometry.PhaseParameterComparison` is the form in which the phase–parameter relation is used at
+  the renormalization levels: from a degeneration bound on the tower of `c`, a realization of the
+  tower by the annuli of its levels and a nest in `M` around `c` such that the modulus of each level
+  is at most `Kd` times the modulus of the corresponding annulus of the nest. With it Lemma T
+  follows (`Geometry.transfer_of_comparison`): the moduli of the levels are at least `1/B`, so the
+  moduli of the nest are at least `1/(B Kd)`, they add up to infinity and the pieces shrink. A
+  quasi-conformal chart between the annuli gives the comparison (for a `C¹` chart this is
+  `extWidth_loopFamily_le_map`); the realization, the nest and the chart are what is open. The
+  comparison is a statement about the dictionary: it is vacuous for a dictionary without towers.
+* `Mlc/Research/CollarCriterion.lean`: the chain from the annuli of a nest to the local connectivity
+  at its center, closed at a point. A set is locally connected at the center of a connected nest
+  whose moduli add up to infinity (`ConnectedNest.locallyConnectedAt_of_divergent`, the Yoccoz
+  criterion). With a uniform lower bound `w` for the moduli and the first piece in the disk of
+  radius `R` around `c`, for every `ε > 0` some piece of depth at most
+  `max (log 8, log (8R/ε)) / (κ w) + 1`, `κ = (log 2)² / 2π`, is a connected neighbourhood of `c`
+  inside the disk of radius `ε` (`exists_relativePiece_of_uniform`): a logarithmic bound on the
+  depth, not on the size of the neighbourhood. Uniform collars give `w = μ₀ / (2π K₀)`
+  (`locallyConnectedAt_of_collars`,
+  `exists_relativePiece_of_collars`); the phase–parameter comparison with a degeneration bound `B`
+  gives `w = 1 / (B Kd)` (`Geometry.locallyConnectedAt_of_comparison`,
+  `Geometry.exists_relativePiece_of_comparison`). The whole chain is
+  `Geometry.locallyConnectedAt_of_collars_and_comparison`: collars of dilatation at most `K₀` and
+  modulus at least `μ₀/2π` at the jumps of a level tower of `c`, the linear dichotomy for it, and the
+  comparison give the local connectivity of `M` at `c`. The collars, Lemma D and the comparison are
+  the explicit geometric statements that are open; the concentric nest has uniform collars
+  (`concentricNest_collars`), so the hypotheses of the criterion are satisfiable.
+* `Mlc/Research/Stacking.lean`: Lemma D as a geometric statement. Grötzsch's inequality for
+  pairwise disjoint measurable sub-annuli (`sum_extWidth_loopFamily_le`: the moduli of the
+  sub-annuli add up to at most the modulus of the annulus that contains them, for the loops that
+  separate the same `K` from the complement of the same `O`). `LevelTower.StackedAnnuli L C c' A'`:
+  for every pair of levels `k`, `k + n`, either the degeneration jumps by the factor `C` at the level
+  `k + n`, or the annulus of the level `k + n` contains `p = period k n` pairwise disjoint
+  measurable sub-annuli, each of modulus at least `c' / (W_k + A' p)`. This is a proposed sufficient
+  form of the amplification, an analogue of the quasi-additivity mechanism of §4.2 (the deeper
+  annulus collects the moduli of `p` sub-annuli, with an additive loss in the degeneration that is
+  linear in the period); the survey does not state it, and the code encodes measurable regions whose
+  loops separate the same set, not pullbacks or the geometry of the orbit. If it holds for every
+  threshold, the linear dichotomy holds (`LevelTower.linearDichotomy_of_stacked`): the moduli add up,
+  so `c' p W_{k+n} ≤ W_k + A' p`. In the round model the converse holds, the sub-annuli being
+  concentric, so Lemma D is equivalent there to the stacked annuli for every threshold
+  (`WidthTower.linearDichotomy_iff_stacked`): the geometric form is exact where the geometry is
+  trivial. A loss `A'` that does not grow with `p`, `c' / (W_k + A')`, would be strictly stronger and
+  fails for a tower of constant degeneration without jumps. With the collars of Lemma G this gives
+  `Geometry.locallyConnectedAt_of_collars_stacked_and_comparison`: the Teichmüller contraction,
+  collars at the jumps at large relative period, stacked annuli and the comparison give the local
+  connectivity of `M` at `c`. The last three are statements about sets of the plane (collars,
+  sub-annuli, a nest) and their moduli, while the Teichmüller contraction is an inequality between
+  the widths of consecutive levels; that the levels of the dynamical towers satisfy them is open.
+* `Mlc/Research/LevelGeometry.lean`: the geometric form of the programme. `LevelGeometry` is a
+  `Geometry` together with the level towers behind its towers (`levels c`, `vlevels c`: the sets
+  that define the degeneration of the levels, with the widths of the dictionary: the filled Julia
+  sets and range domains of quadratic-like restrictions of `f_c` for the quadratic-like classes, the
+  regularized sets of the pseudo-Siegel disks for the class of Problem 4.3, whose widths are the
+  pseudo-Siegel degenerations); like `Geometry` it is
+  a parameter of the statements, and that the sets are the dynamical ones is the faithfulness of the
+  dictionary, which the structure does not contain. The statements are dictionary-dependent: for a
+  dictionary with no towers the five geometric statements are vacuous and `Yoccoz` carries the whole
+  content, and the comparison is more than a bound on widths (for round level sets of constant
+  width it asserts a nest in `M` with moduli bounded below, which gives the local connectivity at
+  `c`). The link between the virtual level sets and the virtual Julia nest of VJ is not stated.
+  For these sets, Lemma G is stated as collars at the large-period jumps
+  (`UnboundedCollars`, `VirtualCollars`), Lemma D as stacked annuli (`UnboundedStacked`,
+  `VirtualStacked`), and Lemma T as the phase–parameter comparison (`Comparison`); the abstract
+  fields `UnboundedJumpCap`, `UnboundedDichotomy`, `VirtualJumpCap`, `VirtualLinearDichotomy` and
+  `Transfer` are derived from them. `MLC.mlc_of_levelGeometry`: MLC from the six published lemmas,
+  the Teichmüller contraction for the pseudo-Siegel and for the virtual levels (TC′, VT1), VJ, VD1,
+  VT, and these five geometric statements.
+* `Mlc/Research/Dimension.lean`: the dimension of the fractal against the smooth curves of the
+  moduli. The image of a `C¹` loop has Hausdorff dimension at most `1` (`IsLoop.dimH_range_le`), so
+  countably many loops cover no set of larger dimension. A `C¹` embedding with invertible
+  derivative is locally bi-Lipschitz, so it preserves the dimension of every subset of its domain
+  (`QcEmbedding.dimH_image`), whatever its dilatation, and no `C¹` chart carries a smooth curve onto
+  a fractal. A `K`-quasi-conformal map distorts the dimension within the bound of Astala (1994:
+  dimension `d` goes to at most `2Kd/(2 + (K−1)d)`; not formalized), which is below `2` for `d < 2`,
+  so a quasi-conformal map of finite dilatation never carries a set of dimension below `2` onto a
+  set of dimension `2`. The charts of `QuasiInvariance.lean` and `Collar.lean` compare the moduli of
+  annuli, which are open sets, and say nothing about the dimension of the sets that the annuli go
+  around. An
+  `α`-Hölder parametrization of a set of dimension `d` by an interval has `α d ≤ 1`
+  (`holder_mul_le_one`). `ShishikuraDimension` states Shishikura's theorem (the boundary of `M` has
+  Hausdorff dimension `2`; published, a hypothesis here), and gives that the boundary is not covered
+  by countably many `C¹` loops, is not the `C¹` image of a set of dimension below `2`, and has no
+  parametrization by an interval that is `α`-Hölder with `α > 1/2`
+  (`ShishikuraDimension.holder_exponent_le_half`). For the kernel of a nest: divergent
+  moduli leave a point, of dimension `0` (`ConnectedNest.dimH_kernel_eq_zero_of_divergent`), and a
+  kernel of positive dimension contains a point other than the center, so the moduli add up to a
+  finite bound (`ConnectedNest.sum_extWidth_loops_bounded_of_dimH_kernel_pos`); the kernel of a
+  given nest need not be the fiber of the parameter (Schleicher), which the dynamics defines.
+* `Mlc/Research/BoundarySplit.lean`: the boundary of `M` against families of smooth curves.
+  `wildPart E γ` is `E ∖ ⋃ i, range (γ i)`, the part that the loops of a family miss (all of `E`
+  for the empty family). `dimH_wildPart_eq`: a set of dimension `d > 1` keeps the dimension `d`
+  outside every countable family of loops (countable stability of `dimH`, with the dimension `≤ 1`
+  of the loops). `ShishikuraDimension.dimH_wildPart_eq_two`, `wildPart_nonempty` and
+  `not_countable_wildPart`: the wild part of the boundary has dimension exactly `2` for every
+  countable family, so it is nonempty and uncountable. The skeleton: the boundary of a hyperbolic
+  component is a Jordan curve, real-analytic away from its root, and a parameter with an
+  indifferent cycle lies on the boundary of a hyperbolic component, so the parameters with an
+  indifferent cycle (`HasIndifferentCycle`: the parabolic, Siegel and Cremer parameters) lie on
+  countably many analytic images of the circle; this fact of the literature is not formalized and
+  enters as the hypothesis `hskel`. `ShishikuraDimension.dimH_noIndifferentCycle_eq_two`: with
+  `hskel`, the boundary parameters with no indifferent cycle (a set that does not depend on the
+  family) have dimension `2`. The wild part depends on the family (a larger family has a smaller
+  wild part) and differs from the set of Problems 4.3 and 4.4: it contains parameters for which
+  MLC is known, such as the Misiurewicz parameter `c = i` (an end point of a filament of `M`).
+  `frontier_mandelbrot_eq_unresolved`: the
+  boundary is the unresolved set `R` of the grid certificate, the same set for every depth of the
+  grid, which lowers only the certified bound on its area; `wildPart_subset_unresolved`.
+  `ShishikuraDimension.exists_class_dimH_eq_two`: for every dictionary the classes of boundary
+  parameters partition the boundary into finitely many sets, so some class has dimension `2` (the
+  dimension of a finite union is the largest of the dimensions of its parts). This
+  is a statement about the finite partition and holds for every dictionary, for example one that
+  labels the whole boundary `neutral`; for the intended dictionary the class `neutral` lies in the
+  skeleton, of dimension at most `1`, so other classes carry the dimension, and which ones is not
+  determined here.
+* `Mlc/Research/PeanoObject.lean`: the same in the category of compact Hausdorff spaces, next to
+  the categorical root. `IsPeanoObject X`: `X` is an epimorphic image of the interval (the
+  epimorphisms of `CompHaus` are the surjections), and, the epimorphisms being effective, a regular
+  quotient: the coequalizer of its kernel pair, a closed equivalence relation on the interval
+  (`IsPeanoObject.exists_regularEpi`; for `M` it is the kernel pair of the chosen parametrization,
+  and the landing relation of the rays, which lives on the circle of angles and gives the
+  pinched-disk model, is a different statement that is not formalized). A Peano object is locally
+  connected
+  (`IsPeanoObject.locallyConnectedSpace`: a surjection of a compact space onto a Hausdorff space is a
+  quotient map, and quotients of locally connected spaces are locally connected). Given the
+  Hahn–Mazurkiewicz theorem (`HahnMazurkiewicz`, the converse for metrizable continua; published,
+  not formalized) and the connectedness of `M` (Douady–Hubbard), `Categorical.MLCConjecture` holds
+  exactly when `mandelbrotCompHaus` is a Peano object, exactly when it is a regular quotient of the
+  interval (`mlc_iff_peano`, `mlc_iff_regularEpi`). Given Shishikura's
+  theorem, no epimorphism from the interval onto `boundaryCompHaus` is `α`-Hölder with `α > 1/2`
+  (`ShishikuraDimension.holder_exponent_le_half_of_epi`): the parametrization of the boundary that
+  MLC provides is wild.
 
 The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
 `mlc_of_programme`) uses only the three kernel axioms.
@@ -314,11 +640,44 @@ roadmap, not claims of the survey.
   shrinks the pieces when the moduli add up (`ConnectedNest.SeparationEstimate` with a
   divergent budget is already checked). Grötzsch's inequality is proved for the extremal
   length of abstract length measures (`ExtremalLength.lean`: series and parallel laws).
-  First step: the modulus of a round annulus in the plane as the extremal length of its
-  circles and its radii (polar coordinates), and its conformal invariance (the Yoccoz
-  package uses a Gaussian weighted area as a proxy, which changes under conformal maps).
-  Second step: the phase–parameter relation of Lyubich (§3.9). Risk: the conformal geometry
-  is not in Mathlib.
+  First step (done, `AnnulusModulus.lean` and `RectangleModulus.lean`): the moduli of the round
+  annulus and of the rectangle in the plane as extremal lengths, in polar and in Cartesian
+  coordinates (the Yoccoz package uses
+  a Gaussian weighted area as a proxy, which changes under conformal maps). Second step (done,
+  `NestModulus.lean`, `PhaseParameter.lean`): the Grötzsch–Teichmüller estimate for the annuli of
+  a nest of parameter pieces, so that T follows from the phase–parameter relation in moduli
+  form (`Geometry.PhaseParameter`, a nest in `M` whose moduli add up to infinity) and, by a
+  subnest, is equivalent to it (`transfer_iff_phaseParameter`); the proof
+  is checked for general open pieces, with the area inequality in dimension one for the
+  argument and the logarithm of `γ − c`, with no Teichmüller bound for a general annulus and no
+  conformal invariance needed. Third step (done, `QuasiInvariance.lean`): the extremal width, and
+  the moduli of a nest, are quasi-monotone under `C¹` embeddings of dilatation at most `K` (the
+  width of a family is at most `K` times that of a family containing the images of its curves;
+  `K = 1` for a holomorphic embedding), with divergent moduli transported
+  (`ConnectedNest.DivergentModuli.map`). Fourth step (done, `Collar.lean`): a level whose annulus
+  has a collar, a quasi-round annular chart of dilatation `Kd` and modulus `log (R/r) / 2π`, has
+  modulus at least `log (R/r) / (2π Kd)` (`IsCollar.ofReal_le_extWidth`), and a nest with uniform
+  collars has divergent moduli (`ConnectedNest.divergentModuli_of_collars`), with the modulus of
+  the round annulus exactly `log (R/r) / 2π` (`RoundAnnulus.lean`) and the pieces shrinking at the
+  geometric rate `exp(−κ μ₀ n / (2π K₀))` (`NestRate.lean`, a Teichmüller-type estimate). Fifth step (done,
+  `LevelTower.lean`): the degeneration of a level is the reciprocal modulus of its annulus, collars
+  at the jump levels cap the jumps (Lemma G in the reading of PS4), and the phase–parameter
+  comparison of the moduli of the levels with the moduli of a parameter nest gives Lemma T
+  (`Geometry.transfer_of_comparison`). Sixth step (done, `Dimension.lean`): the dimension of the
+  fractal against the smooth curves: `C¹` charts preserve the Hausdorff dimension, quasi-conformal
+  maps of finite dilatation distort it within Astala's bound and never carry a set of dimension
+  below `2` onto a set of dimension `2`, and the boundary of `M` has no parametrization by an
+  interval better than `1/2`-Hölder (given Shishikura's theorem). Seventh step (done,
+  `CollarCriterion.lean`): the chain closes at a point, collars at the jumps, the linear dichotomy
+  and the comparison give the local connectivity of `M` at `c` with a logarithmic depth bound
+  (`Geometry.locallyConnectedAt_of_collars_and_comparison`). Next: `PhaseParameter` itself (the
+  phase–parameter
+  relation of Lyubich (§3.9) with the quasi-additivity law), which compares the moduli of the
+  dynamical annuli of the tower with the parameter annuli; that correspondence is
+  quasi-conformal and comes with no `C¹` chart, so the construction of the nest from the bound
+  is what stays open. VT has the same shape with the dynamical hulls of
+  `VirtualJuliaNest.SeparationEstimate` instead of annuli around the point; its geometric half is
+  not yet written. Risk: the conformal geometry is not in Mathlib.
 * **Y, TC, B, A, N, QG (published).** Formalize the cited theorems in the form of a parameter
   realization or of the estimate. Y is Yoccoz's puzzle theorem; TC is the Teichmüller
   contraction of §4.3; B, A and N are long research papers; QG is the 71-page theorem of
@@ -329,8 +688,9 @@ roadmap, not claims of the survey.
   rotation number 0, §4.4), so TC′ is TC applied level by level; the new content is the
   compatibility of the regularization of a level with the preceding level (PS1). The
   pullback estimate for extremal widths is proved (`extWidth_pullback_le`: `W(ΓX) ≤ d W(ΓY)`
-  for a map of area multiplicity at most `d`); the next step (proposal) is its application
-  to the families of the renormalization levels, with `d = 2^p`.
+  for a map of area multiplicity at most `d`), and its hypothesis is proved for the iterates of
+  `f_c` (`extWidth_le_pow_two_mul_fc_iterate`: multiplicity `2ᵖ`); the next step (proposal) is its
+  application to the families of the renormalization levels, with `d = 2^p`.
 * **G (jump cap).** In alternative (ii) of §4.3 the degeneration of the deeper level jumps by
   `C_δ`. The Teichmüller contraction excludes the jump while its factor `Δ^p` stays below
   `C_δ`, which fails for unbounded `p`. The recursion needs only that a jump lands below a
@@ -354,7 +714,12 @@ roadmap, not claims of the survey.
   extremal widths and check that it gives the linear error by the argument of §4.3. The
   main term `p W(f₁)` of the amplification is the parallel law (`extWidth_parallel_finset`);
   what remains is the error, that is the thin–thick decomposition with a linear error in the
-  dynamical setting.
+  dynamical setting. The quasi-additivity form of the main term is checked in `Stacking.lean` as a
+  proposed sufficient analogue: `p` disjoint sub-annuli of the deeper annulus, each of modulus at
+  least `c'/(W_k + A' p)`, give the linear dichotomy (`LevelTower.linearDichotomy_of_stacked`), and
+  in the round model the two are equivalent; that the annuli of the dynamical levels contain such
+  sub-annuli, pullbacks of the shallower annulus along the critical orbit with the additive loss, is
+  the dynamical statement that is open.
 * **VJ.** The minimal connected hull in `K_c` of the Cantor small Julia set and the critical
   return window exists in Lean (`VirtualJuliaNest.carrier`); the lemma is that it lies inside
   `J_c` and is partially invariant. First step (proposal): the real parameters, where the
@@ -368,10 +733,14 @@ roadmap, not claims of the survey.
   cap at large relative period and the linear error are those of G and D for the virtual hull,
   after the pseudo-Siegel regularization (Figure 14, left loop). They wait for G and D.
 
-The abstract extremal length and its laws exist (`ExtremalLength.lean`). What the lemmas
-that depend on conformal geometry still need is the link between them and the dynamics: the
-modulus of an annulus and its conformal invariance, then the families of curves of a
-quadratic-like map. That is the first real step of every route.
+The abstract extremal length, its laws, the moduli of the round annulus and of the rectangle, the
+Grötzsch–Teichmüller estimate for nested annuli, and the quasi-invariance of the moduli under `C¹`
+embeddings of bounded dilatation exist (`ExtremalLength.lean`, `AnnulusModulus.lean`,
+`RectangleModulus.lean`, `NestModulus.lean`, `QuasiInvariance.lean`). What the lemmas that depend
+on conformal geometry still need is the link between them and the dynamics: the correspondence
+that carries the moduli of the dynamical annuli of a tower to the parameter plane
+(`Geometry.PhaseParameter`), then the families of curves of a quadratic-like map. That is the
+first real step of every route.
 
 ### Rays, the lamination and tuning
 
@@ -393,6 +762,29 @@ precise description of the points that stay open.
 3. *Fibers.* The fiber of `c` is the set of the points that no pair of rational rays landing
    together separates from `c`. `M` is locally connected exactly when every fiber is a point
    (Schleicher, *On fibers and local connectivity of Mandelbrot and Multibrot sets*).
+4. *Peano parametrization.* `M` is locally connected exactly when it is a continuous image of the
+   interval (Hahn–Mazurkiewicz, given that `M` is a continuum); the landing map of the rays then
+   parametrizes the boundary. In `CompHaus` this is an
+   epimorphism from the interval onto `M` (`Mlc/Research/PeanoObject.lean`, `mlc_iff_peano`, given
+   Hahn–Mazurkiewicz and the connectedness of `M`).
+
+**The fractal against the smooth curves.** The boundary of `M` has Hausdorff dimension `2` and
+topological dimension `1` (Shishikura, 1998), and a `C¹` or Lipschitz curve has dimension at most
+`1`. Two consequences are checked in `Mlc/Research/Dimension.lean`, given Shishikura's theorem as a
+hypothesis: the boundary is not a countable union of smooth arcs, and a parametrization of it by
+the interval, such as the landing map of the rays, is at best `1/2`-Hölder, so any Hölder control
+of the landing map has an exponent at most `1/2` (`ShishikuraDimension.holder_exponent_le_half`,
+and `holder_exponent_le_half_of_epi` for the epimorphisms of `CompHaus`). The moduli of the
+development are measured with `C¹` loops, which see a fractal kernel only as a set that is not a
+point: divergent moduli leave a point of dimension `0`, and a kernel of positive dimension forces a
+finite total modulus. `C¹` charts preserve the Hausdorff dimension (`QcEmbedding.dimH_image`), and
+quasi-conformal maps of finite dilatation distort it within Astala's bound (1994; not formalized),
+which is below `2` for a set of dimension below `2`: no such map carries a smooth curve, or any set
+of dimension below `2`, onto a fractal of dimension `2`. The comparisons of the programme relate
+annuli, which are open sets, and say nothing about the dimension of the sets that the annuli go
+around. Dimension `2` is compatible with area `0` and with
+positive area, so the dimension decides neither the area of the boundary nor the shrinking of the
+nests, which is the content of Problems 4.3 and 4.4.
 
 **Which landing points stay open.** The fibers of the parameters that are not infinitely
 renormalizable are points (Yoccoz, Hubbard), and the lemmas Y, N, B, A and QG give the same for
@@ -450,9 +842,10 @@ copies of `M` along the dendritic filaments can be covered in groups. The data o
 how the cost grows. The unresolved cells counted at depth 9, 10, 11, 12 and 13 are 67 609,
 224 189, 761 108, 2.42·10⁶ and 8.69·10⁶, a factor 3.2–3.6 per level (the count grows like
 `h^{-1.77}` for cells of side `h`), while the certified bound of the unresolved area is 0.516,
-0.428, 0.363, 0.289 and 0.259, a decrease of 12–17% per level. Every level costs a factor 3.4 in
+0.428, 0.363, 0.289 and 0.259, a decrease of 10–20% per level. Every level costs a factor 3.4 in
 kernel work and lowers the bound a little, and the exponent tends to 2 (the boundary of `M` has
-Hausdorff dimension 2, Shishikura), so a hundredfold reduction by subdivision does not exist.
+Hausdorff dimension 2, Shishikura), so a hundredfold reduction by subdivision is out of reach (see
+the next subsection).
 The unresolved layer is the neighbourhood of the part of `∂M` made of copies and their
 filaments; each piece of `M` of the size of a cell must be surrounded by certified cells, and no
 covering by squares is much cheaper.
@@ -468,6 +861,47 @@ reduce the kernel work, which is the sum over the certificates, and the memory o
 merged much; the build outputs shrink with `noncomputable` data (measured on a small tile: the
 `.c` drops by 90% and the `.olean` by 42%, the fixed part of an `.olean` being 25 KB), which is a
 matter of storage. The area is a by-product of the grid, and the grid stays at depth 13.
+
+#### Would a finer grid simplify Problems 4.3 and 4.4?
+
+The grid does not enter the programme, and the grid stays at depth 13. Four observations, the
+first heuristic and the others checked.
+
+1. *Heuristic: the statements concern the tail of a tower.* The three statements of Problem 4.3
+   and the a priori bounds hold for a tower exactly when they hold for the tower without its first
+   `n` levels (`WidthTower.lemmas_shift_iff`). A certificate of the grid is information at finitely
+   many scales about where `M` lies. Tail invariance does not exclude that such information could
+   help; it shows that the statements are not about the first levels, which are the scales that a
+   grid of fixed depth sees.
+2. *The set that the grid bounds is the boundary itself.* The unresolved set is
+   `R = M ∖ int M = ∂M` (`frontier_mandelbrot_eq_unresolved`), the same set for every depth. The
+   parameters of the open classes are boundary points, and a deeper grid changes only the
+   certified bound on the area of `R`; it contains no statement about local connectivity at a
+   point of `R`.
+3. *No statement and no reduction of the programme uses the grid.* The declaration-level cones of
+   the sixteen statements of `ProgrammeInput` and of the five reductions of `LevelGeometry.lean`
+   contain no declaration of the grid (checked on the exported dependency graph; the Progress page
+   computes which objects each cone reaches). The theorems `MLC.mlc_conjecture`,
+   `MLC.mlc_of_programme` and `MLC.mlc_of_levelGeometry` do reach the grid, through the three
+   redundant fields `residual_area_bound`, `coarse_area_bound` and `grid_area_bound` of
+   `CandidateSystem.VirtualMoleculeCompletion`, which have default proofs and which no theorem
+   consumes.
+4. *The return is small.* Every level costs a factor 3.4 in kernel work for a decrease of 10–20% of
+   the bound (the ratios of consecutive depths are 0.83, 0.85, 0.80 and 0.90); depth 14 would take
+   about six hours on 20 cores for 0.15% of the share. At the ratios 0.80 to 0.90 a hundredfold
+   reduction of the bound takes 21 to 44 further levels, between `10¹¹` and `10²³` times the
+   present work (an extrapolation of the measured data). The bound is the area of the unresolved
+   cells, an upper bound for the area of `R`. Its limit need not be the area of `∂M`: the
+   certificates of the grid test the periods up to 8 (`periodLen` in `GridDefs.lean`), so the
+   interior of the components of a larger period stays in unresolved cells. Since `∂M` has
+   Hausdorff dimension 2 (Shishikura), hence box dimension 2, the area of the `ε`-neighbourhood of
+   `∂M` is `ε^{o(1)}` (`log(area) / log ε → 0`), which decreases more slowly than every positive
+   power of `ε`; this standard consequence is not formalized.
+
+What a deeper grid gives is a smaller number on the first tile of the Progress page. What would
+help Problems 4.3 and 4.4 is a statement about the tail of the towers, which the geometric form of
+the programme (`LevelGeometry`) states as collars, stacked annuli and the phase–parameter
+comparison.
 
 ### Caveats
 
@@ -640,8 +1074,8 @@ from the open root obligations and the existence of
 ### The area of `∂M`: route Z
 
 The grid cannot reach `100%` without an input about `∂M`: the unresolved
-cells at depth `d` cover a neighbourhood of `∂M` whose area decreases to
-`area(∂M)`, and the measured ratio of one level to the next is `0.83–0.87`, so
+cells at depth `d` cover `∂M`, so their area is at least `area(∂M)`, which is
+unknown, and the measured ratios of one level to the next are `0.80–0.90`, so
 every further level costs about three times more for a smaller gain. At depth 14
 the search resolves 7% of the children of the unresolved cells of depth 13
 (outside certificates of at most 32 steps), at about `3·10⁻¹⁰` of area per step

@@ -25,8 +25,21 @@ import textwrap
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from progress_report import PROGRESS_CSS, PROGRESS_ROUTES
+from progress_report import PROGRESS_CSS, PROGRESS_ROUTES, lean_research_text
 from programme import (
+    ANNULUS_ROOTS,
+    BOUNDARY_SPLIT_ROOTS,
+    COLLAR_ROOTS,
+    CRITERION_ROOTS,
+    DIMENSION_ROOTS,
+    LEVEL_GEOMETRY_ROOTS,
+    LEVEL_JUMP_ROOTS,
+    LEVEL_TRANSFER_ROOTS,
+    MULTIPLICITY_ROOTS,
+    NEST_ROOTS,
+    PEANO_ROOTS,
+    RECTANGLE_ROOTS,
+    STACKING_ROOTS,
     CLASSES,
     GROTZSCH_ROOT,
     LEMMAS,
@@ -34,12 +47,15 @@ from programme import (
     PROGRAMME_ROOT,
     PSEUDO_SIEGEL,
     PULLBACK_ROOT,
+    QUASI_INVARIANCE_ROOTS,
     SHARPNESS_ROOT,
     TAIL_ROOTS,
+    VIRTUAL_SHRINKING_ROOTS,
     check_catalogue,
     class_shares,
     open_lemmas,
     proved_lemmas,
+    reduces,
 )
 
 # Geometry of the figure, in user units of the SVG.
@@ -169,6 +185,21 @@ SIDE_ROOTS = (
     PARALLEL_ROOT,
     PULLBACK_ROOT,
     *TAIL_ROOTS,
+    *ANNULUS_ROOTS,
+    *RECTANGLE_ROOTS,
+    *NEST_ROOTS,
+    *MULTIPLICITY_ROOTS,
+    *VIRTUAL_SHRINKING_ROOTS,
+    *QUASI_INVARIANCE_ROOTS,
+    *COLLAR_ROOTS,
+    *LEVEL_JUMP_ROOTS,
+    *LEVEL_TRANSFER_ROOTS,
+    *STACKING_ROOTS,
+    *DIMENSION_ROOTS,
+    *BOUNDARY_SPLIT_ROOTS,
+    *PEANO_ROOTS,
+    *CRITERION_ROOTS,
+    *LEVEL_GEOMETRY_ROOTS,
 )
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
@@ -766,12 +797,36 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
     if issues:
         raise RuntimeError("Programme catalogue out of date: " + "; ".join(issues))
     open_keys = set(open_lemmas(root_text))
+    research_text = lean_research_text(repo_root)
     lemma_nodes: dict[str, Node] = {}
     for lemma in LEMMAS:
         if lemma.lean not in fq_index:
             raise RuntimeError(f"Lemma not found in the sources: {lemma.lean}")
         file, line, doc = from_decl(lemma.lean)
         is_open = lemma.key in open_keys
+        reduced = (
+            lemma.kind != "published"
+            and bool(lemma.reduction)
+            and lemma.reduction in fq_index
+            and lemma.lean in edges.get(lemma.reduction, set())
+            and reduces(lemma, research_text)
+        )
+        if not is_open:
+            status_text = "Proved."
+        elif reduced:
+            status_text = (
+                f"Reduced: the theorem {lemma.reduction.rsplit('.', 1)[-1]} derives it in Lean "
+                "from a geometric statement about the level sets of the dictionary, which is "
+                "itself open. A field of ProgrammeInput."
+            )
+        elif lemma.kind == "published":
+            status_text = (
+                "Literature: a hypothesis about the dictionary that the literature motivates "
+                "(a field of ProgrammeInput); the bridge from the published statement to this "
+                "formal one is not formalized."
+            )
+        else:
+            status_text = "Open: a field of ProgrammeInput."
         node = make(
             Node(
                 id=f"lemma:{lemma.key}",
@@ -783,8 +838,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
                 ),
                 title=lemma.title,
                 sub=lemma.sub,
-                text=f"{lemma.text} Source: {lemma.source}. "
-                + ("Open: a field of ProgrammeInput." if is_open else "Proved."),
+                text=f"{lemma.text} Source: {lemma.source}. " + status_text,
                 lean=lemma.lean,
                 file=file,
                 line=line,
@@ -816,12 +870,12 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         sub: str,
         text: str,
         parent: Node,
-    ) -> None:
+    ) -> Node | None:
         """A checked branch: the declarations that only these side results need."""
         roots = (root,) if isinstance(root, str) else root
         names = set().union(*(side_names[r] for r in roots))
         if not names:
-            return
+            return None
         decl = fq_index[roots[0]]
         bud = make(
             Node(
@@ -842,6 +896,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         bud.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
         add_child(parent, bud, below=True)
         extras.append(bud)
+        return bud
 
     side_bud(
         SHARPNESS_ROOT,
@@ -891,6 +946,67 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         ps_nodes["ps4"],
     )
     side_bud(
+        LEVEL_JUMP_ROOTS,
+        "prog:level_jump",
+        "Lemma G from collars",
+        "bounded dilatation ⇒ cap on the jumps",
+        "Checked in Lean (LevelTower, LevelTower.width_le_of_collar, "
+        "LevelTower.jumpCap_of_collars, LevelTower.aPrioriBounds_of_collars, "
+        "LevelTower.width_eq_of_round, WidthTower.exists_levelTower). A LevelTower "
+        "records that the degeneration of the level k is W(f_k) = 1 / mod(V_k ∖ K_k), the "
+        "reciprocal modulus of the annulus between the filled Julia set and the range domain "
+        "of the level (the survey (3.2), (4.1)), the modulus being the extremal width of the "
+        "C¹ loops that separate K_k from the complement of V_k: at most the classical "
+        "modulus, and equal to it for round annuli (for a round level K = B̄(c, r), "
+        "V = B(c, R) the degeneration is exactly 2π / log(R/r)). The sets are data of the "
+        "dictionary: every width tower is realized by round levels "
+        "(WidthTower.exists_levelTower), so a LevelTower has no dynamical content by itself, "
+        "and the hypotheses below are meaningful for the sets that the dictionary provides "
+        "(the filled Julia sets and range domains of quadratic-like restrictions, or the "
+        "regularized sets of the pseudo-Siegel levels). If this annulus has a collar of "
+        "dilatation "
+        "Kd and modulus log(R/r) / 2π (see \"Collars bound the modulus\"), the degeneration is "
+        "at most 2π Kd / log(R/r). So if at every level that follows a jump by the factor C₀ "
+        "the annulus has a collar of dilatation at most K₀ and modulus at least μ₀ / 2π, the "
+        "jumps are capped by the ceiling 2π K₀ / μ₀: Lemma G, in the reading of PS4 that the "
+        "invariant degeneration is bounded by the uniform quasiconformal geometry of the "
+        "pseudo-Siegel disks. With the linear dichotomy this gives a priori bounds; with the "
+        "Teichmüller contraction for the levels of small relative period (Lemma TC′), collars "
+        "at the jumps at the levels of large relative period suffice "
+        "(LevelTower.aPrioriBounds_of_tails_collars), the three lemmas of Problem 4.3. "
+        "That the "
+        "pseudo-Siegel disks give such collars at the jumps is the proposed content of PS4 and "
+        "stays open; the same theorem applies to the virtual levels of Lemma VG2.",
+        ps_nodes["ps4"],
+    )
+    side_bud(
+        STACKING_ROOTS,
+        "prog:stacking",
+        "Lemma D from stacked annuli",
+        "p disjoint sub-annuli ⇒ linear dichotomy",
+        "Checked in Lean (LevelTower.StackedAnnuli, LevelTower.linearDichotomy_of_stacked, "
+        "sum_extWidth_loopFamily_le, WidthTower.linearDichotomy_iff_stacked). The linear "
+        "dichotomy asks, for every threshold C, for "
+        "constants c and A such that for every pair of levels k, k+n of relative period p "
+        "either c p W_{k+n} − A p ≤ W_k or the degeneration jumps at the level k+n. A proposed "
+        "sufficient geometric form, an analogue of the quasi-additivity mechanism of the "
+        "survey (§4.2, (4.5)), which the survey does not state in this form: for every pair "
+        "of levels and every threshold C, with uniform constants c′ > 0 and A′ ≥ 0, either "
+        "the degeneration jumps by the factor C at the level k+n, or the annulus of the "
+        "level k+n contains p pairwise disjoint sub-annuli, each of modulus at least "
+        "c′/(W_k + A′ p). The moduli of disjoint sub-annuli "
+        "add up (Grötzsch's inequality, the parallel law), so the modulus of the deeper "
+        "annulus is at least p c′/(W_k + A′ p), that is c′ p W_{k+n} ≤ W_k + A′ p, the "
+        "amplification, and the linear dichotomy follows. In the round model the converse "
+        "holds, the sub-annuli being concentric, so Lemma D is equivalent there to the "
+        "stacked annuli; with a loss A′ that does not grow with p the form would be "
+        "strictly stronger and fails for a tower of constant degeneration without jumps. "
+        "That the annuli of the dynamical levels contain such sub-annuli, pullbacks of the "
+        "shallower annulus along the critical orbit, is the proposed content of "
+        "Lemma D and stays open.",
+        ps_nodes["ps4"],
+    )
+    side_bud(
         PULLBACK_ROOT,
         "prog:pullback",
         "Pullback law (contraction)",
@@ -898,11 +1014,33 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "Checked in Lean (extWidth_pullback_le, extLength_pullback_le). If a map φ carries "
         "the curves of a family ΓX to curves of ΓY and its area multiplicity is at most d "
         "(the area formula for a holomorphic map of degree d), then W(ΓX) ≤ d · W(ΓY). "
-        "This is the mechanism of the Teichmüller contraction: p iterations of a "
-        "quadratic-like map have multiplicity at most 2^p, so the width of a pulled-back "
-        "family grows by at most 2^p; for d = 1 it is conformal invariance. The "
+        "This is the shape of the growth bound of the Teichmüller contraction: p iterations "
+        "of a quadratic-like map have multiplicity at most 2^p, so the width of a pulled-back "
+        "family grows by at most 2^p; for d = 1 it is the monotonicity of the width under a "
+        "conformal map. The "
         "tower-level statement, W(f_{m+1}) ≤ Δ_P W(f_m), needs the families of the "
         "renormalization levels and stays open.",
+        lemma_nodes["unboundedTeichmuller"],
+    )
+    side_bud(
+        MULTIPLICITY_ROOTS,
+        "prog:multiplicity",
+        "Area multiplicity of f_c^p",
+        "W(ΓX) ≤ 2^p · W(ΓY) for the iterates of z² + c",
+        "Checked in Lean (extWidth_le_pow_two_mul_fc_iterate, areaMultiplicity_fc_iterate, "
+        "areaMultiplicity_fc, loopMeasure_comp). The hypothesis of the pullback law, the area "
+        "formula with multiplicity at most d, is proved for the quadratic polynomials: z ↦ z² + c "
+        "is injective on each of the two half planes that z ↦ −z swaps, so by the area formula "
+        "of Mathlib (with the determinant |w|² of the multiplication by w) it has area "
+        "multiplicity 2; the multiplicity is additive over a partition of the domain and "
+        "multiplicative under composition, so f_c^p has multiplicity 2^p with the stretching "
+        "|(f_c^p)′|. Hence, if f_c^p maps the curves of a family ΓX to curves of ΓY, then "
+        "W(ΓX) ≤ 2^p · W(ΓY): the width of a pulled-back family grows by at most 2^p, which "
+        "has the shape of the Teichmüller contraction of §4.3 (growth at most exponential in "
+        "the relative period). For a C¹ loop the image curve has the "
+        "length measure of the pushed-forward loop (loopMeasure_comp). The families of the "
+        "renormalization levels to which the estimate applies, and the quadratic-like "
+        "restrictions, stay open.",
         lemma_nodes["unboundedTeichmuller"],
     )
     side_bud(
@@ -957,6 +1095,22 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
     add_lemma(p44, "virtualTeichmuller")
     add_lemma(p44, "virtualJulia")
     add_lemma(p44, "virtualTransfer")
+    side_bud(
+        VIRTUAL_SHRINKING_ROOTS,
+        "prog:virtual_shrinking",
+        "What VT says about the hulls",
+        "separation estimate ⇔ hulls shrink",
+        "Checked in Lean (VirtualJuliaNest.separationEstimate_iff, "
+        "Geometry.virtualTransfer_hulls_shrink). For a cost with non-negative terms and "
+        "divergent partial sums, such as the canonical cost of a degeneration bound, the "
+        "dynamical separation estimate of Lemma VT is equivalent to the shrinking of the "
+        "virtual hulls to their origins: for every ε the closure of the n-th hull lies in the "
+        "ε-ball around its origin for n large. So the dynamical content of Lemma VT is that "
+        "the diameters of the virtual hulls tend to zero, the analogue of the shrinking of "
+        "the parameter pieces for Lemma T. The nest in the parameter plane, the "
+        "phase–parameter chart and the proof that the hulls shrink stay open.",
+        lemma_nodes["virtualTransfer"],
+    )
 
     published = make(
         Node(
@@ -971,9 +1125,10 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
                 "renormalizable (Yoccoz, Hubbard), the Teichmüller contraction for bounded "
                 "type (§4.3), bounded type (Theorem 4.1), the anti-Molecule condition "
                 "(Kahn–Lyubich), neutral parameters (Theorem 4.2) and the satellite types of "
-                "quadratic growth (Cheraghi–Shishikura, Theorem D). Each is one statement "
-                "about the geometric dictionary, a field of ProgrammeInput; none is "
-                "formalized."
+                "quadratic growth (Cheraghi–Shishikura, Theorem D). Each is one hypothesis "
+                "about the geometric dictionary that the literature motivates, a field of "
+                "ProgrammeInput; neither the published theorem nor the bridge from it to the "
+                "field is formalized."
             ),
             parent=vertebrae[dudko].id,
         )
@@ -1026,6 +1181,37 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         assembly.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
         attach(dudko, assembly, 1)
         extras.append(assembly)
+        side_bud(
+            LEVEL_GEOMETRY_ROOTS,
+            "prog:level_geometry",
+            "Geometric form of the programme",
+            "collars, stacked annuli, comparison ⇒ MLC",
+            "Checked in Lean (MLC.mlc_of_levelGeometry, LevelGeometry, "
+            "LevelGeometry.UnboundedCollars, LevelGeometry.UnboundedStacked, "
+            "LevelGeometry.VirtualCollars, LevelGeometry.VirtualStacked, "
+            "LevelGeometry.Comparison). A LevelGeometry is a dictionary together with the "
+            "level sets of its towers, the sets that define the degeneration of the levels. "
+            "Lemma G is stated for them as collars of bounded dilatation and definite modulus "
+            "at the jumps at the levels of large relative period, and Lemma D as stacked "
+            "annuli, for the tower of unbounded satellite type (Problem 4.3) and for the "
+            "virtual near-neutral tower (Problem 4.4); Lemma T is the phase–parameter "
+            "comparison of the moduli of the levels with those of a nest in M. The abstract "
+            "fields UnboundedJumpCap, UnboundedDichotomy, VirtualJumpCap, "
+            "VirtualLinearDichotomy and Transfer are derived from them "
+            "(LevelTower.largePeriodJumpCap_of_collars, LevelTower.linearDichotomy_of_stacked, "
+            "Geometry.transfer_of_comparison), and MLC follows from the six published lemmas, "
+            "the Teichmüller contraction for the pseudo-Siegel and for the virtual levels, the "
+            "virtual Julia sets, the dichotomy for the virtual bounded type, the virtual "
+            "transfer and these five geometric statements. That the level sets are the "
+            "dynamical ones (the filled Julia sets and range domains of quadratic-like "
+            "restrictions of f_c, or the regularized sets of the pseudo-Siegel levels whose "
+            "degeneration is the width of the class of Problem 4.3) is the "
+            "faithfulness of the dictionary and is not part of the structure; the statements "
+            "depend on the dictionary (for a dictionary without towers the five are vacuous, "
+            "and the comparison is more than a bound on widths); none of the "
+            "statements is proved.",
+            assembly,
+        )
     phase = next(i for i, v in enumerate(SPINE) if v.key == "phase")
     unified = make(
         Node(
@@ -1043,7 +1229,196 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
     )
     attach(phase, unified, 1)
     add_lemma(unified, "transfer", below=True)
-    add_child(
+    side_bud(
+        (*ANNULUS_ROOTS, *RECTANGLE_ROOTS),
+        "prog:modulus",
+        "Moduli of the model domains",
+        "round annulus and rectangle",
+        "Checked in Lean (extLength_radialFamily, extLength_circleFamily, "
+        "extLength_radialFamily_mul_circleFamily, extLength_radialFamily_add_le, "
+        "extLength_horizFamily, extWidth_horizFamily). In the plane with Lebesgue measure, the "
+        "extremal length of the radial segments of the annulus {r < |z| < R}, the curves that "
+        "join its boundary circles, is log(R/r)/2π, and that of the circles that separate "
+        "them is 2π/log(R/r); the extremal length of the horizontal segments of a rectangle, "
+        "which join its vertical sides, is width/height. So the extremal-length theory of "
+        "ExtremalLength.lean agrees with the classical modulus on both model domains "
+        "(Cauchy–Schwarz and Fubini for the upper bounds, a characteristic metric for the "
+        "lower bounds), and its series law gives the Grötzsch inequality for concentric "
+        "annuli. This is the first step of the transfer lemma and the model of the rectangles "
+        "of the survey (Figure 13). The modulus of domains that are not round, the conformal "
+        "invariance and the Teichmüller bound that turn moduli into shrinking stay open.",
+        lemma_nodes["transfer"],
+    )
+    side_bud(
+        NEST_ROOTS,
+        "prog:nest",
+        "Moduli ⇒ shrinking",
+        "Grötzsch–Teichmüller · T ⇔ phase–parameter",
+        "Checked in Lean (ConnectedNest.sum_extWidth_loops_le, DivergentModuli.shrinking, "
+        "ConnectedNest.sum_extWidth_loops_le_coarse, ConnectedNest.exists_divergentSubnest, "
+        "Geometry.transfer_iff_phaseParameter, concentricNest_divergentModuli, "
+        "extWidth_loopFamily_round). The loops of "
+        "the annulus between two consecutive pieces of a nest are the C¹ closed curves in it "
+        "that separate the next piece from the complement of the piece (every path from one "
+        "to the other meets the loop); their extremal width is the modulus of the annulus, "
+        "which for the round annulus r < |z − c| ≤ R is exactly the classical log(R/r)/2π "
+        "(the circles bound it below, and the metric 1/|z − c| of area 2π log(R/r) bounds it "
+        "above). If "
+        "the piece n of the nest keeps a point at distance δ from c, the moduli of the first n "
+        "annuli add up to at most 2π log(4(R + δ)/δ) / (log 2)², where R bounds the first "
+        "piece. Each loop has length at least log 2 for the metric 1/|z − c| on the ring "
+        "δ/2 ≤ |z − c| ≤ R + δ (a loop that stays outside the disk of radius δ/2 meets every "
+        "ray from c, so the argument of z − c sweeps (−π, π); a loop that enters the disk "
+        "crosses the ring δ/2 ≤ |z − c| ≤ δ; both by the area inequality for real "
+        "functions), the ring has area at most 2π log(4(R + δ)/δ), and the annuli are "
+        "disjoint (the parallel law). So a nest whose moduli add up to infinity shrinks to c "
+        "and gives the separation estimate of every budget. Grötzsch's inequality for a "
+        "coarsening: the modulus of Pₙ ∖ cl P_m is at least the sum of the moduli of the "
+        "annuli Pⱼ ∖ cl P_{j+1} with n ≤ j < m, so grouping the levels of a nest can only "
+        "increase the moduli. Conversely, a shrinking nest has "
+        "a subnest whose annuli contain round annuli of modulus log(3/2)/2π, so Lemma T is "
+        "equivalent to the phase–parameter relation in moduli form (Geometry.PhaseParameter), "
+        "and the concentric disks give an example of a nest with divergent moduli, so the "
+        "notion is satisfiable (the relation over the parameters of M is the open statement). The "
+        "construction of the nest from an a priori bound stays open.",
+        lemma_nodes["transfer"],
+    )
+    phase_parameter = add_child(
+        lemma_nodes["transfer"],
+        Node(
+            id="paper:phase_parameter",
+            kind="tip",
+            cat="informal",
+            title="Phase–parameter moduli",
+            sub="open · equivalent to Lemma T",
+            text=(
+                "Lyubich's phase–parameter relation, in the form that Lemma T needs "
+                "(Geometry.PhaseParameter): an a priori bound on the degeneration of the tower "
+                "of c gives a connected nest of parameter pieces around c in M whose annuli "
+                "have moduli with an infinite sum. The quasi-additivity law of Kahn–Lyubich "
+                "carries the moduli of the dynamical annuli of the tower to the parameter "
+                "plane. This statement is equivalent to Lemma T (checked in Lean, below): the "
+                "geometric half, from the moduli to the shrinking of the pieces, and the "
+                "converse, a subnest with moduli bounded below, are theorems. What is open is "
+                "the construction of the nest from the bound. The root theorem keeps the "
+                "hypothesis Transfer."
+            ),
+        ),
+        below=True,
+    )
+    quasi_invariance = side_bud(
+        QUASI_INVARIANCE_ROOTS,
+        "prog:quasi_invariance",
+        "Moduli under a change of chart",
+        "C¹ charts of dilatation ≤ K",
+        "Checked in Lean (QcEmbedding, extWidth_le_of_qcEmbedding, Separates.image, "
+        "extWidth_loopFamily_le_map, ConnectedNest.extWidth_loops_le_map, "
+        "ConnectedNest.DivergentModuli.map, QcEmbedding.of_holomorphic). A C¹ embedding φ of "
+        "an open set with dilatation at most K (‖Dφ‖² ≤ K |det Dφ|; K = 1 for an injective "
+        "holomorphic map with non-vanishing derivative) multiplies the extremal width by at "
+        "most K: if φ carries every curve of ΓX to a curve that dominates a curve of ΓY, then "
+        "W(ΓX) ≤ K W(ΓY) (the area formula of Mathlib and the pullback law). A map that is "
+        "continuous and injective on the compact closure of O, with φ(O) open, carries a loop "
+        "that separates K from the complement of O to a loop that separates φ(K) from the "
+        "complement of φ(O) (the first exit time of a path from φ(O)). So the modulus of an "
+        "annular region, the extremal width of the C¹ loops in it that separate K from the "
+        "complement of O, is at most K times the modulus of every annular region that "
+        "contains the image of the first. For the annuli of a nest this gives that the "
+        "modulus of each annulus of the image nest is at least 1/K times that of the original, "
+        "and that a nest with divergent moduli has an image with divergent moduli. This is the "
+        "form that the transport of the moduli takes in the phase–parameter relation, as "
+        "proposed here: the correspondence between the dynamical and the parameter annuli is "
+        "quasi-conformal and is not given as a C¹ chart, and neither the chart nor the phase "
+        "nest is constructed. What is open is the construction of the nest from the a priori "
+        "bound.",
+        phase_parameter,
+    )
+    collar = side_bud(
+        COLLAR_ROOTS,
+        "prog:collar",
+        "Collars bound the modulus",
+        "quasi-round annulus ⇒ definite modulus",
+        "Checked in Lean (IsCollar, IsCollar.ofReal_le_extWidth, "
+        "ConnectedNest.divergentModuli_of_collars, "
+        "ConnectedNest.closure_piece_subset_closedBall_of_collars). The modulus of the "
+        "annulus V ∖ E is the "
+        "extremal width of the C¹ loops in it that separate E from the complement of V; for a "
+        "level f : U → V with filled Julia set E = K_f it is the C¹ version of mod⁺(f), the "
+        "reciprocal of the degeneration W(f) of the survey (4.1): at most the classical "
+        "modulus, and equal to it for round annuli; the identification in general belongs to "
+        "the dictionary. A collar of V ∖ E is a C¹ embedding ψ of "
+        "dilatation at most Kd of a neighbourhood of the closed disk of radius R, such that E "
+        "lies in the image of the disk of radius r and the image of the disk of radius R lies "
+        "in V. The loops of the round annulus r < |w| ≤ R go to loops of V ∖ E, so the "
+        "modulus of V ∖ E is at least log(R/r) / (2π Kd): Grötzsch's monotonicity of the "
+        "modulus together with the quasi-invariance. A nest whose annuli all have collars of "
+        "dilatation at most K₀ and modulus at least μ₀/2π has moduli bounded below by "
+        "μ₀/(2π K₀), so they add up to infinity and the pieces shrink to the point, at a "
+        "geometric rate: if the first piece lies in the disk of radius R around c and the "
+        "first n annuli have total modulus at least s, with κ s ≥ log 8 for κ = (log 2)²/2π, "
+        "the piece n lies in the disk of radius 8R e^(−κ s) (a Teichmüller-type estimate "
+        "with non-optimal constants, "
+        "closure_piece_subset_closedBall_of_sum), so uniform collars give the decay "
+        "exp(−κ μ₀ n / (2π K₀)): this is the form that bounded geometry takes here. The "
+        "collars of the levels of a tower and "
+        "the charts between dynamical and parameter annuli are not constructed.",
+        quasi_invariance or phase_parameter,
+    )
+    level_transfer = side_bud(
+        LEVEL_TRANSFER_ROOTS,
+        "prog:level_transfer",
+        "Lemma T from the comparison",
+        "level moduli ≤ Kd · nest moduli ⇒ T",
+        "Checked in Lean (Geometry.PhaseParameterComparison, Geometry.transfer_of_comparison). "
+        "The levels of the tower of c, with a degeneration bound B, have moduli at least 1/B. "
+        "If a connected nest in M around c has annuli whose moduli are at least 1/Kd times the "
+        "moduli of the corresponding levels (the comparison; a quasi-conformal chart from the "
+        "dynamical annulus to the parameter annulus gives it, and for a C¹ chart this is "
+        "extWidth_loopFamily_le_map), the moduli of the nest are bounded below by 1/(B Kd), so "
+        "they add up to infinity, the pieces shrink to c, and Lemma T holds. This is the form "
+        "in which the phase–parameter relation of Lyubich is used at the renormalization "
+        "levels, as proposed here. The realization of the tower by the annuli of its levels, "
+        "the nest and the chart are not constructed; the root theorem keeps the hypothesis "
+        "Transfer.",
+        collar or quasi_invariance or phase_parameter,
+    )
+    side_bud(
+        CRITERION_ROOTS,
+        "prog:criterion",
+        "Collars ⇒ local connectivity at c",
+        "the Yoccoz criterion, with a logarithmic depth bound",
+        "Checked in Lean (ConnectedNest.locallyConnectedAt_of_divergent, "
+        "ConnectedNest.locallyConnectedAt_of_collars, "
+        "ConnectedNest.exists_relativePiece_of_collars, "
+        "Geometry.exists_relativePiece_of_comparison, "
+        "Geometry.locallyConnectedAt_of_collars_and_comparison, "
+        "Geometry.locallyConnectedAt_of_tails_collars_and_comparison, concentricNest_collars). "
+        "A set "
+        "is locally connected at the center of a connected nest whose moduli add up to "
+        "infinity (the Yoccoz criterion). If the moduli have a uniform lower bound w and the "
+        "first piece lies in the disk of radius R around c, then for every ε > 0 some piece "
+        "of depth at most max(log 8, log(8R/ε)) / (κ w) + 1, κ = (log 2)²/2π, is a connected "
+        "neighbourhood of c inside the disk of radius ε: the depth grows like log(1/ε), a "
+        "logarithmic bound on the depth, not on the size of the neighbourhood. Uniform "
+        "collars of dilatation at most K₀ "
+        "and modulus at least μ₀/2π give w = μ₀/(2π K₀); the phase–parameter comparison with a "
+        "degeneration bound B gives w = 1/(B Kd). The whole chain in one statement: collars "
+        "of bounded dilatation and definite modulus at the jumps of a level tower of c (the "
+        "content proposed for PS4), the linear dichotomy (Lemma D) and the phase–parameter "
+        "comparison give the local connectivity of M at c; in the form that follows the three "
+        "lemmas of Problem 4.3, the Teichmüller contraction (TC′), collars at the jumps at "
+        "the levels of large relative period (G), the linear dichotomy (D) and the "
+        "comparison, and with Lemma D in the form of stacked annuli (see \"Lemma D from "
+        "stacked annuli\") every hypothesis but TC′ is a statement about sets of the plane "
+        "(collars, sub-annuli, a nest) and their moduli, while TC′ is an inequality between "
+        "the widths of consecutive levels. "
+        "These hypotheses are "
+        "explicit geometric statements and none is proved; the concentric nest, whose annuli "
+        "are their own collars, shows that the hypotheses of the collar criterion are "
+        "satisfiable.",
+        level_transfer or collar or quasi_invariance or phase_parameter,
+    )
+    rays = add_child(
         unified,
         Node(
             id="paper:rays",
@@ -1061,11 +1436,100 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
                 "those classes, so the rays land at points where local connectivity is "
                 "known, except possibly at the infinitely renormalizable parameters of "
                 "Problems 4.3 and 4.4. The formalization uses connected parameter nests "
-                "that shrink to the point and needs no ray. Not formalized; see ROADMAP.md, "
-                "“Rays, the lamination and tuning”."
+                "that shrink to the point and needs no ray. The rays and the lamination are "
+                "not formalized; see ROADMAP.md, “Rays, the lamination and tuning”. Checked "
+                "below: the form of local connectivity as a parametrization by the interval, "
+                "in the category of compact Hausdorff spaces, and the dimension of the "
+                "fractal boundary against the smooth curves of the moduli."
             ),
         ),
         below=True,
+    )
+    dimension = side_bud(
+        DIMENSION_ROOTS,
+        "prog:dimension",
+        "Fractal against smooth curves",
+        "dim_H of loops, charts and kernels",
+        "Checked in Lean (IsLoop.dimH_range_le, QcEmbedding.dimH_image, "
+        "dimH_le_inv_of_holderOnWith, ShishikuraDimension.holder_exponent_le_half, "
+        "ConnectedNest.sum_extWidth_loops_bounded_of_dimH_kernel_pos). The loops with which the "
+        "moduli are measured are C¹ curves, of Hausdorff dimension at most 1, while the sets "
+        "that they go around are fractals: the boundary of the Mandelbrot set has topological "
+        "dimension 1 and Hausdorff dimension 2 (Shishikura 1998, a published hypothesis here). "
+        "Countably many loops cover no set of dimension above 1. A C¹ embedding with "
+        "invertible derivative is locally bi-Lipschitz, so it preserves the Hausdorff "
+        "dimension of every subset, whatever its dilatation, so no C¹ chart carries a smooth "
+        "curve onto a fractal. A K-quasi-conformal map distorts the dimension within the bound "
+        "of Astala (1994, not formalized), dimension d goes to at most 2Kd/(2+(K−1)d), which "
+        "is below 2 for d < 2: a quasi-conformal map of finite dilatation never carries a set "
+        "of dimension below 2 onto a set of dimension 2. The charts of the quasi-invariance "
+        "and of the collars compare the moduli of annuli, which are open sets, and say "
+        "nothing about the dimension of the sets that the annuli go around. An α-Hölder "
+        "parametrization of a set of dimension d by "
+        "an interval has α d ≤ 1: given Shishikura, a parametrization of the boundary of M, "
+        "such as the landing map of the external rays that exists when M is locally "
+        "connected, has exponent at most 1/2, and the boundary is not the C¹ image of any set "
+        "of smaller dimension. For the kernel of a nest: divergent moduli leave a "
+        "point, of dimension 0; a kernel of positive dimension forces a finite total modulus "
+        "(it contains a point other than c, and the Grötzsch–Teichmüller estimate bounds the "
+        "moduli).",
+        rays,
+    )
+    side_bud(
+        BOUNDARY_SPLIT_ROOTS,
+        "prog:boundary_split",
+        "Skeleton and wild part",
+        "where the dimension of ∂M lies",
+        "Checked in Lean (wildPart, dimH_wildPart_eq, ShishikuraDimension.dimH_wildPart_eq_two, "
+        "ShishikuraDimension.dimH_noIndifferentCycle_eq_two, "
+        "ShishikuraDimension.not_countable_wildPart, wildPart_subset_unresolved, "
+        "ShishikuraDimension.exists_class_dimH_eq_two). The boundary of a hyperbolic component "
+        "is a Jordan curve, real-analytic away from its root, and a parameter with an indifferent "
+        "cycle lies on the boundary of a hyperbolic component, so the parameters with an "
+        "indifferent cycle (the parabolic, Siegel and Cremer parameters) lie on countably many "
+        "analytic images of the circle: the skeleton of the boundary, a fact of the literature "
+        "that is not formalized and enters as an explicit hypothesis on a family of C¹ loops. "
+        "The part of the boundary that the loops miss, the wild part, keeps the whole "
+        "Hausdorff dimension 2 for every countable family (given Shishikura's theorem, taken "
+        "as a hypothesis here), so it is nonempty and uncountable; when the family covers the "
+        "indifferent boundary parameters, the boundary parameters with no indifferent cycle "
+        "have dimension 2. The wild part depends on the family (a larger family has a smaller "
+        "wild part) and differs from the set of Problems 4.3 and 4.4: it contains parameters "
+        "for which MLC is known, such as the Misiurewicz parameter c = i (an end point of a "
+        "filament of M). The boundary is the unresolved set of the grid "
+        "certificate (frontier_mandelbrot_eq_unresolved): the same set for every depth of the "
+        "grid, which lowers only the certified bound on its area. For every dictionary some "
+        "class of boundary parameters has dimension 2, since the dimension of a finite union "
+        "is the largest of the dimensions of its parts; this is a statement about the finite "
+        "partition and holds even for a dictionary that labels the whole boundary neutral. "
+        "For the intended dictionary the class neutral lies in the skeleton, of dimension at "
+        "most 1, so other classes carry the dimension, and which ones is not determined here.",
+        dimension or rays,
+    )
+    side_bud(
+        PEANO_ROOTS,
+        "prog:peano",
+        "Peano parametrization of M",
+        "epimorphisms of CompHaus from the interval",
+        "Checked in Lean (IsPeanoObject, IsPeanoObject.locallyConnectedSpace, "
+        "IsPeanoObject.exists_regularEpi, mlc_iff_regularEpi, "
+        "ShishikuraDimension.holder_exponent_le_half_of_epi). An object of the category of "
+        "compact Hausdorff spaces is a Peano object if it is an epimorphic image of the "
+        "interval. Such an object is locally connected: an epimorphism is a surjection, "
+        "hence a quotient map, and a quotient of the locally connected interval is locally "
+        "connected. In this category the epimorphisms are the effective ones, so the "
+        "parametrization is a regular epimorphism, the coequalizer of its kernel pair: the "
+        "object is the quotient of the interval by a closed equivalence relation (for M, some "
+        "closed equivalence relation on the interval, the kernel pair of the chosen "
+        "parametrization; the landing relation of the external rays lives on the circle of "
+        "angles and belongs to the pinched-disk model of Thurston and Douady–Hubbard, a "
+        "different statement that is not formalized). The Hahn–Mazurkiewicz theorem "
+        "(published, not formalized) is the converse for continua, so, given the "
+        "connectedness of M (Douady–Hubbard), MLC holds exactly when the Mandelbrot object is "
+        "a regular quotient of the interval (mlc_iff_regularEpi). Given "
+        "Shishikura's theorem, no epimorphism from the interval onto the boundary object is "
+        "better than 1/2-Hölder: the parametrization of a fractal is wild.",
+        dimension or rays,
     )
     # Ground: the kernel axioms below the first vertebra.
     ground = [
@@ -1429,7 +1893,7 @@ def render_svg(model: dict[str, object], width: float, height: float) -> str:
 LEGEND = (
     ("open", "Open problem", "open"),
     ("lemma", "Open statement of the programme", "lemma"),
-    ("published", "Published, not formalized", "published"),
+    ("published", "Literature-motivated hypothesis", "published"),
     ("informal", "Not formalized", "informal"),
     ("checked", "Checked in Lean", "checked"),
     ("num", "Certified computation", "num"),

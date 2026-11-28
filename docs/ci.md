@@ -36,8 +36,9 @@ A job looks, in this order, for
 3. the sharded build: `defs` builds `Mlc.GridDefs` once, 20 jobs `tiles` build the modules of
    their shard (`crc32(module) mod 20`, so a changed tile moves no other tile) and upload the
    outputs, and `build` downloads all archives. A finished shard is cached under
-   `tiles-shard-<i>-<key>`, so a re-run resumes where the last one stopped. Expect about an
-   hour and a half from scratch.
+   `tiles-shard-<i>-<key>`, so a re-run resumes where the last one stopped. A cold run measured
+   on GitHub took about an hour: 1.5 minutes for `defs`, 26 to 37 minutes for the shards (the
+   jobs run at once when 20 runners are free) and 16 minutes for the final build.
 
 After unpacking, `python3 scripts/ci_grid.py check` runs `lake build --no-build` on every tile and
 fails at once if Lake would rebuild one, instead of spending hours on it. The remaining modules

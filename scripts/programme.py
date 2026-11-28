@@ -5,7 +5,9 @@
 module is the catalogue of the lemmas for the dependency graph and the progress report:
 the parameter classes, the lemmas that each class needs, their sources and their status.
 A lemma is proved when the theorem named in `proof` exists in the Lean sources; until then
-it is open, a field of the structure.
+it is open, a field of the structure. A lemma is reduced when the theorem named in `reduction`
+derives it from a geometric statement about the level sets of the dictionary, which is
+itself open; the lemma stays a field.
 
 The classes and the weights are research-management priors, frozen between progress
 baselines. The weights are equal: no class is claimed to be larger than another. A class
@@ -29,6 +31,93 @@ TAIL_ROOTS = (
     "MLC.Research.WidthTower.aPrioriBounds_of_shift_tails",
     "MLC.Research.WidthTower.shift_shift",
 )
+# The results of Mlc/Research/AnnulusModulus.lean that no other result uses.
+ANNULUS_ROOTS = (
+    "MLC.Research.extLength_radialFamily_mul_circleFamily",
+    "MLC.Research.extLength_circleFamily_eq_extWidth_radialFamily",
+    "MLC.Research.extLength_radialFamily_add_le",
+)
+# The results of Mlc/Research/RectangleModulus.lean that no other result uses.
+RECTANGLE_ROOTS = (
+    "MLC.Research.extWidth_horizFamily",
+)
+# The results of Mlc/Research/NestModulus.lean, PhaseParameter.lean and DivergentNest.lean
+# that no other result uses.
+NEST_ROOTS = (
+    "MLC.Research.Geometry.transfer_iff_phaseParameter",
+    "MLC.Research.nonempty_parameterRealization_concentric",
+    "MLC.Research.ConnectedNest.sum_extWidth_loops_le_coarse",
+    "MLC.Research.extWidth_loopFamily_round",
+)
+# The results of Mlc/Research/AreaMultiplicity.lean that no other result uses.
+MULTIPLICITY_ROOTS = (
+    "MLC.Research.extWidth_le_pow_two_mul_fc_iterate_of_loops",
+)
+# The results of Mlc/Research/VirtualShrinking.lean that no other result uses.
+VIRTUAL_SHRINKING_ROOTS = (
+    "MLC.Research.Geometry.virtualTransfer_hulls_shrink",
+)
+# The results of Mlc/Research/QuasiInvariance.lean that no other result uses.
+QUASI_INVARIANCE_ROOTS = (
+    "MLC.Research.ConnectedNest.DivergentModuli.map",
+    "MLC.Research.QcEmbedding.of_holomorphic",
+)
+# The results of Mlc/Research/Collar.lean that no other result uses.
+COLLAR_ROOTS = (
+    "MLC.Research.ConnectedNest.divergentModuli_of_collars",
+    "MLC.Research.ConnectedNest.closure_piece_subset_closedBall_of_collars",
+)
+# The results of Mlc/Research/LevelTower.lean that no other result uses.
+LEVEL_JUMP_ROOTS = (
+    "MLC.Research.LevelTower.aPrioriBounds_of_collars",
+    "MLC.Research.LevelTower.aPrioriBounds_of_tails_collars",
+    "MLC.Research.LevelTower.width_eq_of_round",
+    "MLC.Research.WidthTower.exists_levelTower",
+)
+LEVEL_TRANSFER_ROOTS = (
+    "MLC.Research.Geometry.transfer_of_comparison",
+)
+# The results of Mlc/Research/CollarCriterion.lean that no other result uses.
+CRITERION_ROOTS = (
+    "MLC.Research.ConnectedNest.locallyConnectedAt_of_collars",
+    "MLC.Research.ConnectedNest.exists_relativePiece_of_collars",
+    "MLC.Research.Geometry.exists_relativePiece_of_comparison",
+    "MLC.Research.Geometry.locallyConnectedAt_of_collars_and_comparison",
+    "MLC.Research.Geometry.locallyConnectedAt_of_tails_collars_and_comparison",
+    "MLC.Research.Geometry.locallyConnectedAt_of_collars_stacked_and_comparison",
+    "MLC.Research.concentricNest_collars",
+)
+# The results of Mlc/Research/Stacking.lean that no other result uses.
+STACKING_ROOTS = (
+    "MLC.Research.LevelTower.linearDichotomy_of_stacked",
+    "MLC.Research.WidthTower.linearDichotomy_iff_stacked",
+)
+# The results of Mlc/Research/LevelGeometry.lean that no other result uses.
+LEVEL_GEOMETRY_ROOTS = (
+    "MLC.mlc_of_levelGeometry",
+)
+# The results of Mlc/Research/BoundarySplit.lean that no other result uses.
+BOUNDARY_SPLIT_ROOTS = (
+    "MLC.Research.ShishikuraDimension.dimH_wildPart_eq_two",
+    "MLC.Research.ShishikuraDimension.dimH_noIndifferentCycle_eq_two",
+    "MLC.Research.ShishikuraDimension.wildPart_nonempty",
+    "MLC.Research.ShishikuraDimension.not_countable_wildPart",
+    "MLC.Research.ShishikuraDimension.exists_class_dimH_eq_two",
+    "MLC.Research.wildPart_subset_unresolved",
+)
+# The results of Mlc/Research/Dimension.lean that no other result uses.
+DIMENSION_ROOTS = (
+    "MLC.Research.ShishikuraDimension.holder_exponent_le_half",
+    "MLC.Research.ShishikuraDimension.not_subset_iUnion_range",
+    "MLC.Research.ShishikuraDimension.two_le_dimH_of_image",
+    "MLC.Research.ConnectedNest.dimH_kernel_eq_zero_of_divergent",
+    "MLC.Research.ConnectedNest.sum_extWidth_loops_bounded_of_dimH_kernel_pos",
+)
+# The results of Mlc/Research/PeanoObject.lean that no other result uses.
+PEANO_ROOTS = (
+    "MLC.Research.mlc_iff_regularEpi",
+    "MLC.Research.ShishikuraDimension.holder_exponent_le_half_of_epi",
+)
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 
@@ -43,6 +132,10 @@ class Lemma:
     source: str
     text: str
     proof: str = ""  # the theorem that proves the lemma, once there is one
+    # The theorem that derives the lemma from a geometric statement about the level sets of
+    # the dictionary (`LevelGeometry`): the lemma stays a field of `ProgrammeInput`, and the
+    # geometric statement is open.
+    reduction: str = ""
 
 
 LEMMAS: tuple[Lemma, ...] = (
@@ -57,6 +150,7 @@ LEMMAS: tuple[Lemma, ...] = (
         "parameter nest with the separation estimate of the canonical return budget, so "
         "that the pieces shrink to c. This is the step from a priori bounds to local "
         "connectivity; the classes with a tower share it.",
+        reduction="MLC.Research.LevelGeometry.transfer",
     ),
     Lemma(
         "yoccoz",
@@ -66,7 +160,8 @@ LEMMAS: tuple[Lemma, ...] = (
         "published",
         "Yoccoz; Hubbard; Milnor (reduction (2.1) of §2)",
         "At the parameters that are not infinitely quadratic-like renormalizable, M is "
-        "locally connected. Published; not formalized.",
+        "locally connected. From the literature; a hypothesis about the dictionary, not "
+        "formalized.",
     ),
     Lemma(
         "teichmuller",
@@ -78,8 +173,11 @@ LEMMAS: tuple[Lemma, ...] = (
         "Dudko–Lyubich, arXiv:2309.02107, Proposition 2.7 (W(Y_n ∖ X_n) = O(Δ_P^n))",
         "For the tower of a parameter of bounded type, the degeneration grows from a level to "
         "the next by at most a factor Δ_P that depends on the bound P of the relative period "
-        "of the level. It excludes a jump by C_δ. The sources state it for towers of "
-        "relative periods bounded by P. Published; not formalized.",
+        "of the level. It excludes a jump by C_δ. The sources state an exponential bound "
+        "W(Y_n ∖ X_n) = O(Δ_P^n) for towers of relative periods bounded by P; the field "
+        "states it level by level, which is the form that the recursion uses, and the passage "
+        "from the published form is not formalized. Motivated by the literature; not "
+        "formalized.",
     ),
     Lemma(
         "boundedType",
@@ -91,7 +189,8 @@ LEMMAS: tuple[Lemma, ...] = (
         "levels); (4.1), (4.6)",
         "At a parameter of bounded type the dichotomy (4.6) holds with an error that depends "
         "on the period; with the Teichmüller contraction the a priori bounds follow "
-        "(WidthTower.aPrioriBounds_of_bounded). Published; not formalized.",
+        "(WidthTower.aPrioriBounds_of_bounded). From the literature; a hypothesis about the "
+        "dictionary, not formalized.",
     ),
     Lemma(
         "antiMolecule",
@@ -101,7 +200,8 @@ LEMMAS: tuple[Lemma, ...] = (
         "published",
         "Kahn–Lyubich: Covering Lemma and Quasi-Additivity Law (§4.1–§4.2)",
         "The amplification W(f) ⪰ p W(f_n) − O(1) holds for the tower of a parameter whose "
-        "primitive levels are far from the Molecule. Published; not formalized.",
+        "primitive levels are far from the Molecule. From the literature; a hypothesis about "
+        "the dictionary, not formalized.",
     ),
     Lemma(
         "neutral",
@@ -111,8 +211,8 @@ LEMMAS: tuple[Lemma, ...] = (
         "published",
         "Theorem 4.2 (Dudko–Lyubich, uniform a priori bounds for neutral renormalization) "
         "and the sectorial bounds of §3.4",
-        "At the neutral parameters M is locally connected. Published as pseudo-Siegel a "
-        "priori bounds; not formalized.",
+        "At the neutral parameters M is locally connected. From the literature as "
+        "pseudo-Siegel a priori bounds; a hypothesis about the dictionary, not formalized.",
     ),
     Lemma(
         "quadraticGrowth",
@@ -127,7 +227,8 @@ LEMMAS: tuple[Lemma, ...] = (
         "(b₁,₁ ≥ N, b_{i,j+1} ≥ b_{i,j}², b_{i+1,1} ≥ q_i²; for example p_i = ±1, q_1 ≥ N, "
         "q_{i+1} ≥ q_i²) the pieces M(⟨p_i/q_i⟩_{i ≤ n}) have diameter at most Cλⁿ and M is "
         "locally connected. The proof uses near-parabolic renormalization; these parameters "
-        "lack quadratic-like a priori bounds. Published; not formalized.",
+        "lack quadratic-like a priori bounds. From the literature; a hypothesis about the "
+        "dictionary, not formalized.",
     ),
     Lemma(
         "unboundedTeichmuller",
@@ -159,6 +260,7 @@ LEMMAS: tuple[Lemma, ...] = (
         "dichotomy the cap is equivalent to the a priori bounds "
         "(WidthTower.aPrioriBounds_iff_jumpCap), and it is weaker than a uniform growth "
         "bound.",
+        reduction="MLC.Research.LevelGeometry.unboundedJumpCap",
     ),
     Lemma(
         "unboundedDichotomy",
@@ -173,6 +275,7 @@ LEMMAS: tuple[Lemma, ...] = (
         "the amplification holds, or the degeneration jumps by C_δ. The published constants "
         "depend on the period implicitly, without a rate; a decomposition with a linear "
         "topological error is known, but it is not the dynamical dichotomy.",
+        reduction="MLC.Research.LevelGeometry.unboundedDichotomy",
     ),
     Lemma(
         "virtualJulia",
@@ -213,6 +316,7 @@ LEMMAS: tuple[Lemma, ...] = (
         "At the virtual levels of the near-neutral subcase, a jump of the degeneration by a "
         "fixed factor at a level of large relative period lands below a fixed ceiling: the "
         "virtual version of Lemma G.",
+        reduction="MLC.Research.LevelGeometry.virtualJumpCap",
     ),
     Lemma(
         "virtualLinearDichotomy",
@@ -223,6 +327,7 @@ LEMMAS: tuple[Lemma, ...] = (
         "§4.5 with §4.4; proposed reading",
         "The dichotomy (4.6) holds for the virtual levels of the near-neutral subcase with "
         "an additive error at most linear in the period.",
+        reduction="MLC.Research.LevelGeometry.virtualLinearDichotomy",
     ),
     Lemma(
         "virtualTransfer",
@@ -289,8 +394,16 @@ PSEUDO_SIEGEL = (
         "amplifies at deeper levels (Figure 13 and (4.6)), is absorbed by the pseudo-Siegel "
         "disks: in a jump the deeper degeneration is bounded by their uniform "
         "quasiconformal geometry. This gives Lemma G, and with the Wave Lemma Lemma D. "
-        "The estimate W(G \\ G′) ≥ δ⁻¹ W(G) itself, from the series law, is proved in Lean "
-        "(extWidth_ge_of_series). The rest is proposed; not formalized.",
+        "The arithmetic of the estimate W(G \\ G′) ≥ δ⁻¹ W(G) is proved in Lean as an "
+        "implication (extWidth_ge_of_series): if the curves of a family cross two disjoint "
+        "regions in succession and the second piece carries the fraction 1 − δ of the "
+        "extremal length, the first piece has width at least δ⁻¹ times that of the whole; "
+        "that the families of Figure 13 satisfy these hypotheses is the dynamical content "
+        "and is not formalized. The passage from the quasiconformal geometry to "
+        "the cap is proved too: collars of bounded dilatation and definite modulus at the "
+        "levels that "
+        "follow a jump cap the jumps (LevelTower.jumpCap_of_collars). That the pseudo-Siegel "
+        "disks give such collars is the proposed content; not formalized.",
     ),
 )
 
@@ -316,6 +429,109 @@ def proved_lemmas(lean_text: str) -> set[str]:
         if lemma.proof
         and re.search(rf"^\s*theorem\s+{re.escape(lemma.proof)}\b", lean_text, re.MULTILINE)
     }
+
+
+_OPEN_COMMENT = re.compile(r"/-|--")
+_INSIDE_COMMENT = re.compile(r"/-|-/|\n")
+
+
+def strip_lean_comments(text: str) -> str:
+    """The source without its comments: the line comments and the block comments (which nest,
+    docstrings included). The line breaks stay, so the lines of the code are those of the
+    source."""
+    pieces: list[str] = []
+    depth = 0
+    keep_from = 0  # the start of the code that is not copied yet
+    position = 0
+    while True:
+        found = (_INSIDE_COMMENT if depth else _OPEN_COMMENT).search(text, position)
+        if found is None:
+            break
+        token, position = found.group(), found.end()
+        if depth == 0:
+            pieces.append(text[keep_from : found.start()])
+            if token == "/-":
+                depth = 1
+            else:
+                end = text.find("\n", position)
+                position = len(text) if end < 0 else end
+                keep_from = position
+        elif token == "/-":
+            depth += 1
+        elif token == "-/":
+            depth -= 1
+            keep_from = position if depth == 0 else keep_from
+        else:
+            pieces.append("\n")
+    if depth == 0:
+        pieces.append(text[keep_from:])
+    return "".join(pieces)
+
+
+def _split_signature(signature: str) -> tuple[str, str] | None:
+    """The binders and the type that follow the name of a theorem, split at the first colon
+    outside brackets."""
+    depth = 0
+    for index, char in enumerate(signature):
+        if char in "([{⟨⦃":
+            depth += 1
+        elif char in ")]}⟩⦄":
+            depth -= 1
+        elif char == ":" and depth == 0:
+            return signature[:index].strip(), signature[index + 1 :].strip()
+    return None
+
+
+def reduces(lemma: Lemma, lean_text: str) -> bool:
+    """A Lean theorem `reduction` that derives the lemma from a hypothesis: its binders are not
+    empty and its conclusion, the type after the first colon outside brackets of the signature
+    (up to the first `:=`), is the definition of the lemma at the dictionary of a level
+    geometry, `LG.toGeometry.Target`, and nothing else. A theorem of the same name that states
+    something else, one that merely mentions the lemma among its hypotheses, one without a
+    hypothesis (that would prove the lemma) and a line of a comment do not count."""
+    if not lemma.reduction:
+        return False
+    name = lemma.reduction.rsplit(".", 1)[-1]
+    target = lemma.lean.rsplit(".", 1)[-1]
+    pattern = rf"^\s*theorem\s+{re.escape(name)}(?![\w'.])(.*?):="
+    code = strip_lean_comments(lean_text)
+    for found in re.finditer(pattern, code, re.MULTILINE | re.DOTALL):
+        split = _split_signature(found.group(1))
+        if split is None:
+            continue
+        binders, conclusion = split
+        if binders and re.fullmatch(rf"[\w']+\.toGeometry\.{re.escape(target)}", conclusion):
+            return True
+    return False
+
+
+def reduced_lemmas(lean_text: str) -> set[str]:
+    """The lemmas that a Lean theorem derives from a geometric statement about the level
+    sets (`Mlc/Research/LevelGeometry.lean`). They stay fields of `ProgrammeInput`; the
+    geometric statement is open."""
+    return {lemma.key for lemma in LEMMAS if reduces(lemma, lean_text)}
+
+
+# The status of a lemma: proved (a Lean theorem proves it), reduced (a Lean theorem derives
+# it from a geometric statement that is itself open), published (a theorem of the
+# literature, taken here as a hypothesis) and open (a proposed reading).
+STATUSES = ("proved", "reduced", "published", "open")
+
+
+def lemma_statuses(lean_text: str) -> dict[str, str]:
+    proved = proved_lemmas(lean_text)
+    reduced = reduced_lemmas(lean_text)
+    out = {}
+    for lemma in LEMMAS:
+        if lemma.key in proved:
+            out[lemma.key] = "proved"
+        elif lemma.kind == "published":
+            out[lemma.key] = "published"
+        elif lemma.key in reduced:
+            out[lemma.key] = "reduced"
+        else:
+            out[lemma.key] = "open"
+    return out
 
 
 def class_shares(proved: set[str]) -> dict[str, float]:

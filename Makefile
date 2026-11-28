@@ -17,6 +17,7 @@ check-progress:
 test-scripts:
 	python3 scripts/test_map_raster.py
 	python3 scripts/test_progress_ledger.py
+	python3 scripts/test_typology.py
 
 install-hooks:
 	git config core.hooksPath .githooks
@@ -31,6 +32,7 @@ report-pdf: graphs
 	mkdir -p docs
 	cp site/mlc_conjecture/progress_commits.tex docs/mlc_progress_commits.tex
 	cp site/mlc_conjecture/progress_routes.tex docs/mlc_progress_routes.tex
+	cp site/mlc_conjecture/progress_types.tex docs/mlc_progress_types.tex
 	inkscape site/mlc_conjecture/progress_map.svg --export-filename=docs/mlc_progress_map.pdf
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs docs/mlc_progress.tex
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs docs/mlc_progress.tex
@@ -49,4 +51,4 @@ clean:
 	rm -rf .ci
 	rm -f docs/mlc_progress.aux docs/mlc_progress.log docs/mlc_progress.out docs/mlc_progress.toc
 	rm -f docs/mlc_progress_map.pdf
-	rm -f docs/mlc_progress_commits.tex docs/mlc_progress_routes.tex
+	rm -f docs/mlc_progress_commits.tex docs/mlc_progress_routes.tex docs/mlc_progress_types.tex
