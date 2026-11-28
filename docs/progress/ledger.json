@@ -1719,5 +1719,63 @@
       "Quasi-invariance of extremal width and of nest moduli under C¹ embeddings of bounded dilatation",
       "MLC from the lemmas of the programme"
     ]
+  },
+  {
+    "id": "2026-11-28-prove-the-collar-estimate-an-annulus-with-a",
+    "timestamp": "2026-11-28T13:47:55+01:00",
+    "subject": "Prove the collar estimate: an annulus with a quasi-round collar has a definite modulus",
+    "area_note": "The modulus of an annular region is quasi-invariant under C¹ embeddings of bounded dilatation, not only for the annuli of a nest; an annulus V ∖ E that contains, around E, the image of a round annulus of modulus μ under a chart of dilatation Kd has modulus at least μ/Kd, so a nest whose annuli have uniform collars has divergent moduli and shrinks; the collars of the levels of a tower and the charts between dynamical and parameter annuli are not constructed.",
+    "baseline": false,
+    "grid": {
+      "format": "blocks",
+      "cells": 8694258,
+      "depth": 13,
+      "weight": 556432512,
+      "scale": 16,
+      "finest": 13,
+      "coarsest": 13,
+      "area": 0.2591090798377991,
+      "percent": 2.0619245428089137,
+      "exact": "2\\cdot 8694258/4^{13}"
+    },
+    "area_exact": "2\\cdot 8694258/4^{13}",
+    "debt_percent": 6.666666666666667,
+    "area_upper_percent": 2.0619245428089137,
+    "area_symbols": [
+      "residualOuterArea_le_four_pi",
+      "ball_quarter_subset_interior_mandelbrot",
+      "unresolved_volume_le_grid"
+    ],
+    "open_frontier": 2,
+    "open_lemmas": 16,
+    "classes_share": 0.0,
+    "milestone_weight": 29,
+    "milestones": [
+      "Conditional root",
+      "Harmonic budget",
+      "Connected parameter nest",
+      "Virtual-Molecule bridge",
+      "Filled-Julia topology",
+      "Minimal connected hull",
+      "Mandelbrot compactness",
+      "Residual-area envelope",
+      "Certified interior parameter ball",
+      "Kernel-checked grid bound",
+      "A priori bounds from uniform control",
+      "Both uniformities are necessary",
+      "A priori bounds are equivalent to a jump cap",
+      "Extremal length: series and parallel laws",
+      "Tail invariance of the Problem 4.3 statements",
+      "Modulus of a round annulus as an extremal length",
+      "Modulus of a rectangle as an extremal length",
+      "Moduli of nested annuli force shrinking (Lemma T from the phase–parameter relation)",
+      "Lemma T is equivalent to its moduli form",
+      "Grötzsch's inequality for a coarsening of a nest of moduli",
+      "Pullback law for the iterates of f_c with area multiplicity 2^p",
+      "The virtual separation estimate is the shrinking of the virtual hulls",
+      "Quasi-invariance of extremal width and of nest moduli under C¹ embeddings of bounded dilatation",
+      "Collar estimate: an annulus with a quasi-round collar has a definite modulus",
+      "MLC from the lemmas of the programme"
+    ]
   }
 ]

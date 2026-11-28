@@ -59,6 +59,10 @@ QUASI_INVARIANCE_ROOTS = (
     "MLC.Research.ConnectedNest.DivergentModuli.map",
     "MLC.Research.QcEmbedding.of_holomorphic",
 )
+# The results of Mlc/Research/Collar.lean that no other result uses.
+COLLAR_ROOTS = (
+    "MLC.Research.ConnectedNest.divergentModuli_of_collars",
+)
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 

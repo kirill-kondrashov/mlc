@@ -57,6 +57,7 @@ COARSE_THEOREM = re.compile(r"^\s*theorem\s+sum_extWidth_loops_le_coarse\b", re.
 QUASI_INVARIANCE_THEOREM = re.compile(
     r"^\s*theorem\s+extWidth_le_of_qcEmbedding\b", re.MULTILINE
 )
+COLLAR_THEOREM = re.compile(r"^\s*theorem\s+IsCollar\.ofReal_le_extWidth\b", re.MULTILINE)
 MULTIPLICITY_THEOREM = re.compile(
     r"^\s*theorem\s+extWidth_le_pow_two_mul_fc_iterate\b", re.MULTILINE
 )
@@ -92,6 +93,8 @@ PROGRESS_MILESTONES = (
      VIRTUAL_SHRINKING_THEOREM, 1),
     ("Quasi-invariance of extremal width and of nest moduli under C¹ embeddings of bounded "
      "dilatation", QUASI_INVARIANCE_THEOREM, 1),
+    ("Collar estimate: an annulus with a quasi-round collar has a definite modulus",
+     COLLAR_THEOREM, 1),
     ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )

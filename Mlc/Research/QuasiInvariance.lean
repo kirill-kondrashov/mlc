@@ -227,17 +227,16 @@ lemma Separates.subset {γ : ℝ → ℂ} {K O : Set ℂ} (hsep : Separates γ K
   exact hzO (by rw [show z = γ s from hs]; exact hγO s)
 
 /-- **A homeomorphism onto an open image carries separating loops to separating loops.** Let `φ`
-be continuous and injective on the compact set `cl O`, with `φ '' O` open. If a loop in `O`
+be continuous and injective on the compact set `cl O`, with `φ '' O` open and `K ⊆ O`. If a loop
 separates `K` from the complement of `O`, then `φ ∘ γ` separates `φ '' K` from the complement of
 `φ '' O`: a path from `φ '' K` to the complement of `φ '' O` stays in `φ '' O` up to its first exit
 time, where it is the image of a path in `cl O` that ends outside `O`. -/
 lemma Separates.image {γ : ℝ → ℂ} {K O : Set ℂ} {φ : ℂ → ℂ} (hsep : Separates γ K O)
-    (hγO : ∀ s, γ s ∈ O) (hcont : ContinuousOn φ (closure O)) (hinj : InjOn φ (closure O))
+    (hKO : K ⊆ O) (hcont : ContinuousOn φ (closure O)) (hinj : InjOn φ (closure O))
     (hcpt : IsCompact (closure O)) (hopen : IsOpen (φ '' O)) :
     Separates (φ ∘ γ) (φ '' K) (φ '' O) := by
   intro z hz w hw a b p hab hp hpa hpb
   obtain ⟨z₀, hz₀, rfl⟩ := hz
-  have hKO : K ⊆ O := hsep.subset hγO
   set T := closure O with hT
   set F : Set ℝ := Icc a b ∩ p ⁻¹' (φ '' O)ᶜ with hF
   have hFclosed : IsClosed F := hp.preimage_isClosed_of_isClosed isClosed_Icc hopen.isClosed_compl
@@ -312,6 +311,32 @@ lemma Separates.image {γ : ℝ → ℂ} {K O : Set ℂ} {φ : ℂ → ℂ} (hse
     exact Function.invFunOn_eq (hmem ⟨σ, hσ⟩)
   exact ⟨σ, ⟨hσ.1, hσ.2.trans hτb⟩, s, by rw [Function.comp_apply, ← hs, hpσ]⟩
 
+/-! ### Loop families under an embedding -/
+
+/-- **Quasi-invariance of the modulus of an annular region.** Let `φ` be a `C¹` embedding of the
+open set `Ω` with dilatation at most `Kd`, and `O` an open set with compact closure in `Ω`; either
+`K ⊆ O`, or the loops lie in `O` (they then force `K ⊆ O`, and the family is empty otherwise). If
+`φ` carries `A ⊆ Ω` into `A'`, `K'` lies in `φ '' K` and `φ '' O` lies in `O'`, the extremal width
+of the `C¹` loops in `A` that separate `K` from the complement of `O` is at most `Kd` times that of
+the loops in `A'` that separate `K'` from the complement of `O'`. -/
+theorem extWidth_loopFamily_le_map {Ω : Set ℂ} {φ : ℂ → ℂ} {Kd : ℝ} (h : QcEmbedding Ω φ Kd)
+    (hKd : 0 < Kd) (hφm : Measurable φ) {A K O A' K' O' : Set ℂ} (hO : IsOpen O)
+    (hOc : IsCompact (closure O)) (hOΩ : closure O ⊆ Ω) (hAΩ : A ⊆ Ω) (hKO : K ⊆ O ∨ A ⊆ O)
+    (hA' : φ '' A ⊆ A') (hK' : K' ⊆ φ '' K) (hO' : φ '' O ⊆ O') :
+    extWidth volume (loopFamily A K O) ≤
+      ENNReal.ofReal Kd * extWidth volume (loopFamily A' K' O') := by
+  refine extWidth_le_of_qcEmbedding h hKd hφm (fun μ hμ => ?_) (fun μ hμ => ?_)
+  · obtain ⟨γ, hγ, hA, -, rfl⟩ := hμ
+    exact loopMeasure_compl_eq_zero hγ h.isOpen.measurableSet fun t => hAΩ (hA t)
+  · obtain ⟨γ, hγ, hA, hsep, rfl⟩ := hμ
+    have hKO' : K ⊆ O := hKO.elim id fun hAO => hsep.subset fun t => hAO (hA t)
+    have himg := hsep.image hKO' (h.contDiffOn.continuousOn.mono hOΩ) (h.injOn.mono hOΩ) hOc
+      (h.isOpen_image hO (subset_closure.trans hOΩ))
+    exact ⟨loopMeasure (φ ∘ γ),
+      ⟨φ ∘ γ, hγ.comp_contDiffOn h.contDiffOn fun t => hAΩ (hA t),
+        fun t => hA' ⟨γ t, hA t, rfl⟩, himg.mono hK' hO', rfl⟩,
+      loopMeasure_comp_le h.isOpen h.contDiffOn hφm hγ fun t => hAΩ (hA t)⟩
+
 /-! ### The image of a nest -/
 
 namespace ConnectedNest
@@ -364,41 +389,21 @@ lemma map_annulus_subset (h : QcEmbedding Ω φ K) (hΩ : closure (D.piece 0) �
   obtain ⟨y', hy', hyy'⟩ := D.closure_image_piece_subset h hΩ (j + 1) hmem
   exact hy2 (h.injOn (D.closure_piece_subset hΩ (j + 1) hy') (D.piece_subset hΩ j hy1) hyy' ▸ hy')
 
-/-- A loop of the `j`-th annulus is carried by the embedding to a loop of the `j`-th annulus of the
-image nest. -/
-lemma map_mem_loops (h : QcEmbedding Ω φ K) (hΩ : closure (D.piece 0) ⊆ Ω)
-    (hS : φ '' D.piece 0 ∩ S' = φ '' (D.piece 0 ∩ S)) {j : ℕ}
-    {γ : ℝ → ℂ} (hγ : IsLoop γ) (hA : ∀ t, γ t ∈ D.annulus j)
-    (hsep : Separates γ (closure (D.piece (j + 1))) (D.piece j)) :
-    loopMeasure (φ ∘ γ) ∈ (D.map h hΩ hS).loops j := by
-  have hγO : ∀ t, γ t ∈ D.piece j := fun t => (hA t).1
-  refine ⟨φ ∘ γ, hγ.comp_contDiffOn h.contDiffOn
-      (fun t => D.piece_subset hΩ j (hγO t)),
-    fun t => D.map_annulus_subset h hΩ hS j ⟨γ t, hA t, rfl⟩, ?_, rfl⟩
-  have himg := hsep.image (φ := φ) hγO
-    (h.contDiffOn.continuousOn.mono (D.closure_piece_subset hΩ j)) (h.injOn.mono
-      (D.closure_piece_subset hΩ j)) (D.compact_closure j)
-    (h.isOpen_image (D.open_piece j) (D.piece_subset hΩ j))
-  exact himg.mono (D.closure_image_piece_subset h hΩ (j + 1)) subset_rfl
-
 /-- **Quasi-invariance of the moduli of a nest.** The modulus of the `j`-th annulus of a nest is
 at most `K` times the modulus of the `j`-th annulus of its image under a `C¹` embedding with
 dilatation at most `K`. -/
 theorem extWidth_loops_le_map (h : QcEmbedding Ω φ K) (hK : 0 < K) (hφm : Measurable φ)
     (hΩ : closure (D.piece 0) ⊆ Ω) (hS : φ '' D.piece 0 ∩ S' = φ '' (D.piece 0 ∩ S)) (j : ℕ) :
     extWidth volume (D.loops j) ≤
-      ENNReal.ofReal K * extWidth volume ((D.map h hΩ hS).loops j) := by
-  refine extWidth_le_of_qcEmbedding h hK hφm (fun μ hμ => ?_) (fun μ hμ => ?_)
-  · refine measure_mono_null (compl_subset_compl.2 ?_) (D.loops_compl_null hμ)
-    exact fun x hx => D.piece_subset hΩ j hx.1
-  · obtain ⟨γ, hγ, hA, hsep, rfl⟩ := hμ
-    exact ⟨loopMeasure (φ ∘ γ), D.map_mem_loops h hΩ hS hγ hA hsep,
-      loopMeasure_comp_le h.isOpen h.contDiffOn hφm hγ
-        (fun t => D.piece_subset hΩ j (hA t).1)⟩
+      ENNReal.ofReal K * extWidth volume ((D.map h hΩ hS).loops j) :=
+  extWidth_loopFamily_le_map h hK hφm (D.open_piece j) (D.compact_closure j)
+    (D.closure_piece_subset hΩ j) (diff_subset.trans (D.piece_subset hΩ j))
+    (Or.inr diff_subset) (D.map_annulus_subset h hΩ hS j)
+    (D.closure_image_piece_subset h hΩ (j + 1)) subset_rfl
 
 /-- **Divergent moduli are preserved by `C¹` embeddings of bounded dilatation.** -/
-theorem DivergentModuli.map (hD : D.DivergentModuli) (h : QcEmbedding Ω φ K) (hK : 0 < K)
-    (hφm : Measurable φ) (hΩ : closure (D.piece 0) ⊆ Ω)
+theorem DivergentModuli.map {D : ConnectedNest S c} (hD : D.DivergentModuli)
+    (h : QcEmbedding Ω φ K) (hK : 0 < K) (hφm : Measurable φ) (hΩ : closure (D.piece 0) ⊆ Ω)
     (hS : φ '' D.piece 0 ∩ S' = φ '' (D.piece 0 ∩ S)) : (D.map h hΩ hS).DivergentModuli := by
   intro C hC
   obtain ⟨n, hn⟩ := hD (ENNReal.ofReal K * C) (ENNReal.mul_ne_top ENNReal.ofReal_ne_top hC)

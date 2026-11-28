@@ -126,7 +126,13 @@ which the concentric disks satisfy. A \(C^1\) embedding of dilatation at most \(
 extremal width by at most \(K\), and carries a nest to a nest whose annuli have at least \(1/K\)
 times the moduli, so divergent moduli are transported by such a chart; \(K=1\) for an injective
 holomorphic map with non-vanishing derivative
-(\texttt{ConnectedNest.DivergentModuli.map} in \texttt{Mlc/Research/QuasiInvariance.lean}). What
+(\texttt{ConnectedNest.DivergentModuli.map} in \texttt{Mlc/Research/QuasiInvariance.lean}). The
+same holds for the modulus of any annular region, and it gives the collar estimate: if the
+annulus \(V\setminus E\) of a level contains the image of a round annulus \(r<|w|\le R\) under
+such a chart of dilatation \(K_d\), going around \(E\), its modulus is at least
+\(\log(R/r)/(2\pi K_d)\), so a nest whose annuli have uniform collars has divergent moduli
+(\texttt{IsCollar.ofReal\_le\_extWidth}, \texttt{ConnectedNest.divergentModuli\_of\_collars} in
+\texttt{Mlc/Research/Collar.lean}). What
 is open is the construction of the nest from an a priori bound, since the correspondence between
 the dynamical and the parameter annuli is quasi-conformal and comes with no \(C^1\) chart. For the
 virtual hulls of Problem~4.4, the dynamical separation estimate of Lemma~VT is

@@ -338,13 +338,29 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   of `ΓY`, then `W(ΓX) ≤ K W(ΓY)` (conformal invariance for `K = 1`). `Separates.image`: a map that
   is continuous and injective on the compact closure of `O`, with `φ '' O` open, carries a loop
   that separates `K` from the complement of `O` to a loop that separates `φ '' K` from the
-  complement of `φ '' O` (the first exit time of a path from `φ '' O`). So the image of a nest is a
+  complement of `φ '' O` (the first exit time of a path from `φ '' O`). The modulus of an annular
+  region (the extremal width of the `C¹` loops in it that separate `K` from the complement of `O`)
+  is therefore at most `Kd` times the modulus of every annular region that contains the image
+  (`extWidth_loopFamily_le_map`). So the image of a nest is a
   nest (`ConnectedNest.map`), the modulus of each annulus of the image is at least `1/K` times that
   of the original (`extWidth_loops_le_map`), and divergent moduli are transported
   (`ConnectedNest.DivergentModuli.map`). This is the tool that the transport of the moduli between
   the dynamical and the parameter plane needs, for a `C¹` correspondence; a quasi-conformal
   homeomorphism is in general only absolutely continuous on lines, and neither a chart between a
   phase nest and a parameter nest nor the phase nest is constructed.
+* `Mlc/Research/Collar.lean`: a quasi-round annulus has a definite modulus. For a level
+  `f : U → V` of a renormalization tower with filled Julia set `E = K_f`, the modulus of `V ∖ E`,
+  the extremal width of the separating loops, is `mod⁺(f)`, the reciprocal of the degeneration
+  `W(f)` of the survey (4.1); for the annuli of a nest it is `D.loops j`. `IsCollar E V Kd r R`: a
+  `C¹` embedding `ψ` of dilatation at most `Kd` of a neighbourhood of the closed disk of radius `R`
+  such that `E` lies in `ψ(B̄(w₀, r))` and `ψ(B̄(w₀, R))` lies in `V`. The circles of the round
+  annulus bound its modulus below by `log (R/r) / 2π` (`extWidth_loopFamily_ge_radii`), the loops
+  go to loops of `V ∖ E`, and so the modulus of `V ∖ E` is at least `log (R/r) / (2π Kd)`
+  (`IsCollar.ofReal_le_extWidth`): Grötzsch's monotonicity with the quasi-invariance. A nest whose
+  annuli all have collars of dilatation at most `K₀` and modulus at least `μ₀/2π` has moduli
+  bounded below by `μ₀/(2π K₀)`, hence divergent moduli and shrinking pieces
+  (`ConnectedNest.divergentModuli_of_collars`): the form that bounded geometry takes here. The
+  collars of the levels of a tower are not constructed.
 
 The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
 `mlc_of_programme`) uses only the three kernel axioms.
@@ -423,7 +439,11 @@ roadmap, not claims of the survey.
   conformal invariance needed. Third step (done, `QuasiInvariance.lean`): the extremal width, and
   the moduli of a nest, are quasi-invariant under `C¹` embeddings of dilatation at most `K`
   (conformally invariant for `K = 1`), with divergent moduli transported
-  (`ConnectedNest.DivergentModuli.map`). Next: `PhaseParameter` itself (the phase–parameter
+  (`ConnectedNest.DivergentModuli.map`). Fourth step (done, `Collar.lean`): a level whose annulus
+  has a collar, a quasi-round annular chart of dilatation `Kd` and modulus `log (R/r) / 2π`, has
+  modulus at least `log (R/r) / (2π Kd)` (`IsCollar.ofReal_le_extWidth`), and a nest with uniform
+  collars has divergent moduli (`ConnectedNest.divergentModuli_of_collars`). Next: `PhaseParameter`
+  itself (the phase–parameter
   relation of Lyubich (§3.9) with the quasi-additivity law), which compares the moduli of the
   dynamical annuli of the tower with the parameter annuli; that correspondence is
   quasi-conformal and comes with no `C¹` chart, so the construction of the nest from the bound

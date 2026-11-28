@@ -28,6 +28,7 @@ from pathlib import Path
 from progress_report import PROGRESS_CSS, PROGRESS_ROUTES
 from programme import (
     ANNULUS_ROOTS,
+    COLLAR_ROOTS,
     MULTIPLICITY_ROOTS,
     NEST_ROOTS,
     RECTANGLE_ROOTS,
@@ -181,6 +182,7 @@ SIDE_ROOTS = (
     *MULTIPLICITY_ROOTS,
     *VIRTUAL_SHRINKING_ROOTS,
     *QUASI_INVARIANCE_ROOTS,
+    *COLLAR_ROOTS,
 )
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
@@ -828,12 +830,12 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         sub: str,
         text: str,
         parent: Node,
-    ) -> None:
+    ) -> Node | None:
         """A checked branch: the declarations that only these side results need."""
         roots = (root,) if isinstance(root, str) else root
         names = set().union(*(side_names[r] for r in roots))
         if not names:
-            return
+            return None
         decl = fq_index[roots[0]]
         bud = make(
             Node(
@@ -854,6 +856,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         bud.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
         add_child(parent, bud, below=True)
         extras.append(bud)
+        return bud
 
     side_bud(
         SHARPNESS_ROOT,
@@ -1164,30 +1167,53 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         ),
         below=True,
     )
-    side_bud(
+    quasi_invariance = side_bud(
         QUASI_INVARIANCE_ROOTS,
         "prog:quasi_invariance",
         "Moduli under a change of chart",
         "C¹ charts of dilatation ≤ K",
         "Checked in Lean (QcEmbedding, extWidth_le_of_qcEmbedding, Separates.image, "
-        "ConnectedNest.extWidth_loops_le_map, ConnectedNest.DivergentModuli.map, "
-        "QcEmbedding.of_holomorphic). A C¹ embedding φ of an open set with dilatation at most "
-        "K (‖Dφ‖² ≤ K |det Dφ|; K = 1 for an injective holomorphic map with non-vanishing "
-        "derivative) multiplies the extremal width by at most K: if φ carries "
-        "every curve of ΓX to a curve that dominates a curve of ΓY, then W(ΓX) ≤ K W(ΓY) (the "
-        "area formula of Mathlib and the pullback law). A map that is continuous and "
-        "injective on the compact closure of O, with φ(O) open, carries a loop that "
-        "separates K from the complement of O to a loop that separates φ(K) from the "
-        "complement of φ(O) (the first exit time of a path from φ(O)). So the loops of an "
-        "annulus of a nest go to loops of the corresponding annulus of the image nest, the "
-        "modulus of each annulus of the image is at least 1/K times that of the original, "
-        "and a nest with divergent moduli has an image with divergent moduli. This is the "
+        "extWidth_loopFamily_le_map, ConnectedNest.extWidth_loops_le_map, "
+        "ConnectedNest.DivergentModuli.map, QcEmbedding.of_holomorphic). A C¹ embedding φ of "
+        "an open set with dilatation at most K (‖Dφ‖² ≤ K |det Dφ|; K = 1 for an injective "
+        "holomorphic map with non-vanishing derivative) multiplies the extremal width by at "
+        "most K: if φ carries every curve of ΓX to a curve that dominates a curve of ΓY, then "
+        "W(ΓX) ≤ K W(ΓY) (the area formula of Mathlib and the pullback law). A map that is "
+        "continuous and injective on the compact closure of O, with φ(O) open, carries a loop "
+        "that separates K from the complement of O to a loop that separates φ(K) from the "
+        "complement of φ(O) (the first exit time of a path from φ(O)). So the modulus of an "
+        "annular region, the extremal width of the C¹ loops in it that separate K from the "
+        "complement of O, is at most K times the modulus of every annular region that "
+        "contains the image of the first. For the annuli of a nest this gives that the "
+        "modulus of each annulus of the image nest is at least 1/K times that of the original, "
+        "and that a nest with divergent moduli has an image with divergent moduli. This is the "
         "form that the transport of the moduli takes in the phase–parameter relation, as "
         "proposed here: the correspondence between the dynamical and the parameter annuli is "
         "quasi-conformal and is not given as a C¹ chart, and neither the chart nor the phase "
         "nest is constructed. What is open is the construction of the nest from the a priori "
         "bound.",
         phase_parameter,
+    )
+    side_bud(
+        COLLAR_ROOTS,
+        "prog:collar",
+        "Collars bound the modulus",
+        "quasi-round annulus ⇒ definite modulus",
+        "Checked in Lean (IsCollar, IsCollar.ofReal_le_extWidth, "
+        "ConnectedNest.divergentModuli_of_collars). The modulus of the annulus V ∖ E is the "
+        "extremal width of the C¹ loops in it that separate E from the complement of V; for a "
+        "level f : U → V with filled Julia set E = K_f it is mod⁺(f), the reciprocal of the "
+        "degeneration W(f) of the survey (4.1). A collar of V ∖ E is a C¹ embedding ψ of "
+        "dilatation at most Kd of a neighbourhood of the closed disk of radius R, such that E "
+        "lies in the image of the disk of radius r and the image of the disk of radius R lies "
+        "in V. The loops of the round annulus r < |w| ≤ R go to loops of V ∖ E, so the "
+        "modulus of V ∖ E is at least log(R/r) / (2π Kd): Grötzsch's monotonicity of the "
+        "modulus together with the quasi-invariance. A nest whose annuli all have collars of "
+        "dilatation at most K₀ and modulus at least μ₀/2π has moduli bounded below by "
+        "μ₀/(2π K₀), so they add up to infinity and the pieces shrink to the point: this is "
+        "the form that bounded geometry takes here. The collars of the levels of a tower and "
+        "the charts between dynamical and parameter annuli are not constructed.",
+        quasi_invariance or phase_parameter,
     )
     add_child(
         unified,

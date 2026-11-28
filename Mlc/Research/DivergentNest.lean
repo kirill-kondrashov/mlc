@@ -148,15 +148,14 @@ lemma loopMeasure_const_add {γ : ℝ → ℂ} (hγ : IsLoop γ) (c : ℂ) :
   rfl
 
 /-- **The circles of an annulus bound its modulus from below.** If the circles `|z - c| = s`,
-`r < s ≤ 3r/2`, lie in `A`, the set `K` lies in the closed disk of radius `r` around `c` and the
-complement of `O` lies outside the open disk of radius `3r/2`, the loops in `A` that separate `K`
-from the complement of `O` have extremal width at least `log (3/2) / 2π`. -/
-lemma extWidth_loopFamily_ge {A K O : Set ℂ} {c : ℂ} {r : ℝ} (hr : 0 < r)
-    (hK : ∀ z ∈ K, ‖z - c‖ ≤ r) (hO : ∀ w, w ∉ O → 3 / 2 * r ≤ ‖w - c‖)
-    (hA : ∀ s ∈ Ioc r (3 / 2 * r), ∀ t, c + circleLoop s t ∈ A) :
-    ENNReal.ofReal (Real.log (3 / 2) / (2 * π)) ≤ extWidth volume (loopFamily A K O) := by
-  have hrR : r < 3 / 2 * r := by linarith
-  set Γ := circleFamily r (3 / 2 * r) with hΓ
+`r < s ≤ R`, lie in `A`, the set `K` lies in the closed disk of radius `r` around `c` and the
+complement of `O` lies outside the open disk of radius `R`, the loops in `A` that separate `K`
+from the complement of `O` have extremal width at least `log (R/r) / 2π`. -/
+lemma extWidth_loopFamily_ge_radii {A K O : Set ℂ} {c : ℂ} {r R : ℝ} (hr : 0 < r) (hrR : r < R)
+    (hK : ∀ z ∈ K, ‖z - c‖ ≤ r) (hO : ∀ w, w ∉ O → R ≤ ‖w - c‖)
+    (hA : ∀ s ∈ Ioc r R, ∀ t, c + circleLoop s t ∈ A) :
+    ENNReal.ofReal (Real.log (R / r) / (2 * π)) ≤ extWidth volume (loopFamily A K O) := by
+  set Γ := circleFamily r R with hΓ
   set Γ' : Set (Measure ℂ) := (fun μ : Measure ℂ => μ.map (fun z => c + z)) '' Γ with hΓ'
   have hsub : Γ' ⊆ loopFamily A K O := by
     rintro _ ⟨_, ⟨s, hs, rfl⟩, rfl⟩
@@ -180,12 +179,20 @@ lemma extWidth_loopFamily_ge {A K O : Set ℂ} {c : ℂ} {r : ℝ} (hr : 0 < r)
         exact ⟨μ, hμ, rfl⟩)
     rwa [one_mul] at h
   have h2 : extWidth volume Γ' ≤ extWidth volume (loopFamily A K O) := extWidth_mono hsub
-  have hlog : 0 < Real.log (3 / 2) := Real.log_pos (by norm_num)
-  have h0 : ENNReal.ofReal (Real.log (3 / 2) / (2 * π)) = extWidth volume Γ := by
+  have hlog : 0 < Real.log (R / r) := Real.log_pos ((one_lt_div hr).2 hrR)
+  have h0 : ENNReal.ofReal (Real.log (R / r) / (2 * π)) = extWidth volume Γ := by
     unfold extWidth
-    rw [hΓ, extLength_circleFamily hr hrR, show 3 / 2 * r / r = 3 / 2 by field_simp,
+    rw [hΓ, extLength_circleFamily hr hrR,
       ← ENNReal.ofReal_inv_of_pos (div_pos (by positivity) hlog), inv_div]
   exact h0.le.trans (h1.trans h2)
+
+/-- The circles of the ratio `3/2` bound the modulus from below by `log (3/2) / 2π`. -/
+lemma extWidth_loopFamily_ge {A K O : Set ℂ} {c : ℂ} {r : ℝ} (hr : 0 < r)
+    (hK : ∀ z ∈ K, ‖z - c‖ ≤ r) (hO : ∀ w, w ∉ O → 3 / 2 * r ≤ ‖w - c‖)
+    (hA : ∀ s ∈ Ioc r (3 / 2 * r), ∀ t, c + circleLoop s t ∈ A) :
+    ENNReal.ofReal (Real.log (3 / 2) / (2 * π)) ≤ extWidth volume (loopFamily A K O) := by
+  have h := extWidth_loopFamily_ge_radii (R := 3 / 2 * r) hr (by linarith) hK hO hA
+  rwa [show 3 / 2 * r / r = 3 / 2 by field_simp] at h
 
 /-! ### The concentric nest -/
 
