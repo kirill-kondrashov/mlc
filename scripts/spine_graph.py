@@ -29,10 +29,12 @@ from progress_report import PROGRESS_CSS, PROGRESS_ROUTES
 from programme import (
     ANNULUS_ROOTS,
     COLLAR_ROOTS,
+    DIMENSION_ROOTS,
     LEVEL_JUMP_ROOTS,
     LEVEL_TRANSFER_ROOTS,
     MULTIPLICITY_ROOTS,
     NEST_ROOTS,
+    PEANO_ROOTS,
     RECTANGLE_ROOTS,
     CLASSES,
     GROTZSCH_ROOT,
@@ -187,6 +189,8 @@ SIDE_ROOTS = (
     *COLLAR_ROOTS,
     *LEVEL_JUMP_ROOTS,
     *LEVEL_TRANSFER_ROOTS,
+    *DIMENSION_ROOTS,
+    *PEANO_ROOTS,
 )
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
@@ -1257,7 +1261,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "Transfer.",
         collar or quasi_invariance or phase_parameter,
     )
-    add_child(
+    rays = add_child(
         unified,
         Node(
             id="paper:rays",
@@ -1275,11 +1279,63 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
                 "those classes, so the rays land at points where local connectivity is "
                 "known, except possibly at the infinitely renormalizable parameters of "
                 "Problems 4.3 and 4.4. The formalization uses connected parameter nests "
-                "that shrink to the point and needs no ray. Not formalized; see ROADMAP.md, "
-                "“Rays, the lamination and tuning”."
+                "that shrink to the point and needs no ray. The rays and the lamination are "
+                "not formalized; see ROADMAP.md, “Rays, the lamination and tuning”. Checked "
+                "below: the form of local connectivity as a parametrization by the interval, "
+                "in the category of compact Hausdorff spaces, and the dimension of the "
+                "fractal boundary against the smooth curves of the moduli."
             ),
         ),
         below=True,
+    )
+    dimension = side_bud(
+        DIMENSION_ROOTS,
+        "prog:dimension",
+        "Fractal against smooth curves",
+        "dim_H of loops, charts and fibers",
+        "Checked in Lean (IsLoop.dimH_range_le, QcEmbedding.dimH_image, "
+        "dimH_le_inv_of_holderOnWith, ShishikuraDimension.holder_exponent_le_half, "
+        "ConnectedNest.sum_extWidth_loops_bounded_of_dimH_kernel_pos). The loops with which the "
+        "moduli are measured are C¹ curves, of Hausdorff dimension at most 1, while the sets "
+        "that they go around are fractals: the boundary of the Mandelbrot set has topological "
+        "dimension 1 and Hausdorff dimension 2 (Shishikura 1998, a published hypothesis here). "
+        "Countably many loops cover no set of dimension above 1. A C¹ embedding with "
+        "invertible derivative is locally bi-Lipschitz, so it preserves the Hausdorff "
+        "dimension of every subset, whatever its dilatation: the charts of the "
+        "quasi-invariance and of the collars compare moduli, never dimensions, and a "
+        "correspondence between sets of different dimension (a smooth curve and a fractal, a "
+        "Julia set of dimension below 2 and the boundary of M) is not C¹. It is "
+        "quasi-conformal, and the distortion of the dimension is bounded by the dilatation "
+        "(Astala 1994, not formalized). An α-Hölder parametrization of a set of dimension d by "
+        "an interval has α d ≤ 1: given Shishikura, a parametrization of the boundary of M, "
+        "such as the landing map of the external rays that exists exactly when M is locally "
+        "connected, has exponent at most 1/2, and the boundary is not the C¹ image of any set "
+        "of smaller dimension. For the fiber of a nest, its kernel: divergent moduli leave a "
+        "point, of dimension 0; a fiber of positive dimension has a finite total modulus.",
+        rays,
+    )
+    side_bud(
+        PEANO_ROOTS,
+        "prog:peano",
+        "Peano parametrization of M",
+        "epimorphisms of CompHaus from the interval",
+        "Checked in Lean (IsPeanoObject, IsPeanoObject.locallyConnectedSpace, "
+        "IsPeanoObject.exists_regularEpi, mlc_iff_lamination, "
+        "ShishikuraDimension.holder_exponent_le_half_of_epi). An object of the category of "
+        "compact Hausdorff spaces is a Peano object if it is an epimorphic image of the "
+        "interval. Such an object is locally connected: an epimorphism is a surjection, "
+        "hence a quotient map, and a quotient of the locally connected interval is locally "
+        "connected. In this category the epimorphisms are the effective ones, so the "
+        "parametrization is a regular epimorphism, the coequalizer of its kernel pair: the "
+        "object is the quotient of the interval by a closed equivalence relation, which for M "
+        "is the landing relation of the external rays, the lamination of Thurston and "
+        "Douady–Hubbard. The Hahn–Mazurkiewicz theorem (published, not formalized) is the "
+        "converse for continua, so, given the connectedness of M (Douady–Hubbard), MLC holds "
+        "exactly when the Mandelbrot object is a regular quotient of the interval "
+        "(mlc_iff_lamination, the pinched-disk model in categorical terms). Given "
+        "Shishikura's theorem, no epimorphism from the interval onto the boundary object is "
+        "better than 1/2-Hölder: the parametrization of a fractal is wild.",
+        dimension or rays,
     )
     # Ground: the kernel axioms below the first vertebra.
     ground = [

@@ -380,6 +380,40 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   moduli of the nest are at least `1/(B Kd)`, they add up to infinity and the pieces shrink. A
   quasi-conformal chart between the annuli gives the comparison (for a `C¹` chart this is
   `extWidth_loopFamily_le_map`); the realization, the nest and the chart are what is open.
+* `Mlc/Research/Dimension.lean`: the dimension of the fractal against the smooth curves of the
+  moduli. The image of a `C¹` loop has Hausdorff dimension at most `1` (`IsLoop.dimH_range_le`), so
+  countably many loops cover no set of larger dimension. A `C¹` embedding with invertible
+  derivative is locally bi-Lipschitz, so it preserves the dimension of every subset of its domain
+  (`QcEmbedding.dimH_image`), whatever its dilatation: the charts of `QuasiInvariance.lean` and
+  `Collar.lean` compare moduli and never dimensions. A correspondence between sets of different
+  dimension, a smooth curve and a fractal, or a Julia set of dimension below `2` and the boundary
+  of `M`, is therefore not `C¹`; it is quasi-conformal, and the distortion of the dimension is
+  bounded by the dilatation `K` (Astala, 1994: dimension `d` goes to at most `2Kd/(2 + (K−1)d)`;
+  not formalized), which is why `Geometry.PhaseParameterComparison` is stated for moduli. An
+  `α`-Hölder parametrization of a set of dimension `d` by an interval has `α d ≤ 1`
+  (`holder_mul_le_one`). `ShishikuraDimension` states Shishikura's theorem (the boundary of `M` has
+  Hausdorff dimension `2`; published, a hypothesis here), and gives that the boundary is not covered
+  by countably many `C¹` loops, is not the `C¹` image of a set of dimension below `2`, and has no
+  parametrization by an interval that is `α`-Hölder with `α > 1/2`
+  (`ShishikuraDimension.holder_exponent_le_half`). For the fiber of a nest, its kernel: divergent
+  moduli leave a point, of dimension `0` (`ConnectedNest.dimH_kernel_eq_zero_of_divergent`), and a
+  fiber of positive dimension has a finite total modulus
+  (`ConnectedNest.sum_extWidth_loops_bounded_of_dimH_kernel_pos`).
+* `Mlc/Research/PeanoObject.lean`: the same in the category of compact Hausdorff spaces, next to
+  the categorical root. `IsPeanoObject X`: `X` is an epimorphic image of the interval (the
+  epimorphisms of `CompHaus` are the surjections), and, the epimorphisms being effective, a regular
+  quotient: the coequalizer of its kernel pair, a closed equivalence relation on the interval
+  (`IsPeanoObject.exists_regularEpi`), which for `M` is the landing relation of the rays, the
+  lamination. A Peano object is locally connected
+  (`IsPeanoObject.locallyConnectedSpace`: a surjection of a compact space onto a Hausdorff space is a
+  quotient map, and quotients of locally connected spaces are locally connected). Given the
+  Hahn–Mazurkiewicz theorem (`HahnMazurkiewicz`, the converse for metrizable continua; published,
+  not formalized) and the connectedness of `M` (Douady–Hubbard), `Categorical.MLCConjecture` holds
+  exactly when `mandelbrotCompHaus` is a Peano object, exactly when it is a regular quotient of the
+  interval (`mlc_iff_peano`, `mlc_iff_lamination`). Given Shishikura's
+  theorem, no epimorphism from the interval onto `boundaryCompHaus` is `α`-Hölder with `α > 1/2`
+  (`ShishikuraDimension.holder_exponent_le_half_of_epi`): the parametrization of the boundary that
+  MLC provides is wild.
 
 The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
 `mlc_of_programme`) uses only the three kernel axioms.
@@ -465,7 +499,11 @@ roadmap, not claims of the survey.
   `LevelTower.lean`): the degeneration of a level is the reciprocal modulus of its annulus, collars
   at the jump levels cap the jumps (Lemma G in the reading of PS4), and the phase–parameter
   comparison of the moduli of the levels with the moduli of a parameter nest gives Lemma T
-  (`Geometry.transfer_of_comparison`). Next: `PhaseParameter` itself (the phase–parameter
+  (`Geometry.transfer_of_comparison`). Sixth step (done, `Dimension.lean`): the dimension of the
+  fractal against the smooth curves: `C¹` charts preserve the Hausdorff dimension, which is why the
+  phase–parameter correspondence, which relates sets of different dimension, is quasi-conformal and
+  not `C¹`, and the boundary of `M` has no parametrization by an interval better than
+  `1/2`-Hölder (given Shishikura's theorem). Next: `PhaseParameter` itself (the phase–parameter
   relation of Lyubich (§3.9) with the quasi-additivity law), which compares the moduli of the
   dynamical annuli of the tower with the parameter annuli; that correspondence is
   quasi-conformal and comes with no `C¹` chart, so the construction of the nest from the bound
@@ -551,6 +589,26 @@ precise description of the points that stay open.
 3. *Fibers.* The fiber of `c` is the set of the points that no pair of rational rays landing
    together separates from `c`. `M` is locally connected exactly when every fiber is a point
    (Schleicher, *On fibers and local connectivity of Mandelbrot and Multibrot sets*).
+4. *Peano parametrization.* `M` is a continuous image of the interval (Hahn–Mazurkiewicz), the
+   landing map of the rays being the parametrization of the boundary. In `CompHaus` this is an
+   epimorphism from the interval onto `M` (`Mlc/Research/PeanoObject.lean`, `mlc_iff_peano`, given
+   Hahn–Mazurkiewicz and the connectedness of `M`).
+
+**The fractal against the smooth curves.** The boundary of `M` has Hausdorff dimension `2` and
+topological dimension `1` (Shishikura, 1998), and a `C¹` or Lipschitz curve has dimension at most
+`1`. Two consequences are checked in `Mlc/Research/Dimension.lean`, given Shishikura's theorem as a
+hypothesis: the boundary is not a countable union of smooth arcs, and a parametrization of it by
+the interval, such as the landing map of the rays, is at best `1/2`-Hölder, so any Hölder control
+of the landing map has an exponent at most `1/2` (`ShishikuraDimension.holder_exponent_le_half`,
+and `holder_exponent_le_half_of_epi` for the epimorphisms of `CompHaus`). The moduli of the
+development are measured with `C¹` loops, which see a fractal fiber only as a set that is not a
+point: divergent moduli leave a point of dimension `0`, and a fiber of positive dimension has a
+finite total modulus. `C¹` charts preserve the Hausdorff dimension (`QcEmbedding.dimH_image`), so
+the correspondences between the dynamical and the parameter plane that relate sets of different
+dimension are quasi-conformal and not `C¹`, with a distortion of the dimension bounded by the
+dilatation (Astala, 1994; not formalized). What the dimension does not give: it does not decide
+the area of the boundary, which is `0` or not, whatever its dimension, and it does not decide the
+shrinking of the nests, which is the content of Problems 4.3 and 4.4.
 
 **Which landing points stay open.** The fibers of the parameters that are not infinitely
 renormalizable are points (Yoccoz, Hubbard), and the lemmas Y, N, B, A and QG give the same for

@@ -11,6 +11,8 @@ import Mlc.Research.AreaMultiplicity
 import Mlc.Research.QuasiInvariance
 import Mlc.Research.Collar
 import Mlc.Research.LevelTower
+import Mlc.Research.Dimension
+import Mlc.Research.PeanoObject
 import Mlc.Research.VirtualShrinking
 import Mlc.Research.TailInvariance
 import Mlc.ProgrammeRoot

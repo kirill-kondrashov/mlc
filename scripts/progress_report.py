@@ -60,6 +60,13 @@ QUASI_INVARIANCE_THEOREM = re.compile(
 COLLAR_THEOREM = re.compile(r"^\s*theorem\s+IsCollar\.ofReal_le_extWidth\b", re.MULTILINE)
 LEVEL_JUMP_THEOREM = re.compile(r"^\s*theorem\s+jumpCap_of_collars\b", re.MULTILINE)
 LEVEL_TRANSFER_THEOREM = re.compile(r"^\s*theorem\s+transfer_of_comparison\b", re.MULTILINE)
+DIMENSION_THEOREM = re.compile(r"^\s*theorem\s+holder_exponent_le_half\b", re.MULTILINE)
+PEANO_THEOREM = re.compile(
+    r"^\s*theorem\s+IsPeanoObject\.locallyConnectedSpace\b", re.MULTILINE
+)
+FIBER_THEOREM = re.compile(
+    r"^\s*theorem\s+sum_extWidth_loops_bounded_of_dimH_kernel_pos\b", re.MULTILINE
+)
 MULTIPLICITY_THEOREM = re.compile(
     r"^\s*theorem\s+extWidth_le_pow_two_mul_fc_iterate\b", re.MULTILINE
 )
@@ -101,6 +108,11 @@ PROGRESS_MILESTONES = (
      LEVEL_JUMP_THEOREM, 1),
     ("Lemma T from the phase–parameter comparison of the moduli of the levels",
      LEVEL_TRANSFER_THEOREM, 1),
+    ("C¹ charts preserve the Hausdorff dimension; the boundary of M has no Hölder "
+     "parametrization better than 1/2 (Shishikura)", DIMENSION_THEOREM, 1),
+    ("A fiber of positive Hausdorff dimension has a finite total modulus", FIBER_THEOREM, 1),
+    ("Peano objects of CompHaus are locally connected: MLC as a parametrization by the "
+     "interval", PEANO_THEOREM, 1),
     ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )

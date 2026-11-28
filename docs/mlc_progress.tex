@@ -137,7 +137,14 @@ such a chart of dilatation \(K_d\), going around \(E\), its modulus is at least
 follow a jump cap the jumps (Lemma~G in the reading of PS4), and a comparison of the moduli of
 the levels with the moduli of a parameter nest gives Lemma~T
 (\texttt{LevelTower.jumpCap\_of\_collars}, \texttt{Geometry.transfer\_of\_comparison} in
-\texttt{Mlc/Research/LevelTower.lean}). What
+\texttt{Mlc/Research/LevelTower.lean}). The loops with which the moduli are measured are curves of
+Hausdorff dimension at most~1, while the boundary of the Mandelbrot set is a fractal of Hausdorff
+dimension~2 (Shishikura); a \(C^1\) chart preserves the Hausdorff dimension, so a correspondence
+between sets of different dimension is not \(C^1\), and given Shishikura's theorem a
+parametrization of the boundary by an interval, such as the landing map of the external rays, is
+at best \(\tfrac12\)-H\"older (\texttt{ShishikuraDimension.holder\_exponent\_le\_half} in
+\texttt{Mlc/Research/Dimension.lean}, and in the category of compact Hausdorff spaces
+\texttt{mlc\_iff\_peano} in \texttt{Mlc/Research/PeanoObject.lean}). What
 is open is the construction of the nest from an a priori bound, since the correspondence between
 the dynamical and the parameter annuli is quasi-conformal and comes with no \(C^1\) chart. For the
 virtual hulls of Problem~4.4, the dynamical separation estimate of Lemma~VT is

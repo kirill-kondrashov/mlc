@@ -70,6 +70,19 @@ LEVEL_JUMP_ROOTS = (
 LEVEL_TRANSFER_ROOTS = (
     "MLC.Research.Geometry.transfer_of_comparison",
 )
+# The results of Mlc/Research/Dimension.lean that no other result uses.
+DIMENSION_ROOTS = (
+    "MLC.Research.ShishikuraDimension.holder_exponent_le_half",
+    "MLC.Research.ShishikuraDimension.not_subset_iUnion_range",
+    "MLC.Research.ShishikuraDimension.two_le_dimH_of_image",
+    "MLC.Research.ConnectedNest.dimH_kernel_eq_zero_of_divergent",
+    "MLC.Research.ConnectedNest.sum_extWidth_loops_bounded_of_dimH_kernel_pos",
+)
+# The results of Mlc/Research/PeanoObject.lean that no other result uses.
+PEANO_ROOTS = (
+    "MLC.Research.mlc_iff_lamination",
+    "MLC.Research.ShishikuraDimension.holder_exponent_le_half_of_epi",
+)
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 
