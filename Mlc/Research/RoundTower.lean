@@ -11,11 +11,15 @@ width tower is the width tower of a level tower whose levels are round annuli
 (`WidthTower.exists_levelTower`), with the filled set `B̄(0, 1)` and the range domain `B(0, e^{2π/W_k})`
 of modulus `1 / W_k` (`extWidth_loopFamily_round_open`).
 
-So `LevelTower` has no dynamical content by itself. The content of the collar and comparison
-hypotheses of `LevelTower.lean` and `CollarCriterion.lean` lies in the sets to which they are
-applied: they are statements about the filled Julia sets and the range domains of quadratic-like
-restrictions of `f_c`, when the dictionary provides them, and the round realization shows that for
-arbitrary sets they say no more than a bound on the widths.
+So `LevelTower` has no dynamical content by itself. The content of the collar, stacked-annuli and
+comparison hypotheses of `LevelTower.lean`, `Stacking.lean` and `CollarCriterion.lean` lies in the
+sets to which they are applied, which the dictionary has to provide: the filled Julia sets and the
+range domains of quadratic-like restrictions of `f_c`, or, for the pseudo-Siegel degeneration, the
+regularized sets. For arbitrary sets the collar and stacked-annuli hypotheses say no more than the
+bounds on the widths that they imply (for the stacked annuli this is an equivalence in the round
+model, `WidthTower.linearDichotomy_iff_stacked`), and the comparison asks for a nest in `M` whose
+annuli have moduli bounded below, which gives the local connectivity of `M` at `c`
+(`CollarCriterion.lean`).
 -/
 
 namespace MLC.Research

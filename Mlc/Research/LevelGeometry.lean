@@ -12,11 +12,24 @@ the abstract fields from them.
 
 * **Structure `LevelGeometry`**: a `Geometry` together with the level towers (`LevelTower`) behind
   its towers, `levels c` for the tower of `c` and `vlevels c` for its virtual tower, that is, with
-  the filled sets and the range domains of the levels, such that the widths are the ones of the
-  dictionary. As `Geometry` is, it is a parameter of the statements: that the sets are the filled
-  Julia sets and the range domains of quadratic-like restrictions of `f_c` is the faithfulness of the
-  dictionary, which the structure does not contain (every width tower is realized by round levels,
-  `RoundTower.lean`).
+  the sets that define the degeneration of the levels, such that the widths are the ones of the
+  dictionary. For the classes of quadratic-like towers these are the filled Julia sets and the range
+  domains of quadratic-like restrictions of `f_c`; for the class of unbounded satellite type, whose
+  widths are the pseudo-Siegel degenerations (`CaseTree.lean`), they are the regularized sets of the
+  pseudo-Siegel disks and their domains, since the quadratic-like degeneration is unbounded in some
+  of these classes (Sørensen; Cheraghi–Shishikura). As `Geometry` is, it is a parameter of the
+  statements: that the sets are the dynamical ones is the faithfulness of the dictionary, which the
+  structure does not contain (every width tower is realized by round levels, `RoundTower.lean`).
+  The statements are dictionary-dependent in two further ways. For a dictionary with no towers
+  (`levels c = none` for every `c`, for instance `cls` constantly `finite`) the five geometric
+  statements are vacuous and the published lemma `Yoccoz` carries the whole content; the six
+  published lemmas are published for the true dictionary only. And the comparison is more than a
+  bound on widths: for round level sets with constant width it asserts a nest in `M` around `c`
+  whose annuli have moduli bounded below, which gives the local connectivity of `M` at `c`
+  (`CollarCriterion.lean`). The structure does not link the virtual level sets `vlevels c` to the
+  virtual Julia nest of Lemma VJ (the hulls), and the survey's near-neutral virtual case is one
+  step (`n = 0`) rather than an infinite tower: both belong to the faithfulness of the dictionary and
+  to the reading of §4.5 proposed in `Problem44.lean`.
 * **`LevelGeometry.UnboundedCollars`, `LevelGeometry.VirtualCollars`**: Lemma G in collar form, for
   the tower of unbounded satellite type and for the virtual near-neutral tower: collars of bounded
   dilatation and definite modulus at the jumps at the levels of large relative period
@@ -38,8 +51,9 @@ open MeasureTheory ENNReal Set Real
 noncomputable section
 
 /-- **A dictionary with the level sets of its towers.** The level towers `levels c` and `vlevels c`
-carry, with the widths of `tower c` and `vtower c`, the filled sets and the range domains of the
-levels. -/
+carry, with the widths of `tower c` and `vtower c`, the sets that define the degeneration of the
+levels: the filled sets and the range domains of the quadratic-like levels, or the regularized sets
+of the pseudo-Siegel levels. -/
 structure LevelGeometry extends Geometry where
   levels : ℂ → Option LevelTower
   vlevels : ℂ → Option LevelTower

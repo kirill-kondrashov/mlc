@@ -88,6 +88,7 @@ CRITERION_ROOTS = (
 # The results of Mlc/Research/Stacking.lean that no other result uses.
 STACKING_ROOTS = (
     "MLC.Research.LevelTower.linearDichotomy_of_stacked",
+    "MLC.Research.WidthTower.linearDichotomy_iff_stacked",
 )
 # The results of Mlc/Research/LevelGeometry.lean that no other result uses.
 LEVEL_GEOMETRY_ROOTS = (

@@ -397,8 +397,9 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   classical modulus, and equal to it for round annuli. The sets are data of the dictionary: nothing
   ties them to the dynamics of `f_c`, and every width tower is realized by round levels
   (`WidthTower.exists_levelTower` in `RoundTower.lean`), so the structure has no dynamical content by
-  itself and the hypotheses below are meaningful for the filled Julia sets and range domains of
-  quadratic-like restrictions. A collar of the
+  itself and the hypotheses below are meaningful for the sets that the dictionary provides (the
+  filled Julia sets and range domains of quadratic-like restrictions, or the regularized sets of the
+  pseudo-Siegel levels). A collar of the
   annulus of a level bounds its degeneration by `2π Kd / log (R/r)` (`LevelTower.width_le_of_collar`),
   so Lemma G follows from collars at the jump levels: if at every level that follows a jump by the
   factor `C₀` the annulus has a collar of dilatation at most `K₀` and modulus at least `μ₀/2π`, the
@@ -422,8 +423,9 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   criterion). With a uniform lower bound `w` for the moduli and the first piece in the disk of
   radius `R` around `c`, for every `ε > 0` some piece of depth at most
   `max (log 8, log (8R/ε)) / (κ w) + 1`, `κ = (log 2)² / 2π`, is a connected neighbourhood of `c`
-  inside the disk of radius `ε` (`exists_relativePiece_of_uniform`): a logarithmic modulus of local
-  connectivity. Uniform collars give `w = μ₀ / (2π K₀)` (`locallyConnectedAt_of_collars`,
+  inside the disk of radius `ε` (`exists_relativePiece_of_uniform`): a logarithmic bound on the
+  depth, not on the size of the neighbourhood. Uniform collars give `w = μ₀ / (2π K₀)`
+  (`locallyConnectedAt_of_collars`,
   `exists_relativePiece_of_collars`); the phase–parameter comparison with a degeneration bound `B`
   gives `w = 1 / (B Kd)` (`Geometry.locallyConnectedAt_of_comparison`,
   `Geometry.exists_relativePiece_of_comparison`). The whole chain is
@@ -438,25 +440,35 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   separate the same `K` from the complement of the same `O`). `LevelTower.StackedAnnuli L C c' A'`:
   for every pair of levels `k`, `k + n`, either the degeneration jumps by the factor `C` at the level
   `k + n`, or the annulus of the level `k + n` contains `p = period k n` pairwise disjoint
-  measurable sub-annuli, each of modulus at least `c' / (W_k + A')`. This is the quasi-additivity
-  mechanism of §4.2 (the deeper annulus collects the moduli of the pullbacks of the shallower one,
-  with an additive loss `A'` of the thin–thick decomposition). If it holds for every threshold, the
-  linear dichotomy holds (`LevelTower.linearDichotomy_of_stacked`): the moduli add up,
-  `c' p W_{k+n} ≤ W_k + A'`, and `A' ≤ A' p`. With the collars of Lemma G this gives
+  measurable sub-annuli, each of modulus at least `c' / (W_k + A' p)`. This is a proposed sufficient
+  form of the amplification, an analogue of the quasi-additivity mechanism of §4.2 (the deeper
+  annulus collects the moduli of `p` sub-annuli, with an additive loss in the degeneration that is
+  linear in the period); the survey does not state it, and the code encodes measurable regions whose
+  loops separate the same set, not pullbacks or the geometry of the orbit. If it holds for every
+  threshold, the linear dichotomy holds (`LevelTower.linearDichotomy_of_stacked`): the moduli add up,
+  so `c' p W_{k+n} ≤ W_k + A' p`. In the round model the converse holds, the sub-annuli being
+  concentric, so Lemma D is equivalent there to the stacked annuli for every threshold
+  (`WidthTower.linearDichotomy_iff_stacked`): the geometric form is exact where the geometry is
+  trivial. A loss `A'` that does not grow with `p`, `c' / (W_k + A')`, would be strictly stronger and
+  fails for a tower of constant degeneration without jumps. With the collars of Lemma G this gives
   `Geometry.locallyConnectedAt_of_collars_stacked_and_comparison`: the Teichmüller contraction,
   collars at the jumps at large relative period, stacked annuli and the comparison give the local
   connectivity of `M` at `c`. The last three are statements about sets of the plane (collars,
   sub-annuli, a nest) and their moduli, while the Teichmüller contraction is an inequality between
-  the widths of consecutive levels; that the levels
-  of the pseudo-Siegel towers satisfy them is open. In the round model the sub-annuli can be taken
-  concentric, so there the hypothesis demands no more than the amplification inequality (this
-  converse is not formalized).
+  the widths of consecutive levels; that the levels of the dynamical towers satisfy them is open.
 * `Mlc/Research/LevelGeometry.lean`: the geometric form of the programme. `LevelGeometry` is a
-  `Geometry` together with the level towers behind its towers (`levels c`, `vlevels c`: the filled
-  sets and the range domains of the levels, with the widths of the dictionary); like `Geometry` it is
-  a parameter of the statements, and that the sets are the filled Julia sets and range domains of
-  quadratic-like restrictions of `f_c` is the faithfulness of the dictionary, which the structure
-  does not contain. For these sets, Lemma G is stated as collars at the large-period jumps
+  `Geometry` together with the level towers behind its towers (`levels c`, `vlevels c`: the sets
+  that define the degeneration of the levels, with the widths of the dictionary: the filled Julia
+  sets and range domains of quadratic-like restrictions of `f_c` for the quadratic-like classes, the
+  regularized sets of the pseudo-Siegel disks for the class of Problem 4.3, whose widths are the
+  pseudo-Siegel degenerations); like `Geometry` it is
+  a parameter of the statements, and that the sets are the dynamical ones is the faithfulness of the
+  dictionary, which the structure does not contain. The statements are dictionary-dependent: for a
+  dictionary with no towers the five geometric statements are vacuous and `Yoccoz` carries the whole
+  content, and the comparison is more than a bound on widths (for round level sets of constant
+  width it asserts a nest in `M` with moduli bounded below, which gives the local connectivity at
+  `c`). The link between the virtual level sets and the virtual Julia nest of VJ is not stated.
+  For these sets, Lemma G is stated as collars at the large-period jumps
   (`UnboundedCollars`, `VirtualCollars`), Lemma D as stacked annuli (`UnboundedStacked`,
   `VirtualStacked`), and Lemma T as the phase–parameter comparison (`Comparison`); the abstract
   fields `UnboundedJumpCap`, `UnboundedDichotomy`, `VirtualJumpCap`, `VirtualLinearDichotomy` and
@@ -595,7 +607,7 @@ roadmap, not claims of the survey.
   below `2` onto a set of dimension `2`, and the boundary of `M` has no parametrization by an
   interval better than `1/2`-Hölder (given Shishikura's theorem). Seventh step (done,
   `CollarCriterion.lean`): the chain closes at a point, collars at the jumps, the linear dichotomy
-  and the comparison give the local connectivity of `M` at `c` with a logarithmic scale
+  and the comparison give the local connectivity of `M` at `c` with a logarithmic depth bound
   (`Geometry.locallyConnectedAt_of_collars_and_comparison`). Next: `PhaseParameter` itself (the
   phase–parameter
   relation of Lyubich (§3.9) with the quasi-additivity law), which compares the moduli of the
@@ -640,11 +652,12 @@ roadmap, not claims of the survey.
   extremal widths and check that it gives the linear error by the argument of §4.3. The
   main term `p W(f₁)` of the amplification is the parallel law (`extWidth_parallel_finset`);
   what remains is the error, that is the thin–thick decomposition with a linear error in the
-  dynamical setting. The quasi-additivity form of the main term is checked in `Stacking.lean`:
-  `p` disjoint sub-annuli of the deeper annulus, each of modulus at least `c'/(W_k + A')`, give the
-  linear dichotomy (`LevelTower.linearDichotomy_of_stacked`); the sub-annuli, pullbacks of the
-  shallower annulus along the critical orbit with the additive loss `A'`, are the dynamical
-  statement that is open.
+  dynamical setting. The quasi-additivity form of the main term is checked in `Stacking.lean` as a
+  proposed sufficient analogue: `p` disjoint sub-annuli of the deeper annulus, each of modulus at
+  least `c'/(W_k + A' p)`, give the linear dichotomy (`LevelTower.linearDichotomy_of_stacked`), and
+  in the round model the two are equivalent; that the annuli of the dynamical levels contain such
+  sub-annuli, pullbacks of the shallower annulus along the critical orbit with the additive loss, is
+  the dynamical statement that is open.
 * **VJ.** The minimal connected hull in `K_c` of the Cantor small Julia set and the critical
   return window exists in Lean (`VirtualJuliaNest.carrier`); the lemma is that it lies inside
   `J_c` and is partially invariant. First step (proposal): the real parameters, where the

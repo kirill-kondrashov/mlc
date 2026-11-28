@@ -16,7 +16,8 @@ the dictionary and is not proved. The module proves what follows from the quasi-
 modulus (`Mlc/Research/Collar.lean`).
 
 * **Structure `LevelTower`**: a `WidthTower` with sets `filled k` (the filled Julia set of the level
-  `k`) and `target k` (its range domain `V_k`) such that `W_k = 1 / mod(V_k ∖ K_k)`, where the
+  `k`, or the regularized set of a pseudo-Siegel level) and `target k` (its range domain `V_k`) such
+  that `W_k = 1 / mod(V_k ∖ K_k)`, where the
   modulus of an annulus is the extremal width of the `C¹` loops in it that separate the inner set
   from the complement of the outer one. The sets are data of the dictionary: nothing in the
   structure ties them to the dynamics of `f_c`, and every width tower is realized by round levels
@@ -61,10 +62,11 @@ open MeasureTheory ENNReal Set Real
 
 noncomputable section
 
-/-- **A tower whose degeneration is the reciprocal modulus of an annulus.** The level `k` is a
-quadratic-like map `f_k : U_k → V_k`; `filled k` is its filled Julia set `K_{f_k}` and `target k`
-is `V_k`. The degeneration of the level is `W(f_k) = 1 / mod⁺(f_k)` with
-`mod⁺(f_k) = mod(V_k ∖ K_{f_k})` (the survey (3.2), (4.1)), where the modulus of an annulus is the
+/-- **A tower whose degeneration is the reciprocal modulus of an annulus.** The level `k` has the
+filled set `filled k` and the range domain `target k`; for a quadratic-like level
+`f_k : U_k → V_k` they are the filled Julia set `K_{f_k}` and `V_k`, and the degeneration is
+`W(f_k) = 1 / mod⁺(f_k)` with `mod⁺(f_k) = mod(V_k ∖ K_{f_k})` (the survey (3.2), (4.1)); for a
+pseudo-Siegel level they are the regularized sets. The modulus of an annulus is the
 extremal width of the `C¹` loops in it that separate the inner set from the complement of the
 outer one. -/
 structure LevelTower extends WidthTower where

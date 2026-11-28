@@ -75,6 +75,7 @@ CRITERION_THEOREM = re.compile(
     r"^\s*theorem\s+locallyConnectedAt_of_collars_and_comparison\b", re.MULTILINE
 )
 STACKING_THEOREM = re.compile(r"^\s*theorem\s+linearDichotomy_of_stacked\b", re.MULTILINE)
+STACKING_ROUND_THEOREM = re.compile(r"^\s*theorem\s+linearDichotomy_iff_stacked\b", re.MULTILINE)
 LEVEL_GEOMETRY_THEOREM = re.compile(r"^\s*theorem\s+mlc_of_levelGeometry\b", re.MULTILINE)
 MULTIPLICITY_THEOREM = re.compile(
     r"^\s*theorem\s+extWidth_le_pow_two_mul_fc_iterate\b", re.MULTILINE
@@ -128,9 +129,12 @@ PROGRESS_MILESTONES = (
      "so uniform collars give exponential shrinking", RATE_THEOREM, 1),
     ("The Yoccoz criterion in modulus form: collars at the jumps, the linear dichotomy and the "
      "phase–parameter comparison give local connectivity of M at a parameter, with a "
-     "logarithmic scale", CRITERION_THEOREM, 1),
+     "logarithmic depth bound", CRITERION_THEOREM, 1),
     ("Lemma D from stacked annuli: p disjoint sub-annuli of definite modulus give the linear "
      "dichotomy (Grötzsch's inequality for sub-annuli)", STACKING_THEOREM, 1),
+    ("In the round model Lemma D is equivalent to the stacked annuli: for round levels the "
+     "linear dichotomy holds exactly when the deeper annulus contains p concentric sub-annuli "
+     "of definite modulus", STACKING_ROUND_THEOREM, 1),
     ("MLC from the geometric form of the programme: collars, stacked annuli and the "
      "phase–parameter comparison for the level sets of the dictionary replace five of the "
      "abstract lemmas", LEVEL_GEOMETRY_THEOREM, 1),

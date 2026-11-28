@@ -5,12 +5,14 @@ import Mlc.Research.NestRate
 import Mlc.Research.Stacking
 
 /-!
-# The Yoccoz criterion in modulus form, with a logarithmic scale
+# The Yoccoz criterion in modulus form, with a logarithmic depth bound
 
 The modules `NestModulus.lean`, `Collar.lean`, `NestRate.lean` and `LevelTower.lean` prove the
 steps from a geometric hypothesis on the annuli of a nest to the shrinking of its pieces. This
 module closes the chain at a point: the shrinking gives the local connectivity at the center of the
-nest, with a scale that is logarithmic in the size of the neighbourhood.
+nest, and, for a uniform lower bound of the moduli, a connected neighbourhood inside the disk of
+radius `ε` at a depth that is logarithmic in `1/ε`. The bound is on the depth of the piece, not on
+the size of the neighbourhood: it gives no lower bound for its inner radius.
 
 * **Theorem `ConnectedNest.exists_closure_piece_subset_ball_of_uniform`**: if every annulus of a nest
   has modulus at least `w`, and the closure of the first piece lies in the disk of radius `R`
@@ -21,8 +23,8 @@ nest, with a scale that is logarithmic in the size of the neighbourhood.
   `ConnectedNest.locallyConnectedAt_of_uniform`**: the set is locally connected at the center of
   a nest whose moduli add up to infinity (the Yoccoz criterion), in particular when the moduli of
   the annuli have a uniform lower bound, and
-  `ConnectedNest.exists_relativePiece_of_uniform` gives, in that case, the connected
-  neighbourhoods at depth `O (log (1/ε))` (the *logarithmic modulus of local connectivity*).
+  `ConnectedNest.exists_relativePiece_of_uniform` gives, in that case, a connected neighbourhood
+  inside the disk of radius `ε` at depth `O (log (1/ε))`.
 * **Theorems `ConnectedNest.locallyConnectedAt_of_collars`,
   `ConnectedNest.exists_relativePiece_of_collars`**: the same when every annulus has a collar of
   dilatation at most `K₀` and modulus at least `μ₀ / 2π`, with `w = μ₀ / (2π K₀)`
@@ -70,7 +72,7 @@ lemma exists_radius : ∃ R : ℝ, 0 < R ∧ closure (D.piece 0) ⊆ closedBall 
   exact ⟨max R 1, lt_of_lt_of_le one_pos (le_max_right _ _),
     hR.trans (closedBall_subset_closedBall (le_max_left _ _))⟩
 
-/-- **A uniform lower bound for the moduli gives a logarithmic scale.** If every annulus of the nest
+/-- **A uniform lower bound for the moduli gives a logarithmic depth.** If every annulus of the nest
 has modulus at least `w`, and the closure of the first piece lies in the disk of radius `R` around
 `c`, then for every `ε > 0` the closure of the piece `n` lies in the disk of radius `ε` around `c`,
 for some `n` that is at most `max (log 8) (log (8R/ε)) / (κ w) + 1`, `κ = (log 2)² / 2π`. -/
@@ -124,10 +126,11 @@ theorem locallyConnectedAt_of_uniform (hc : c ∈ S) {w : ℝ} (hw : 0 < w)
   D.locallyConnectedAt_of_divergent hc
     (D.divergentModuli_of_uniform (ENNReal.ofReal_pos.2 hw).ne' hmod)
 
-/-- **The logarithmic modulus of local connectivity.** If every annulus of the nest has modulus at
-least `w` and the closure of the first piece lies in the disk of radius `R` around `c`, then for
-every `ε > 0` the relative piece `n` is a connected neighbourhood of `c` in `S` inside the disk of
-radius `ε`, for some depth `n` that is at most `max (log 8) (log (8R/ε)) / (κ w) + 1`. -/
+/-- **A logarithmic depth bound for the connected neighbourhoods.** If every annulus of the nest has
+modulus at least `w` and the closure of the first piece lies in the disk of radius `R` around `c`,
+then for every `ε > 0` the relative piece `n` is a connected neighbourhood of `c` in `S` inside the
+disk of radius `ε`, for some depth `n` that is at most `max (log 8) (log (8R/ε)) / (κ w) + 1`. The
+bound is on the depth `n`; it gives no lower bound for the size of the neighbourhood. -/
 theorem exists_relativePiece_of_uniform (hc : c ∈ S) {R w ε : ℝ} (hR : 0 < R)
     (hR' : closure (D.piece 0) ⊆ closedBall c R) (hw : 0 < w)
     (hmod : ∀ j, ENNReal.ofReal w ≤ extWidth volume (D.loops j)) (hε : 0 < ε) :
@@ -149,7 +152,7 @@ theorem locallyConnectedAt_of_collars (hc : c ∈ S) {K₀ μ₀ : ℝ} (hK₀ :
   D.locallyConnectedAt_of_uniform hc (w := μ₀ / (2 * π) / K₀) (by positivity)
     (D.ofReal_le_extWidth_loops_of_collars hK₀ hμ₀ h)
 
-/-- **Uniform collars give the logarithmic modulus of local connectivity.** With the collars of
+/-- **Uniform collars give a logarithmic depth bound.** With the collars of
 `locallyConnectedAt_of_collars` and the closure of the first piece in the disk of radius `R`
 around `c`, for every `ε > 0` the relative piece `n` is a connected neighbourhood of `c` in `S`
 inside the disk of radius `ε`, for some `n` at most
@@ -179,7 +182,7 @@ theorem locallyConnectedAt_of_comparison (h : G.PhaseParameterComparison) {c : �
   obtain ⟨D, Kd, hKd, hmod⟩ := G.uniformNest_of_comparison h hc hB hbound
   exact D.locallyConnectedAt_of_uniform hc (by positivity) hmod
 
-/-- **Lemma T with a logarithmic scale.** Given the phase–parameter comparison of moduli with the
+/-- **Lemma T with a logarithmic depth bound.** Given the phase–parameter comparison of moduli with the
 constant `Kd`, a degeneration bound `B` at a parameter `c` of `M` gives a nest around `c`, with the
 closure of its first piece in the disk of radius `R`, such that for every `ε > 0` some relative
 piece at depth at most `max (log 8) (log (8R/ε)) / (κ / (B Kd)) + 1` is a connected neighbourhood

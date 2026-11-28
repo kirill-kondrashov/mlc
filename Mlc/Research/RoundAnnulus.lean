@@ -20,6 +20,9 @@ the width of its loops is exactly the classical modulus.
   `R` is exactly `log (R/r) / 2π`.
 * **Theorem `extWidth_loopFamily_round_open`**: the same for the open ring `r < |z − c| < R`, the
   annulus `target ∖ filled` of a level of a `LevelTower`.
+* **Theorem `extWidth_loopFamily_ge_radii_of_ioo`**: the lower bound `log (R/r) / 2π` when only the
+  circles of radius `s` with `r < s < R` lie in the annulus, for every pair of sets `K`, `O` that the
+  circles separate; it gives the modulus of the concentric sub-annuli of `Stacking.lean`.
 
 So the dictionary of `LevelTower.lean` is exact on the round annuli: the degeneration of a round
 level `K = B̄(c, r)`, `V = B(c, R)` is `2π / log (R/r)`, the reciprocal of the classical modulus
@@ -137,6 +140,28 @@ theorem extWidth_loopFamily_round_open {c : ℂ} {r R : ℝ} (hr : 0 < r) (hrR :
         exact hs.2.trans_lt hR'.2
       · rw [mem_closedBall_iff_norm, add_sub_cancel_left, hn, not_le]
         exact hs.1
+
+/-- **The circles of an open range of radii bound the modulus from below.** If the circles
+`|z − c| = s`, `r < s < R`, lie in `A`, the set `K` lies in the closed disk of radius `r` around `c`
+and the complement of `O` lies outside the open disk of radius `R`, the loops in `A` that separate
+`K` from the complement of `O` have extremal width at least `log (R/r) / 2π`: the case of
+`extWidth_loopFamily_ge_radii` with the circle of radius `R` excluded, by letting the outer radius
+increase to `R`. -/
+theorem extWidth_loopFamily_ge_radii_of_ioo {A K O : Set ℂ} {c : ℂ} {r R : ℝ} (hr : 0 < r)
+    (hrR : r < R) (hK : ∀ z ∈ K, ‖z - c‖ ≤ r) (hO : ∀ w, w ∉ O → R ≤ ‖w - c‖)
+    (hA : ∀ s ∈ Ioo r R, ∀ t, c + circleLoop s t ∈ A) :
+    ENNReal.ofReal (Real.log (R / r) / (2 * π)) ≤ extWidth volume (loopFamily A K O) := by
+  have hc : ContinuousAt (fun R' : ℝ => Real.log (R' / r) / (2 * π)) R := by
+    have hne : R / r ≠ 0 := (div_pos (hr.trans hrR) hr).ne'
+    exact ((continuousAt_id.div_const r).log hne).div_const _
+  have hcont : Filter.Tendsto (fun R' : ℝ => ENNReal.ofReal (Real.log (R' / r) / (2 * π)))
+      (nhdsWithin R (Set.Iio R)) (nhds (ENNReal.ofReal (Real.log (R / r) / (2 * π)))) :=
+    ((ENNReal.continuous_ofReal.continuousAt.tendsto.comp hc.tendsto).mono_left
+      nhdsWithin_le_nhds)
+  refine le_of_tendsto hcont ?_
+  filter_upwards [Ioo_mem_nhdsLT hrR] with R' hR'
+  exact extWidth_loopFamily_ge_radii hr hR'.1 hK (fun w hw => hR'.2.le.trans (hO w hw))
+    (fun s hs t => hA s ⟨hs.1, hs.2.trans_lt hR'.2⟩ t)
 
 end
 

@@ -90,9 +90,10 @@ necessary for the a priori bounds (\texttt{aPrioriBounds\_iff\_jumpCap}), so it 
 the weakest hypothesis of its shape, and the Teichm\"uller contraction caps the
 jumps at the levels of small relative period, so that the open content is the
 tail at large relative period. Both ingredients are necessary
-(\texttt{uniformities\_necessary}): for every unbounded \(h\), a tower with
-unbounded relative periods satisfies the Teichm\"uller contraction, a uniform
-growth bound and the dichotomy with the error \(p\,h(p)\) and has unbounded
+(\texttt{uniformities\_necessary}): for every monotone, positive and unbounded \(h\), a tower with
+unbounded relative periods satisfies the Teichm\"uller contraction and the dichotomy with the error
+\(p\,h(p)\), has a uniform growth bound whenever \(h\) grows by a bounded factor (as for
+\(h(p)=p+1\), the quadratic error), and has unbounded
 degeneration, so a linear error is the threshold; and the tower of widths
 \((k+1)!\) satisfies the Teichm\"uller contraction and the dichotomy with a
 linear error but has uncapped jumps and unbounded degeneration. The widths of the
@@ -153,24 +154,31 @@ the levels with the moduli of a parameter nest gives Lemma~T
 loops of the annulus, which is at most the classical modulus and equals it for round annuli, and
 the sets of the levels are data of the dictionary: every width tower is realized by round levels
 (\texttt{WidthTower.exists\_levelTower} in \texttt{Mlc/Research/RoundTower.lean}), so the
-hypotheses are meaningful for the filled Julia sets and range domains of quadratic-like
-restrictions. The chain closes at a point: a set is locally connected at
+hypotheses are meaningful for the sets that the dictionary provides. The chain closes at a point: a set is locally connected at
 the center of a nest whose moduli add up to infinity (the Yoccoz criterion), and for a uniform
 lower bound \(w\) of the moduli the connected neighbourhoods of the center are reached at depth
-\(O(\log(1/\varepsilon))\) for the radius \(\varepsilon\); collars at the jumps of a level tower,
+\(O(\log(1/\varepsilon))\) for the radius \(\varepsilon\), a bound on the depth and not on the size of
+the neighbourhood; collars at the jumps of a level tower,
 the linear dichotomy and the phase--parameter comparison give the local connectivity of \(M\) at the
 parameter (\texttt{Geometry.locallyConnectedAt\_of\_collars\_and\_comparison} in
-\texttt{Mlc/Research/CollarCriterion.lean}), and these three hypotheses are open. The quasi-additivity
-form of Lemma~D is also checked: if the annulus of the level \(k+n\) contains \(p\) disjoint
-sub-annuli, each of modulus at least \(c'/(W_k+A')\), their moduli add up (Gr\"otzsch's inequality,
-\texttt{sum\_extWidth\_loopFamily\_le}), so \(c'pW_{k+n}\le W_k+A'\) and the linear dichotomy holds
-(\texttt{LevelTower.linearDichotomy\_of\_stacked} in \texttt{Mlc/Research/Stacking.lean}); the
-existence of such sub-annuli, the pullbacks of the shallower annulus along the critical orbit, is
-open. For a dictionary with the level sets of its towers (\texttt{LevelGeometry} in
+\texttt{Mlc/Research/CollarCriterion.lean}), and these three hypotheses are open. A proposed
+sufficient geometric form of Lemma~D is also checked: if for every pair of levels and every
+threshold \(C\), with uniform constants \(c'>0\) and \(A'\ge0\), either the degeneration jumps by the
+factor \(C\) at the level \(k+n\) or the annulus of that level contains \(p\) disjoint sub-annuli,
+each of modulus at least \(c'/(W_k+A'p)\) (\(p\) the relative period), their moduli add up
+(Gr\"otzsch's inequality, \texttt{sum\_extWidth\_loopFamily\_le}), so \(c'pW_{k+n}\le W_k+A'p\) and
+the linear dichotomy holds (\texttt{LevelTower.linearDichotomy\_of\_stacked} in
+\texttt{Mlc/Research/Stacking.lean}); in the round model the two are equivalent
+(\texttt{WidthTower.linearDichotomy\_iff\_stacked}), and the existence of such sub-annuli in the
+dynamical levels is open. The sets of the levels are the filled Julia sets and range domains of
+quadratic-like restrictions for the quadratic-like classes and the regularized sets of the
+pseudo-Siegel disks for the class of Problem~4.3, whose widths are the pseudo-Siegel
+degenerations. For a dictionary with the level sets of its towers (\texttt{LevelGeometry} in
 \texttt{Mlc/Research/LevelGeometry.lean}) these statements, collars at the large-period jumps,
 stacked annuli and the phase--parameter comparison, replace five of the abstract lemmas, and
 \texttt{MLC.mlc\_of\_levelGeometry} derives MLC from them together with the published lemmas and
-the lemmas TC$'$, VJ, VD1, VT1 and VT. The loops with
+the lemmas TC$'$, VJ, VD1, VT1 and VT; the statements depend on the dictionary (for a dictionary
+without towers the five are vacuous). The loops with
 which the moduli are measured are curves of
 Hausdorff dimension at most~1, while the boundary of the Mandelbrot set is a fractal of Hausdorff
 dimension~2 (Shishikura); a \(C^1\) chart preserves the Hausdorff dimension, a quasi-conformal map
@@ -181,8 +189,9 @@ exists when \(M\) is locally connected, is
 at best \(\tfrac12\)-H\"older (\texttt{ShishikuraDimension.holder\_exponent\_le\_half} in
 \texttt{Mlc/Research/Dimension.lean}, and in the category of compact Hausdorff spaces
 \texttt{ShishikuraDimension.holder\_exponent\_le\_half\_of\_epi} in
-\texttt{Mlc/Research/PeanoObject.lean}, where \texttt{mlc\_iff\_peano} states MLC as a
-parametrization of \(M\) by the interval). What
+\texttt{Mlc/Research/PeanoObject.lean}, where \texttt{mlc\_iff\_peano} states, given the
+Hahn--Mazurkiewicz theorem and the connectedness of \(M\), that MLC holds exactly when \(M\) is a
+continuous image of the interval). What
 is open is the construction of the nest from an a priori bound, since the correspondence between
 the dynamical and the parameter annuli in the phase--parameter relation is quasi-conformal and no
 \(C^1\) chart is available. For the

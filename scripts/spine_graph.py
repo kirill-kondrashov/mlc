@@ -935,8 +935,10 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "V = B(c, R) the degeneration is exactly 2π / log(R/r)). The sets are data of the "
         "dictionary: every width tower is realized by round levels "
         "(WidthTower.exists_levelTower), so a LevelTower has no dynamical content by itself, "
-        "and the hypotheses below are meaningful for the filled Julia sets and range domains "
-        "of quadratic-like restrictions. If this annulus has a collar of dilatation "
+        "and the hypotheses below are meaningful for the sets that the dictionary provides "
+        "(the filled Julia sets and range domains of quadratic-like restrictions, or the "
+        "regularized sets of the pseudo-Siegel levels). If this annulus has a collar of "
+        "dilatation "
         "Kd and modulus log(R/r) / 2π (see \"Collars bound the modulus\"), the degeneration is "
         "at most 2π Kd / log(R/r). So if at every level that follows a jump by the factor C₀ "
         "the annulus has a collar of dilatation at most K₀ and modulus at least μ₀ / 2π, the "
@@ -957,20 +959,25 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "Lemma D from stacked annuli",
         "p disjoint sub-annuli ⇒ linear dichotomy",
         "Checked in Lean (LevelTower.StackedAnnuli, LevelTower.linearDichotomy_of_stacked, "
-        "sum_extWidth_loopFamily_le). The linear dichotomy asks, for every threshold C, for "
+        "sum_extWidth_loopFamily_le, WidthTower.linearDichotomy_iff_stacked). The linear "
+        "dichotomy asks, for every threshold C, for "
         "constants c and A such that for every pair of levels k, k+n of relative period p "
-        "either c p W_{k+n} − A p ≤ W_k or the degeneration jumps at the level k+n. The "
-        "quasi-additivity mechanism of the survey (§4.2, (4.5)) gives it geometrically: the "
-        "annulus of the level k+n contains p pairwise disjoint sub-annuli, the pullbacks of "
-        "the annulus of the level k, each of modulus at least c′/(W_k + A′), where A′ is an "
-        "additive loss of the thin–thick decomposition. The moduli of disjoint sub-annuli "
+        "either c p W_{k+n} − A p ≤ W_k or the degeneration jumps at the level k+n. A proposed "
+        "sufficient geometric form, an analogue of the quasi-additivity mechanism of the "
+        "survey (§4.2, (4.5)), which the survey does not state in this form: for every pair "
+        "of levels and every threshold C, with uniform constants c′ > 0 and A′ ≥ 0, either "
+        "the degeneration jumps by the factor C at the level k+n, or the annulus of the "
+        "level k+n contains p pairwise disjoint sub-annuli, each of modulus at least "
+        "c′/(W_k + A′ p). The moduli of disjoint sub-annuli "
         "add up (Grötzsch's inequality, the parallel law), so the modulus of the deeper "
-        "annulus is at least p c′/(W_k + A′), that is c′ p W_{k+n} ≤ W_k + A′, and the "
-        "linear dichotomy follows because A′ ≤ A′ p. That the annuli of the levels of the "
-        "pseudo-Siegel towers contain such stacked sub-annuli is the proposed content of "
-        "Lemma D and stays open; in the round model the sub-annuli can be taken concentric, "
-        "so the hypothesis demands there no more than the amplification itself (this "
-        "converse is not formalized).",
+        "annulus is at least p c′/(W_k + A′ p), that is c′ p W_{k+n} ≤ W_k + A′ p, the "
+        "amplification, and the linear dichotomy follows. In the round model the converse "
+        "holds, the sub-annuli being concentric, so Lemma D is equivalent there to the "
+        "stacked annuli; with a loss A′ that does not grow with p the form would be "
+        "strictly stronger and fails for a tower of constant degeneration without jumps. "
+        "That the annuli of the dynamical levels contain such sub-annuli, pullbacks of the "
+        "shallower annulus along the critical orbit, is the proposed content of "
+        "Lemma D and stays open.",
         ps_nodes["ps4"],
     )
     side_bud(
@@ -1156,7 +1163,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             "LevelGeometry.UnboundedCollars, LevelGeometry.UnboundedStacked, "
             "LevelGeometry.VirtualCollars, LevelGeometry.VirtualStacked, "
             "LevelGeometry.Comparison). A LevelGeometry is a dictionary together with the "
-            "level sets of its towers, the filled sets and the range domains of the levels. "
+            "level sets of its towers, the sets that define the degeneration of the levels. "
             "Lemma G is stated for them as collars of bounded dilatation and definite modulus "
             "at the jumps at the levels of large relative period, and Lemma D as stacked "
             "annuli, for the tower of unbounded satellite type (Problem 4.3) and for the "
@@ -1168,9 +1175,13 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             "Geometry.transfer_of_comparison), and MLC follows from the six published lemmas, "
             "the Teichmüller contraction for the pseudo-Siegel and for the virtual levels, the "
             "virtual Julia sets, the dichotomy for the virtual bounded type, the virtual "
-            "transfer and these five geometric statements. That the level sets are the filled "
-            "Julia sets and range domains of quadratic-like restrictions of f_c is the "
-            "faithfulness of the dictionary and is not part of the structure; none of the "
+            "transfer and these five geometric statements. That the level sets are the "
+            "dynamical ones (the filled Julia sets and range domains of quadratic-like "
+            "restrictions of f_c, or the regularized sets of the pseudo-Siegel levels whose "
+            "degeneration is the width of the class of Problem 4.3) is the "
+            "faithfulness of the dictionary and is not part of the structure; the statements "
+            "depend on the dictionary (for a dictionary without towers the five are vacuous, "
+            "and the comparison is more than a bound on widths); none of the "
             "statements is proved.",
             assembly,
         )
@@ -1348,7 +1359,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         CRITERION_ROOTS,
         "prog:criterion",
         "Collars ⇒ local connectivity at c",
-        "the Yoccoz criterion, with a logarithmic scale",
+        "the Yoccoz criterion, with a logarithmic depth bound",
         "Checked in Lean (ConnectedNest.locallyConnectedAt_of_divergent, "
         "ConnectedNest.locallyConnectedAt_of_collars, "
         "ConnectedNest.exists_relativePiece_of_collars, "
@@ -1361,7 +1372,8 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "first piece lies in the disk of radius R around c, then for every ε > 0 some piece "
         "of depth at most max(log 8, log(8R/ε)) / (κ w) + 1, κ = (log 2)²/2π, is a connected "
         "neighbourhood of c inside the disk of radius ε: the depth grows like log(1/ε), a "
-        "logarithmic modulus of local connectivity. Uniform collars of dilatation at most K₀ "
+        "logarithmic bound on the depth, not on the size of the neighbourhood. Uniform "
+        "collars of dilatation at most K₀ "
         "and modulus at least μ₀/2π give w = μ₀/(2π K₀); the phase–parameter comparison with a "
         "degeneration bound B gives w = 1/(B Kd). The whole chain in one statement: collars "
         "of bounded dilatation and definite modulus at the jumps of a level tower of c (the "
