@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import re
 import struct
+import zlib
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -13,7 +14,7 @@ import numpy as np
 
 import progress_report as report
 import typology as ty
-from programme import CLASSES, LEMMA, LEMMAS, STATUSES, lemma_statuses
+from programme import CLASSES, LEMMA, LEMMAS, STATUSES, lemma_statuses, strip_lean_comments
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -88,20 +89,29 @@ def test_the_usage_of_an_object_follows_the_dependencies() -> None:
         "yoccoz": {"collar"},
         "neutral": {"grid"},
     }
-    # on the sources of the repository every statement has an entry
-    assert set(ty.object_usage({}, {})) == set(LEMMA)
+    # with no dependency data every statement still has an entry, an empty one
+    assert ty.object_usage({}, {}) == {key: set() for key in LEMMA}
+
+
+def declared_names() -> set[str]:
+    """The fully qualified names of the declarations of the library (without the grid tiles),
+    as the generator of the graph reads them from the sources."""
+    from generate_dependency_graph_site import parse_decls_from_file
+
+    paths = sorted((ROOT / "Mlc").glob("*.lean")) + sorted((ROOT / "Mlc" / "Research").glob("*.lean"))
+    return {decl.fq_name for path in paths for decl in parse_decls_from_file(path, ROOT)[0]}
 
 
 def test_every_pointer_to_a_lean_declaration_exists() -> None:
-    text = report.lean_research_text(ROOT) + (ROOT / "Mlc" / "Core.lean").read_text()
+    names = declared_names()
     pointers = [part.lean for part in ty.PARTS if part.lean]
+    pointers += [lemma.lean for lemma in LEMMAS]
+    pointers += [lemma.reduction for lemma in LEMMAS if lemma.reduction]
+    assert pointers
     for pointer in pointers:
-        short = pointer.rsplit(".", 1)[-1]
-        assert re.search(rf"^\s*(?:theorem|lemma|def)\s+{re.escape(short)}\b", text, re.MULTILINE), pointer
-    for lemma in LEMMAS:
-        if lemma.reduction:
-            short = lemma.reduction.rsplit(".", 1)[-1]
-            assert re.search(rf"^\s*theorem\s+{re.escape(short)}\b", text, re.MULTILINE), lemma.key
+        assert pointer in names, pointer
+    # the check separates a name from the same name in another namespace
+    assert "MLC.Research.NoSuchNamespace.transfer" not in names
 
 
 def test_every_milestone_has_an_object_and_every_prefix_a_milestone() -> None:
@@ -151,24 +161,55 @@ def test_the_status_of_a_lemma_follows_the_sources() -> None:
     for lemma in LEMMAS:
         assert nothing[lemma.key] == ("published" if lemma.kind == "published" else "open")
     reduced = {lemma.key for lemma in LEMMAS if lemma.reduction}
-    # a theorem of the same name that states something else does not reduce the lemma
-    wrong = "\n".join(
-        f"theorem {lemma.reduction.rsplit('.', 1)[-1]} : True := trivial"
-        for lemma in LEMMAS
-        if lemma.reduction
+    assert reduced
+
+    def reduced_by(template: str) -> set[str]:
+        """The lemmas that are reduced when the sources hold, for each reduction, the theorem
+        `template` (`{name}` is the theorem and `{target}` the definition of its lemma)."""
+        text = "\n".join(
+            template.format(
+                name=lemma.reduction.rsplit(".", 1)[-1], target=lemma.lean.rsplit(".", 1)[-1]
+            )
+            for lemma in LEMMAS
+            if lemma.reduction
+        )
+        return {key for key, value in lemma_statuses(text).items() if value == "reduced"}
+
+    # the form of a reduction: a hypothesis, and the lemma for the dictionary of a level geometry
+    for good in (
+        "  theorem {name} (h : LG.Comparison) :\n      LG.toGeometry.{target} := by\n    exact h",
+        "theorem {name} {{ε : ℝ}} (h : LG.Comparison) : LG.toGeometry.{target} := by exact h",
+    ):
+        assert reduced_by(good) == reduced, good
+    # none of these reduces the lemma: another statement under the name, the lemma only among the
+    # hypotheses, a conjunction, another dictionary, no hypothesis (that would prove the lemma),
+    # another name, and a theorem that a comment holds
+    for bad in (
+        "theorem {name} : True := trivial",
+        "theorem {name} (h : LG.toGeometry.{target}) : LG.Comparison := by exact h",
+        "theorem {name} (h : LG.toGeometry.{target}) : LG.Other := by exact h",
+        "theorem {name} (h : LG.Comparison) : LG.toGeometry.{target} ∧ True := ⟨h, trivial⟩",
+        "theorem {name} (h : LG.Comparison) : Other.Space.{target} := by exact h",
+        "theorem {name} (h : LG.Comparison) : {target} := by exact h",
+        "theorem {name} : LG.toGeometry.{target} := by exact LG.proof",
+        "theorem {name}_aux (h : LG.Comparison) : LG.toGeometry.{target} := by exact h",
+        "theorem {name}' (h : LG.Comparison) : LG.toGeometry.{target} := by exact h",
+        "-- theorem {name} (h : LG.Comparison) : LG.toGeometry.{target} := by exact h",
+        "/-- A docstring:\ntheorem {name} (h : LG.Comparison) : LG.toGeometry.{target} := h -/",
+    ):
+        assert reduced_by(bad) == set(), bad
+    # a published lemma stays published
+    right = lemma_statuses(
+        "\n".join(
+            f"theorem {lemma.reduction.rsplit('.', 1)[-1]} (h : LG.Geo) :"
+            f" LG.toGeometry.{lemma.lean.rsplit('.', 1)[-1]} := h"
+            for lemma in LEMMAS
+            if lemma.reduction
+        )
     )
-    assert not [key for key, value in lemma_statuses(wrong).items() if value == "reduced"]
-    right = "\n".join(
-        f"  theorem {lemma.reduction.rsplit('.', 1)[-1]} (h : LG.Geo) :\n"
-        f"      LG.toGeometry.{lemma.lean.rsplit('.', 1)[-1]} := by\n    exact h"
-        for lemma in LEMMAS
-        if lemma.reduction
-    )
-    after = lemma_statuses(right)
-    assert {key for key, value in after.items() if value == "reduced"} == reduced
     for lemma in LEMMAS:
         if lemma.kind == "published":
-            assert after[lemma.key] == "published"
+            assert right[lemma.key] == "published"
 
 
 def test_the_statuses_of_the_tree_are_counted() -> None:
@@ -177,6 +218,60 @@ def test_the_statuses_of_the_tree_are_counted() -> None:
     assert statuses["unboundedDichotomy"] == "reduced"
     assert statuses["unboundedTeichmuller"] == "open"
     assert statuses["yoccoz"] == "published"
+    # every reduction of the catalogue is found in the sources
+    assert {key for key, value in statuses.items() if value == "reduced"} == {
+        lemma.key for lemma in LEMMAS if lemma.reduction
+    }
+
+
+def test_the_comments_of_a_lean_source_are_stripped() -> None:
+    source = (
+        "theorem a : True := trivial -- theorem line_comment\n"
+        "/-- A docstring\ntheorem in_doc : True\n  /- nested\n  theorem deeper -/\n"
+        "still a docstring --/ theorem b : True := trivial\n"
+        "/-! module doc -/\n"
+        "-- /- a line comment that opens no block\n"
+        "theorem c : True := trivial\n"
+    )
+    code = strip_lean_comments(source)
+    assert re.findall(r"theorem (\w+)", code) == ["a", "b", "c"]
+    # the lines of the code are the lines of the source
+    assert code.count("\n") == source.count("\n")
+    assert code.splitlines()[-1] == "theorem c : True := trivial"
+    # an unclosed block comment drops the rest
+    assert strip_lean_comments("def x := 1\n/- open") == "def x := 1\n"
+
+
+def test_the_declarations_of_a_source_are_counted_without_comments_and_with_attributes() -> None:
+    # the lines of comments (a docstring line that starts with a keyword among them) do not count
+    comments = (
+        "/-\ntheorem inside_block : True := trivial\n-/\n"
+        "-- theorem line_comment : True := trivial\n"
+        "/-- A docstring whose line\ntheorem above), and the converse -/\n"
+        "/-! module doc\ndef also_not : ℕ := 0\n-/\n"
+    )
+    assert ty.count_declarations(comments) == 0
+    # a keyword after attributes counts, on the same line or on the next one
+    attributes = (
+        "@[simp] theorem b : True := trivial\n"
+        "@[simp, grind] protected lemma c : True := trivial\n"
+        "@[simp]\ntheorem d : True := trivial\n"
+    )
+    assert ty.count_declarations(attributes) == 3
+    plain = (
+        "/-- Doc. -/\ntheorem a : True := trivial\n"
+        "noncomputable def e : ℕ := 0\n"
+        "private theorem f : True := trivial\n"
+        "structure S where\n  x : ℕ\n"
+        "instance : Inhabited S := ⟨⟨0⟩⟩\n"
+        "instance instNamed : Inhabited S := ⟨⟨0⟩⟩\n"
+        "deriving instance Fintype for S\n"
+    )
+    # a, e, f, S and the two instances; the deriving line adds none
+    assert ty.count_declarations(plain) == 6
+    assert ty.count_declarations(comments + attributes + plain) == 9
+    sizes = ty.declaration_counts(ROOT)
+    assert set(sizes) == set(ty.OBJECT) and all(sizes[key] > 0 for key in sizes)
 
 
 def png_size(png: bytes) -> tuple[int, int]:
@@ -184,13 +279,44 @@ def png_size(png: bytes) -> tuple[int, int]:
     return struct.unpack(">II", png[16:24])
 
 
+def decode_png(png: bytes) -> np.ndarray:
+    """The pixels (height, width, 3) of an 8-bit RGB PNG whose scanlines are unfiltered."""
+    width, height = png_size(png)
+    data, position = b"", 8
+    while position < len(png):
+        length, tag = struct.unpack(">I4s", png[position : position + 8])
+        if tag == b"IDAT":
+            data += png[position + 8 : position + 8 + length]
+        position += 12 + length
+    raw = zlib.decompress(data)
+    stride = 1 + 3 * width
+    assert len(raw) == stride * height
+    rows = []
+    for row in range(height):
+        line = raw[row * stride : (row + 1) * stride]
+        assert line[0] == 0
+        rows.append(np.frombuffer(line[1:], dtype=np.uint8).reshape(width, 3))
+    return np.stack(rows)
+
+
 def test_a_thumbnail_is_a_png_with_a_dark_interior() -> None:
     first = ty.render_fragment((0.0, 0.0), 0.2, size=33, max_iter=200)
-    second = ty.render_fragment((0.0, 0.0), 0.2, size=33, max_iter=200)
-    assert first == second
+    assert first == ty.render_fragment((0.0, 0.0), 0.2, size=33, max_iter=200)
     assert png_size(first) == (33, 33)
-    far = ty.render_fragment((3.0, 3.0), 0.2, size=9, max_iter=50)
-    assert png_size(far) == (9, 9) and far != first
+    pixels = decode_png(first)
+    # the middle of the window (|c| <= 0.14) lies in the main cardioid: one dark colour
+    interior = pixels[16, 16]
+    assert int(interior.sum()) < 60
+    assert (pixels[8:25, 8:25] == interior).all()
+    # a window far from M has no interior pixel
+    far = decode_png(ty.render_fragment((3.0, 3.0), 0.2, size=9, max_iter=50))
+    assert far.shape == (9, 9, 3)
+    assert not (far == interior).all(axis=2).any()
+    # a window on the boundary (the cusp at -3/4) has the interior and brighter exterior pixels
+    edge = decode_png(ty.render_fragment((-0.75, 0.0), 0.2, size=33, max_iter=300))
+    inside = (edge == interior).all(axis=2)
+    assert inside.any() and (~inside).any()
+    assert int(edge[~inside].sum(axis=1).max()) > int(interior.sum()) + 100
 
 
 class Balance(HTMLParser):

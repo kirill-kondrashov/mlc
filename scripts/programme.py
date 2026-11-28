@@ -431,8 +431,46 @@ def proved_lemmas(lean_text: str) -> set[str]:
     }
 
 
-def _conclusion(signature: str) -> str | None:
-    """The type that follows the first colon outside brackets of the signature of a theorem."""
+_OPEN_COMMENT = re.compile(r"/-|--")
+_INSIDE_COMMENT = re.compile(r"/-|-/|\n")
+
+
+def strip_lean_comments(text: str) -> str:
+    """The source without its comments: the line comments and the block comments (which nest,
+    docstrings included). The line breaks stay, so the lines of the code are those of the
+    source."""
+    pieces: list[str] = []
+    depth = 0
+    keep_from = 0  # the start of the code that is not copied yet
+    position = 0
+    while True:
+        found = (_INSIDE_COMMENT if depth else _OPEN_COMMENT).search(text, position)
+        if found is None:
+            break
+        token, position = found.group(), found.end()
+        if depth == 0:
+            pieces.append(text[keep_from : found.start()])
+            if token == "/-":
+                depth = 1
+            else:
+                end = text.find("\n", position)
+                position = len(text) if end < 0 else end
+                keep_from = position
+        elif token == "/-":
+            depth += 1
+        elif token == "-/":
+            depth -= 1
+            keep_from = position if depth == 0 else keep_from
+        else:
+            pieces.append("\n")
+    if depth == 0:
+        pieces.append(text[keep_from:])
+    return "".join(pieces)
+
+
+def _split_signature(signature: str) -> tuple[str, str] | None:
+    """The binders and the type that follow the name of a theorem, split at the first colon
+    outside brackets."""
     depth = 0
     for index, char in enumerate(signature):
         if char in "([{⟨⦃":
@@ -440,23 +478,29 @@ def _conclusion(signature: str) -> str | None:
         elif char in ")]}⟩⦄":
             depth -= 1
         elif char == ":" and depth == 0:
-            return signature[index + 1 :].strip()
+            return signature[:index].strip(), signature[index + 1 :].strip()
     return None
 
 
 def reduces(lemma: Lemma, lean_text: str) -> bool:
-    """A Lean theorem `reduction` whose conclusion is the lemma: the type after the colon of
-    its signature (up to the first `:=`) is the definition of the lemma, applied to a
-    dictionary and nothing else. A theorem of the same name that states something else, or one
-    that merely mentions the lemma among its hypotheses, does not count."""
+    """A Lean theorem `reduction` that derives the lemma from a hypothesis: its binders are not
+    empty and its conclusion, the type after the first colon outside brackets of the signature
+    (up to the first `:=`), is the definition of the lemma at the dictionary of a level
+    geometry, `LG.toGeometry.Target`, and nothing else. A theorem of the same name that states
+    something else, one that merely mentions the lemma among its hypotheses, one without a
+    hypothesis (that would prove the lemma) and a line of a comment do not count."""
     if not lemma.reduction:
         return False
     name = lemma.reduction.rsplit(".", 1)[-1]
     target = lemma.lean.rsplit(".", 1)[-1]
-    pattern = rf"^\s*theorem\s+{re.escape(name)}\b(.*?):="
-    for found in re.finditer(pattern, lean_text, re.MULTILINE | re.DOTALL):
-        conclusion = _conclusion(found.group(1))
-        if conclusion and re.fullmatch(rf"(?:[\w']+\.)*{re.escape(target)}", conclusion):
+    pattern = rf"^\s*theorem\s+{re.escape(name)}(?![\w'.])(.*?):="
+    code = strip_lean_comments(lean_text)
+    for found in re.finditer(pattern, code, re.MULTILINE | re.DOTALL):
+        split = _split_signature(found.group(1))
+        if split is None:
+            continue
+        binders, conclusion = split
+        if binders and re.fullmatch(rf"[\w']+\.toGeometry\.{re.escape(target)}", conclusion):
             return True
     return False
 

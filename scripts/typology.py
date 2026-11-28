@@ -36,7 +36,7 @@ import zlib
 from dataclasses import dataclass
 from pathlib import Path
 
-from programme import CLASSES, LEMMA, LEMMAS, STATUSES, lemma_statuses
+from programme import CLASSES, LEMMA, LEMMAS, STATUSES, lemma_statuses, strip_lean_comments
 
 # ---------------------------------------------------------------------------------------------
 # The three regimes of a scale near a boundary parameter (Dudko, §3, after Question 3.1).
@@ -660,11 +660,20 @@ def object_of_label(label: str) -> str | None:
 # Counts that the page shows.
 # ---------------------------------------------------------------------------------------------
 
+# A declaration of a Lean source without comments: a keyword at the start of a line, after the
+# attributes (`@[simp]`) and the modifiers. An anonymous instance counts, as in Lean.
 DECLARATION = re.compile(
-    r"^\s*(?:(?:noncomputable|private|protected|unsafe|partial)\s+)*"
-    r"(?:theorem|lemma|def|abbrev|structure|inductive|class|instance)\s",
+    r"^[ \t]*(?:@\[[^\]]*\][ \t]*\n?[ \t]*)*"
+    r"(?:(?:noncomputable|private|protected|unsafe|partial|mutual)\s+)*"
+    r"(?:theorem|lemma|def|abbrev|axiom|structure|inductive|class|instance)\s",
     re.MULTILINE,
 )
+
+
+def count_declarations(source: str) -> int:
+    """The declarations of a Lean source: the lines of its comments, docstrings included, do
+    not count, and the attributes before a keyword are read."""
+    return len(DECLARATION.findall(strip_lean_comments(source)))
 
 
 def declaration_counts(repo_root: Path) -> dict[str, int]:
@@ -678,7 +687,7 @@ def declaration_counts(repo_root: Path) -> dict[str, int]:
                 continue
             path = repo_root / "Mlc" / f"{module}.lean"
             if path.exists():
-                total += len(DECLARATION.findall(path.read_text(encoding="utf-8")))
+                total += count_declarations(path.read_text(encoding="utf-8"))
         out[obj.key] = total
     return out
 

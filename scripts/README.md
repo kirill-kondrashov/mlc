@@ -30,10 +30,12 @@ literature-motivated (`kind` published) while the literature suggests it and the
 development takes it as a hypothesis (the dictionary is a parameter, so it is a hypothesis about
 the dictionary, and the bridge from the published theorem is not formalized), reduced when a Lean
 theorem of `LevelGeometry.lean` derives it from a geometric statement about the level sets of
-the dictionary (the statement is itself open, and the lemma stays a field; the generator checks
-that the conclusion of the theorem, the type after the colon of its signature, is the definition
-of the lemma and that the theorem depends on it, so a theorem that mentions the lemma among its
-hypotheses only does not count),
+the dictionary (the statement is itself open, and the lemma stays a field; the generator reads
+the sources without their comments and checks that the theorem has a hypothesis, that its
+conclusion, the type after the colon of its signature, is the definition of the lemma at the
+dictionary of a level geometry (`LG.toGeometry.Target`), and that the theorem depends on it in
+the graph, so a theorem that mentions the lemma among its hypotheses only, one without a
+hypothesis and one that a comment holds do not count),
 and proved once its theorem exists. The generator fails if the catalogue and the Lean
 structure disagree; the
 graph draws the statements as nodes, and the progress report derives the classes
@@ -56,9 +58,11 @@ in no cone is labelled as such; a standalone run of `progress_report.py` has no 
 marks no class), the thumbnails by an escape-time rendering with a distance estimate (an
 illustration that the Lean proof does not use), and the census of the components by the
 necklace formula. `scripts/test_typology.py` checks the hierarchy, the objects, the usage
-computation on a small graph, that every pointer to a Lean declaration exists, that every
-milestone of the ledger has an object, the census against the roots of the Gleason polynomials
-and the rendering.
+computation on a small graph, that every pointer to a Lean declaration exists under its full
+name, the form of a reduction (the theorems that must not count among them), the counts of
+declarations of the objects (comments and attributes), that every milestone of the ledger has an
+object, the census against the roots of the Gleason polynomials and the pixels of the
+thumbnails.
 
 `progress_report.py` renders the **Progress** tab and the LaTeX report from the
 progress ledger (below); it reads no Git history. The tab shows the certified resolved
