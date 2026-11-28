@@ -265,6 +265,32 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   `G ⊃ G′` of the survey (Figure 13, the estimate (4.6)) are computed, not assumed. The upper
   bound is Cauchy–Schwarz along a segment with Fubini, the lower bound the characteristic
   function of the rectangle.
+* `Mlc/Research/NestModulus.lean`: the geometric half of Lemma T, the Grötzsch–Teichmüller
+  estimate for the annuli of a nest. For a nest of connected parameter pieces `P₀ ⊇ P₁ ⊇ …`
+  around `c`, the loops of the annulus `Pⱼ ∖ cl P_{j+1}` are the `C¹` closed curves in it that go
+  around `cl P_{j+1}` (they meet every ray that starts there), recorded by their arc-length
+  measures (`ConnectedNest.loops`); their extremal width is the modulus of the annulus.
+  `ConnectedNest.sum_extWidth_loops_le`: if `P₀ ⊂ B(c, R)` and the closure of `Pₙ` contains a
+  point at distance `δ` from `c`, the moduli of the first `n` annuli add up to at most
+  `2π log (4 (R + δ) / δ) / (log 2)²`. The proof is the parallel law for the disjoint annuli and
+  the metric `1/|z − c|` on the ring `δ/2 ≤ |z − c| ≤ R + δ`, whose area is at most
+  `2π log (4 (R + δ) / δ)`: a loop that stays outside the disk of radius `δ/2` has length at
+  least `2π` (the argument of `γ − c` sweeps `(−π, π)`), and a loop that enters the disk and
+  reaches distance `δ` crosses the ring and has length at least `log 2` (the function
+  `log |γ − c|` sweeps `[log δ/2, log δ]`); both are the area inequality
+  `λ(f(S)) ≤ ∫_S |f′|` of Mathlib in dimension one. So pieces with `DivergentModuli` (moduli that
+  add up to infinity) shrink to `c` and have the `SeparationEstimate` of every cost
+  (`ConnectedNest.nonempty_parameterRealization`).
+* `Mlc/Research/PhaseParameter.lean`: `Geometry.PhaseParameter`, the dynamical half of Lemma T
+  in moduli form (an a priori bound on the tower of `c` gives a nest in `M` around `c` with
+  divergent moduli), and `Geometry.transfer_of_phaseParameter : PhaseParameter → Transfer`.
+  `ProgrammeInput.transfer` keeps the weaker hypothesis `Transfer`; to prove
+  `PhaseParameter` is the open content of Lemma T.
+* `Mlc/Research/ConcentricNest.lean`: the nest of the disks `B(0, 2⁻ʲ)` has annuli of modulus at
+  least `log(3/2)/2π`, because the circles of the annulus are loops of its family
+  (`loopMeasure_circleLoop`) and the extremal length of the circles is known
+  (`extLength_circleFamily`). So `concentricNest_divergentModuli` shows that the definition of the
+  moduli of a nest is satisfiable (the hypothesis of the geometric half has instances).
 
 The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
 `mlc_of_programme`) uses only the three kernel axioms.
@@ -333,12 +359,19 @@ roadmap, not claims of the survey.
   First step (done, `AnnulusModulus.lean` and `RectangleModulus.lean`): the moduli of the round
   annulus and of the rectangle in the plane as extremal lengths, in polar and in Cartesian
   coordinates (the Yoccoz package uses
-  a Gaussian weighted area as a proxy, which changes under conformal maps). Next: the conformal
-  invariance of the modulus under injective holomorphic maps (the pullback law with `d = 1` for
-  the length measures of paths), the modulus of a general annulus, and the Teichmüller bound (a
-  ring around a continuum of diameter `ε` in a disk of radius `R` has modulus at most
-  `(1/2π) log(16R/ε)`, which turns moduli into shrinking). Then the phase–parameter relation of
-  Lyubich (§3.9). Risk: the conformal geometry is not in Mathlib.
+  a Gaussian weighted area as a proxy, which changes under conformal maps). Second step (done,
+  `NestModulus.lean`, `PhaseParameter.lean`): the Grötzsch–Teichmüller estimate for the annuli of
+  a nest of parameter pieces, so that T follows from the phase–parameter relation in moduli
+  form (`Geometry.PhaseParameter`, a nest in `M` whose moduli add up to infinity); the proof
+  is checked for general open pieces, with the area inequality in dimension one for the
+  argument and the logarithm of `γ − c`, with no Teichmüller bound for a general annulus and no
+  conformal invariance needed. Next: `PhaseParameter` itself (the phase–parameter relation of
+  Lyubich (§3.9) with the quasi-additivity law), which compares the moduli of the dynamical
+  annuli of the tower with the parameter annuli, and for that the conformal invariance of the
+  modulus under injective holomorphic maps (the pullback law with `d = 1` for the length
+  measures of paths). VT has the same shape with the dynamical hulls of
+  `VirtualJuliaNest.SeparationEstimate` instead of annuli around the point; its geometric half is
+  not yet written. Risk: the conformal geometry is not in Mathlib.
 * **Y, TC, B, A, N, QG (published).** Formalize the cited theorems in the form of a parameter
   realization or of the estimate. Y is Yoccoz's puzzle theorem; TC is the Teichmüller
   contraction of §4.3; B, A and N are long research papers; QG is the 71-page theorem of
@@ -388,11 +421,13 @@ roadmap, not claims of the survey.
   cap at large relative period and the linear error are those of G and D for the virtual hull,
   after the pseudo-Siegel regularization (Figure 14, left loop). They wait for G and D.
 
-The abstract extremal length, its laws and the moduli of the round annulus and of the rectangle
-exist (`ExtremalLength.lean`, `AnnulusModulus.lean`, `RectangleModulus.lean`). What the lemmas that
-depend on conformal geometry still need is the link between them and the dynamics: the conformal
-invariance of the modulus, the modulus of general annuli with the Teichmüller bound, then the
-families of curves of a quadratic-like map. That is the first real step of every route.
+The abstract extremal length, its laws, the moduli of the round annulus and of the rectangle, and
+the Grötzsch–Teichmüller estimate for nested annuli exist (`ExtremalLength.lean`,
+`AnnulusModulus.lean`, `RectangleModulus.lean`, `NestModulus.lean`). What the lemmas that depend
+on conformal geometry still need is the link between them and the dynamics: the conformal
+invariance of the modulus, which carries the moduli of the dynamical annuli of a tower to the
+parameter plane (`Geometry.PhaseParameter`), then the families of curves of a quadratic-like map.
+That is the first real step of every route.
 
 ### Rays, the lamination and tuning
 

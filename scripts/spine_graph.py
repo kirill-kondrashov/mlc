@@ -28,6 +28,7 @@ from pathlib import Path
 from progress_report import PROGRESS_CSS, PROGRESS_ROUTES
 from programme import (
     ANNULUS_ROOTS,
+    NEST_ROOTS,
     RECTANGLE_ROOTS,
     CLASSES,
     GROTZSCH_ROOT,
@@ -173,6 +174,7 @@ SIDE_ROOTS = (
     *TAIL_ROOTS,
     *ANNULUS_ROOTS,
     *RECTANGLE_ROOTS,
+    *NEST_ROOTS,
 )
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
@@ -1066,6 +1068,49 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "of the survey (Figure 13). The modulus of domains that are not round, the conformal "
         "invariance and the Teichmüller bound that turn moduli into shrinking stay open.",
         lemma_nodes["transfer"],
+    )
+    side_bud(
+        NEST_ROOTS,
+        "prog:nest",
+        "Moduli ⇒ shrinking",
+        "Grötzsch–Teichmüller · T from phase–parameter",
+        "Checked in Lean (ConnectedNest.sum_extWidth_loops_le, DivergentModuli.shrinking, "
+        "Geometry.transfer_of_phaseParameter, concentricNest_divergentModuli). The loops of "
+        "the annulus between two consecutive pieces of a nest are the C¹ closed curves that "
+        "go around the next piece; their extremal width is the modulus of the annulus. If the "
+        "piece n of the nest keeps a point at distance δ from c, the moduli of the first n "
+        "annuli add up to at most 2π log(4(R + δ)/δ) / (log 2)², where R bounds the first "
+        "piece. Each loop has length at least log 2 for the metric 1/|z − c| on the ring "
+        "δ/2 ≤ |z − c| ≤ R + δ (it goes around c, so the argument of z − c sweeps (−π, π), or "
+        "it crosses the ring δ/2 ≤ |z − c| ≤ δ; both by the area inequality for real "
+        "functions), the ring has area at most 2π log(4(R + δ)/δ), and the annuli are "
+        "disjoint (the parallel law). So a nest whose moduli add up to infinity shrinks to c "
+        "and gives the separation estimate of every budget: Lemma T follows from the "
+        "phase–parameter relation in moduli form (Geometry.PhaseParameter). The concentric "
+        "disks have moduli at least log(3/2)/2π, so the hypothesis is satisfiable. The "
+        "construction of the nest from an a priori bound stays open.",
+        lemma_nodes["transfer"],
+    )
+    add_child(
+        lemma_nodes["transfer"],
+        Node(
+            id="paper:phase_parameter",
+            kind="tip",
+            cat="informal",
+            title="Phase–parameter moduli",
+            sub="open · the dynamical half of Lemma T",
+            text=(
+                "Lyubich's phase–parameter relation, in the form that Lemma T needs "
+                "(Geometry.PhaseParameter): an a priori bound on the degeneration of the tower "
+                "of c gives a connected nest of parameter pieces around c in M whose annuli "
+                "have moduli with an infinite sum. The quasi-additivity law of Kahn–Lyubich "
+                "carries the moduli of the dynamical annuli of the tower to the parameter "
+                "plane. Open; the geometric half, from the moduli to the shrinking of the "
+                "pieces, is checked in Lean (below). The root theorem keeps the weaker "
+                "hypothesis Transfer, which this statement implies."
+            ),
+        ),
+        below=True,
     )
     add_child(
         unified,

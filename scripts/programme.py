@@ -39,6 +39,12 @@ ANNULUS_ROOTS = (
 RECTANGLE_ROOTS = (
     "MLC.Research.extWidth_horizFamily",
 )
+# The results of Mlc/Research/NestModulus.lean, PhaseParameter.lean and ConcentricNest.lean
+# that no other result uses.
+NEST_ROOTS = (
+    "MLC.Research.Geometry.transfer_of_phaseParameter",
+    "MLC.Research.nonempty_parameterRealization_concentric",
+)
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 
