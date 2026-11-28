@@ -919,10 +919,12 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "Lemma G from collars",
         "bounded dilatation ⇒ cap on the jumps",
         "Checked in Lean (LevelTower, LevelTower.width_le_of_collar, "
-        "LevelTower.jumpCap_of_collars, LevelTower.aPrioriBounds_of_collars). A LevelTower "
+        "LevelTower.jumpCap_of_collars, LevelTower.aPrioriBounds_of_collars, "
+        "LevelTower.width_eq_of_round). A LevelTower "
         "records that the degeneration of the level k is W(f_k) = 1 / mod(V_k ∖ K_k), the "
         "reciprocal modulus of the annulus between the filled Julia set and the range domain "
-        "of the level (the survey (3.2), (4.1)). If this annulus has a collar of dilatation "
+        "of the level (the survey (3.2), (4.1)); for a round level K = B̄(c, r), V = B(c, R) "
+        "this is exactly 2π / log(R/r). If this annulus has a collar of dilatation "
         "Kd and modulus log(R/r) / 2π (see \"Collars bound the modulus\"), the degeneration is "
         "at most 2π Kd / log(R/r). So if at every level that follows a jump by the factor C₀ "
         "the annulus has a collar of dilatation at most K₀ and modulus at least μ₀ / 2π, the "
@@ -1150,10 +1152,14 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "Grötzsch–Teichmüller · T ⇔ phase–parameter",
         "Checked in Lean (ConnectedNest.sum_extWidth_loops_le, DivergentModuli.shrinking, "
         "ConnectedNest.sum_extWidth_loops_le_coarse, ConnectedNest.exists_divergentSubnest, "
-        "Geometry.transfer_iff_phaseParameter, concentricNest_divergentModuli). The loops of "
+        "Geometry.transfer_iff_phaseParameter, concentricNest_divergentModuli, "
+        "extWidth_loopFamily_round). The loops of "
         "the annulus between two consecutive pieces of a nest are the C¹ closed curves in it "
         "that separate the next piece from the complement of the piece (every path from one "
-        "to the other meets the loop); their extremal width is the modulus of the annulus. If "
+        "to the other meets the loop); their extremal width is the modulus of the annulus, "
+        "which for the round annulus r < |z − c| ≤ R is exactly the classical log(R/r)/2π "
+        "(the circles bound it below, and the metric 1/|z − c| of area 2π log(R/r) bounds it "
+        "above). If "
         "the piece n of the nest keeps a point at distance δ from c, the moduli of the first n "
         "annuli add up to at most 2π log(4(R + δ)/δ) / (log 2)², where R bounds the first "
         "piece. Each loop has length at least log 2 for the metric 1/|z − c| on the ring "
@@ -1228,7 +1234,9 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "Collars bound the modulus",
         "quasi-round annulus ⇒ definite modulus",
         "Checked in Lean (IsCollar, IsCollar.ofReal_le_extWidth, "
-        "ConnectedNest.divergentModuli_of_collars). The modulus of the annulus V ∖ E is the "
+        "ConnectedNest.divergentModuli_of_collars, "
+        "ConnectedNest.closure_piece_subset_closedBall_of_collars). The modulus of the "
+        "annulus V ∖ E is the "
         "extremal width of the C¹ loops in it that separate E from the complement of V; for a "
         "level f : U → V with filled Julia set E = K_f it is mod⁺(f), the reciprocal of the "
         "degeneration W(f) of the survey (4.1). A collar of V ∖ E is a C¹ embedding ψ of "
@@ -1238,8 +1246,13 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "modulus of V ∖ E is at least log(R/r) / (2π Kd): Grötzsch's monotonicity of the "
         "modulus together with the quasi-invariance. A nest whose annuli all have collars of "
         "dilatation at most K₀ and modulus at least μ₀/2π has moduli bounded below by "
-        "μ₀/(2π K₀), so they add up to infinity and the pieces shrink to the point: this is "
-        "the form that bounded geometry takes here. The collars of the levels of a tower and "
+        "μ₀/(2π K₀), so they add up to infinity and the pieces shrink to the point, at a "
+        "geometric rate: if the first piece lies in the disk of radius R around c and the "
+        "first n annuli have total modulus at least s, with κ s ≥ log 8 for κ = (log 2)²/2π, "
+        "the piece n lies in the disk of radius 8R e^(−κ s) (Teichmüller's inequality, "
+        "closure_piece_subset_closedBall_of_sum), so uniform collars give the decay "
+        "exp(−κ μ₀ n / (2π K₀)): this is the form that bounded geometry takes here. The "
+        "collars of the levels of a tower and "
         "the charts between dynamical and parameter annuli are not constructed.",
         quasi_invariance or phase_parameter,
     )

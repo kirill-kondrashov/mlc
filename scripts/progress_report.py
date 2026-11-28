@@ -67,6 +67,10 @@ PEANO_THEOREM = re.compile(
 FIBER_THEOREM = re.compile(
     r"^\s*theorem\s+sum_extWidth_loops_bounded_of_dimH_kernel_pos\b", re.MULTILINE
 )
+ROUND_THEOREM = re.compile(r"^\s*theorem\s+extWidth_loopFamily_round\b", re.MULTILINE)
+RATE_THEOREM = re.compile(
+    r"^\s*theorem\s+closure_piece_subset_closedBall_of_sum\b", re.MULTILINE
+)
 MULTIPLICITY_THEOREM = re.compile(
     r"^\s*theorem\s+extWidth_le_pow_two_mul_fc_iterate\b", re.MULTILINE
 )
@@ -113,6 +117,10 @@ PROGRESS_MILESTONES = (
     ("A fiber of positive Hausdorff dimension has a finite total modulus", FIBER_THEOREM, 1),
     ("Peano objects of CompHaus are locally connected: MLC as a parametrization by the "
      "interval", PEANO_THEOREM, 1),
+    ("The modulus of the round annulus is exactly log(R/r)/2π as the extremal width of its "
+     "separating loops", ROUND_THEOREM, 1),
+    ("Teichmüller's inequality: the size of a nest piece is controlled by the total modulus, "
+     "so uniform collars give exponential shrinking", RATE_THEOREM, 1),
     ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )

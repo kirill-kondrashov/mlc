@@ -45,6 +45,7 @@ NEST_ROOTS = (
     "MLC.Research.Geometry.transfer_iff_phaseParameter",
     "MLC.Research.nonempty_parameterRealization_concentric",
     "MLC.Research.ConnectedNest.sum_extWidth_loops_le_coarse",
+    "MLC.Research.extWidth_loopFamily_round",
 )
 # The results of Mlc/Research/AreaMultiplicity.lean that no other result uses.
 MULTIPLICITY_ROOTS = (
@@ -62,10 +63,12 @@ QUASI_INVARIANCE_ROOTS = (
 # The results of Mlc/Research/Collar.lean that no other result uses.
 COLLAR_ROOTS = (
     "MLC.Research.ConnectedNest.divergentModuli_of_collars",
+    "MLC.Research.ConnectedNest.closure_piece_subset_closedBall_of_collars",
 )
 # The results of Mlc/Research/LevelTower.lean that no other result uses.
 LEVEL_JUMP_ROOTS = (
     "MLC.Research.LevelTower.aPrioriBounds_of_collars",
+    "MLC.Research.LevelTower.width_eq_of_round",
 )
 LEVEL_TRANSFER_ROOTS = (
     "MLC.Research.Geometry.transfer_of_comparison",

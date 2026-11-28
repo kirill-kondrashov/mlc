@@ -132,7 +132,16 @@ annulus \(V\setminus E\) of a level contains the image of a round annulus \(r<|w
 such a chart of dilatation \(K_d\), going around \(E\), its modulus is at least
 \(\log(R/r)/(2\pi K_d)\), so a nest whose annuli have uniform collars has divergent moduli
 (\texttt{IsCollar.ofReal\_le\_extWidth}, \texttt{ConnectedNest.divergentModuli\_of\_collars} in
-\texttt{Mlc/Research/Collar.lean}). A level whose annulus has a collar has degeneration at most
+\texttt{Mlc/Research/Collar.lean}). For the round annulus \(r<|z-c|\le R\) the modulus is exactly
+\(\log(R/r)/2\pi\) (\texttt{extWidth\_loopFamily\_round} in \texttt{Mlc/Research/RoundAnnulus.lean}; the degeneration of
+a round level is \(2\pi/\log(R/r)\), \texttt{LevelTower.width\_eq\_of\_round}),
+and the size of a piece of a nest is controlled by the total modulus before it: if the first piece
+lies in \(B(c,R)\) and the first \(n\) annuli have total modulus at least \(s\) with
+\(\kappa s\ge\log 8\), \(\kappa=(\log 2)^2/2\pi\), then the piece \(n\) lies in
+\(B(c,8Re^{-\kappa s})\) (Teichm\"uller's inequality,
+\texttt{ConnectedNest.closure\_piece\_subset\_closedBall\_of\_sum} in
+\texttt{Mlc/Research/NestRate.lean}), so uniform collars give pieces that shrink geometrically.
+A level whose annulus has a collar has degeneration at most
 \(2\pi K_d/\log(R/r)\), so collars of bounded dilatation and definite modulus at the levels that
 follow a jump cap the jumps (Lemma~G in the reading of PS4), and a comparison of the moduli of
 the levels with the moduli of a parameter nest gives Lemma~T

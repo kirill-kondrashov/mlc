@@ -361,6 +361,27 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   bounded below by `μ₀/(2π K₀)`, hence divergent moduli and shrinking pieces
   (`ConnectedNest.divergentModuli_of_collars`): the form that bounded geometry takes here. The
   collars of the levels of a tower are not constructed.
+* `Mlc/Research/RoundAnnulus.lean`: the modulus of the round annulus, exactly. For `0 < r < R` the
+  extremal width of the `C¹` loops in `B̄(c, R) ∖ B̄(c, r)` that separate `B̄(c, r)` from the
+  complement of `B(c, R)` is `log (R/r) / 2π` (`extWidth_loopFamily_round`): the circles bound it
+  below (`extWidth_loopFamily_ge_radii`), and the metric `1/|z − c|` on the ring, of area
+  `2π log (R/r)` (`rhoArea_ringMetric_eq`, equal almost everywhere to the metric of the annulus
+  off a null circle), in which every separating loop has length at least `2π`
+  (`ofReal_two_pi_le_minLength_round`), bounds it above. The same holds for the open ring
+  `r < |z − c| < R` (`extWidth_loopFamily_round_open`, a limit of the circles of radius `s < R`),
+  the annulus of a round level of a `LevelTower`, whose degeneration is therefore
+  `2π / log (R/r)` (`LevelTower.width_eq_of_round`). So the `C¹` modulus agrees with the classical
+  one on the round annuli, the model that the collars compare with.
+* `Mlc/Research/NestRate.lean`: the rate of the shrinking. Teichmüller's inequality in the form
+  of a theorem about nests (`ConnectedNest.closure_piece_subset_closedBall_of_sum`): if the
+  closure of the first piece lies in `B̄(c, R)` and the first `n` annuli have total modulus at
+  least `s`, with `κ s ≥ log 8` and `κ = (log 2)² / 2π`, then the closure of the piece `n` lies in
+  `B̄(c, 8 R e^(−κ s))`. Hence moduli bounded below by `μ` give the pieces `n ≥ N` radius at most
+  `8 R e^(−κ μ n)` (`closure_piece_subset_closedBall_of_uniform`), and uniform collars give the
+  geometric decay `exp(−κ μ₀ n / (2π K₀))`
+  (`closure_piece_subset_closedBall_of_collars`). The statement that a nest of divergent moduli
+  shrinks (`DivergentModuli.shrinking`) becomes quantitative; the rate is that of bounded
+  geometry, and the geometric bound is what the construction of the nest has to supply.
 * `Mlc/Research/LevelTower.lean`: the degeneration as the reciprocal modulus of an annulus, and what
   follows. `LevelTower` extends `WidthTower` by the filled Julia sets `K_k` and the range domains
   `V_k` of the levels, with `W_k = 1 / mod(V_k ∖ K_k)` (the survey (3.2), (4.1)). A collar of the
@@ -495,7 +516,9 @@ roadmap, not claims of the survey.
   (`ConnectedNest.DivergentModuli.map`). Fourth step (done, `Collar.lean`): a level whose annulus
   has a collar, a quasi-round annular chart of dilatation `Kd` and modulus `log (R/r) / 2π`, has
   modulus at least `log (R/r) / (2π Kd)` (`IsCollar.ofReal_le_extWidth`), and a nest with uniform
-  collars has divergent moduli (`ConnectedNest.divergentModuli_of_collars`). Fifth step (done,
+  collars has divergent moduli (`ConnectedNest.divergentModuli_of_collars`), with the modulus of
+  the round annulus exactly `log (R/r) / 2π` (`RoundAnnulus.lean`) and the pieces shrinking at the
+  geometric rate `exp(−κ μ₀ n / (2π K₀))` (`NestRate.lean`, Teichmüller's inequality). Fifth step (done,
   `LevelTower.lean`): the degeneration of a level is the reciprocal modulus of its annulus, collars
   at the jump levels cap the jumps (Lemma G in the reading of PS4), and the phase–parameter
   comparison of the moduli of the levels with the moduli of a parameter nest gives Lemma T
@@ -606,9 +629,9 @@ point: divergent moduli leave a point of dimension `0`, and a fiber of positive 
 finite total modulus. `C¹` charts preserve the Hausdorff dimension (`QcEmbedding.dimH_image`), so
 the correspondences between the dynamical and the parameter plane that relate sets of different
 dimension are quasi-conformal and not `C¹`, with a distortion of the dimension bounded by the
-dilatation (Astala, 1994; not formalized). What the dimension does not give: it does not decide
-the area of the boundary, which is `0` or not, whatever its dimension, and it does not decide the
-shrinking of the nests, which is the content of Problems 4.3 and 4.4.
+dilatation (Astala, 1994; not formalized). Dimension `2` is compatible with area `0` and with
+positive area, so the dimension decides neither the area of the boundary nor the shrinking of the
+nests, which is the content of Problems 4.3 and 4.4.
 
 **Which landing points stay open.** The fibers of the parameters that are not infinitely
 renormalizable are points (Yoccoz, Hubbard), and the lemmas Y, N, B, A and QG give the same for

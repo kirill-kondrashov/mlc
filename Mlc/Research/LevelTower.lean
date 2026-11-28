@@ -1,5 +1,6 @@
 import Mlc.Research.Collar
 import Mlc.Research.PhaseParameter
+import Mlc.Research.RoundAnnulus
 
 /-!
 # The levels of a tower as annuli
@@ -15,7 +16,10 @@ follows from the quasi-invariance of the modulus (`Mlc/Research/Collar.lean`).
   modulus of an annulus is the extremal width of the `C¹` loops in it that separate the inner set
   from the complement of the outer one. The circles of a round annulus lie in that family, so its
   modulus is at least `log (R/r) / 2π` (`extWidth_loopFamily_ge_radii`), and it is at most the
-  classical modulus in general, since the family consists of separating curves.
+  classical modulus in general, since the family consists of separating curves. For a round level
+  `filled = B̄(c, r)`, `target = B(c, R)` it is exactly `log (R/r) / 2π`
+  (`LevelTower.width_eq_of_round`, from `RoundAnnulus.lean`), so the degeneration of a round level
+  is `2π / log (R/r)`.
 * **Theorem `LevelTower.width_le_of_collar`**: a collar of dilatation `Kd` and modulus
   `log (R/r) / 2π` in the annulus of a level bounds its degeneration by `2π Kd / log (R/r)`.
 * **Theorem `LevelTower.jumpCap_of_collars`** (Lemma G from uniform collars): if at every level that
@@ -70,6 +74,18 @@ def modulus (k : ℕ) : ℝ≥0∞ :=
 lemma modulus_eq (k : ℕ) : T.modulus k = (ENNReal.ofReal (T.width k))⁻¹ := by
   rw [T.width_eq k, inv_inv]
   rfl
+
+/-- **The degeneration of a round level is the reciprocal of the classical modulus.** If the filled
+set of the level `k` is the closed disk `B̄(c, r)` and its range domain is the disk `B(c, R)`, the
+degeneration of the level is `2π / log (R/r)`: the dictionary is exact on the round annuli. -/
+theorem width_eq_of_round {k : ℕ} {c : ℂ} {r R : ℝ} (hr : 0 < r) (hrR : r < R)
+    (hf : T.filled k = Metric.closedBall c r) (ht : T.target k = Metric.ball c R) :
+    T.width k = 2 * π / Real.log (R / r) := by
+  have hlog : 0 < Real.log (R / r) := Real.log_pos ((one_lt_div hr).2 hrR)
+  have h := T.width_eq k
+  rw [hf, ht, extWidth_loopFamily_round_open hr hrR,
+    ← ENNReal.ofReal_inv_of_pos (div_pos hlog (by positivity)), inv_div] at h
+  exact (ENNReal.ofReal_eq_ofReal_iff (T.width_pos k).le (by positivity)).1 h
 
 /-- **A collar bounds the degeneration of a level.** If the annulus of the level `k` has a collar of
 dilatation `Kd` and modulus `log (R/r) / 2π`, its degeneration is at most `2π Kd / log (R/r)`. -/
