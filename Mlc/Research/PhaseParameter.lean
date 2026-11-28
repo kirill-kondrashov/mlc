@@ -1,5 +1,6 @@
 import Mlc.Research.CaseTree
 import Mlc.Research.NestModulus
+import Mlc.Research.DivergentNest
 
 /-!
 # The phase–parameter relation in moduli form
@@ -16,10 +17,11 @@ halves (Kahn–Lyubich; Lyubich, the phase–parameter relation; Dudko §3.9, §
   estimate of every budget (the Grötzsch–Teichmüller estimate).
 
 `Mlc/Research/NestModulus.lean` proves the geometric half. This module states the dynamical half
-as the hypothesis `Geometry.PhaseParameter`, and derives the transfer lemma from it. Proving
-`PhaseParameter` is the open content of Lemma T: it replaces the shrinking of the pieces, which
-is a consequence, by the divergence of the moduli, which is what the phase–parameter relation
-gives.
+as `Geometry.PhaseParameter`, derives the transfer lemma from it, and proves the converse
+(`Mlc/Research/DivergentNest.lean`: every shrinking nest has a subnest whose moduli add up to
+infinity), so that the two statements are equivalent. The moduli form is thus a lossless
+reformulation of Lemma T in the language of the phase–parameter relation, and what is open is the
+same construction of the nest from an a priori bound.
 -/
 
 namespace MLC.Research
@@ -45,6 +47,20 @@ theorem transfer_of_phaseParameter (h : G.PhaseParameter) : G.Transfer := by
   intro c hc B hB hbound
   obtain ⟨D, hD⟩ := h c hc B hB hbound
   exact D.nonempty_parameterRealization hD _
+
+/-- **The moduli form follows from Lemma T.** The nest of Lemma T shrinks to `c`, because its
+separation estimate has a divergent budget, and a shrinking nest has a subnest whose moduli add up
+to infinity. -/
+theorem phaseParameter_of_transfer (h : G.Transfer) : G.PhaseParameter := by
+  intro c hc B hB hbound
+  obtain ⟨⟨D, hsep⟩⟩ := h c hc B hB hbound
+  have hbudget := (ReturnBudget.ofBound B hB).unbounded_of_linearLossControl
+    (ReturnBudget.ofBound_linearLossControl B hB)
+  exact D.exists_divergentSubnest fun ε hε => D.exists_closure_subset_ball hsep hbudget hε
+
+/-- **Lemma T is equivalent to the phase–parameter relation in moduli form.** -/
+theorem transfer_iff_phaseParameter : G.Transfer ↔ G.PhaseParameter :=
+  ⟨G.phaseParameter_of_transfer, G.transfer_of_phaseParameter⟩
 
 end Geometry
 

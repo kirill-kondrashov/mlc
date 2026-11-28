@@ -1073,9 +1073,10 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         NEST_ROOTS,
         "prog:nest",
         "Moduli ⇒ shrinking",
-        "Grötzsch–Teichmüller · T from phase–parameter",
+        "Grötzsch–Teichmüller · T ⇔ phase–parameter",
         "Checked in Lean (ConnectedNest.sum_extWidth_loops_le, DivergentModuli.shrinking, "
-        "Geometry.transfer_of_phaseParameter, concentricNest_divergentModuli). The loops of "
+        "ConnectedNest.exists_divergentSubnest, Geometry.transfer_iff_phaseParameter, "
+        "concentricNest_divergentModuli). The loops of "
         "the annulus between two consecutive pieces of a nest are the C¹ closed curves that "
         "go around the next piece; their extremal width is the modulus of the annulus. If the "
         "piece n of the nest keeps a point at distance δ from c, the moduli of the first n "
@@ -1085,9 +1086,10 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "it crosses the ring δ/2 ≤ |z − c| ≤ δ; both by the area inequality for real "
         "functions), the ring has area at most 2π log(4(R + δ)/δ), and the annuli are "
         "disjoint (the parallel law). So a nest whose moduli add up to infinity shrinks to c "
-        "and gives the separation estimate of every budget: Lemma T follows from the "
-        "phase–parameter relation in moduli form (Geometry.PhaseParameter). The concentric "
-        "disks have moduli at least log(3/2)/2π, so the hypothesis is satisfiable. The "
+        "and gives the separation estimate of every budget. Conversely, a shrinking nest has "
+        "a subnest whose annuli contain round annuli of modulus log(3/2)/2π, so Lemma T is "
+        "equivalent to the phase–parameter relation in moduli form (Geometry.PhaseParameter), "
+        "and the concentric disks show that the moduli form is satisfiable. The "
         "construction of the nest from an a priori bound stays open.",
         lemma_nodes["transfer"],
     )
@@ -1098,16 +1100,18 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             kind="tip",
             cat="informal",
             title="Phase–parameter moduli",
-            sub="open · the dynamical half of Lemma T",
+            sub="open · equivalent to Lemma T",
             text=(
                 "Lyubich's phase–parameter relation, in the form that Lemma T needs "
                 "(Geometry.PhaseParameter): an a priori bound on the degeneration of the tower "
                 "of c gives a connected nest of parameter pieces around c in M whose annuli "
                 "have moduli with an infinite sum. The quasi-additivity law of Kahn–Lyubich "
                 "carries the moduli of the dynamical annuli of the tower to the parameter "
-                "plane. Open; the geometric half, from the moduli to the shrinking of the "
-                "pieces, is checked in Lean (below). The root theorem keeps the weaker "
-                "hypothesis Transfer, which this statement implies."
+                "plane. This statement is equivalent to Lemma T (checked in Lean, below): the "
+                "geometric half, from the moduli to the shrinking of the pieces, and the "
+                "converse, a subnest with moduli bounded below, are theorems. What is open is "
+                "the construction of the nest from the bound. The root theorem keeps the "
+                "hypothesis Transfer."
             ),
         ),
         below=True,

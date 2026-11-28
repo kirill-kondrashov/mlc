@@ -2,18 +2,26 @@ import Mlc.Research.NestModulus
 import Mathlib.Analysis.SpecialFunctions.ExpDeriv
 
 /-!
-# A nest with moduli bounded below: the concentric disks
+# Nests with moduli bounded below
 
 The moduli of the annuli of a nest of `Mlc/Research/NestModulus.lean` are the extremal widths of
-the families `D.loops j` of `C¹` loops around the next piece. This module checks that the
-definition is not empty: the nest of the concentric disks `B(0, 2⁻ʲ)` has annuli of modulus at
-least `log (3/2) / 2π`, so its moduli add up to infinity (`concentricNest_divergentModuli`) and
-the nest realizes every budget.
+the families `D.loops j` of `C¹` loops around the next piece. This module shows that nests with
+moduli bounded below exist, in two ways.
+
+* The nest of the concentric disks `B(0, 2⁻ʲ)` has annuli of modulus at least `log (3/2) / 2π`,
+  so its moduli add up to infinity (`concentricNest_divergentModuli`) and it realizes every
+  budget. So the definition of the moduli of a nest is satisfiable.
+* **Every shrinking nest has a subnest whose moduli add up to infinity**
+  (`ConnectedNest.exists_divergentSubnest`): if the pieces shrink to `c`, each piece contains a
+  disk around `c` and a later piece lies in the half of that disk, so the annulus between the two
+  contains a round annulus of modulus at least `log (3/2) / 2π`. Together with
+  `Mlc/Research/PhaseParameter.lean` this makes the moduli form of Lemma T equivalent to the lemma
+  itself.
 
 The circle of radius `s` is the loop `t ↦ s e^{i (2π t - π)}`; its length measure is the
-`circleCurve s` of `Mlc/Research/AnnulusModulus.lean`, so the family of the circles of the
-annulus lies in the family of its loops, and the extremal length of the circles
-(`extLength_circleFamily`) bounds that of the loops from above.
+`circleCurve s` of `Mlc/Research/AnnulusModulus.lean`, so the family of the circles of an annulus
+lies in the family of its loops, and the extremal length of the circles (`extLength_circleFamily`)
+bounds that of the loops from above (`extWidth_loopFamily_ge`).
 -/
 
 namespace MLC.Research
@@ -142,6 +150,58 @@ lemma exists_circleLoop_eq {s : ℝ} {z u : ℂ} (hz : ‖z‖ < s) (hu : ‖u�
   rw [hang]
   conv_rhs => rw [← Complex.norm_mul_exp_arg_mul_I (z + (σ : ℂ) * u), hw]
 
+/-! ### The circles around a point bound the modulus from below -/
+
+/-- Translating a loop translates its length measure. -/
+lemma loopMeasure_const_add {γ : ℝ → ℂ} (hγ : IsLoop γ) (c : ℂ) :
+    loopMeasure (fun t => c + γ t) = (loopMeasure γ).map (fun z => c + z) := by
+  have hd : deriv (fun t => c + γ t) = deriv γ := funext fun t => deriv_const_add c
+  unfold loopMeasure
+  rw [hd, Measure.map_map (measurable_const_add c) hγ.continuous.measurable]
+  rfl
+
+/-- **The circles of an annulus bound its modulus from below.** If the circles `|z - c| = s`,
+`r < s ≤ 3r/2`, lie in `A` and the set `K` lies in the closed disk of radius `r` around `c`, the
+loops in `A` that go around `K` have extremal width at least `log (3/2) / 2π`. -/
+lemma extWidth_loopFamily_ge {A K : Set ℂ} {c : ℂ} {r : ℝ} (hr : 0 < r)
+    (hK : ∀ z ∈ K, ‖z - c‖ ≤ r) (hA : ∀ s ∈ Ioc r (3 / 2 * r), ∀ t, c + circleLoop s t ∈ A) :
+    ENNReal.ofReal (Real.log (3 / 2) / (2 * π)) ≤ extWidth volume (loopFamily A K) := by
+  have hrR : r < 3 / 2 * r := by linarith
+  set Γ := circleFamily r (3 / 2 * r) with hΓ
+  set Γ' : Set (Measure ℂ) := (fun μ : Measure ℂ => μ.map (fun z => c + z)) '' Γ with hΓ'
+  have hsub : Γ' ⊆ loopFamily A K := by
+    rintro _ ⟨_, ⟨s, hs, rfl⟩, rfl⟩
+    have hs0 : 0 < s := hr.trans hs.1
+    have hloop := isLoop_circleLoop s
+    refine ⟨fun t => c + circleLoop s t, ⟨contDiff_const.add hloop.1, fun t => ?_⟩, hA s hs,
+      fun z hz u hu => ?_, ?_⟩
+    · show c + circleLoop s (t + 1) = c + circleLoop s t
+      rw [hloop.2 t]
+    · obtain ⟨t, σ, hσ, h⟩ := exists_circleLoop_eq (z := z - c) (u := u)
+        (lt_of_le_of_lt (hK z hz) hs.1) hu
+      exact ⟨t, σ, hσ, show c + circleLoop s t = z + (σ : ℂ) * u by rw [h]; ring⟩
+    · rw [loopMeasure_const_add hloop c, loopMeasure_circleLoop hs0]
+  have h1 : extWidth volume Γ ≤ extWidth volume Γ' := by
+    have h := extWidth_pullback_le (mX := volume) (mY := volume) (ΓX := Γ) (ΓY := Γ')
+      (φ := fun z => c + z) (J := fun _ => 1) (d := 1) (measurable_const_add c)
+      measurable_const one_ne_zero ENNReal.one_ne_top
+      (by
+        simp only [one_pow, withDensity_const, one_smul]
+        exact (map_add_left_eq_self volume c).le)
+      (fun μ hμ => by
+        rw [withDensity_const, one_smul]
+        exact ⟨μ, hμ, rfl⟩)
+    rwa [one_mul] at h
+  have h2 : extWidth volume Γ' ≤ extWidth volume (loopFamily A K) := by
+    unfold extWidth
+    exact ENNReal.inv_le_inv.2 (extLength_mono fun μ hμ => ⟨μ, hsub hμ, le_rfl⟩)
+  have hlog : 0 < Real.log (3 / 2) := Real.log_pos (by norm_num)
+  have h0 : ENNReal.ofReal (Real.log (3 / 2) / (2 * π)) = extWidth volume Γ := by
+    unfold extWidth
+    rw [hΓ, extLength_circleFamily hr hrR, show 3 / 2 * r / r = 3 / 2 by field_simp,
+      ← ENNReal.ofReal_inv_of_pos (div_pos (by positivity) hlog), inv_div]
+  exact h0.le.trans (h1.trans h2)
+
 /-! ### The concentric nest -/
 
 /-- The nest of the concentric disks `B(0, 2⁻ʲ)`. -/
@@ -160,27 +220,6 @@ def concentricNest : ConnectedNest Set.univ (0 : ℂ) where
     rw [pow_succ]
     linarith)
 
-/-- Each circle of the annulus `2⁻⁽ʲ⁺¹⁾ < |z| < 2⁻ʲ` is a loop of the annulus of the nest that
-goes around the next piece. -/
-lemma circleCurve_mem_loops {j : ℕ} {s : ℝ}
-    (hs : s ∈ Ioo ((1 / 2 : ℝ) ^ (j + 1)) ((1 / 2 : ℝ) ^ j)) :
-    circleCurve s ∈ concentricNest.loops j := by
-  have hr : 0 < (1 / 2 : ℝ) ^ (j + 1) := by positivity
-  have hs0 : 0 < s := hr.trans hs.1
-  refine ⟨circleLoop s, isLoop_circleLoop s, fun t => ?_, fun z hz u hu => ?_,
-    (loopMeasure_circleLoop hs0).symm⟩
-  · have hn : ‖circleLoop s t‖ = s := norm_pol hs0.le _
-    refine ⟨?_, ?_⟩
-    · show circleLoop s t ∈ ball (0 : ℂ) ((1 / 2 : ℝ) ^ j)
-      rw [mem_ball_zero_iff, hn]
-      exact hs.2
-    · show circleLoop s t ∉ closure (ball (0 : ℂ) ((1 / 2 : ℝ) ^ (j + 1)))
-      rw [closure_ball _ hr.ne', mem_closedBall_zero_iff, hn, not_le]
-      exact hs.1
-  · have hz' : z ∈ closure (ball (0 : ℂ) ((1 / 2 : ℝ) ^ (j + 1))) := hz
-    rw [closure_ball _ hr.ne', mem_closedBall_zero_iff] at hz'
-    exact exists_circleLoop_eq (lt_of_le_of_lt hz' hs.1) hu
-
 /-- The annuli of the concentric nest have extremal width at least `log (3/2) / 2π`. -/
 lemma ofReal_le_extWidth_concentric_loops (j : ℕ) :
     ENNReal.ofReal (Real.log (3 / 2) / (2 * π)) ≤ extWidth volume (concentricNest.loops j) := by
@@ -188,28 +227,21 @@ lemma ofReal_le_extWidth_concentric_loops (j : ℕ) :
   have hpow : (1 / 2 : ℝ) ^ j = 2 * (1 / 2 : ℝ) ^ (j + 1) := by
     rw [pow_succ]
     ring
-  have hrR : (1 / 2 : ℝ) ^ (j + 1) < 3 / 2 * (1 / 2 : ℝ) ^ (j + 1) := by linarith
-  have hsub : circleFamily ((1 / 2 : ℝ) ^ (j + 1)) (3 / 2 * (1 / 2 : ℝ) ^ (j + 1)) ⊆
-      concentricNest.loops j := by
-    rintro _ ⟨s, hs, rfl⟩
-    exact circleCurve_mem_loops ⟨hs.1, by linarith [hs.2]⟩
-  have h1 := extLength_mono (m := volume) (Γ := circleFamily ((1 / 2 : ℝ) ^ (j + 1))
-    (3 / 2 * (1 / 2 : ℝ) ^ (j + 1))) (Γ' := concentricNest.loops j)
-    fun μ hμ => ⟨μ, hsub hμ, le_rfl⟩
-  have hlog : 0 < Real.log (3 / 2) := Real.log_pos (by norm_num)
-  have hratio : 3 / 2 * (1 / 2 : ℝ) ^ (j + 1) / (1 / 2 : ℝ) ^ (j + 1) = 3 / 2 := by
-    field_simp
-  unfold extWidth
-  calc ENNReal.ofReal (Real.log (3 / 2) / (2 * π))
-      = (ENNReal.ofReal (2 * π / Real.log (3 / 2)))⁻¹ := by
-        rw [← ENNReal.ofReal_inv_of_pos (by positivity), inv_div]
-    _ = (extLength volume (circleFamily ((1 / 2 : ℝ) ^ (j + 1))
-          (3 / 2 * (1 / 2 : ℝ) ^ (j + 1))))⁻¹ := by
-        rw [extLength_circleFamily hr hrR, hratio]
-    _ ≤ (extLength volume (concentricNest.loops j))⁻¹ := ENNReal.inv_le_inv.2 h1
+  refine extWidth_loopFamily_ge (c := 0) hr (fun z hz => ?_) (fun s hs t => ?_)
+  · have hz' : z ∈ closure (ball (0 : ℂ) ((1 / 2 : ℝ) ^ (j + 1))) := hz
+    rw [closure_ball _ hr.ne', mem_closedBall_zero_iff] at hz'
+    simpa using hz'
+  · have hn : ‖circleLoop s t‖ = s := norm_pol (hr.trans hs.1).le _
+    refine ⟨?_, ?_⟩
+    · show 0 + circleLoop s t ∈ ball (0 : ℂ) ((1 / 2 : ℝ) ^ j)
+      rw [zero_add, mem_ball_zero_iff, hn]
+      linarith [hs.2]
+    · show 0 + circleLoop s t ∉ closure (ball (0 : ℂ) ((1 / 2 : ℝ) ^ (j + 1)))
+      rw [zero_add, closure_ball _ hr.ne', mem_closedBall_zero_iff, hn, not_le]
+      exact hs.1
 
 /-- **The moduli of the annuli of the concentric nest add up to infinity.** The definition of the
-moduli of a nest is not empty. -/
+moduli of a nest is satisfiable. -/
 theorem concentricNest_divergentModuli : concentricNest.DivergentModuli :=
   concentricNest.divergentModuli_of_uniform
     (ENNReal.ofReal_pos.2 (div_pos (Real.log_pos (by norm_num)) (by positivity))).ne'
@@ -219,6 +251,53 @@ theorem concentricNest_divergentModuli : concentricNest.DivergentModuli :=
 theorem nonempty_parameterRealization_concentric (b : ReturnBudget) :
     Nonempty (ParameterRealization Set.univ (0 : ℂ) b) :=
   concentricNest.nonempty_parameterRealization concentricNest_divergentModuli b
+
+/-! ### A subnest with divergent moduli -/
+
+/-- **Every shrinking nest has a subnest whose moduli add up to infinity.** If the pieces shrink
+to `c`, each piece `Pₙ` contains a disk `B(c, ρₙ)` and a later piece `P_m` has its closure in
+`B(c, ρₙ/2)`; the annulus between them contains the circles `ρₙ/2 < |z - c| ≤ 3ρₙ/4`, which go
+around `cl P_m` and have extremal width at least `log (3/2) / 2π`. -/
+theorem ConnectedNest.exists_divergentSubnest {S : Set ℂ} {c : ℂ} (D : ConnectedNest S c)
+    (hshr : ∀ ε : ℝ, 0 < ε → ∃ n, closure (D.piece n) ⊆ ball c ε) :
+    ∃ D' : ConnectedNest S c, D'.DivergentModuli := by
+  have hρ : ∀ n, ∃ ρ : ℝ, 0 < ρ ∧ ball c ρ ⊆ D.piece n := fun n => by
+    obtain ⟨ρ, hρ, hb⟩ := Metric.isOpen_iff.1 (D.open_piece n) c (D.contains n)
+    exact ⟨ρ, hρ, hb⟩
+  choose ρ hρpos hρsub using hρ
+  have hN : ∀ n, ∃ m, closure (D.piece m) ⊆ ball c (ρ n / 2) := fun n =>
+    hshr _ (half_pos (hρpos n))
+  choose N hN using hN
+  have hnest : ∀ k, D.piece (N^[k + 1] 0) ⊆ D.piece (N^[k] 0) := fun k => by
+    rw [Function.iterate_succ_apply']
+    exact subset_closure.trans ((hN _).trans
+      ((ball_subset_ball (by linarith [hρpos (N^[k] 0)])).trans (hρsub _)))
+  let D' : ConnectedNest S c :=
+    { piece := fun k => D.piece (N^[k] 0)
+      open_piece := fun k => D.open_piece _
+      contains := fun k => D.contains _
+      connected := fun k => D.connected _
+      compact_closure := fun k => D.compact_closure _
+      nested := hnest }
+  refine ⟨D', D'.divergentModuli_of_uniform (w := ENNReal.ofReal (Real.log (3 / 2) / (2 * π)))
+    (ENNReal.ofReal_pos.2 (div_pos (Real.log_pos (by norm_num)) (by positivity))).ne'
+    fun k => ?_⟩
+  have hr : 0 < ρ (N^[k] 0) / 2 := half_pos (hρpos _)
+  refine extWidth_loopFamily_ge (c := c) hr (fun z hz => ?_) (fun s hs t => ?_)
+  · have hz' : z ∈ closure (D.piece (N^[k + 1] 0)) := hz
+    rw [Function.iterate_succ_apply'] at hz'
+    exact (mem_ball_iff_norm.1 (hN _ hz')).le
+  · have hn : ‖circleLoop s t‖ = s := norm_pol (hr.trans hs.1).le _
+    refine ⟨?_, ?_⟩
+    · refine hρsub (N^[k] 0) ?_
+      rw [mem_ball_iff_norm, add_sub_cancel_left, hn]
+      linarith [hs.2, hρpos (N^[k] 0)]
+    · intro hmem
+      have hmem' : c + circleLoop s t ∈ closure (D.piece (N^[k + 1] 0)) := hmem
+      rw [Function.iterate_succ_apply'] at hmem'
+      have h := mem_ball_iff_norm.1 (hN _ hmem')
+      rw [add_sub_cancel_left, hn] at h
+      linarith [hs.1]
 
 end
 

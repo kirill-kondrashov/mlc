@@ -280,17 +280,27 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   `log |γ − c|` sweeps `[log δ/2, log δ]`); both are the area inequality
   `λ(f(S)) ≤ ∫_S |f′|` of Mathlib in dimension one. So pieces with `DivergentModuli` (moduli that
   add up to infinity) shrink to `c` and have the `SeparationEstimate` of every cost
-  (`ConnectedNest.nonempty_parameterRealization`).
-* `Mlc/Research/PhaseParameter.lean`: `Geometry.PhaseParameter`, the dynamical half of Lemma T
-  in moduli form (an a priori bound on the tower of `c` gives a nest in `M` around `c` with
-  divergent moduli), and `Geometry.transfer_of_phaseParameter : PhaseParameter → Transfer`.
-  `ProgrammeInput.transfer` keeps the weaker hypothesis `Transfer`; to prove
-  `PhaseParameter` is the open content of Lemma T.
-* `Mlc/Research/ConcentricNest.lean`: the nest of the disks `B(0, 2⁻ʲ)` has annuli of modulus at
-  least `log(3/2)/2π`, because the circles of the annulus are loops of its family
-  (`loopMeasure_circleLoop`) and the extremal length of the circles is known
-  (`extLength_circleFamily`). So `concentricNest_divergentModuli` shows that the definition of the
-  moduli of a nest is satisfiable (the hypothesis of the geometric half has instances).
+  (`ConnectedNest.nonempty_parameterRealization`). *Faithfulness:* the family of `C¹` loops is
+  a subfamily of all curves that go around the next piece, so its extremal width is at most the
+  classical modulus (and expected to equal it for annuli with piecewise smooth boundary, as the
+  parapuzzle pieces have, which is not proved here); a rough annulus can have fewer loops and a
+  smaller width, which only strengthens the hypothesis `DivergentModuli`.
+* `Mlc/Research/PhaseParameter.lean`: `Geometry.PhaseParameter`, the phase–parameter relation in
+  moduli form (an a priori bound on the tower of `c` gives a nest in `M` around `c` with
+  divergent moduli), and `Geometry.transfer_iff_phaseParameter : Transfer ↔ PhaseParameter`. The
+  direction `PhaseParameter → Transfer` is the geometric half above; the converse takes the nest
+  of `Transfer`, which shrinks because its separation estimate has a divergent budget, and passes
+  to a subnest (`DivergentNest.lean`). So the moduli form is a lossless reformulation of Lemma T,
+  and what is open is the construction of the nest from an a priori bound.
+  `ProgrammeInput.transfer` keeps the hypothesis `Transfer`.
+* `Mlc/Research/DivergentNest.lean`: nests with moduli bounded below. The nest of the disks
+  `B(0, 2⁻ʲ)` has annuli of modulus at least `log(3/2)/2π`, because the circles of an annulus are
+  loops of its family (`loopMeasure_circleLoop`, `extWidth_loopFamily_ge`) and the extremal length
+  of the circles is known (`extLength_circleFamily`); so `concentricNest_divergentModuli` shows
+  that the definition of the moduli of a nest is satisfiable. More generally, every shrinking nest
+  has a subnest with `DivergentModuli` (`ConnectedNest.exists_divergentSubnest`): each piece
+  contains a disk around `c` and a later piece lies in the half of it, so the annulus between them
+  contains round annuli of modulus at least `log(3/2)/2π`.
 
 The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
 `mlc_of_programme`) uses only the three kernel axioms.
@@ -362,7 +372,8 @@ roadmap, not claims of the survey.
   a Gaussian weighted area as a proxy, which changes under conformal maps). Second step (done,
   `NestModulus.lean`, `PhaseParameter.lean`): the Grötzsch–Teichmüller estimate for the annuli of
   a nest of parameter pieces, so that T follows from the phase–parameter relation in moduli
-  form (`Geometry.PhaseParameter`, a nest in `M` whose moduli add up to infinity); the proof
+  form (`Geometry.PhaseParameter`, a nest in `M` whose moduli add up to infinity) and, by a
+  subnest, is equivalent to it (`transfer_iff_phaseParameter`); the proof
   is checked for general open pieces, with the area inequality in dimension one for the
   argument and the logarithm of `γ − c`, with no Teichmüller bound for a general annulus and no
   conformal invariance needed. Next: `PhaseParameter` itself (the phase–parameter relation of
