@@ -361,6 +361,25 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   bounded below by `μ₀/(2π K₀)`, hence divergent moduli and shrinking pieces
   (`ConnectedNest.divergentModuli_of_collars`): the form that bounded geometry takes here. The
   collars of the levels of a tower are not constructed.
+* `Mlc/Research/LevelTower.lean`: the degeneration as the reciprocal modulus of an annulus, and what
+  follows. `LevelTower` extends `WidthTower` by the filled Julia sets `K_k` and the range domains
+  `V_k` of the levels, with `W_k = 1 / mod(V_k ∖ K_k)` (the survey (3.2), (4.1)). A collar of the
+  annulus of a level bounds its degeneration by `2π Kd / log (R/r)` (`LevelTower.width_le_of_collar`),
+  so Lemma G follows from collars at the jump levels: if at every level that follows a jump by the
+  factor `C₀` the annulus has a collar of dilatation at most `K₀` and modulus at least `μ₀/2π`, the
+  jumps are capped by `2π K₀ / μ₀` (`LevelTower.jumpCap_of_collars`), and with a linear dichotomy
+  the tower has a priori bounds (`LevelTower.aPrioriBounds_of_collars`). This is the reading of PS4
+  ("bounded by the uniform quasi-conformal geometry of the pseudo-Siegel disks") as a precise
+  geometric hypothesis with a proved consequence; that the pseudo-Siegel disks give such collars at
+  the jumps is proposed and open, and the same theorem serves the virtual levels of Lemma VG2.
+  `Geometry.PhaseParameterComparison` is the form in which the phase–parameter relation is used at
+  the renormalization levels: from a degeneration bound on the tower of `c`, a realization of the
+  tower by the annuli of its levels and a nest in `M` around `c` such that the modulus of each level
+  is at most `Kd` times the modulus of the corresponding annulus of the nest. With it Lemma T
+  follows (`Geometry.transfer_of_comparison`): the moduli of the levels are at least `1/B`, so the
+  moduli of the nest are at least `1/(B Kd)`, they add up to infinity and the pieces shrink. A
+  quasi-conformal chart between the annuli gives the comparison (for a `C¹` chart this is
+  `extWidth_loopFamily_le_map`); the realization, the nest and the chart are what is open.
 
 The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
 `mlc_of_programme`) uses only the three kernel axioms.
@@ -442,8 +461,11 @@ roadmap, not claims of the survey.
   (`ConnectedNest.DivergentModuli.map`). Fourth step (done, `Collar.lean`): a level whose annulus
   has a collar, a quasi-round annular chart of dilatation `Kd` and modulus `log (R/r) / 2π`, has
   modulus at least `log (R/r) / (2π Kd)` (`IsCollar.ofReal_le_extWidth`), and a nest with uniform
-  collars has divergent moduli (`ConnectedNest.divergentModuli_of_collars`). Next: `PhaseParameter`
-  itself (the phase–parameter
+  collars has divergent moduli (`ConnectedNest.divergentModuli_of_collars`). Fifth step (done,
+  `LevelTower.lean`): the degeneration of a level is the reciprocal modulus of its annulus, collars
+  at the jump levels cap the jumps (Lemma G in the reading of PS4), and the phase–parameter
+  comparison of the moduli of the levels with the moduli of a parameter nest gives Lemma T
+  (`Geometry.transfer_of_comparison`). Next: `PhaseParameter` itself (the phase–parameter
   relation of Lyubich (§3.9) with the quasi-additivity law), which compares the moduli of the
   dynamical annuli of the tower with the parameter annuli; that correspondence is
   quasi-conformal and comes with no `C¹` chart, so the construction of the nest from the bound

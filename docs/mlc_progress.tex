@@ -132,7 +132,12 @@ annulus \(V\setminus E\) of a level contains the image of a round annulus \(r<|w
 such a chart of dilatation \(K_d\), going around \(E\), its modulus is at least
 \(\log(R/r)/(2\pi K_d)\), so a nest whose annuli have uniform collars has divergent moduli
 (\texttt{IsCollar.ofReal\_le\_extWidth}, \texttt{ConnectedNest.divergentModuli\_of\_collars} in
-\texttt{Mlc/Research/Collar.lean}). What
+\texttt{Mlc/Research/Collar.lean}). A level whose annulus has a collar has degeneration at most
+\(2\pi K_d/\log(R/r)\), so collars of bounded dilatation and definite modulus at the levels that
+follow a jump cap the jumps (Lemma~G in the reading of PS4), and a comparison of the moduli of
+the levels with the moduli of a parameter nest gives Lemma~T
+(\texttt{LevelTower.jumpCap\_of\_collars}, \texttt{Geometry.transfer\_of\_comparison} in
+\texttt{Mlc/Research/LevelTower.lean}). What
 is open is the construction of the nest from an a priori bound, since the correspondence between
 the dynamical and the parameter annuli is quasi-conformal and comes with no \(C^1\) chart. For the
 virtual hulls of Problem~4.4, the dynamical separation estimate of Lemma~VT is

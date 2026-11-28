@@ -63,6 +63,13 @@ QUASI_INVARIANCE_ROOTS = (
 COLLAR_ROOTS = (
     "MLC.Research.ConnectedNest.divergentModuli_of_collars",
 )
+# The results of Mlc/Research/LevelTower.lean that no other result uses.
+LEVEL_JUMP_ROOTS = (
+    "MLC.Research.LevelTower.aPrioriBounds_of_collars",
+)
+LEVEL_TRANSFER_ROOTS = (
+    "MLC.Research.Geometry.transfer_of_comparison",
+)
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 
@@ -324,7 +331,10 @@ PSEUDO_SIEGEL = (
         "disks: in a jump the deeper degeneration is bounded by their uniform "
         "quasiconformal geometry. This gives Lemma G, and with the Wave Lemma Lemma D. "
         "The estimate W(G \\ G′) ≥ δ⁻¹ W(G) itself, from the series law, is proved in Lean "
-        "(extWidth_ge_of_series). The rest is proposed; not formalized.",
+        "(extWidth_ge_of_series), and so is the passage from the quasiconformal geometry to "
+        "the cap: collars of bounded dilatation and definite modulus at the levels that "
+        "follow a jump cap the jumps (LevelTower.jumpCap_of_collars). That the pseudo-Siegel "
+        "disks give such collars is the proposed content; not formalized.",
     ),
 )
 

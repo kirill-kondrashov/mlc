@@ -29,6 +29,8 @@ from progress_report import PROGRESS_CSS, PROGRESS_ROUTES
 from programme import (
     ANNULUS_ROOTS,
     COLLAR_ROOTS,
+    LEVEL_JUMP_ROOTS,
+    LEVEL_TRANSFER_ROOTS,
     MULTIPLICITY_ROOTS,
     NEST_ROOTS,
     RECTANGLE_ROOTS,
@@ -183,6 +185,8 @@ SIDE_ROOTS = (
     *VIRTUAL_SHRINKING_ROOTS,
     *QUASI_INVARIANCE_ROOTS,
     *COLLAR_ROOTS,
+    *LEVEL_JUMP_ROOTS,
+    *LEVEL_TRANSFER_ROOTS,
 )
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
@@ -906,6 +910,26 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         ps_nodes["ps4"],
     )
     side_bud(
+        LEVEL_JUMP_ROOTS,
+        "prog:level_jump",
+        "Lemma G from collars",
+        "bounded dilatation ⇒ cap on the jumps",
+        "Checked in Lean (LevelTower, LevelTower.width_le_of_collar, "
+        "LevelTower.jumpCap_of_collars, LevelTower.aPrioriBounds_of_collars). A LevelTower "
+        "records that the degeneration of the level k is W(f_k) = 1 / mod(V_k ∖ K_k), the "
+        "reciprocal modulus of the annulus between the filled Julia set and the range domain "
+        "of the level (the survey (3.2), (4.1)). If this annulus has a collar of dilatation "
+        "Kd and modulus log(R/r) / 2π (see \"Collars bound the modulus\"), the degeneration is "
+        "at most 2π Kd / log(R/r). So if at every level that follows a jump by the factor C₀ "
+        "the annulus has a collar of dilatation at most K₀ and modulus at least μ₀ / 2π, the "
+        "jumps are capped by the ceiling 2π K₀ / μ₀: Lemma G, in the reading of PS4 that the "
+        "invariant degeneration is bounded by the uniform quasiconformal geometry of the "
+        "pseudo-Siegel disks. With the linear dichotomy this gives a priori bounds. That the "
+        "pseudo-Siegel disks give such collars at the jumps is the proposed content of PS4 and "
+        "stays open; the same theorem applies to the virtual levels of Lemma VG2.",
+        ps_nodes["ps4"],
+    )
+    side_bud(
         PULLBACK_ROOT,
         "prog:pullback",
         "Pullback law (contraction)",
@@ -1194,7 +1218,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "bound.",
         phase_parameter,
     )
-    side_bud(
+    collar = side_bud(
         COLLAR_ROOTS,
         "prog:collar",
         "Collars bound the modulus",
@@ -1214,6 +1238,24 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "the form that bounded geometry takes here. The collars of the levels of a tower and "
         "the charts between dynamical and parameter annuli are not constructed.",
         quasi_invariance or phase_parameter,
+    )
+    side_bud(
+        LEVEL_TRANSFER_ROOTS,
+        "prog:level_transfer",
+        "Lemma T from the comparison",
+        "level moduli ≤ Kd · nest moduli ⇒ T",
+        "Checked in Lean (Geometry.PhaseParameterComparison, Geometry.transfer_of_comparison). "
+        "The levels of the tower of c, with a degeneration bound B, have moduli at least 1/B. "
+        "If a connected nest in M around c has annuli whose moduli are at least 1/Kd times the "
+        "moduli of the corresponding levels (the comparison; a quasi-conformal chart from the "
+        "dynamical annulus to the parameter annulus gives it, and for a C¹ chart this is "
+        "extWidth_loopFamily_le_map), the moduli of the nest are bounded below by 1/(B Kd), so "
+        "they add up to infinity, the pieces shrink to c, and Lemma T holds. This is the form "
+        "in which the phase–parameter relation of Lyubich is used at the renormalization "
+        "levels, as proposed here. The realization of the tower by the annuli of its levels, "
+        "the nest and the chart are not constructed; the root theorem keeps the hypothesis "
+        "Transfer.",
+        collar or quasi_invariance or phase_parameter,
     )
     add_child(
         unified,

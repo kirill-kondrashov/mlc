@@ -58,6 +58,8 @@ QUASI_INVARIANCE_THEOREM = re.compile(
     r"^\s*theorem\s+extWidth_le_of_qcEmbedding\b", re.MULTILINE
 )
 COLLAR_THEOREM = re.compile(r"^\s*theorem\s+IsCollar\.ofReal_le_extWidth\b", re.MULTILINE)
+LEVEL_JUMP_THEOREM = re.compile(r"^\s*theorem\s+jumpCap_of_collars\b", re.MULTILINE)
+LEVEL_TRANSFER_THEOREM = re.compile(r"^\s*theorem\s+transfer_of_comparison\b", re.MULTILINE)
 MULTIPLICITY_THEOREM = re.compile(
     r"^\s*theorem\s+extWidth_le_pow_two_mul_fc_iterate\b", re.MULTILINE
 )
@@ -95,6 +97,10 @@ PROGRESS_MILESTONES = (
      "dilatation", QUASI_INVARIANCE_THEOREM, 1),
     ("Collar estimate: an annulus with a quasi-round collar has a definite modulus",
      COLLAR_THEOREM, 1),
+    ("Lemma G from collars: bounded dilatation and definite modulus at the jumps cap them",
+     LEVEL_JUMP_THEOREM, 1),
+    ("Lemma T from the phase–parameter comparison of the moduli of the levels",
+     LEVEL_TRANSFER_THEOREM, 1),
     ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )
