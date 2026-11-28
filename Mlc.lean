@@ -8,6 +8,7 @@ import Mlc.Research.NestModulus
 import Mlc.Research.DivergentNest
 import Mlc.Research.PhaseParameter
 import Mlc.Research.AreaMultiplicity
+import Mlc.Research.QuasiInvariance
 import Mlc.Research.VirtualShrinking
 import Mlc.Research.TailInvariance
 import Mlc.ProgrammeRoot

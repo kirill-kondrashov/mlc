@@ -38,6 +38,7 @@ from programme import (
     PROGRAMME_ROOT,
     PSEUDO_SIEGEL,
     PULLBACK_ROOT,
+    QUASI_INVARIANCE_ROOTS,
     SHARPNESS_ROOT,
     TAIL_ROOTS,
     VIRTUAL_SHRINKING_ROOTS,
@@ -179,6 +180,7 @@ SIDE_ROOTS = (
     *NEST_ROOTS,
     *MULTIPLICITY_ROOTS,
     *VIRTUAL_SHRINKING_ROOTS,
+    *QUASI_INVARIANCE_ROOTS,
 )
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
@@ -1139,7 +1141,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "construction of the nest from an a priori bound stays open.",
         lemma_nodes["transfer"],
     )
-    add_child(
+    phase_parameter = add_child(
         lemma_nodes["transfer"],
         Node(
             id="paper:phase_parameter",
@@ -1161,6 +1163,31 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             ),
         ),
         below=True,
+    )
+    side_bud(
+        QUASI_INVARIANCE_ROOTS,
+        "prog:quasi_invariance",
+        "Moduli under a change of chart",
+        "C¹ charts of dilatation ≤ K",
+        "Checked in Lean (QcEmbedding, extWidth_le_of_qcEmbedding, Separates.image, "
+        "ConnectedNest.extWidth_loops_le_map, ConnectedNest.DivergentModuli.map, "
+        "QcEmbedding.of_holomorphic). A C¹ embedding φ of an open set with dilatation at most "
+        "K (‖Dφ‖² ≤ K |det Dφ|; K = 1 for an injective holomorphic map with non-vanishing "
+        "derivative) multiplies the extremal width by at most K: if φ carries "
+        "every curve of ΓX to a curve that dominates a curve of ΓY, then W(ΓX) ≤ K W(ΓY) (the "
+        "area formula of Mathlib and the pullback law). A map that is continuous and "
+        "injective on the compact closure of O, with φ(O) open, carries a loop that "
+        "separates K from the complement of O to a loop that separates φ(K) from the "
+        "complement of φ(O) (the first exit time of a path from φ(O)). So the loops of an "
+        "annulus of a nest go to loops of the corresponding annulus of the image nest, the "
+        "modulus of each annulus of the image is at least 1/K times that of the original, "
+        "and a nest with divergent moduli has an image with divergent moduli. This is the "
+        "form that the transport of the moduli takes in the phase–parameter relation, as "
+        "proposed here: the correspondence between the dynamical and the parameter annuli is "
+        "quasi-conformal and is not given as a C¹ chart, and neither the chart nor the phase "
+        "nest is constructed. What is open is the construction of the nest from the a priori "
+        "bound.",
+        phase_parameter,
     )
     add_child(
         unified,

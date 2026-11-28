@@ -329,6 +329,22 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   derives that shrinking from `VirtualTransfer`. So the dynamical content of VT is that the diameters
   of the virtual hulls tend to zero, the analogue of the shrinking of the parameter pieces for T; the
   nest and the phase–parameter chart of VT are the rest.
+* `Mlc/Research/QuasiInvariance.lean`: the invariance of the extremal width under a change of chart.
+  `QcEmbedding Ω φ K` is a `C¹` embedding of an open set with invertible derivative and dilatation
+  `‖Dφ‖² ≤ K |det Dφ|` at most `K`; an injective holomorphic map with non-vanishing derivative has
+  `K = 1` (`QcEmbedding.of_holomorphic`). The area formula of Mathlib gives the hypothesis of the
+  pullback law with multiplicity `K` and stretching `‖Dφ‖` (`QcEmbedding.areaMultiplicity`), so
+  `extWidth_le_of_qcEmbedding`: if `φ` carries every curve of `ΓX` to a curve that dominates a curve
+  of `ΓY`, then `W(ΓX) ≤ K W(ΓY)` (conformal invariance for `K = 1`). `Separates.image`: a map that
+  is continuous and injective on the compact closure of `O`, with `φ '' O` open, carries a loop
+  that separates `K` from the complement of `O` to a loop that separates `φ '' K` from the
+  complement of `φ '' O` (the first exit time of a path from `φ '' O`). So the image of a nest is a
+  nest (`ConnectedNest.map`), the modulus of each annulus of the image is at least `1/K` times that
+  of the original (`extWidth_loops_le_map`), and divergent moduli are transported
+  (`ConnectedNest.DivergentModuli.map`). This is the tool that the transport of the moduli between
+  the dynamical and the parameter plane needs, for a `C¹` correspondence; a quasi-conformal
+  homeomorphism is in general only absolutely continuous on lines, and neither a chart between a
+  phase nest and a parameter nest nor the phase nest is constructed.
 
 The assembly (`ProgrammeInput.completion`, `.problem43`, `.problem44`, `RootInput.ofProgramme`,
 `mlc_of_programme`) uses only the three kernel axioms.
@@ -404,11 +420,14 @@ roadmap, not claims of the survey.
   subnest, is equivalent to it (`transfer_iff_phaseParameter`); the proof
   is checked for general open pieces, with the area inequality in dimension one for the
   argument and the logarithm of `γ − c`, with no Teichmüller bound for a general annulus and no
-  conformal invariance needed. Next: `PhaseParameter` itself (the phase–parameter relation of
-  Lyubich (§3.9) with the quasi-additivity law), which compares the moduli of the dynamical
-  annuli of the tower with the parameter annuli, and for that the conformal invariance of the
-  modulus under injective holomorphic maps (the pullback law with `d = 1` for the length
-  measures of paths). VT has the same shape with the dynamical hulls of
+  conformal invariance needed. Third step (done, `QuasiInvariance.lean`): the extremal width, and
+  the moduli of a nest, are quasi-invariant under `C¹` embeddings of dilatation at most `K`
+  (conformally invariant for `K = 1`), with divergent moduli transported
+  (`ConnectedNest.DivergentModuli.map`). Next: `PhaseParameter` itself (the phase–parameter
+  relation of Lyubich (§3.9) with the quasi-additivity law), which compares the moduli of the
+  dynamical annuli of the tower with the parameter annuli; that correspondence is
+  quasi-conformal and comes with no `C¹` chart, so the construction of the nest from the bound
+  is what stays open. VT has the same shape with the dynamical hulls of
   `VirtualJuliaNest.SeparationEstimate` instead of annuli around the point; its geometric half is
   not yet written. Risk: the conformal geometry is not in Mathlib.
 * **Y, TC, B, A, N, QG (published).** Formalize the cited theorems in the form of a parameter
@@ -461,13 +480,14 @@ roadmap, not claims of the survey.
   cap at large relative period and the linear error are those of G and D for the virtual hull,
   after the pseudo-Siegel regularization (Figure 14, left loop). They wait for G and D.
 
-The abstract extremal length, its laws, the moduli of the round annulus and of the rectangle, and
-the Grötzsch–Teichmüller estimate for nested annuli exist (`ExtremalLength.lean`,
-`AnnulusModulus.lean`, `RectangleModulus.lean`, `NestModulus.lean`). What the lemmas that depend
-on conformal geometry still need is the link between them and the dynamics: the conformal
-invariance of the modulus, which carries the moduli of the dynamical annuli of a tower to the
-parameter plane (`Geometry.PhaseParameter`), then the families of curves of a quadratic-like map.
-That is the first real step of every route.
+The abstract extremal length, its laws, the moduli of the round annulus and of the rectangle, the
+Grötzsch–Teichmüller estimate for nested annuli, and the quasi-invariance of the moduli under `C¹`
+embeddings of bounded dilatation exist (`ExtremalLength.lean`, `AnnulusModulus.lean`,
+`RectangleModulus.lean`, `NestModulus.lean`, `QuasiInvariance.lean`). What the lemmas that depend
+on conformal geometry still need is the link between them and the dynamics: the correspondence
+that carries the moduli of the dynamical annuli of a tower to the parameter plane
+(`Geometry.PhaseParameter`), then the families of curves of a quadratic-like map. That is the
+first real step of every route.
 
 ### Rays, the lamination and tuning
 

@@ -122,8 +122,14 @@ the moduli of the annuli \(P_j\setminus\overline{P_{j+1}}\), \(n\le j<m\)
 (\texttt{ConnectedNest.sum\_extWidth\_loops\_le\_coarse}, Gr\"otzsch's inequality). Conversely, a shrinking nest has a
 subnest whose annuli contain round annuli of modulus \(\log(3/2)/2\pi\), so Lemma~T is equivalent
 to the phase--parameter relation in moduli form (\texttt{Geometry.transfer\_iff\_phaseParameter}),
-which the concentric disks satisfy. What is open is the construction of the nest from an a priori
-bound. For the virtual hulls of Problem~4.4, the dynamical separation estimate of Lemma~VT is
+which the concentric disks satisfy. A \(C^1\) embedding of dilatation at most \(K\) multiplies the
+extremal width by at most \(K\), and carries a nest to a nest whose annuli have at least \(1/K\)
+times the moduli, so divergent moduli are transported by such a chart; \(K=1\) for an injective
+holomorphic map with non-vanishing derivative
+(\texttt{ConnectedNest.DivergentModuli.map} in \texttt{Mlc/Research/QuasiInvariance.lean}). What
+is open is the construction of the nest from an a priori bound, since the correspondence between
+the dynamical and the parameter annuli is quasi-conformal and comes with no \(C^1\) chart. For the
+virtual hulls of Problem~4.4, the dynamical separation estimate of Lemma~VT is
 equivalent to the shrinking of the hulls to their origins, for the canonical cost of a degeneration
 bound (\texttt{VirtualJuliaNest.separationEstimate\_iff} in
 \texttt{Mlc/Research/VirtualShrinking.lean}). The three statements of Problem~4.3 and the a priori

@@ -54,6 +54,9 @@ RECTANGLE_THEOREM = re.compile(r"^\s*theorem\s+extLength_horizFamily\b", re.MULT
 NEST_THEOREM = re.compile(r"^\s*theorem\s+sum_extWidth_loops_le\b", re.MULTILINE)
 EQUIVALENCE_THEOREM = re.compile(r"^\s*theorem\s+transfer_iff_phaseParameter\b", re.MULTILINE)
 COARSE_THEOREM = re.compile(r"^\s*theorem\s+sum_extWidth_loops_le_coarse\b", re.MULTILINE)
+QUASI_INVARIANCE_THEOREM = re.compile(
+    r"^\s*theorem\s+extWidth_le_of_qcEmbedding\b", re.MULTILINE
+)
 MULTIPLICITY_THEOREM = re.compile(
     r"^\s*theorem\s+extWidth_le_pow_two_mul_fc_iterate\b", re.MULTILINE
 )
@@ -87,6 +90,8 @@ PROGRESS_MILESTONES = (
     ("Pullback law for the iterates of f_c with area multiplicity 2^p", MULTIPLICITY_THEOREM, 1),
     ("The virtual separation estimate is the shrinking of the virtual hulls",
      VIRTUAL_SHRINKING_THEOREM, 1),
+    ("Quasi-invariance of extremal width and of nest moduli under C¹ embeddings of bounded "
+     "dilatation", QUASI_INVARIANCE_THEOREM, 1),
     ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )

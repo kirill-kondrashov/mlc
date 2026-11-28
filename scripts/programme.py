@@ -54,6 +54,11 @@ MULTIPLICITY_ROOTS = (
 VIRTUAL_SHRINKING_ROOTS = (
     "MLC.Research.Geometry.virtualTransfer_hulls_shrink",
 )
+# The results of Mlc/Research/QuasiInvariance.lean that no other result uses.
+QUASI_INVARIANCE_ROOTS = (
+    "MLC.Research.ConnectedNest.DivergentModuli.map",
+    "MLC.Research.QcEmbedding.of_holomorphic",
+)
 STRUCTURE = "structure Research.ProgrammeInput"
 GEOMETRY = "MLC.Research.Geometry"
 
