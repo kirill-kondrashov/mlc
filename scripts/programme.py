@@ -89,6 +89,10 @@ CRITERION_ROOTS = (
 STACKING_ROOTS = (
     "MLC.Research.LevelTower.linearDichotomy_of_stacked",
 )
+# The results of Mlc/Research/LevelGeometry.lean that no other result uses.
+LEVEL_GEOMETRY_ROOTS = (
+    "MLC.mlc_of_levelGeometry",
+)
 # The results of Mlc/Research/Dimension.lean that no other result uses.
 DIMENSION_ROOTS = (
     "MLC.Research.ShishikuraDimension.holder_exponent_le_half",

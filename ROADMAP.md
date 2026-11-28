@@ -445,10 +445,24 @@ degeneration of (4.1); for the class of Problem 4.3 it is the pseudo-Siegel dege
   `c' p W_{k+n} ≤ W_k + A'`, and `A' ≤ A' p`. With the collars of Lemma G this gives
   `Geometry.locallyConnectedAt_of_collars_stacked_and_comparison`: the Teichmüller contraction,
   collars at the jumps at large relative period, stacked annuli and the comparison give the local
-  connectivity of `M` at `c`. The last three are statements about moduli of annuli; that the levels
+  connectivity of `M` at `c`. The last three are statements about sets of the plane (collars,
+  sub-annuli, a nest) and their moduli, while the Teichmüller contraction is an inequality between
+  the widths of consecutive levels; that the levels
   of the pseudo-Siegel towers satisfy them is open. In the round model the sub-annuli can be taken
   concentric, so there the hypothesis demands no more than the amplification inequality (this
   converse is not formalized).
+* `Mlc/Research/LevelGeometry.lean`: the geometric form of the programme. `LevelGeometry` is a
+  `Geometry` together with the level towers behind its towers (`levels c`, `vlevels c`: the filled
+  sets and the range domains of the levels, with the widths of the dictionary); like `Geometry` it is
+  a parameter of the statements, and that the sets are the filled Julia sets and range domains of
+  quadratic-like restrictions of `f_c` is the faithfulness of the dictionary, which the structure
+  does not contain. For these sets, Lemma G is stated as collars at the large-period jumps
+  (`UnboundedCollars`, `VirtualCollars`), Lemma D as stacked annuli (`UnboundedStacked`,
+  `VirtualStacked`), and Lemma T as the phase–parameter comparison (`Comparison`); the abstract
+  fields `UnboundedJumpCap`, `UnboundedDichotomy`, `VirtualJumpCap`, `VirtualLinearDichotomy` and
+  `Transfer` are derived from them. `MLC.mlc_of_levelGeometry`: MLC from the six published lemmas,
+  the Teichmüller contraction for the pseudo-Siegel and for the virtual levels (TC′, VT1), VJ, VD1,
+  VT, and these five geometric statements.
 * `Mlc/Research/Dimension.lean`: the dimension of the fractal against the smooth curves of the
   moduli. The image of a `C¹` loop has Hausdorff dimension at most `1` (`IsLoop.dimH_range_le`), so
   countably many loops cover no set of larger dimension. A `C¹` embedding with invertible

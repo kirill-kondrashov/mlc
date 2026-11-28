@@ -166,7 +166,11 @@ sub-annuli, each of modulus at least \(c'/(W_k+A')\), their moduli add up (Gr\"o
 \texttt{sum\_extWidth\_loopFamily\_le}), so \(c'pW_{k+n}\le W_k+A'\) and the linear dichotomy holds
 (\texttt{LevelTower.linearDichotomy\_of\_stacked} in \texttt{Mlc/Research/Stacking.lean}); the
 existence of such sub-annuli, the pullbacks of the shallower annulus along the critical orbit, is
-open. The loops with
+open. For a dictionary with the level sets of its towers (\texttt{LevelGeometry} in
+\texttt{Mlc/Research/LevelGeometry.lean}) these statements, collars at the large-period jumps,
+stacked annuli and the phase--parameter comparison, replace five of the abstract lemmas, and
+\texttt{MLC.mlc\_of\_levelGeometry} derives MLC from them together with the published lemmas and
+the lemmas TC$'$, VJ, VD1, VT1 and VT. The loops with
 which the moduli are measured are curves of
 Hausdorff dimension at most~1, while the boundary of the Mandelbrot set is a fractal of Hausdorff
 dimension~2 (Shishikura); a \(C^1\) chart preserves the Hausdorff dimension, a quasi-conformal map

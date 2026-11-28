@@ -16,6 +16,7 @@ import Mlc.Research.RoundAnnulus
 import Mlc.Research.RoundTower
 import Mlc.Research.Stacking
 import Mlc.Research.LevelTower
+import Mlc.Research.LevelGeometry
 import Mlc.Research.Dimension
 import Mlc.Research.PeanoObject
 import Mlc.Research.VirtualShrinking

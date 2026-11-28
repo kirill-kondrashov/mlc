@@ -31,6 +31,7 @@ from programme import (
     COLLAR_ROOTS,
     CRITERION_ROOTS,
     DIMENSION_ROOTS,
+    LEVEL_GEOMETRY_ROOTS,
     LEVEL_JUMP_ROOTS,
     LEVEL_TRANSFER_ROOTS,
     MULTIPLICITY_ROOTS,
@@ -195,6 +196,7 @@ SIDE_ROOTS = (
     *DIMENSION_ROOTS,
     *PEANO_ROOTS,
     *CRITERION_ROOTS,
+    *LEVEL_GEOMETRY_ROOTS,
 )
 
 # Titles of the support branches, by file; a pair (vertebra, file) overrides them.
@@ -1145,6 +1147,33 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         assembly.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
         attach(dudko, assembly, 1)
         extras.append(assembly)
+        side_bud(
+            LEVEL_GEOMETRY_ROOTS,
+            "prog:level_geometry",
+            "Geometric form of the programme",
+            "collars, stacked annuli, comparison ⇒ MLC",
+            "Checked in Lean (MLC.mlc_of_levelGeometry, LevelGeometry, "
+            "LevelGeometry.UnboundedCollars, LevelGeometry.UnboundedStacked, "
+            "LevelGeometry.VirtualCollars, LevelGeometry.VirtualStacked, "
+            "LevelGeometry.Comparison). A LevelGeometry is a dictionary together with the "
+            "level sets of its towers, the filled sets and the range domains of the levels. "
+            "Lemma G is stated for them as collars of bounded dilatation and definite modulus "
+            "at the jumps at the levels of large relative period, and Lemma D as stacked "
+            "annuli, for the tower of unbounded satellite type (Problem 4.3) and for the "
+            "virtual near-neutral tower (Problem 4.4); Lemma T is the phase–parameter "
+            "comparison of the moduli of the levels with those of a nest in M. The abstract "
+            "fields UnboundedJumpCap, UnboundedDichotomy, VirtualJumpCap, "
+            "VirtualLinearDichotomy and Transfer are derived from them "
+            "(LevelTower.largePeriodJumpCap_of_collars, LevelTower.linearDichotomy_of_stacked, "
+            "Geometry.transfer_of_comparison), and MLC follows from the six published lemmas, "
+            "the Teichmüller contraction for the pseudo-Siegel and for the virtual levels, the "
+            "virtual Julia sets, the dichotomy for the virtual bounded type, the virtual "
+            "transfer and these five geometric statements. That the level sets are the filled "
+            "Julia sets and range domains of quadratic-like restrictions of f_c is the "
+            "faithfulness of the dictionary and is not part of the structure; none of the "
+            "statements is proved.",
+            assembly,
+        )
     phase = next(i for i, v in enumerate(SPINE) if v.key == "phase")
     unified = make(
         Node(
@@ -1341,7 +1370,9 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         "lemmas of Problem 4.3, the Teichmüller contraction (TC′), collars at the jumps at "
         "the levels of large relative period (G), the linear dichotomy (D) and the "
         "comparison, and with Lemma D in the form of stacked annuli (see \"Lemma D from "
-        "stacked annuli\") every hypothesis but TC′ is a statement about moduli of annuli. "
+        "stacked annuli\") every hypothesis but TC′ is a statement about sets of the plane "
+        "(collars, sub-annuli, a nest) and their moduli, while TC′ is an inequality between "
+        "the widths of consecutive levels. "
         "These hypotheses are "
         "explicit geometric statements and none is proved; the concentric nest, whose annuli "
         "are their own collars, shows that the hypotheses of the collar criterion are "

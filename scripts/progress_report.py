@@ -75,6 +75,7 @@ CRITERION_THEOREM = re.compile(
     r"^\s*theorem\s+locallyConnectedAt_of_collars_and_comparison\b", re.MULTILINE
 )
 STACKING_THEOREM = re.compile(r"^\s*theorem\s+linearDichotomy_of_stacked\b", re.MULTILINE)
+LEVEL_GEOMETRY_THEOREM = re.compile(r"^\s*theorem\s+mlc_of_levelGeometry\b", re.MULTILINE)
 MULTIPLICITY_THEOREM = re.compile(
     r"^\s*theorem\s+extWidth_le_pow_two_mul_fc_iterate\b", re.MULTILINE
 )
@@ -130,6 +131,9 @@ PROGRESS_MILESTONES = (
      "logarithmic scale", CRITERION_THEOREM, 1),
     ("Lemma D from stacked annuli: p disjoint sub-annuli of definite modulus give the linear "
      "dichotomy (Grötzsch's inequality for sub-annuli)", STACKING_THEOREM, 1),
+    ("MLC from the geometric form of the programme: collars, stacked annuli and the "
+     "phase–parameter comparison for the level sets of the dictionary replace five of the "
+     "abstract lemmas", LEVEL_GEOMETRY_THEOREM, 1),
     ("MLC from the lemmas of the programme", PROGRAMME_THEOREM, 1),
     ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )

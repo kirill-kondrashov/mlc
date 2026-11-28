@@ -246,7 +246,8 @@ Teichmüller contraction for the tower of `c` (Lemma TC′), collars of dilatati
 modulus at least `μ₀ / 2π` at the jumps at the levels of large relative period (Lemma G), stacked
 annuli at the pairs of levels for every threshold (Lemma D, `LevelTower.StackedAnnuli`), and the
 phase–parameter comparison of moduli give the local connectivity of `M` at `c`. Of the four
-hypotheses only the first is not a statement about moduli of annuli; none is proved here. -/
+hypotheses only the first, an inequality between the widths of consecutive levels, involves no sets
+of the plane; none is proved here. -/
 theorem locallyConnectedAt_of_collars_stacked_and_comparison (h : G.PhaseParameterComparison)
     {c : ℂ} (hc : c ∈ MLC.Quadratic.MandelbrotSet) (L : LevelTower)
     (hL : G.tower c = some L.toWidthTower) {P₀ : ℕ} {C₀ K₀ μ₀ : ℝ} (hC₀ : 0 < C₀)
